@@ -3,19 +3,19 @@
 </script>
 
 <Section --max-width="200rem">
-	<h2>join our friendly community</h2>
+	<h2>rejoignez notre communauté</h2>
 	<p>
-		Our sister organisation, <a href="https://www.sveltesociety.dev/">Svelte Society</a>, organises
-		events around the globe. Find your chapter and join us in
-		<a href="/chat">our Discord server</a>.
+		Notre petite soeur, <a href="https://www.sveltesociety.dev/">Svelte Society</a>, organise des
+		évèvements partout dans le monde. Trouvez votre antenne locale et rejoignez-nous sur
+		<a href="/chat">notre serveur Discord</a>.
 	</p>
 
 	<figure>
 		<enhanced:img
 			src="./summit.png?w=800;1200;2000;2800;4400"
-			alt="Photos by Marcel Cutts from the 2022 Svelte Summit in Stockholm"
+			alt="Photos du Svelte Summit de 2022 à Stockholm par Marcel Cutts"
 		/>
-		<figcaption>Photos by <a href="https://x.com/marcelcutts">Marcel Cutts</a></figcaption>
+		<figcaption>Photos par <a href="https://x.com/marcelcutts">Marcel Cutts</a></figcaption>
 	</figure>
 </Section>
 

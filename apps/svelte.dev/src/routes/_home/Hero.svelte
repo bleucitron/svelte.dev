@@ -8,8 +8,8 @@
 
 <div class="hero">
 	<div class="hero-content">
-		<h1>web development for the rest of us</h1>
-		<a href="/docs" class="cta">get started <Icon name="arrow-right" /></a>
+		<h1>Le développement web pour tous</h1>
+		<a href="/docs" class="cta">commencer <Icon name="arrow-right" /></a>
 	</div>
 
 	<picture class="machine">
@@ -38,7 +38,7 @@
 		<source srcset={MachineMobile.sources.webp} width="2208" height="936" type="image/webp" />
 		<source srcset={MachineMobile.sources.png} width="2208" height="936" type="image/png" />
 		<img
-			alt="The Svelte compiler packaging up your component code"
+			alt="Le compilateur Svelte préparant le code de vos composants"
 			src={MachineMobile.img.src}
 			fetchpriority="high"
 		/>

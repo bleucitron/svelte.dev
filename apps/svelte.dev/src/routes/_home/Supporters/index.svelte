@@ -9,8 +9,9 @@
 </script>
 
 <p class="intro">
-	Backed by <a href="https://vercel.com" target="_blank" rel="noreferrer">Vercel</a> and countless donors,
-	developed by full-time and part-time maintainers, Svelte is here to stay.
+	Soutenu par <a href="https://vercel.com" target="_blank" rel="noreferrer">Vercel</a> et de nombreux
+	donateurs, développé par des personnes à plein temps comme des contributeurs occasionnels, Svelte est
+	parti pour rester.
 </p>
 
 <div class="wrapper">

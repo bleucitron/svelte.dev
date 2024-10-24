@@ -13,8 +13,8 @@
 	<title>Svelte • Web development for the rest of us</title>
 
 	<meta name="twitter:title" content="Svelte" />
-	<meta name="twitter:description" content="Web development for the rest of us" />
-	<meta name="Description" content="Web development for the rest of us" />
+	<meta name="twitter:description" content="Le développement web pour tous" />
+	<meta name="Description" content="Le développement web pour tous" />
 </svelte:head>
 
 <div class="home">
@@ -31,7 +31,7 @@
 			<Video />
 			<figcaption>
 				<a href="https://www.offerzen.com/community/svelte-origins-documentary"
-					>Watch the full Svelte Origins documentary</a
+					>Regarder l'intégralité du documentaire Svelte Origins</a
 				>
 			</figcaption>
 		</figure>

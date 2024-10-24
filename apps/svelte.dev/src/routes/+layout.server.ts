@@ -20,7 +20,7 @@ const nav_links: NavigationLink[] = [
 		)
 	},
 	{
-		title: 'Tutorial',
+		title: 'Tutoriel',
 		slug: 'tutorial',
 		sections: index.tutorial.children.map((topic) => ({
 			title: topic.metadata.title,
@@ -38,7 +38,7 @@ const nav_links: NavigationLink[] = [
 		}))
 	},
 	{
-		title: 'Playground',
+		title: 'Bac à sable',
 		slug: 'playground'
 	},
 	{
@@ -49,10 +49,10 @@ const nav_links: NavigationLink[] = [
 
 const sections: Record<string, string> = {
 	docs: 'Docs',
-	playground: 'Playground',
+	playground: 'Bac à sable',
 	blog: 'Blog',
-	tutorial: 'Tutorial',
-	search: 'Search'
+	tutorial: 'Tutoriel',
+	search: 'Recherche'
 };
 
 const banner: BannerData = {

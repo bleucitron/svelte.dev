@@ -123,13 +123,13 @@ Top navigation bar for the application. It provides a slot for the left side, th
 			<Search />
 
 			<div class="external-links">
-				<a href="/chat" data-icon="discord" aria-label="Discord Chat"></a>
+				<a href="/chat" data-icon="discord" aria-label="Serveur Discord"></a>
 				<a
 					href="https://bsky.app/profile/sveltesociety.dev"
 					data-icon="bluesky"
-					aria-label="Svelte Society on Bluesky"
+					aria-label="Svelte Society sur BlueSky"
 				></a>
-				<a href="https://github.com/sveltejs/svelte" data-icon="github" aria-label="GitHub Repo"
+				<a href="https://github.com/sveltejs/svelte" data-icon="github" aria-label="Repo GitHub"
 				></a>
 			</div>
 
@@ -141,7 +141,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 
 	<div class="mobile mobile-menu">
 		<button
-			aria-label="Search"
+			aria-label="Recherche"
 			class="raised icon search"
 			onclick={() => {
 				$searching = true;
@@ -156,7 +156,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 
 		<button
 			bind:this={menu_button}
-			aria-label="Toggle menu"
+			aria-label="Activer le menu"
 			aria-expanded={open}
 			class="menu-toggle raised icon"
 			class:open

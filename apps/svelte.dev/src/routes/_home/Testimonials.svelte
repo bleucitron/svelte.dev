@@ -7,20 +7,22 @@
 		/>
 
 		<span class="description">
-			<span class="adjective"></span> attractively thin, graceful and stylish
+			<span class="adjective"></span> mince, élancé, gracieux
 		</span>
 	</p>
 
 	<div class="blurb">
 		<p>
-			Svelte is a UI framework that uses a compiler to let you write breathtakingly concise
-			components that do minimal work in the browser, using languages you already know — HTML, CSS
-			and JavaScript. <strong>It’s a love letter to web development.</strong>
+			Svelte est un framework de composants qui utilise un compilateur vous permettant d'écrire de
+			manière concise des composants efficaces dans le navigateur, en utilisant des langages que
+			vous connaissez déjà – HTML, CSS et JavaScript. <strong
+				>C'est une déclaration d'amour au développement web.</strong
+			>
 		</p>
 
 		<p>
-			But don’t take our word for it. Developers consistently rank Svelte as the framework they’re
-			most excited about using.
+			Mais ce n'est pas nous qui le disons. Svelte est régulièrement cité comme le framework que les
+			développeurs et développeuses préfèrent utiliser.
 		</p>
 	</div>
 
@@ -193,7 +195,7 @@
 				margin-right: 0.5rem;
 
 				&::after {
-					content: 'adjective';
+					content: 'adjectif';
 				}
 			}
 		}

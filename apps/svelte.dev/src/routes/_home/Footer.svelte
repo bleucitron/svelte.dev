@@ -4,9 +4,9 @@
 
 <Section>
 	<p class="copyright">
-		© 2024 Svelte contributors. Svelte is <a href="https://github.com/sveltejs/svelte"
-			>free and open source software</a
-		> released under the MIT license.
+		© 2024 Svelte contributors. Svelte est un <a href="https://github.com/sveltejs/svelte"
+			>logiciel libre et ouvert</a
+		> publié sous la licence MIT.
 	</p>
 </Section>
 

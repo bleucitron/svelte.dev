@@ -19,7 +19,7 @@ It appears when the user clicks on the `Search` component or presses the corresp
 		no_results?: Snippet;
 	}
 
-	let { placeholder = 'Search', idle, search_description, no_results }: Props = $props();
+	let { placeholder = 'Recherche', idle, search_description, no_results }: Props = $props();
 
 	let modal = $state() as HTMLElement;
 
