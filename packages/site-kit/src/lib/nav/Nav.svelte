@@ -72,6 +72,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 	style:z-index={$overlay_open && ($searching || $on_this_page_open) ? 80 : null}
 	aria-label="Primary"
 >
+	<div class="progress">En cours de traduction</div>
 	<a class="home-link" href="/" title={home_title} aria-label="Svelte"></a>
 
 	{#if title}
@@ -381,5 +382,12 @@ Top navigation bar for the application. It provides a slot for the left side, th
 		nav :global(.small) {
 			display: none;
 		}
+	}
+
+	.progress {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		text-align: center;
 	}
 </style>
