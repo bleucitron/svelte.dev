@@ -5,7 +5,7 @@ Renders a search widget which when clicked (or the corresponding keyboard shortc
 	import { BROWSER } from 'esm-env';
 	import { search_query, searching } from '../stores/search';
 
-	let { q = '', label = 'Search' }: { q?: string; label?: string } = $props();
+	let { q = '', label = 'Recherche' }: { q?: string; label?: string } = $props();
 </script>
 
 <form class="search-container" action="/search">

@@ -21,7 +21,7 @@ const nav_links: NavigationLink[] = [
 			.sort((a, b) => a.title.localeCompare(b.title)) // Svelte first
 	},
 	{
-		title: 'Tutorial',
+		title: 'Tutoriel',
 		slug: 'tutorial',
 		sections: index.tutorial.children.map((topic) => ({
 			title: topic.metadata.title,
@@ -35,7 +35,7 @@ const nav_links: NavigationLink[] = [
 		}))
 	},
 	{
-		title: 'Playground',
+		title: 'Bac à sable',
 		slug: 'playground'
 	},
 	{
@@ -46,10 +46,10 @@ const nav_links: NavigationLink[] = [
 
 const sections: Record<string, string> = {
 	docs: 'Docs',
-	playground: 'Playground',
+	playground: 'Bac à sable',
 	blog: 'Blog',
-	tutorial: 'Tutorial',
-	search: 'Search'
+	tutorial: 'Tutoriel',
+	search: 'Recherche'
 };
 
 export const load = async ({ url, fetch }) => {

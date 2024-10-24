@@ -4,11 +4,11 @@
 			<enhanced:img src="./companies/mullvad.svg" alt="Mullvad logo" />
 			<enhanced:img src="./companies/stack-overflow.svg" alt="Stack Overflow logo" />
 			<enhanced:img src="./companies/yelp.svg" alt="Yelp logo" />
-			<enhanced:img src="./companies/square.svg" alt="Square logo" />
 			<enhanced:img src="./companies/apple.svg" alt="Apple logo" />
+			<enhanced:img src="./companies/radiofrance.svg" alt="Radiofrance logo" />
 		</div>
 	</div>
-	<h2>used by companies you’ve heard of</h2>
+	<h2>utilisé par des entreprises reconnues</h2>
 	<div class="wing">
 		<div class="logos">
 			<enhanced:img src="./companies/spotify.svg" alt="Spotify logo" />
