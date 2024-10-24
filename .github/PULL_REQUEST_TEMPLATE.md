@@ -1,9 +1,10 @@
-### A note on documentation PRs
+### Attention
 
-If this is a documentation PR (i.e. changing content within `apps/svelte.dev/content/docs`), then this is the wrong repository to make those changes. The content in this folder is synced from other repositories. Therefore, these changes should be made in their respective repositories (at https://github.com/sveltejs/svelte or https://github.com/sveltejs/kit, or example).
+Vous vous apprêtez à ouvrir une PR sur le projet de traduction francophone de la documentation de
+Svelte et SvelteKit.
 
-### Before submitting the PR, please make sure you do the following
+Ce projet est uniquement dédié à de la traduction, et nous n'accepterons donc que les PRs dont
+l'objet est l'ajout ou la modification de traductions, ou tout outillage associé.
 
-- [ ] It's really useful if your PR references an issue where it is discussed ahead of time.
-- [ ] Prefix your PR title with `feat:`, `fix:`, `chore:`, or `docs:`.
-- [ ] This message body should clearly illustrate what problems it solves.
+Pour toute PR liée au projet Svelte en lui-même, merci de les ouvrir sur le [repository
+officiel](https://github.com/sveltejs/svelte.dev/pulls).
