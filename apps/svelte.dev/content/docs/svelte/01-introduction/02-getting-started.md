@@ -1,8 +1,9 @@
 ---
-title: Getting started
+title: Débuter avec Svelte
 ---
 
-We recommend using [SvelteKit](../kit), the official application framework from the Svelte team powered by [Vite](https://vite.dev/):
+Nous recommandons d'utiliser [SvelteKit](../kit), le framework d'application officiel développé par
+l'équipe Svelte, qui se base sur [Vite](https://vite.dev) :
 
 ```bash
 npx sv create myapp
@@ -11,20 +12,34 @@ npm install
 npm run dev
 ```
 
-Don't worry if you don't know Svelte yet! You can ignore all the nice features SvelteKit brings on top for now and dive into it later.
+Ne vous inquiétez pas si vous ne connaissez pas encore Svelte ! Vous pouvez dans un premier temps
+ignorer toutes les choses merveilleuses que SvelteKit apporte et vous y intéresser plus tard.
 
-## Alternatives to SvelteKit
+## Alternatives à SvelteKit
 
-You can also use Svelte directly with Vite by running `npm create vite@latest` and selecting the `svelte` option. With this, `npm run build` will generate HTML, JS and CSS files inside the `dist` directory using [vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte). In most cases, you will probably need to [choose a routing library](faq#Is-there-a-router) as well.
+Vous pouvez aussi utiliser Svelte directement avec Vite en exécutant `npm create vite@latest` et en
+choisissant l'option `svelte`. De cette manière, `npm run build` va générer des fichiers HTML, JS et
+CSS dans le dossier `dist` grâce à
+[vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte). Dans la plupart des cas vous
+aurez également certainement besoin de choisir une [librairie de routing](faq#Is-there-a-router).
 
-There are also plugins for [Rollup](https://github.com/sveltejs/rollup-plugin-svelte), [Webpack](https://github.com/sveltejs/svelte-loader) [and a few others](https://sveltesociety.dev/packages?category=build-plugins), but we recommend Vite.
+Il existe également des plugins pour [Rollup](https://github.com/sveltejs/rollup-plugin-svelte),
+[Webpack](https://github.com/sveltejs/svelte-loader) [et quelques
+autres](https://sveltesociety.dev/packages?category=build-plugins), mais nous recommandons
+l'utilisation de Vite.
 
-## Editor tooling
+## Outillage des éditeurs
 
-The Svelte team maintains a [VS Code extension](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode), and there are integrations with various other [editors](https://sveltesociety.dev/resources#editor-support) and tools as well.
+L'équipe de Svelte maintient une [extension VS
+Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode), et des intégrations
+sont également disponibles pour d'autres
+[éditeurs](https://sveltesociety.dev/resources#editor-support) et outils.
 
-You can also check your code from the command line using [sv check](https://github.com/sveltejs/cli).
+Vous pouvez aussi vérifier la qualité de votre code dans votre terminal en utilisant [sv
+check](https://github.com/sveltejs/cli).
 
-## Getting help
+## Obtenir de l'aide
 
-Don't be shy about asking for help in the [Discord chatroom](/chat)! You can also find answers on [Stack Overflow](https://stackoverflow.com/questions/tagged/svelte).
+N'ayez pas peur de demander de l'aide dans le forum de discussion de notre serveur [Discord](/chat)
+! Vous pourrez aussi trouver des réponses sur [Stack
+Overflow](https://stackoverflow.com/questions/tagged/svelte).

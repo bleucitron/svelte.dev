@@ -1,41 +1,48 @@
 ---
-title: .svelte files
+title: Fichiers .svelte
 ---
 
-Components are the building blocks of Svelte applications. They are written into `.svelte` files, using a superset of HTML.
+Les composants sont les briques de base des application Svelte. Ils sont écrits dans des fichiers
+`.svelte`, en utilisant une version augmentée de HTML.
 
-All three sections — script, styles and markup — are optional.
+Les trois sections – script, styles, et markup – sont optionnelles.
 
 <!-- prettier-ignore -->
 ```svelte
 /// file: MyComponent.svelte
 <script module>
-	// module-level logic goes here
-	// (you will rarely use this)
+	// la logique de module s'écrit ici
+	// (ceci n'est pas souvent utile)
 </script>
 
 <script>
-	// instance-level logic goes here
+	// la logique d'instance s'écrit ici
 </script>
 
-<!-- markup (zero or more items) goes here -->
+<!-- le markup (avec ou sans éléments) s'écrit ici -->
 
 <style>
-	/* styles go here */
+	/* les styles s'écrivent ici */
 </style>
 ```
 
 ## `<script>`
 
-A `<script>` block contains JavaScript (or TypeScript, when adding the `lang="ts"` attribute) that runs when a component instance is created. Variables declared (or imported) at the top level can be referenced in the component's markup.
+Un bloc `<script>` contient du JavaScript (ou du TypeScript, lorsque vous utilisez l'attribut
+`lang="ts"`) qui est exécuté lorsqu'une instance est créée. Les variables déclarées (ou importées)
+au niveau racine peuvent être référencées dans le markup du composant.
 
-In addition to normal JavaScript, you can use _runes_ to declare [component props]($props) and add reactivity to your component. Runes are covered in the next section.
+En plus du code JavaScript normal, vous pouvez utiliser des _runes_ pour déclarer des [props de
+composant]($props) et ajouter de la réactivité à votre composant. Les runes sont décrites dans la
+prochaine section.
 
 <!-- TODO describe behaviour of `export` -->
 
 ## `<script module>`
 
-A `<script>` tag with a `module` attribute runs once when the module first evaluates, rather than for each component instance. Variables declared in this block can be referenced elsewhere in the component, but not vice versa.
+Une balise `<script>` possédant un attribut `module` n'est exécutée qu'une seule fois – la première
+fois que le module est évalué – plutôt que pour chaque instance de composant. Les variables
+déclarées dans ce bloc peuvent être référencées ailleurs dans le composant, mais pas l'inverse.
 
 ```svelte
 <script module>
@@ -44,28 +51,29 @@ A `<script>` tag with a `module` attribute runs once when the module first evalu
 
 <script>
 	total += 1;
-	console.log(`instantiated ${total} times`);
+	console.log(`instancié ${total} fois`);
 </script>
 ```
 
-You can `export` bindings from this block, and they will become exports of the compiled module. You cannot `export default`, since the default export is the component itself.
+Vous pouvez `export`er des liaisons depuis ce bloc, elles deviendront des exports du module copmilé.
+Vous ne pouvez pas utiliser `export default`, puisque l'export par défaut est le composant lui-même.
 
 > [!NOTE] If you are using TypeScript and import such exports from a `module` block into a `.ts` file, make sure to have your editor setup so that TypeScript knows about them. This is the case for our VS Code extension and the IntelliJ plugin, but in other cases you might need to setup our [TypeScript editor plugin](https://www.npmjs.com/package/typescript-svelte-plugin).
 
 > [!LEGACY]
-> In Svelte 4, this script tag was created using `<script context="module">`
+> Avec Svelte 4, cette balise script se définit en utilisant `<script context="module">`
 
 ## `<style>`
 
-CSS inside a `<style>` block will be scoped to that component.
+Le CSS à l'intérieur d'un bloc `<style>` sera scopé à ce composant.
 
 ```svelte
 <style>
 	p {
-		/* this will only affect <p> elements in this component */
+		/* ceci va uniquement affecter les éléments <p> définis dans ce composant */
 		color: burlywood;
 	}
 </style>
 ```
 
-For more information, head to the section on [styling](scoped-styles).
+Pour plus d'explications, rendez-vous dans la section concernant le [style](scoped-styles).

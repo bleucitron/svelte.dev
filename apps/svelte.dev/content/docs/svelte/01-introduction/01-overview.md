@@ -1,18 +1,19 @@
 ---
-title: Overview
+title: Aperçu
 ---
 
-Svelte is a framework for building user interfaces on the web. It uses a compiler to turn declarative components written in HTML, CSS and JavaScript...
+Svelte est un framework permettant de construire des interfaces sur le web. Il utilise un
+compilateur pour transformer les composants écrits en HTML, CSS et JavaScript...
 
 ```svelte
 <!--- file: App.svelte --->
 <script>
 	function greet() {
-		alert('Welcome to Svelte!');
+		alert('Bienvenue sur Svelte !');
 	}
 </script>
 
-<button onclick={greet}>click me</button>
+<button onclick={greet}>cliquez moi</button>
 
 <style>
 	button {
@@ -21,10 +22,16 @@ Svelte is a framework for building user interfaces on the web. It uses a compile
 </style>
 ```
 
-...into lean, tightly optimized JavaScript.
+... en du code JavaScript léger et optimisé.
 
-You can use it to build anything on the web, from standalone components to ambitious full stack apps (using Svelte's companion application framework, [SvelteKit](../kit)) and everything in between.
+Vous pouvez vous en servir pour construire ce que vous voulez sur le web, depuis des composants
+isolés jusqu'à des applications full-stack ambitieuses (en utilisant le framework d'application
+compagnon de Svelte, [SvelteKit](../kit)) et tout ce que vous pouvez imaginer entre les deux.
 
-These pages serve as reference documentation. If you're new to Svelte, we recommend starting with the [interactive tutorial](/tutorial) and coming back here when you have questions.
+Ces pages servent de documentation de référence. Si vous débutez avec Svelte, nous vous recommandons
+de commencer par le [tutoriel interactif](/tutorial) et de revenir ici lorsque vous aurez des
+questions.
 
-You can also try Svelte online in the [playground](/playground) or, if you need a more fully-featured environment, on [StackBlitz](https://sveltekit.new).
+Vous pouvez aussi essayer Svelte directement dans le [bac à sable](/playground) ou sur
+[StackBlitz](https://sveltekit.new), s'il vous faut un environnement plus complet.
+

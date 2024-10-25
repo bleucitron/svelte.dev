@@ -1,10 +1,13 @@
 ---
-title: .svelte.js and .svelte.ts files
+title: Fichiers .svelte.js et .svelte.ts
 ---
 
-Besides `.svelte` files, Svelte also operates on `.svelte.js` and `.svelte.ts` files.
+En plus des fichiers `.svelte`, Svelte opère également sur les fichiers `.svelte.js` et
+`.svelte.ts`.
 
-These behave like any other `.js` or `.ts` module, except that you can use runes. This is useful for creating reusable reactive logic, or sharing reactive state across your app.
+Ils se comportent comme tout autre module `.js` ou `.ts`, sauf qu'ils permettent l'utilisation des
+runes. Ceci est pratique pour créer de la logique réactive réutilisable, ou pour partager un état
+réactif dans toute votre application.
 
 > [!LEGACY]
-> This is a concept that didn't exist prior to Svelte 5
+> Ceci est un concept qui n'existait pas avant Svelte 5
