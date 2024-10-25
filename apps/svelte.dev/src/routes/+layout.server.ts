@@ -56,15 +56,24 @@ const sections: Record<string, string> = {
 };
 
 const banner: BannerData = {
-	id: 'adventofsvelte2024',
-	start: new Date('1 December, 2024 00:00:00 UTC'),
-	end: new Date('25 December, 2024 23:59:59 UTC'),
-	arrow: true,
+	id: 'french-in-progress',
+	start: new Date('24 Oct, 2024 00:00:00 UTC'),
+	end: new Date('31 Oct, 2026 00:00:00 UTC'),
+	arrow: false,
 	content: {
-		lg: 'Twenty-four days, twenty-four features: Advent of Svelte 2024',
-		sm: 'Advent of Svelte 2024'
+		lg: "⚠️ Tout le contenu n'est pas encore traduit ⚠️",
+		sm: '⚠️ Traduction en cours... ⚠️'
 	},
-	href: '/blog/advent-of-svelte'
+	href: 'https://github.com/bleucitron/svelte.dev'
+	// id: 'sveltehack2024',
+	// start: new Date('22 Oct, 2024 00:00:00 UTC'),
+	// end: new Date('15 December, 2024 23:59:59 UTC'),
+	// arrow: true,
+	// content: {
+	// 	lg: 'Cast runes, win prizes: SvelteHack 2024',
+	// 	sm: 'SvelteHack 2024'
+	// },
+	// href: 'https://hack.sveltesociety.dev/2024'
 };
 
 export const load = async ({ url }) => {
