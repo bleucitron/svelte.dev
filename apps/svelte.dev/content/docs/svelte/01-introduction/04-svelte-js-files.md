@@ -10,4 +10,4 @@ runes. Ceci est pratique pour créer de la logique réactive réutilisable, ou p
 réactif dans toute votre application.
 
 > [!LEGACY]
-> Ceci est un concept qui n'existait pas avant Svelte 5
+> Ceci est un concept qui n'existait pas avant Svelte 5.

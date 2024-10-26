@@ -61,7 +61,7 @@ Vous ne pouvez pas utiliser `export default`, puisque l'export par défaut est l
 > [!NOTE] If you are using TypeScript and import such exports from a `module` block into a `.ts` file, make sure to have your editor setup so that TypeScript knows about them. This is the case for our VS Code extension and the IntelliJ plugin, but in other cases you might need to setup our [TypeScript editor plugin](https://www.npmjs.com/package/typescript-svelte-plugin).
 
 > [!LEGACY]
-> Avec Svelte 4, cette balise script se définit en utilisant `<script context="module">`
+> Avec Svelte 4, cette balise script se définit en utilisant `<script context="module">`.
 
 ## `<style>`
 
