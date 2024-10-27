@@ -16,7 +16,7 @@ avez besoin de synchroniser un système extérieur (que ce soit une librairie, u
 
 > [!NOTE] Évitez de trop vous servir des effets ! Lorsque trop de choses sont gérés via des effets,
 > le code devient difficile à comprendre et à maintenir. Voir la partie [quand ne pas utiliser
-> d'effet](#when-not-to-use-effects) pour en savoir plus sur les moyens de les éviter.
+> d'effet](#When-not-to-use-effect) pour en savoir plus sur les moyens de les éviter.
 
 Vos effets sont exécutés après le montage du composant dans le DOM, et lors d'une
 [micro-tâche](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide) juste
