@@ -6,9 +6,9 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
-  track-docs:
+  track-docs-svelte-01:
     runs-on: ubuntu-latest
-    name: Checking Docs
+    name: Checking Docs Svelte 01
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -19,3 +19,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte/01-introduction
+  track-docs-svelte-02:
+    runs-on: ubuntu-latest
+    name: Checking Docs Svelte 02
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/svelte/02-runes
