@@ -1,24 +1,28 @@
 ---
-title: What are runes?
+title: C'est quoi une rune ?
 ---
 
-> [!NOTE] **rune** /ro͞on/ _noun_
+> [!NOTE] **rune** /ro͞on/ _nom_
 >
-> A letter or mark used as a mystical or magic symbol.
+> Une lettre ou caractère graphique utilisé comme symbole magique ou mystique.
 
-Runes are symbols that you use in `.svelte` and `.svelte.js`/`.svelte.ts` files to control the Svelte compiler. If you think of Svelte as a language, runes are part of the syntax — they are _keywords_.
+Les runes sont les symboles utilisés dans les fichiers `.svelte` et `.svelte.js`/`.svelte.ts` pour
+contrôler le compilateur Svelte. Si vous pensez Svelte comme un langage, les runes font partie de sa
+syntaxe – elles sont des _mots-clés_.
 
-Runes have a `$` prefix and look like functions:
+Les runes ont un préfixe `$` et ressemblent à des fonctions :
 
 ```js
-let message = $state('hello');
+let message = $state('coucou');
 ```
 
-They differ from normal JavaScript functions in important ways, however:
+Néanmoins, elles diffèrent des fonctions JavaScript habituelles de manière importante :
 
-- You don't need to import them — they are part of the language
-- They're not values — you can't assign them to a variable or pass them as arguments to a function
-- Just like JavaScript keywords, they are only valid in certain positions (the compiler will help you if you put them in the wrong place)
+- Vous n'avez pas besoin de les importer – elles font partie du langage
+- Elles ne représentent pas de valeurs – vous ne pouvez pas les assigner à une variable ou les
+passer comme argument à une fonction
+- Comme pour les mots-clés JavaScript, elles ne sont valides que dans certaines positions (le
+compilateur vous préviendra si vous les utilisez au mauvais endroit)
 
 > [!LEGACY]
-> Runes didn't exist prior to Svelte 5.
+> Les runes n'existaient pas avant Svelte 5.

@@ -2,7 +2,9 @@
 title: $props
 ---
 
-The inputs to a component are referred to as _props_, which is short for _properties_. You pass props to components just like you pass attributes to elements:
+Les données d'entrée d'un composant sont appelées des _props_, abbréviation de _propriétés_. Vous
+pouvez fournir des props aux composants de la même manière que vous passeriez des attributs aux
+éléments :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -13,7 +15,7 @@ The inputs to a component are referred to as _props_, which is short for _proper
 <MyComponent adjective="cool" />
 ```
 
-On the other side, inside `MyComponent.svelte`, we can receive props with the `$props` rune...
+De l'autre côté, dans `MyComponent.svelte`, les props sont accessibles grâce à la rune `$props`...
 
 ```svelte
 <!--- file: MyComponent.svelte --->
@@ -21,10 +23,12 @@ On the other side, inside `MyComponent.svelte`, we can receive props with the `$
 	let props = $props();
 </script>
 
-<p>this component is {props.adjective}</p>
+<p>ce composant est {props.adjective}</p>
 ```
 
-...though more commonly, you'll [_destructure_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) your props:
+... bien que plus souvent, il est plus pratique de
+[déstructurer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+vos props :
 
 ```svelte
 <!--- file: MyComponent.svelte --->
@@ -32,38 +36,45 @@ On the other side, inside `MyComponent.svelte`, we can receive props with the `$
 	let +++{ adjective }+++ = $props();
 </script>
 
-<p>this component is {+++adjective+++}</p>
+<p>ce composant est {+++adjective+++}</p>
 ```
 
-## Fallback values
+## Valeurs par défaut
 
-Destructuring allows us to declare fallback values, which are used if the parent component does not set a given prop:
+Déstructurer permet de déclarer des valeurs par défaut, qui sont utilisées si le composant parent ne
+définit pas une prop donnée :
 
 ```js
-let { adjective = 'happy' } = $props();
+let { adjective = 'content' } = $props();
 ```
 
-> [!NOTE] Fallback values are not turned into reactive state proxies (see [Updating props](#Updating-props) for more info)
+> [!NOTE] Les valeurs par défaut ne sont pas transformées en proxys d'état réactifs.
 
-## Renaming props
+## Renommer des props
 
-We can also use the destructuring assignment to rename props, which is necessary if they're invalid identifiers, or a JavaScript keyword like `super`:
+Vous pouvez aussi utiliser la syntaxe d'assignation par déstructuration pour renommer des props, ce
+qui est nécessaire si leur identifiant est invalide ou si c'est un mot-clé réservé par JavaScript,
+comme `super` :
 
 ```js
 let { super: trouper = 'lights are gonna find me' } = $props();
 ```
 
-## Rest props
+## Props de reste
 
-Finally, we can use a _rest property_ to get, well, the rest of the props:
+Enfin, nous pouvons utiliser une _propriété de reste_ pour obtenir, eh bien, le reste des props :
 
 ```js
 let { a, b, c, ...others } = $props();
 ```
 
-## Updating props
+## Mise à jour des props
 
-References to a prop inside a component update when the prop itself updates — when `count` changes in `App.svelte`, it will also change inside `Child.svelte`. But the child component is able to temporarily override the prop value, which can be useful for unsaved ephemeral state ([demo](/playground/untitled#H4sIAAAAAAAAE6WQ0WrDMAxFf0WIQR0Wmu3VTQJln7HsIfVcZubIxlbGRvC_DzuBraN92qPula50tODZWB1RPi_IX16jLALWSOOUq6P3-_ihLWftNEZ9TVeOWBNHlNhGFYznfqCBzeRdYHh6M_YVzsFNsNs3pdpGd4eBcqPVDMrNxNDBXeSRtXioDgO1zU8ataeZ2RE4Utao924RFXQ9iHXwvoPHKpW1xY4g_Bg0cSVhKS0p560Za95612ZC02ONrD8ZJYdZp_rGQ37ff_mSP86Np2TWZaNNmdcH56P4P67K66_SXoK9pG-5dF5Z9QEAAA==)):
+Les références à une prop à l'intérieur d'un composant se mettent à jour lorque la prop elle-même se
+met à jour – lorsque `count` change dans `App.svelte`, elle va également changer dans
+`Child.svelte`. Mais le composant enfant est capable d'écraser la valeur de la prop, ce qui peut
+être utile pour des états temporaires qui ne seront pas sauvegardés
+([démo](/playground/untitled#H4sIAAAAAAAAE6WQ0WrDMAxFf0WIQR0Wmu3VTQJln7HsIfVcZubIxlbGRvC_DzuBraN92qPula50tODZWB1RPi_IX16jLALWSOOUq6P3-_ihLWftNEZ9TVeOWBNHlNhGFYznfqCBzeRdYHh6M_YVzsFNsNs3pdpGd4eBcqPVDMrNxNDBXeSRtXioDgO1zU8ataeZ2RE4Utao924RFXQ9iHXwvoPHKpW1xY4g_Bg0cSVhKS0p560Za95612ZC02ONrD8ZJYdZp_rGQ37ff_mSP86Np2TWZaNNmdcH56P4P67K66_SXoK9pG-5dF5Z9QEAAA==)).
 
 ```svelte
 <!--- file: App.svelte --->
@@ -74,7 +85,7 @@ References to a prop inside a component update when the prop itself updates — 
 </script>
 
 <button onclick={() => (count += 1)}>
-	clicks (parent): {count}
+	clics (parent): {count}
 </button>
 
 <Child {count} />
@@ -87,13 +98,16 @@ References to a prop inside a component update when the prop itself updates — 
 </script>
 
 <button onclick={() => (count += 1)}>
-	clicks (child): {count}
+	clics (child): {count}
 </button>
 ```
 
-While you can temporarily _reassign_ props, you should not _mutate_ props unless they are [bindable]($bindable).
+Bien que vous puissiez temporairement _réassigner_ des props, vous ne devriez pas _muter_ de props,
+à moins qu'elles soient définies comme [bindable]($bindable).
 
-If the prop is a regular object, the mutation will have no effect ([demo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2W1QmorQgJXk0RC3PkBwiExG9WQrC17U4Es_ztKUkQp9OjxzM7bjcjtSKjwyfKNp1aLORA4b13ADHszUED1HFE-3eyaBcy-Mw_O5eFAg8xa1wb6T9eWhVgCKiyD9sZJ3XAjZnTWCzzuzfAKvbcjbPJieR2jm_uGy-InweXqtd0baaliBG0nFgW3kBIUNWYo9CGoxE-UsgvIpw2_oc9-LmAPJBCPDJCggqvlVtvdH9puErEMlvVg9HsVtzuoaojzkKKAfRuALVDfk5ZZW0fmy05wXcFdwyktlUs-KIinljTXrRVnm7-kL9dYLVbUAQAA)):
+Si une props est un objet classique, la mutation n'aura aucun effet
+([démo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2W1QmorQgJXk0RC3PkBwiExG9WQrC17U4Es_ztKUkQp9OjxzM7bjcjtSKjwyfKNp1aLORA4b13ADHszUED1HFE-3eyaBcy-Mw_O5eFAg8xa1wb6T9eWhVgCKiyD9sZJ3XAjZnTWCzzuzfAKvbcjbPJieR2jm_uGy-InweXqtd0baaliBG0nFgW3kBIUNWYo9CGoxE-UsgvIpw2_oc9-LmAPJBCPDJCggqvlVtvdH9puErEMlvVg9HsVtzuoaojzkKKAfRuALVDfk5ZZW0fmy05wXcFdwyktlUs-KIinljTXrRVnm7-kL9dYLVbUAQAA)
+:
 
 ```svelte
 <!--- file: App.svelte --->
@@ -111,14 +125,19 @@ If the prop is a regular object, the mutation will have no effect ([demo](/playg
 </script>
 
 <button onclick={() => {
-	// has no effect
+	// n'a aucun effet
 	object.count += 1
 }}>
 	clicks: {object.count}
 </button>
 ```
 
-If the prop is a reactive state proxy, however, then mutations _will_ have an effect but you will see an [`ownership_invalid_mutation`](runtime-warnings#Client-warnings-ownership_invalid_mutation) warning, because the component is mutating state that does not 'belong' to it ([demo](/playground/untitled#H4sIAAAAAAAAE3WR0U7DMAxFf8VESBuiauG1WycheOEbKA9p67FA6kSNszJV-XeUZhMw2GN8r-1znUmQ7FGU4pn2UqsOes-SlSGRia3S6ET5Mgk-2OiJBZGdOh6szd0eNcdaIx3-V28NMRI7UYq1awdleVNTzaq3ZmB43CndwXYwPSzyYn4dWxermqJRI4Np3rFlqODasWRcTtAaT1zCHYSbVU3r4nsyrdPMKTUFKDYiE4yfLEoePIbsQpqfy3_nOVMuJIqg0wk1RFg7GOuWfwEbz2wIDLVatR_VtLyBagNTHFIUMCqtoZXeIfAOU1JoUJsR2IC3nWTMjt7GM4yKdyBhlAMpesvhydCC0y_i0ZagHByMh26WzUhXUUxKnpbcVnBfUwhznJnNlac7JkuIURL-2VVfwxflyrWcSQIAAA==)):
+Toutefois, si la props est un proxy réactif, les mutations _auront_ un effet, mais vous aurez un
+warning
+[`_ownership_invalid_mutation`](runtime-warnings#Client-warnings-ownership_invalid_mutation), car le
+composant mute un état qui ne lui "appartient" pas
+([démo](/playground/untitled#H4sIAAAAAAAAE3WR0U7DMAxFf8VESBuiauG1WycheOEbKA9p67FA6kSNszJV-XeUZhMw2GN8r-1znUmQ7FGU4pn2UqsOes-SlSGRia3S6ET5Mgk-2OiJBZGdOh6szd0eNcdaIx3-V28NMRI7UYq1awdleVNTzaq3ZmB43CndwXYwPSzyYn4dWxermqJRI4Np3rFlqODasWRcTtAaT1zCHYSbVU3r4nsyrdPMKTUFKDYiE4yfLEoePIbsQpqfy3_nOVMuJIqg0wk1RFg7GOuWfwEbz2wIDLVatR_VtLyBagNTHFIUMCqtoZXeIfAOU1JoUJsR2IC3nWTMjt7GM4yKdyBhlAMpesvhydCC0y_i0ZagHByMh26WzUhXUUxKnpbcVnBfUwhznJnNlac7JkuIURL-2VVfwxflyrWcSQIAAA==))
+:
 
 ```svelte
 <!--- file: App.svelte --->
@@ -138,16 +157,19 @@ If the prop is a reactive state proxy, however, then mutations _will_ have an ef
 </script>
 
 <button onclick={() => {
-	// will cause the count below to update,
-	// but with a warning. Don't mutate
-	// objects you don't own!
+	// va mettre à jour le count ci-dessous,
+	// mais avec un warning. Ne mutez pas
+	// des objets que vous ne possédez pas !
 	object.count += 1
 }}>
-	clicks: {object.count}
+	clics: {object.count}
 </button>
 ```
 
-The fallback value of a prop not declared with `$bindable` is left untouched — it is not turned into a reactive state proxy — meaning mutations will not cause updates ([demo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2VkIbUVoYFraCIh7vwA4eC4G9Wta1vxpgJZ_nfkBEQp9OjxzOzTRGHlkUQlXpy9G0gq1idCL43ppDrAD84HUYheGwqieo2CP3y2Z0EU3-En79fhRIaz1slA_-nKWSbLQVRiE9SgPTetbVkfvRsYzztttugHd8RiXU6vr-jisbWb8idhN7O3bEQhmN5ZVDyMlIorcOddv_Eufq4AGmJEuG5PilEjQrnRcoV7JCTUuJlGWq7-YHYjs7NwVhmtDnVcrlA3iLmzLLGTAdaB-j736h68Oxv-JM1I0AFjoG1OzPfX023c1nhobUoT39QeKsRzS8owM8DFTG_pE6dcVl70AQAA))
+La valeur par défaut d'une prop non déclarée avec `$bindable` n'est pas affectée – elle n'est pas
+tranformée en proxy réactif d'état – ce qui implique que les mutations ne provoqueront pas de mise à
+jour
+([démo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2VkIbUVoYFraCIh7vwA4eC4G9Wta1vxpgJZ_nfkBEQp9OjxzOzTRGHlkUQlXpy9G0gq1idCL43ppDrAD84HUYheGwqieo2CP3y2Z0EU3-En79fhRIaz1slA_-nKWSbLQVRiE9SgPTetbVkfvRsYzztttugHd8RiXU6vr-jisbWb8idhN7O3bEQhmN5ZVDyMlIorcOddv_Eufq4AGmJEuG5PilEjQrnRcoV7JCTUuJlGWq7-YHYjs7NwVhmtDnVcrlA3iLmzLLGTAdaB-j736h68Oxv-JM1I0AFjoG1OzPfX023c1nhobUoT39QeKsRzS8owM8DFTG_pE6dcVl70AQAA)) :
 
 ```svelte
 <!--- file: Child.svelte --->
@@ -156,18 +178,21 @@ The fallback value of a prop not declared with `$bindable` is left untouched —
 </script>
 
 <button onclick={() => {
-	// has no effect if the fallback value is used
+	// n'a pas d'éffet si la valeur par défaut est utilisée
 	object.count += 1
 }}>
-	clicks: {object.count}
+	clics: {object.count}
 </button>
 ```
 
-In summary: don't mutate props. Either use callback props to communicate changes, or — if parent and child should share the same object — use the [`$bindable`]($bindable) rune.
+En résumé : ne mutez pas les props. Vous pouvez soit utiliser des props de callback pour communiquer
+des changements, ou – si le parent et l'enfant partagent le même objet – utiliser la rune
+[`$bindable`]($bindable).
 
-## Type safety
+## Typage
 
-You can add type safety to your components by annotating your props, as you would with any other variable declaration. In TypeScript that might look like this...
+Vous pouvez ajouter du typage à vos composants en annotant vos props, comme vous le feriez avec
+toute autre déclaration de variable. En TypeScript, cela peut ressembler à ça...
 
 ```svelte
 <script lang="ts">
@@ -175,7 +200,7 @@ You can add type safety to your components by annotating your props, as you woul
 </script>
 ```
 
-...while in JSDoc you can do this:
+... tandis qu'en JSDoc vous pouvez écrire ceci :
 
 ```svelte
 <script>
@@ -184,7 +209,7 @@ You can add type safety to your components by annotating your props, as you woul
 </script>
 ```
 
-You can, of course, separate the type declaration from the annotation:
+Vous pouvez, bien sûr, séparer la déclaration de type de l'annotation :
 
 ```svelte
 <script lang="ts">
@@ -196,4 +221,5 @@ You can, of course, separate the type declaration from the annotation:
 </script>
 ```
 
-Adding types is recommended, as it ensures that people using your component can easily discover which props they should provide.
+L'ajout de types est recommandé, car il permet aux personnes utilisant votre composant de découvrir
+facilement les props à fournir.

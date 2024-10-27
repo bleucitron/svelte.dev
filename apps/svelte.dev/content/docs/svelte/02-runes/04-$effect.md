@@ -2,15 +2,26 @@
 title: $effect
 ---
 
-Effects are what make your application _do things_. When Svelte runs an effect function, it tracks which pieces of state (and derived state) are accessed (unless accessed inside [`untrack`](svelte#untrack)), and re-runs the function when that state later changes.
+Les effets permettent à votre application de _faire des choses_. Lorsque Svelte exécute une fonction
+d'effet, il détermine les états (et d'états dérivés) qui sont lus, (à moins qu'ils ne soient
+exemptés par [`untrack`](svelte#untrack)), et ré-exécute la fonction lorsque ces états changent.
 
-Most of the effects in a Svelte app are created by Svelte itself — they're the bits that update the text in `<h1>hello {name}!</h1>` when `name` changes, for example.
+La plupart des effets dans une application Svelte sont créés par Svelte lui-même – c'est ce qui
+permet de mettre à jour le texte dans `<h1>coucou {name} !</h1>` lorsque que `name` change, par
+exemple.
 
-But you can also create your own effects with the `$effect` rune, which is useful when you need to synchronize an external system (whether that's a library, or a `<canvas>` element, or something across a network) with state inside your Svelte app.
+Mais vous pouvez aussi créer vos propres effets avec la rune `$effect`, ce qui sert lorsque vous
+avez besoin de synchroniser un système extérieur (que ce soit une librairie, un élément
+`<canvas>`, ou quelque chose sur le réseau) avec un état au sein de votre application Svelte.
 
-> [!NOTE] Avoid overusing `$effect`! When you do too much work in effects, code often becomes difficult to understand and maintain. See [when not to use `$effect`](#When-not-to-use-$effect) to learn about alternative approaches.
+> [!NOTE] Évitez de trop vous servir des effets ! Lorsque trop de choses sont gérés via des effets,
+> le code devient difficile à comprendre et à maintenir. Voir la partie [quand ne pas utiliser
+> d'effet](#when-not-to-use-effects) pour en savoir plus sur les moyens de les éviter.
 
-Your effects run after the component has been mounted to the DOM, and in a [microtask](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide) after state changes ([demo](/playground/untitled#H4sIAAAAAAAAE31S246bMBD9lZF3pSRSAqTVvrCAVPUP2sdSKY4ZwJJjkD0hSVH-vbINuWxXfQH5zMyZc2ZmZLVUaFn6a2R06ZGlHmBrpvnBvb71fWQHVOSwPbf4GS46TajJspRlVhjZU1HqkhQSWPkHIYdXS5xw-Zas3ueI6FRn7qHFS11_xSRZhIxbFtcDtw7SJb1iXaOg5XIFeQGjzyPRaevYNOGZIJ8qogbpe8CWiy_VzEpTXiQUcvPDkSVrSNZz1UlW1N5eLcqmpdXUvaQ4BmqlhZNUCgxuzFHDqUWNAxrYeUM76AzsnOsdiJbrBp_71lKpn3RRbii-4P3f-IMsRxS-wcDV_bL4PmSdBa2wl7pKnbp8DMgVvJm8ZNskKRkEM_OzyOKQFkgqOYBQ3Nq89Ns0nbIl81vMFN-jKoLMTOr-SOBOJS-Z8f5Y6D1wdcR8dFqvEBdetK-PHwj-z-cH8oHPY54wRJ8Ys7iSQ3Bg3VA9azQbmC9k35kKzYa6PoVtfwbbKVnBixBiGn7Pq0rqJoUtHiCZwAM3jdTPWCVtr_glhVrhecIa3vuksJ_b7TqFs4DPyriSjd5IwoNNQaAmNI-ESfR2p8zimzvN1swdCkvJHPH6-_oX8o1SgcIDAAA=)):
+Vos effets sont exécutés après le montage du composant dans le DOM, et lors d'une
+[micro-tâche](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide) juste
+après la mise à jour de l'état
+([démo](/playground/untitled#H4sIAAAAAAAAE31S246bMBD9lZF3pSRSAqTVvrCAVPUP2sdSKY4ZwJJjkD0hSVH-vbINuWxXfQH5zMyZc2ZmZLVUaFn6a2R06ZGlHmBrpvnBvb71fWQHVOSwPbf4GS46TajJspRlVhjZU1HqkhQSWPkHIYdXS5xw-Zas3ueI6FRn7qHFS11_xSRZhIxbFtcDtw7SJb1iXaOg5XIFeQGjzyPRaevYNOGZIJ8qogbpe8CWiy_VzEpTXiQUcvPDkSVrSNZz1UlW1N5eLcqmpdXUvaQ4BmqlhZNUCgxuzFHDqUWNAxrYeUM76AzsnOsdiJbrBp_71lKpn3RRbii-4P3f-IMsRxS-wcDV_bL4PmSdBa2wl7pKnbp8DMgVvJm8ZNskKRkEM_OzyOKQFkgqOYBQ3Nq89Ns0nbIl81vMFN-jKoLMTOr-SOBOJS-Z8f5Y6D1wdcR8dFqvEBdetK-PHwj-z-cH8oHPY54wRJ8Ys7iSQ3Bg3VA9azQbmC9k35kKzYa6PoVtfwbbKVnBixBiGn7Pq0rqJoUtHiCZwAM3jdTPWCVtr_glhVrhecIa3vuksJ_b7TqFs4DPyriSjd5IwoNNQaAmNI-ESfR2p8zimzvN1swdCkvJHPH6-_oX8o1SgcIDAAA=)).
 
 ```svelte
 <script>
@@ -23,7 +34,7 @@ Your effects run after the component has been mounted to the DOM, and in a [micr
 		const context = canvas.getContext('2d');
 		context.clearRect(0, 0, canvas.width, canvas.height);
 
-		// this will re-run whenever `color` or `size` change
+		// ceci va être rejoué lorsque `color` ou `size` change
 		context.fillStyle = color;
 		context.fillRect(0, 0, size, size);
 	});
@@ -32,11 +43,18 @@ Your effects run after the component has been mounted to the DOM, and in a [micr
 <canvas bind:this={canvas} width="100" height="100" />
 ```
 
-Re-runs are batched (i.e. changing `color` and `size` in the same moment won't cause two separate runs), and happen after any DOM updates have been applied.
+Les ré-exécutions sont mutualisées (i.e. changer `color` et `size` au même moment ne va pas
+déclencher deux ré-exécutions distinctes), et se produisent après que les éventuelles modifications
+du DOM aient eu lieu.
 
-You can place `$effect` anywhere, not just at the top level of a component, as long as it is called during component initialization (or while a parent effect is active). It is then tied to the lifecycle of the component (or parent effect) and will therefore destroy itself when the component unmounts (or the parent effect is destroyed).
+Vous pouvez places des `$effect` n'importe où, pas uniquement à la racine d'un composant, tant qu'il
+est exécuté lors de l'initialisation du composant (ou lorsqu'un effet parent est actif). Il est
+ensuite attaché au cycle de vie du composant (ou de l'effet parent) et sera donc détruit lorsque du
+démontage du composant (ou lorsque l'effet parent est détruit).
 
-You can return a function from `$effect`, which will run immediately before the effect re-runs, and before it is destroyed ([demo](/playground/untitled#H4sIAAAAAAAAE42RQY-bMBCF_8rI2kPopiXpMQtIPfbeW6m0xjyKtWaM7CFphPjvFVB2k2oPe7LmzXzyezOjaqxDVKefo5JrD3VaBLVXrLu5-tb3X-IZTmat0hHv6cazgCWqk8qiCbaXouRSHISMH1gop4coWrA7JE9bp7PO2QjjuY5vA8fDYZ3hUh7QNDCy2yWUFzTOUilpSj9aG-linaMKFGACtKCmSwvGGYGeLQvCWbtnMq3m34grajxHoa1JOUXI93_V_Sfz7Oz7Mafj0ypN-zvHm8dSAmQITP_xaUq2IU1GO1dp80I2Uh_82dao92Rl9R8GvgF0QrbrUFstcFeq0PgAkha0LoICPoeB4w1SJUvsZcj4rvcMlvmvGlGCv6J-DeSgw2vabQnJlm55p7nM0rcTctYei3HZxZSl7XHVqkHEM3k2zpqXfFyj393zU05fpyI6f0HI0hUoPoamC9roKDeo2ivBH1EnCQOmX9NfYw2GHrgCAAA=)).
+Vous pouvez renvoyer une fonction depuis `$effect`, qui sera immédiatement exécutée avant la
+ré-exécution de l'effet, et lorsque celui-ci est détruit
+([démo](/playground/untitled#H4sIAAAAAAAAE42RQY-bMBCF_8rI2kPopiXpMQtIPfbeW6m0xjyKtWaM7CFphPjvFVB2k2oPe7LmzXzyezOjaqxDVKefo5JrD3VaBLVXrLu5-tb3X-IZTmat0hHv6cazgCWqk8qiCbaXouRSHISMH1gop4coWrA7JE9bp7PO2QjjuY5vA8fDYZ3hUh7QNDCy2yWUFzTOUilpSj9aG-linaMKFGACtKCmSwvGGYGeLQvCWbtnMq3m34grajxHoa1JOUXI93_V_Sfz7Oz7Mafj0ypN-zvHm8dSAmQITP_xaUq2IU1GO1dp80I2Uh_82dao92Rl9R8GvgF0QrbrUFstcFeq0PgAkha0LoICPoeB4w1SJUvsZcj4rvcMlvmvGlGCv6J-DeSgw2vabQnJlm55p7nM0rcTctYei3HZxZSl7XHVqkHEM3k2zpqXfFyj393zU05fpyI6f0HI0hUoPoamC9roKDeo2ivBH1EnCQOmX9NfYw2GHrgCAAA=))
 
 ```svelte
 <script>
@@ -44,15 +62,15 @@ You can return a function from `$effect`, which will run immediately before the 
 	let milliseconds = $state(1000);
 
 	$effect(() => {
-		// This will be recreated whenever `milliseconds` changes
+		// ceci sera recréé lorsque `milliseconds` change
 		const interval = setInterval(() => {
 			count += 1;
 		}, milliseconds);
 
 		return () => {
-			// if a callback is provided, it will run
-			// a) immediately before the effect re-runs
-			// b) when the component is destroyed
+			// si un callback est fourni, il sera rejoué
+			// a) immédiatement avant que l'effet ne se rejoue
+			// b) lorsque que le composant est démonté
 			clearInterval(interval);
 		};
 	});
@@ -60,15 +78,20 @@ You can return a function from `$effect`, which will run immediately before the 
 
 <h1>{count}</h1>
 
-<button onclick={() => (milliseconds *= 2)}>slower</button>
-<button onclick={() => (milliseconds /= 2)}>faster</button>
+<button onclick={() => (milliseconds *= 2)}>ralentir</button>
+<button onclick={() => (milliseconds /= 2)}>accélérer</button>
 ```
 
-### Understanding dependencies
+### Comprendre les dépendances
 
-`$effect` automatically picks up any reactive values (`$state`, `$derived`, `$props`) that are _synchronously_ read inside its function body and registers them as dependencies. When those dependencies change, the `$effect` schedules a rerun.
+`$effect` détecte automatiquement toute valeur réactive (`$state`, `$derived`, `$props`) qui est lue
+de manière _synchrone_ à l'intérieur de son corps de fonction et l'enregistre en tant que
+dépendance. Lorsque ces dépendances changent, l'`$effect` va planifier une ré-exécution.
 
-Values that are read _asynchronously_ — after an `await` or inside a `setTimeout`, for example — will not be tracked. Here, the canvas will be repainted when `color` changes, but not when `size` changes ([demo](/playground/untitled#H4sIAAAAAAAAE31T246bMBD9lZF3pWSlBEirfaEQqdo_2PatVIpjBrDkGGQPJGnEv1e2IZfVal-wfHzmzJyZ4cIqqdCy9M-F0blDlnqArZjmB3f72XWRHVCRw_bc4me4aDWhJstSlllhZEfbQhekkMDKfwg5PFvihMvX5OXH_CJa1Zrb0-Kpqr5jkiwC48rieuDWQbqgZ6wqFLRcvkC-hYvnkWi1dWqa8ESQTxFRjfQWsOXiWzmr0sSLhEJu3p1YsoJkNUcdZUnN9dagrBu6FVRQHAM10sJRKgUG16bXcGxQ44AGdt7SDkTDdY02iqLHnJVU6hedlWuIp94JW6Tf8oBt_8GdTxlF0b4n0C35ZLBzXb3mmYn3ae6cOW74zj0YVzDNYXRHFt9mprNgHfZSl6mzml8CMoLvTV6wTZIUDEJv5us2iwMtiJRyAKG4tXnhl8O0yhbML0Wm-B7VNlSSSd31BG7z8oIZZ6dgIffAVY_5xdU9Qrz1Bnx8fCfwtZ7v8Qc9j3nB8PqgmMWlHIID6-bkVaPZwDySfWtKNGtquxQ23Qlsq2QJT0KIqb8dL0up6xQ2eIBkAg_c1FI_YqW0neLnFCqFpwmreedJYT7XX8FVOBfwWRhXstZrSXiwKQjUhOZeMIleb5JZfHWn2Yq5pWEpmR7Hv-N_wEqT8hEEAAA=)):
+Les valeurs qui sont lues de manière _asynchrones_ – après un `await` ou à l'intérieur d'un
+`setTimeout`, par exemple – ne seront pas considérées comme dépendances. Ici, le canvas sera repeint
+lorsque `color` change, mais pas lorsque `size` change
+([démo](/playground/untitled#H4sIAAAAAAAAE31T246bMBD9lZF3pWSlBEirfaEQqdo_2PatVIpjBrDkGGQPJGnEv1e2IZfVal-wfHzmzJyZ4cIqqdCy9M-F0blDlnqArZjmB3f72XWRHVCRw_bc4me4aDWhJstSlllhZEfbQhekkMDKfwg5PFvihMvX5OXH_CJa1Zrb0-Kpqr5jkiwC48rieuDWQbqgZ6wqFLRcvkC-hYvnkWi1dWqa8ESQTxFRjfQWsOXiWzmr0sSLhEJu3p1YsoJkNUcdZUnN9dagrBu6FVRQHAM10sJRKgUG16bXcGxQ44AGdt7SDkTDdY02iqLHnJVU6hedlWuIp94JW6Tf8oBt_8GdTxlF0b4n0C35ZLBzXb3mmYn3ae6cOW74zj0YVzDNYXRHFt9mprNgHfZSl6mzml8CMoLvTV6wTZIUDEJv5us2iwMtiJRyAKG4tXnhl8O0yhbML0Wm-B7VNlSSSd31BG7z8oIZZ6dgIffAVY_5xdU9Qrz1Bnx8fCfwtZ7v8Qc9j3nB8PqgmMWlHIID6-bkVaPZwDySfWtKNGtquxQ23Qlsq2QJT0KIqb8dL0up6xQ2eIBkAg_c1FI_YqW0neLnFCqFpwmreedJYT7XX8FVOBfwWRhXstZrSXiwKQjUhOZeMIleb5JZfHWn2Yq5pWEpmR7Hv-N_wEqT8hEEAAA=)) :
 
 ```ts
 // @filename: index.ts
@@ -85,34 +108,36 @@ $effect(() => {
 	const context = canvas.getContext('2d');
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-	// this will re-run whenever `color` changes...
+	// cet effet sera rejoué lorsque `color` change...
 	context.fillStyle = color;
 
 	setTimeout(() => {
-		// ...but not when `size` changes
+		// ... mais pas lorsque `size` change
 		context.fillRect(0, 0, size, size);
 	}, 0);
 });
 ```
 
-An effect only reruns when the object it reads changes, not when a property inside it changes. (If you want to observe changes _inside_ an object at dev time, you can use [`$inspect`]($inspect).)
+Un effet est seulement rejoué lorsque l'objet qu'il lit change, pas lorsqu'une propriété de cet
+objet change. (If vous souhaitez observer les changement _à l'intérieur_ d'un objet lors de vos
+développements, vous pouvez utiliser [`$inspect`]($inspect).)
 
 ```svelte
 <script>
 	let state = $state({ value: 0 });
 	let derived = $derived({ value: state.value * 2 });
 
-	// this will run once, because `state` is never reassigned (only mutated)
+	// ceci sera joué une seule fois, car `state` n'est jamais réassigné (seulement muté)
 	$effect(() => {
 		state;
 	});
 
-	// this will run whenever `state.value` changes...
+	// ceci sera rejoué à chaque fois que `state.value` change...
 	$effect(() => {
 		state.value;
 	});
 
-	// ...and so will this, because `derived` is a new object each time
+	// ... et ceci également, car `derived` est un nouvel objet à chaque fois
 	$effect(() => {
 		derived;
 	});
@@ -122,27 +147,30 @@ An effect only reruns when the object it reads changes, not when a property insi
 	{state.value}
 </button>
 
-<p>{state.value} doubled is {derived.value}</p>
+<p>Le double de {state.value} vaut {derived.value}</p>
 ```
 
-An effect only depends on the values that it read the last time it ran. If `a` is true, changes to `b` will [not cause this effect to rerun](/playground/untitled#H4sIAAAAAAAAE3WQ0WrDMAxFf0U1hTow1vcsMfQ7lj3YjlxEXTvEymC4_vfFC6Ewtidxde8RkrJw5DGJ9j2LoO8oWnGZJvEi-GuqIn2iZ1x1istsa6dLdqaJ1RAG9sigoYdjYs0onfYJm7fdMX85q3dE59CylA30CnJtDWxjSNHjq49XeZqXEChcT9usLUAOpIbHA0yzM78oColGhDVofLS3neZSS6mqOz-XD51ZmGOAGKwne-vztk-956CL0kAJsi7decupf4l658EUZX4I8yTWt93jSI5wFC3PC5aP8g0Aje5DcQEAAA==):
+Un effet dépend uniquement des valeurs qu'il a lues la dernière fois qu'il a été joué. Si `a`
+est vrai, les changements affectant `b` [ne déclencheront pas la ré-exécution de cet
+effet](/playground/untitled#H4sIAAAAAAAAE3WQ0WrDMAxFf0U1hTow1vcsMfQ7lj3YjlxEXTvEymC4_vfFC6Ewtidxde8RkrJw5DGJ9j2LoO8oWnGZJvEi-GuqIn2iZ1x1istsa6dLdqaJ1RAG9sigoYdjYs0onfYJm7fdMX85q3dE59CylA30CnJtDWxjSNHjq49XeZqXEChcT9usLUAOpIbHA0yzM78oColGhDVofLS3neZSS6mqOz-XD51ZmGOAGKwne-vztk-956CL0kAJsi7decupf4l658EUZX4I8yTWt93jSI5wFC3PC5aP8g0Aje5DcQEAAA==).
 
 ```ts
 let a = false;
 let b = false;
 // ---cut---
 $effect(() => {
-	console.log('running');
+	console.log('effet');
 
 	if (a || b) {
-		console.log('inside if block');
+		console.log('intérieur du bloc if');
 	}
 });
 ```
 
 ## `$effect.pre`
 
-In rare cases, you may need to run code _before_ the DOM updates. For this we can use the `$effect.pre` rune:
+Dans de rares cas, vous pourriez avoir besoin d'exécuter votre code _avant_ que le DOM ne soit mis à
+jour. Pour cela, nous avons accès à la rune `$effect.pre` :
 
 ```svelte
 <script>
@@ -154,12 +182,13 @@ In rare cases, you may need to run code _before_ the DOM updates. For this we ca
 	// ...
 
 	$effect.pre(() => {
-		if (!div) return; // not yet mounted
+		if (!div) return; // pas encore monté
 
-		// reference `messages` array length so that this code re-runs whenever it changes
+		// référence à la longueur du tableau `messages` afin que ce code soit rejoué lorsque celle-ci
+		// change
 		messages.length;
 
-		// autoscroll when new messages are added
+		// scroll automatique lorsque de nouveaux messages sont ajoutés
 		if (div.offsetHeight + div.scrollTop > div.scrollHeight - 20) {
 			tick().then(() => {
 				div.scrollTo(0, div.scrollHeight);
@@ -175,25 +204,30 @@ In rare cases, you may need to run code _before_ the DOM updates. For this we ca
 </div>
 ```
 
-Apart from the timing, `$effect.pre` works exactly like `$effect`.
+Le timing mis à part, `$effect.pre` fonctionne exactement comme `$effect`.
 
 ## `$effect.tracking`
 
-The `$effect.tracking` rune is an advanced feature that tells you whether or not the code is running inside a tracking context, such as an effect or inside your template ([demo](/playground/untitled#H4sIAAAAAAAACn3PwYrCMBDG8VeZDYIt2PYeY8Dn2HrIhqkU08nQjItS-u6buAt7UDzmz8ePyaKGMWBS-nNRcmdU-hHUTpGbyuvI3KZvDFLal0v4qvtIgiSZUSb5eWSxPfWSc4oB2xDP1XYk8HHiSHkICeXKeruDDQ4Demlldv4y0rmq6z10HQwuJMxGVv4mVVXDwcJS0jP9u3knynwtoKz1vifT_Z9Jhm0WBCcOTlDD8kyspmML5qNpHg40jc3fFryJ0iWsp_UHgz3180oBAAA=)):
+La rune `$effect.tracking` est une fonctionnalité avancée qui vous informe de si le code est exécuté
+au sein d'un contexte de suivi (_tracking_), comme un effet ou bien dans le template
+([démo](/playground/untitled#H4sIAAAAAAAACn3PwYrCMBDG8VeZDYIt2PYeY8Dn2HrIhqkU08nQjItS-u6buAt7UDzmz8ePyaKGMWBS-nNRcmdU-hHUTpGbyuvI3KZvDFLal0v4qvtIgiSZUSb5eWSxPfWSc4oB2xDP1XYk8HHiSHkICeXKeruDDQ4Demlldv4y0rmq6z10HQwuJMxGVv4mVVXDwcJS0jP9u3knynwtoKz1vifT_Z9Jhm0WBCcOTlDD8kyspmML5qNpHg40jc3fFryJ0iWsp_UHgz3180oBAAA=))
+:
 
 ```svelte
 <script>
-	console.log('in component setup:', $effect.tracking()); // false
+	console.log('lors de la mise en place du composant :', $effect.tracking()); // false
 
 	$effect(() => {
-		console.log('in effect:', $effect.tracking()); // true
+		console.log('dans l\'effet :', $effect.tracking()); // true
 	});
 </script>
 
-<p>in template: {$effect.tracking()}</p> <!-- true -->
+<p>dans le template: {$effect.tracking()}</p> <!-- true -->
 ```
 
-This allows you to (for example) add things like subscriptions without causing memory leaks, by putting them in child effects. Here's a `readable` function that listens to changes from a callback function as long as it's inside a tracking context:
+Cela vous permet (par exemple) de mettre en place des choses comme des abonnements sans causer de
+fuites de mémoire, en les mettant dans des effets enfant. Voici une fonction `readable` qui écoute
+les changements d'un callback tant qu'elle se trouve dans un contexte de suivi :
 
 ```ts
 import { tick } from 'svelte';
@@ -209,24 +243,24 @@ export default function readable<T>(
 
 	return {
 		get value() {
-			// If in a tracking context ...
+			// si dans un contexte de suivi...
 			if ($effect.tracking()) {
 				$effect(() => {
-					// ...and there's no subscribers yet...
+					// ... et qu'il n'y a pas encore d'abonné...
 					if (subscribers === 0) {
-						// ...invoke the function and listen to changes to update state
+						// ... invoquer la fonction et écouter les changements pour mettre à jour l'état
 						stop = start((fn) => (value = fn(value)));
 					}
 
 					subscribers++;
 
-					// The return callback is called once a listener unlistens
+					// le callback de retour est appelé lorsqu'un abonné se désabonne
 					return () => {
 						tick().then(() => {
 							subscribers--;
-							// If it was the last subscriber...
+							// si c'était le dernier abonné...
 							if (subscribers === 0) {
-								// ...stop listening to changes
+								// ... arrêter d'écouter les changements
 								stop?.();
 								stop = null;
 							}
@@ -243,7 +277,10 @@ export default function readable<T>(
 
 ## `$effect.root`
 
-The `$effect.root` rune is an advanced feature that creates a non-tracked scope that doesn't auto-cleanup. This is useful for nested effects that you want to manually control. This rune also allows for the creation of effects outside of the component initialisation phase.
+La rune `$effect.root` est une fonctionnalité avancée qui crée un scope non suivi qui ne
+s'auto-nettoie pas. Cela est utile pour les effets imbriqués que vous souhaitez contrôler
+manuellement. Cette rune permet également la création d'effets en dehors de la phase
+d'initialisation du composant.
 
 ```svelte
 <script>
@@ -255,29 +292,32 @@ The `$effect.root` rune is an advanced feature that creates a non-tracked scope 
 		});
 
 		return () => {
-			console.log('effect root cleanup');
+			console.log('nettoyage de l\'effet racine');
 		};
 	});
 </script>
 ```
 
-## When not to use `$effect`
+## Quand ne pas utiliser `$effect` [!VO]When not to use `$effect`
 
-In general, `$effect` is best considered something of an escape hatch — useful for things like analytics and direct DOM manipulation — rather than a tool you should use frequently. In particular, avoid using it to synchronise state. Instead of this...
+En général, `$effect` est plutôt considéré comme un dernier recours – pratique pour des choses comme
+les analytics ou la manipulation directe du DOM – plutôt qu'un outil que vous devriez utiliser
+souvent. En particulier, évitez de vous en servir pour synchroniser un état. Plutôt que faire
+ceci...
 
 ```svelte
 <script>
 	let count = $state(0);
 	let doubled = $state();
 
-	// don't do this!
+	// ne faites pas ça !
 	$effect(() => {
 		doubled = count * 2;
 	});
 </script>
 ```
 
-...do this:
+... faites ceci :
 
 ```svelte
 <script>
@@ -286,9 +326,14 @@ In general, `$effect` is best considered something of an escape hatch — useful
 </script>
 ```
 
-> [!NOTE] For things that are more complicated than a simple expression like `count * 2`, you can also use `$derived.by`.
+> [!NOTE] Pour des choses plus compliquées qu'une simple expression comme `count * 2`, vous pouvez
+> aussi utiliser `$derived.by`.
 
-You might be tempted to do something convoluted with effects to link one value to another. The following example shows two inputs for "money spent" and "money left" that are connected to each other. If you update one, the other should update accordingly. Don't use effects for this ([demo](/playground/untitled#H4sIAAAAAAAACpVRy26DMBD8FcvKgUhtoIdeHBwp31F6MGSJkBbHwksEQvx77aWQqooq9bgzOzP7mGTdIHipPiZJowOpGJAv0po2VmfnDv4OSBErjYdneHWzBJaCjcx91TWOToUtCIEE3cig0OIty44r5l1oDtjOkyFIsv3GINQ_CNYyGegd1DVUlCR7oU9iilDUcP8S8roYs9n8p2wdYNVFm4csTx872BxNCcjr5I11fdgonEkXsjP2CoUUZWMv6m6wBz2x7yxaM-iJvWeRsvSbSVeUy5i0uf8vKA78NIeJLSZWv1I8jQjLdyK4XuTSeIdmVKJGGI4LdjVOiezwDu1yG74My8PLCQaSiroe5s_5C2PHrkVGAgAA)):
+Vous pourriez être tenté•e de faire des choses tordues avec les effets pour lier une valeur à une
+autre. L'exemple suivant montre deux inputs pour "argent dépensé" et "argent restant" qui sont
+connectés l'un à l'autre. Si vous en mettez un à jour, l'autre s'ajuste automatiquement. N'utilisez
+pas d'effets pour faire ça
+([démo](/playground/untitled#H4sIAAAAAAAACpVRy26DMBD8FcvKgUhtoIdeHBwp31F6MGSJkBbHwksEQvx77aWQqooq9bgzOzP7mGTdIHipPiZJowOpGJAv0po2VmfnDv4OSBErjYdneHWzBJaCjcx91TWOToUtCIEE3cig0OIty44r5l1oDtjOkyFIsv3GINQ_CNYyGegd1DVUlCR7oU9iilDUcP8S8roYs9n8p2wdYNVFm4csTx872BxNCcjr5I11fdgonEkXsjP2CoUUZWMv6m6wBz2x7yxaM-iJvWeRsvSbSVeUy5i0uf8vKA78NIeJLSZWv1I8jQjLdyK4XuTSeIdmVKJGGI4LdjVOiezwDu1yG74My8PLCQaSiroe5s_5C2PHrkVGAgAA).
 
 ```svelte
 <script>
@@ -307,16 +352,17 @@ You might be tempted to do something convoluted with effects to link one value t
 
 <label>
 	<input type="range" bind:value={spent} max={total} />
-	{spent}/{total} spent
+	{spent}/{total} dépensé
 </label>
 
 <label>
 	<input type="range" bind:value={left} max={total} />
-	{left}/{total} left
+	{left}/{total} restant
 </label>
 ```
 
-Instead, use callbacks where possible ([demo](/playground/untitled#H4sIAAAAAAAACo1SMW6EMBD8imWluFMSIEUaDiKlvy5lSOHjlhOSMRZeTiDkv8deMEEJRcqdmZ1ZjzzxqpZgePo5cRw18JQA_sSVaPz0rnVk7iDRYxdhYA8vW4Wg0NnwzJRdrfGtUAVKQIYtCsly9pIkp4AZ7cQOezAoEA7JcWUkVBuCdol0dNWrEutWsV5fHfnhPQ5wZJMnCwyejxCh6G6A0V3IHk4zu_jOxzzPBxBld83PTr7xXrb3rUNw8PbiYJ3FP22oTIoLSComq5XuXTeu8LzgnVA3KDgj13wiQ8taRaJ82rzXskYM-URRlsXktejjgNLoo9e4fyf70_8EnwncySX1GuunX6kGRwnzR_BgaPNaGy3FmLJKwrCUeBM6ZUn0Cs2mOlp3vwthQJ5i14P9st9vZqQlsQIAAA==)):
+Utilisez plutôt des callbacks lorsque c'est possible
+([démo](/playground/untitled#H4sIAAAAAAAACo1SMW6EMBD8imWluFMSIEUaDiKlvy5lSOHjlhOSMRZeTiDkv8deMEEJRcqdmZ1ZjzzxqpZgePo5cRw18JQA_sSVaPz0rnVk7iDRYxdhYA8vW4Wg0NnwzJRdrfGtUAVKQIYtCsly9pIkp4AZ7cQOezAoEA7JcWUkVBuCdol0dNWrEutWsV5fHfnhPQ5wZJMnCwyejxCh6G6A0V3IHk4zu_jOxzzPBxBld83PTr7xXrb3rUNw8PbiYJ3FP22oTIoLSComq5XuXTeu8LzgnVA3KDgj13wiQ8taRaJ82rzXskYM-URRlsXktejjgNLoo9e4fyf70_8EnwncySX1GuunX6kGRwnzR_BgaPNaGy3FmLJKwrCUeBM6ZUn0Cs2mOlp3vwthQJ5i14P9st9vZqQlsQIAAA==)).
 
 ```svelte
 <script>
@@ -337,16 +383,19 @@ Instead, use callbacks where possible ([demo](/playground/untitled#H4sIAAAAAAAAC
 
 <label>
 	<input type="range" value={spent} oninput={updateSpent} max={total} />
-	{spent}/{total} spent
+	{spent}/{total} dépensé
 </label>
 
 <label>
 	<input type="range" value={left} oninput={updateLeft} max={total} />
-	{left}/{total} left
+	{left}/{total} restant
 </label>
 ```
 
-If you need to use bindings, for whatever reason (for example when you want some kind of "writable `$derived`"), consider using getters and setters to synchronise state ([demo](/playground/untitled#H4sIAAAAAAAACpWRwW6DMBBEf8WyekikFOihFwcq9TvqHkyyQUjGsfCCQMj_XnvBNKpy6Qn2DTOD1wu_tRocF18Lx9kCFwT4iRvVxenT2syNoDGyWjl4xi93g2AwxPDSXfrW4oc0EjUgwzsqzSr2VhTnxJwNHwf24lAhHIpjVDZNwy1KS5wlNoGMSg9wOCYksQccerMlv65p51X0p_Xpdt_4YEy9yTkmV3z4MJT579-bUqsaNB2kbI0dwlnCgirJe2UakJzVrbkKaqkWivasU1O1ULxnOVk3JU-Uxti0p_-vKO4no_enbQ_yXhnZn0aHs4b1jiJMK7q2zmo1C3bTMG3LaZQVrMjeoSPgaUtkDxePMCEX2Ie6b_8D4WyJJEwCAAA=)):
+Si vous avez besoin d'utiliser des liaisons, peu importe la raison (par exemple lorsque vous voulez
+quelque chose comme un `$derived` que l'on peut modifier manuellement), envisagez l'utilisation de
+getters et setters pour synchroniser l'état
+([démo](/playground/untitled#H4sIAAAAAAAACpWRwW6DMBBEf8WyekikFOihFwcq9TvqHkyyQUjGsfCCQMj_XnvBNKpy6Qn2DTOD1wu_tRocF18Lx9kCFwT4iRvVxenT2syNoDGyWjl4xi93g2AwxPDSXfrW4oc0EjUgwzsqzSr2VhTnxJwNHwf24lAhHIpjVDZNwy1KS5wlNoGMSg9wOCYksQccerMlv65p51X0p_Xpdt_4YEy9yTkmV3z4MJT579-bUqsaNB2kbI0dwlnCgirJe2UakJzVrbkKaqkWivasU1O1ULxnOVk3JU-Uxti0p_-vKO4no_enbQ_yXhnZn0aHs4b1jiJMK7q2zmo1C3bTMG3LaZQVrMjeoSPgaUtkDxePMCEX2Ie6b_8D4WyJJEwCAAA=)).
 
 ```svelte
 <script>
@@ -365,13 +414,14 @@ If you need to use bindings, for whatever reason (for example when you want some
 
 <label>
 	<input type="range" bind:value={spent} max={total} />
-	{spent}/{total} spent
+	{spent}/{total} dépensé
 </label>
 
 <label>
 	<input type="range" bind:value={left.value} max={total} />
-	{left.value}/{total} left
+	{left.value}/{total} restant
 </label>
 ```
 
-If you absolutely have to update `$state` within an effect and run into an infinite loop because you read and write to the same `$state`, use [untrack](svelte#untrack).
+Si vous devez absolument mettre à jour un `$state` dans un effet et que cela déclenche une boucle
+infinie parce que vous lisez et écrivez un même `$state`, utilisez [untrack](svelte#untrack).

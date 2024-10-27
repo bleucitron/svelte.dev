@@ -2,7 +2,8 @@
 title: $state
 ---
 
-The `$state` rune allows you to create _reactive state_, which means that your UI _reacts_ when it changes.
+La rune `$state` vous permet de créer un _état réactif_, ce qui signifie que votre UI _réagit_
+lorsque cet état évolue.
 
 ```svelte
 <script>
@@ -10,30 +11,40 @@ The `$state` rune allows you to create _reactive state_, which means that your U
 </script>
 
 <button onclick={() => count++}>
-	clicks: {count}
+	clics: {count}
 </button>
 ```
 
-Unlike other frameworks you may have encountered, there is no API for interacting with state — `count` is just a number, rather than an object or a function, and you can update it like you would update any other variable.
+À la différence d'autres frameworks que vous avez peut-être croisés, il n'y a pas d'API pour
+interagir avec un état – `count` est juste un nombre, et non un objet ou une fonction, et vous
+pouvez le mettre à jour comme vous mettriez à jour n'importe quelle variable.
 
-### Deep state
+### L'état profond
 
-If `$state` is used with an array or a simple object, the result is a deeply reactive _state proxy_. [Proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) allow Svelte to run code when you read or write properties, including via methods like `array.push(...)`, triggering granular updates.
+Si `$state` est utilisé avec un tableau ou un objet simple, le résultat est un _proxy d'état_
+profondément réactif. Les
+[Proxys](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
+permettent à Svelte d'exécuter du code lors de la lecture ou de l'écriture de propriétés, en
+particulier via des méthodes comme `array.push(...)`, déclenchant des mises à jour granulaires.
 
-> [!NOTE] Classes like `Set` and `Map` will not be proxied, but Svelte provides reactive implementations for various built-ins like these that can be imported from [`svelte/reactivity`](./svelte-reactivity).
+> [!NOTE] Les classes comme `Set` et `Map` ne seront pas transformées en Proxy, mais Svelte fournit
+> des implémentations réactives pour plusieurs built-ins similaires que vous pouvez importer depuis
+> [`svelte/reactivity`](./svelte-reactivity).
 
-State is proxified recursively until Svelte finds something other than an array or simple object. In a case like this...
+L'état est transformé en Proxy de manière récursive jusqu'à ce que Svelte trouve autre chose qu'un
+tableau ou un objet simple. Dans un cas comme celui-là...
 
 ```js
 let todos = $state([
 	{
 		done: false,
-		text: 'add more todos'
+		text: 'ajouter plus de todos'
 	}
 ]);
 ```
 
-...modifying an individual todo's property will trigger updates to anything in your UI that depends on that specific property:
+... modifier une propriété d'un élément individuel du tableau va déclencher des mises à jour pour
+tous les éléments de votre UI qui dépendent spécifiquement de cette propriété :
 
 ```js
 let todos = [{ done: false, text: 'add more todos' }];
@@ -41,7 +52,8 @@ let todos = [{ done: false, text: 'add more todos' }];
 todos[0].done = !todos[0].done;
 ```
 
-If you push a new object to the array, it will also be proxified:
+Si vous ajoutez un nouvel objet à ce tableau via `.push`, celui-ci sera également transformé en
+Proxy :
 
 ```js
 // @filename: ambient.d.ts
@@ -53,26 +65,27 @@ declare global {
 // ---cut---
 todos.push({
 	done: false,
-	text: 'eat lunch'
+	text: 'déjeuner'
 });
 ```
 
-> [!NOTE] When you update properties of proxies, the original object is _not_ mutated.
+> [!NOTE] Lorsque vous mettez à jour les propriétés d'un Proxy, l'objet d'origine n'est _pas_ muté.
 
-Note that if you destructure a reactive value, the references are not reactive — as in normal JavaScript, they are evaluated at the point of destructuring:
+Notez que si vous déstructurez une valeur réactive, les références ne sont pas réactives – comme
+pour du JavaScript classique, elles sont évaluées au moment de la déstructuration :
 
 ```js
-let todos = [{ done: false, text: 'add more todos' }];
+let todos = [{ done: false, text: 'ajouter plus de tâches' }];
 // ---cut---
 let { done, text } = todos[0];
 
-// this will not affect the value of `done`
+// ceci n'affectera pas la valeur de `done`
 todos[0].done = !todos[0].done;
 ```
 
 ### Classes
 
-You can also use `$state` in class fields (whether public or private):
+Vous pouvez aussi utiliser `$state` avec les champs d'une classe (qu'ils soient publics ou privés) :
 
 ```js
 // @errors: 7006 2554
@@ -91,25 +104,26 @@ class Todo {
 }
 ```
 
-> [!NOTE] The compiler transforms `done` and `text` into `get`/`set` methods on the class prototype referencing private fields. This means the properties are not enumerable.
-
-When calling methods in JavaScript, the value of [`this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this) matters. This won't work, because `this` inside the `reset` method will be the `<button>` rather than the `Todo`:
+Lorsque vous appelez des méthodes en JavaScript, la valeur de
+[`this`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/this) a de
+l'importance. L'exemple suivant ne fonctionne pas, car la référence `this` dans la méthode `reset`
+est le `<button>` plutôt que le `Todo` :
 
 ```svelte
 <button onclick={todo.reset}>
-	reset
+	réinitialiser
 </button>
 ```
 
-You can either use an inline function...
+Vous pouvez soit utiliser une fonction inlinée...
 
 ```svelte
 <button onclick=+++{() => todo.reset()}>+++
-	reset
+	réinitialiser
 </button>
 ```
 
-...or use an arrow function in the class definition:
+... soit une fonction fléchée dans la définition de la classe :
 
 ```js
 // @errors: 7006 2554
@@ -127,12 +141,18 @@ class Todo {
 	}
 }
 ```
+> [!NOTE] Le compilateur transforme `done` et `text` en méthodes `get`/`set` sur le prototype de
+> classe qui référencent des champs privés. Cela signifie que les propriétés ne sont pas
+> énumérables.
 
 ## `$state.raw`
 
-In cases where you don't want objects and arrays to be deeply reactive you can use `$state.raw`.
+Si vous ne souhaitez pas que les objets et tableaux soient profondément réactifs, vous pouvez
+utiliser `$state.raw`.
 
-State declared with `$state.raw` cannot be mutated; it can only be _reassigned_. In other words, rather than assigning to a property of an object, or using an array method like `push`, replace the object or array altogether if you'd like to update it:
+Un état déclaré avec `$state.raw` ne peut pas être muté ; il peut seulement être _réassigné_. En
+d'autres mots, plutôt que de réassigner une propriété ou un objet, ou d'utiliser une méthode de
+tableau comme `push`, remplacez entièrement l'objet ou le tableau si vous voulez le mettre à jour :
 
 ```js
 let person = $state.raw({
@@ -140,38 +160,44 @@ let person = $state.raw({
 	age: 49
 });
 
-// this will have no effect
+// ceci n'aura aucun effet
 person.age += 1;
 
-// this will work, because we're creating a new person
+// ceci fonctionne, car nous créons une nouvelle personne
 person = {
 	name: 'Heraclitus',
 	age: 50
 };
 ```
 
-This can improve performance with large arrays and objects that you weren't planning to mutate anyway, since it avoids the cost of making them reactive. Note that raw state can _contain_ reactive state (for example, a raw array of reactive objects).
+Ceci peut améliorer la performance dans le cas de grands tableaux et objets que vous ne prévoyez de
+toutes façons pas de muter, puisqu'il n'y a pas le surcoût de les rendre profondément réactifs.
+Notez qu'un état `raw` peut _contenir_ des états réactifs (par exemple, un tableau `raw` d'objets
+réactifs).
 
 ## `$state.snapshot`
 
-To take a static snapshot of a deeply reactive `$state` proxy, use `$state.snapshot`:
+Pour prendre un instantané statique d'un Proxy profondément réactif `$state`, utilisez
+`$state.snapshot` :
 
 ```svelte
 <script>
 	let counter = $state({ count: 0 });
 
 	function onclick() {
-		// Will log `{ count: ... }` rather than `Proxy { ... }`
+		// va afficher `{ count: ... }` plutôt que `Proxy { ... }`
 		console.log($state.snapshot(counter));
 	}
 </script>
 ```
 
-This is handy when you want to pass some state to an external library or API that doesn't expect a proxy, such as `structuredClone`.
+Ceci est pratique lorsque vous souhaitez passer un état à une librairie externe ou à une API qui
+ne s'attend pas à recevoir un proxy, comme dans le cas de `structuredClone`.
 
-## Passing state into functions
+## Passer de l'état à des fonctions [!VO]Passing state into functions
 
-JavaScript is a _pass-by-value_ language — when you call a function, the arguments are the _values_ rather than the _variables_. In other words:
+JavaScript est un langage qui _passe par valeur_ – lorsque vous appelez une fonction, les arguments
+sont les _valeurs_ plutôt que les _variables_. En d'autres mots :
 
 ```js
 /// file: index.js
@@ -192,10 +218,11 @@ console.log(total); // 3
 
 a = 3;
 b = 4;
-console.log(total); // still 3!
+console.log(total); // toujours 3!
 ```
 
-If `add` wanted to have access to the _current_ values of `a` and `b`, and to return the current `total` value, you would need to use functions instead:
+Si `add` a besoin d'un accès aux valeurs _courantes_ de `a` et `b`, et de renvoyer la valeur `total`
+mise à jour, vous devez utiliser plutôt des fonctions :
 
 ```js
 /// file: index.js
@@ -219,16 +246,19 @@ b = 4;
 console.log(+++total()+++); // 7
 ```
 
-State in Svelte is no different — when you reference something declared with the `$state` rune...
+L'état dans Svelte fonctionne de la même façon – lorsque vous référencez quelque chose déclaré avec
+la rune `$state`...
 
 ```js
 let a = +++$state(1)+++;
 let b = +++$state(2)+++;
 ```
 
-...you're accessing its _current value_.
+... vous accédez à sa _valeur courante_.
 
-Note that 'functions' is broad — it encompasses properties of proxies and [`get`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)/[`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set) properties...
+Notez que le terme "fonctions" est large – il englobe les propriétés des proxies et les propriétés
+[`get`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Functions/get) et
+[`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)...
 
 ```js
 /// file: index.js
@@ -254,4 +284,5 @@ input.b = 4;
 console.log(total.value); // 7
 ```
 
-...though if you find yourself writing code like that, consider using [classes](#Classes) instead.
+... toutefois si vous vous retrouvez à écrire du code similaire, envisagez plutôt l'utilisation de
+[classes](#Classes).

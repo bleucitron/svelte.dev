@@ -2,7 +2,7 @@
 title: $derived
 ---
 
-Derived state is declared with the `$derived` rune:
+Vous pouvez déclarer un état dérivé avec la rune `$derived` :
 
 ```svelte
 <script>
@@ -14,18 +14,21 @@ Derived state is declared with the `$derived` rune:
 	{doubled}
 </button>
 
-<p>{count} doubled is {doubled}</p>
+<p>Le double de {count} vaut {doubled}</p>
 ```
 
-The expression inside `$derived(...)` should be free of side-effects. Svelte will disallow state changes (e.g. `count++`) inside derived expressions.
+L'expression à l'intérieur de `$derived(...)` ne doit pas contenir d'effet de bord. Svelte empêchera
+les changements d'état (par ex. `count++`) à l'intérieur d'expressions dérivées.
 
-As with `$state`, you can mark class fields as `$derived`.
+Comme avec `$state`, vous pouvez définir les champs d'une classe en utilisant `$derived`.
 
-> [!NOTE] Code in Svelte components is only executed once at creation. Without the `$derived` rune, `doubled` would maintain its original value even when `count` changes.
+> [!NOTE] Le code d'un composant Svelte est uniquement exécuté à sa création. Sans la rune
+> `$derived`, `doubled` maintiendrait sa valeur originale même si `count` change de valeur.
 
 ## `$derived.by`
 
-Sometimes you need to create complex derivations that don't fit inside a short expression. In these cases, you can use `$derived.by` which accepts a function as its argument.
+Parfois, certaines derivations complexes nécessitent plus qu'une simple expression. Dans ces cas là,
+vous pouvez utiliser `$derived.by`, qui prend une fonction comme argument.
 
 ```svelte
 <script>
@@ -44,10 +47,14 @@ Sometimes you need to create complex derivations that don't fit inside a short e
 </button>
 ```
 
-In essence, `$derived(expression)` is equivalent to `$derived.by(() => expression)`.
+Par essence, `$derived(expression)` est équivalent à `$derived.by(() => expression)`.
 
-## Understanding dependencies
+## Comprendre les dépendences
 
-Anything read synchronously inside the `$derived` expression (or `$derived.by` function body) is considered a _dependency_ of the derived state. When the state changes, the derived will be marked as _dirty_ and recalculated when it is next read.
+Tout ce qui est lu de manière synchrone au de l'expression de `$derived` (ou du corps de la fonction
+de `$derived.by`) est considérée comme une _dépendence_ de l'état dérivé. Lorsqu'un des états dont
+il dépend est mis à jour, l'état dérivé sera marqué comme _sale_ et recalculé la prochaine fois que
+sa valeur est lue.
 
-To exempt a piece of state from being treated as a dependency, use [`untrack`](svelte#untrack).
+Pour exempter un morceau d'état d'être considéré comme une dépendance, utilisez
+[`untrack`](svelte#untrack).
