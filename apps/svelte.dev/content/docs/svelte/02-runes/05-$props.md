@@ -39,7 +39,7 @@ vos props :
 <p>ce composant est {+++adjective+++}</p>
 ```
 
-## Valeurs par défaut
+## Valeurs par défaut [!VO]Fallback values
 
 Déstructurer permet de déclarer des valeurs par défaut, qui sont utilisées si le composant parent ne
 définit pas une prop donnée :
@@ -50,7 +50,7 @@ let { adjective = 'content' } = $props();
 
 > [!NOTE] Les valeurs par défaut ne sont pas transformées en proxys d'état réactifs.
 
-## Renommer des props
+## Renommer des props [!VO]Renaming props
 
 Vous pouvez aussi utiliser la syntaxe d'assignation par déstructuration pour renommer des props, ce
 qui est nécessaire si leur identifiant est invalide ou si c'est un mot-clé réservé par JavaScript,
@@ -60,7 +60,7 @@ comme `super` :
 let { super: trouper = 'lights are gonna find me' } = $props();
 ```
 
-## Props de reste
+## Props de reste [!VO]Rest props
 
 Enfin, nous pouvons utiliser une _propriété de reste_ pour obtenir, eh bien, le reste des props :
 
@@ -68,7 +68,7 @@ Enfin, nous pouvons utiliser une _propriété de reste_ pour obtenir, eh bien, l
 let { a, b, c, ...others } = $props();
 ```
 
-## Mise à jour des props
+## Mise à jour des props [!VO]Updating props
 
 Les références à une prop à l'intérieur d'un composant se mettent à jour lorque la prop elle-même se
 met à jour – lorsque `count` change dans `App.svelte`, elle va également changer dans
@@ -189,7 +189,7 @@ En résumé : ne mutez pas les props. Vous pouvez soit utiliser des props de cal
 des changements, ou – si le parent et l'enfant partagent le même objet – utiliser la rune
 [`$bindable`]($bindable).
 
-## Typage
+## Typage [!VO]Type safety
 
 Vous pouvez ajouter du typage à vos composants en annotant vos props, comme vous le feriez avec
 toute autre déclaration de variable. En TypeScript, cela peut ressembler à ça...

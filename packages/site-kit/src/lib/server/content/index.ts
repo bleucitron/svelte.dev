@@ -1,6 +1,8 @@
 import { extract_frontmatter, slugify, smart_quotes } from '../../markdown/utils';
 import type { Document } from '../../types';
 
+const VO_REGEX = /\[\!VO](.+)/;
+
 export async function create_index(
 	documents: Record<string, string>,
 	assets: Record<string, string>,
@@ -38,9 +40,11 @@ export async function create_index(
 				// turn e.g. `class:_name_` into `class:<em>name</em>`
 				.replace(/_(.+)_/g, (_, contents) => `<em>${contents}</em>`);
 
-			const slug = slugify(title);
+			const vo = title.match(VO_REGEX)?.[1];
 
-			return { slug, title };
+			const slug = slugify(vo || title);
+
+			return { slug, title: title.replace(VO_REGEX, '') };
 		});
 
 		content[slug] = {

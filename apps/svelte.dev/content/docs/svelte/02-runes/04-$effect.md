@@ -82,7 +82,7 @@ ré-exécution de l'effet, et lorsque celui-ci est détruit
 <button onclick={() => (milliseconds /= 2)}>accélérer</button>
 ```
 
-### Comprendre les dépendances
+### Comprendre les dépendances [!VO]Understanding dependencies
 
 `$effect` détecte automatiquement toute valeur réactive (`$state`, `$derived`, `$props`) qui est lue
 de manière _synchrone_ à l'intérieur de son corps de fonction et l'enregistre en tant que

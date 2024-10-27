@@ -21,6 +21,8 @@ type TwoslashBanner = (filename: string, content: string) => string;
 const METADATA_REGEX =
 	/(?:<!---\s*|\/\/\/\s*|###\s*)(?<key>file|link|copy):\s*(?<value>.*?)(?:\s*--->|$)\n/gm;
 
+const VO_REGEX = /\[\!VO\](.+)/;
+
 const theme = createCssVariablesTheme({
 	name: 'css-variables',
 	variablePrefix: '--shiki-'
@@ -311,9 +313,15 @@ export async function render_content_markdown(
 		},
 		heading({ tokens, depth }) {
 			const text = this.parser!.parseInline(tokens);
-			const html = text.replace(/<\/?code>/g, '');
+			let html = text.replace(/<\/?code>/g, '');
 
-			headings[depth - 1] = slugify(text);
+			const vo = html.match(VO_REGEX)?.[1];
+
+			if (vo) {
+				html = html.replace(VO_REGEX, '').trim();
+			}
+
+			headings[depth - 1] = slugify(vo || text);
 			headings.length = depth;
 			const slug = headings.filter(Boolean).join('-');
 

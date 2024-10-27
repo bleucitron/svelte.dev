@@ -19,7 +19,7 @@ lorsque cet état évolue.
 interagir avec un état – `count` est juste un nombre, et non un objet ou une fonction, et vous
 pouvez le mettre à jour comme vous mettriez à jour n'importe quelle variable.
 
-### L'état profond
+### L'état profond [!VO]Deep state
 
 Si `$state` est utilisé avec un tableau ou un objet simple, le résultat est un _proxy d'état_
 profondément réactif. Les
