@@ -58,7 +58,11 @@ déclarées dans ce bloc peuvent être référencées ailleurs dans le composant
 Vous pouvez `export`er des liaisons depuis ce bloc, elles deviendront des exports du module copmilé.
 Vous ne pouvez pas utiliser `export default`, puisque l'export par défaut est le composant lui-même.
 
-> [!NOTE] If you are using TypeScript and import such exports from a `module` block into a `.ts` file, make sure to have your editor setup so that TypeScript knows about them. This is the case for our VS Code extension and the IntelliJ plugin, but in other cases you might need to setup our [TypeScript editor plugin](https://www.npmjs.com/package/typescript-svelte-plugin).
+> [!NOTE] Si vous utilisez TypeScript et importez dans un fichier `ts` de tels exports depuis un
+> bloc `module`, assurez-vous que votre éditeur soit configuré correctement pour permettre à
+> TypeScript d'avoir conscience de ces exports. C'est le cas avec notre extension VSCode et avec le
+> plugin IntelliJ, mais dans d'autres cas vous aurez peut-être besoin de configurer notre [plugin
+> d'éditeur dédié à TypeScript](https://www.npmjs.com/package/typescript-svelte-plugin).
 
 > [!LEGACY]
 > Avec Svelte 4, cette balise script se définit en utilisant `<script context="module">`.
