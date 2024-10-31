@@ -1,19 +1,21 @@
 ---
-title: Nested <style> elements
+title: Éléments <style> imbriqués
 ---
 
-There can only be one top-level `<style>` tag per component.
+Il ne peut y avoir qu'une seule balise `<style>` à la racine d'un composant.
 
-However, it is possible to have a `<style>` tag nested inside other elements or logic blocks.
+Toutefois, il est possible d'avoir une balise `<style>` imbriquée dans d'autres éléments ou blocs
+logiques.
 
-In that case, the `<style>` tag will be inserted as-is into the DOM; no scoping or processing will be done on the `<style>` tag.
+Dans ce cas, la balise `<style>` sera ajoutée telle quelle dans le DOM ; aucun scope ou traitement
+ne sera appliqué à cette balise `<style>`.
 
 ```svelte
 <div>
 	<style>
-		/* this style tag will be inserted as-is */
+		/* cette balise `<style>` sera ajoutée telle quelle */
 		div {
-			/* this will apply to all `<div>` elements in the DOM */
+			/* ceci s'appliquera à tous les éléments `<div>` du DOM */
 			color: red;
 		}
 	</style>

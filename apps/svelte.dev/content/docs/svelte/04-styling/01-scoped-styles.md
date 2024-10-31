@@ -1,29 +1,39 @@
 ---
-title: Scoped styles
+title: Styles scopés
 ---
 
-Svelte components can include a `<style>` element containing CSS that belongs to the component. This CSS is _scoped_ by default, meaning that styles will not apply to any elements on the page outside the component in question.
+Les composants Svelte peuvent inclure un élément `<style>` contenant du CSS appartenant au
+composant. Ce CSS est _scopé_ par défaut, ce qui signifie que les styles ne seront pas appliqués aux
+éléments de la page qui ne sont pas définis par le composant en question.
 
-This works by adding a class to affected elements, which is based on a hash of the component styles (e.g. `svelte-123xyz`).
+Ceci est possible en ajoutant une classe aux éléments concernés, classe dont le nom est basé sur un
+hash des styles du composant (par ex. `svelte-123xyz`).
 
 ```svelte
 <style>
 	p {
-		/* this will only affect <p> elements in this component */
+		/* ceci n'affectera que les éléments `<p>` dans ce composant */
 		color: burlywood;
 	}
 </style>
 ```
 
-## Specificity
+## Spécificité [!VO]Specificity
 
-Each scoped selector receives a [specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) increase of 0-1-0, as a result of the scoping class (e.g. `.svelte-123xyz`) being added to the selector. This means that (for example) a `p` selector defined in a component will take precedence over a `p` selector defined in a global stylesheet, even if the global stylesheet is loaded later.
+Chaque sélecteur scopé reçoit un incrément de
+[spécificité](https://developer.mozilla.org/fr/docs/Web/CSS/Specificity) de 0-1-0, résultant de
+l'application de la classe de scope (par ex. `.svelte-123xyz`). Cela signifie que (par example) un
+sélecteur `p` défini sur un composant aura priorité sur un sélecteur `p` défini dans une feuille de
+style globale, même si la feuille de style globale est chargée plus tard.
 
-In some cases, the scoping class must be added to a selector multiple times, but after the first occurrence it is added with `:where(.svelte-xyz123)` in order to not increase specificity further.
+Dans certains cas, la classe de scope doit être ajoutée plusieurs fois à un sélecteur, mais après le
+premier ajout, cette classe est ajoutée en utilisant `:where(.svelte-xyz123)` pour ne pas
+incrémenter de nouveau la spécificité.
 
-## Scoped keyframes
+## Keyframes scopés [!VO]Scoped keyframes
 
-If a component defines `@keyframes`, the name is scoped to the component using the same hashing approach. Any `animation` rules in the component will be similarly adjusted:
+Si un composant définit des `@keyframes`, leur nom est scopé au composant en utilisant la même
+approche de hashing. Toute règle `animation` du composant sera ajustée de la même manière :
 
 ```svelte
 <style>
@@ -31,7 +41,7 @@ If a component defines `@keyframes`, the name is scoped to the component using t
 		animation: bounce 10s;
 	}
 
-	/* these keyframes are only accessible inside this component */
+	/* ces keyframes ne sont accessibles que dans ce composant */
 	@keyframes bounce {
 		/* ... *.
 	}
