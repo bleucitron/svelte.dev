@@ -2,7 +2,7 @@
 title: {@render ...}
 ---
 
-To render a [snippet](snippet), use a `{@render ...}` tag.
+Pour afficher un [snippet](snippet), utiliser une balise `{@render ...}`.
 
 ```svelte
 {#snippet sum(a, b)}
@@ -14,26 +14,29 @@ To render a [snippet](snippet), use a `{@render ...}` tag.
 {@render sum(5, 6)}
 ```
 
-The expression can be an identifier like `sum`, or an arbitrary JavaScript expression:
+L'expression peut être un identifiant comme `sum`, ou une expression JavaScript arbitraire :
 
 ```svelte
-{@render (cool ? coolSnippet : lameSnippet)()}
+{@render (cool ? snippetCool : snippetNul)()}
 ```
 
-## Optional snippets
+## Snippets optionnels [!VO]Optional snippets
 
-If the snippet is potentially undefined — for example, because it's an incoming prop — then you can use optional chaining to only render it when it _is_ defined:
+Si le snippet est potentiellement `undefined` – par exemple parce que c'est une valeur pas encore
+définie – vous pouvez alors utiliser le chaînage optionnel pour ne l'afficher que lorsqu'il sera
+défini :
 
 ```svelte
 {@render children?.()}
 ```
 
-Alternatively, use an [`{#if ...}`](if) block with an `:else` clause to render fallback content:
+Vous pouvez également utiliser un bloc [`{#if ...}`](if) avec une clause `:else` pour afficher du
+contenu par défaut :
 
 ```svelte
 {#if children}
 	{@render children()}
 {:else}
-	<p>fallback content</p>
+	<p>contenu par défaut</p>
 {/if}
 ```

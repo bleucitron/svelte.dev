@@ -2,22 +2,24 @@
 title: class:
 ---
 
-The `class:` directive is a convenient way to conditionally set classes on elements, as an alternative to using conditional expressions inside `class` attributes:
+La directive `class:` est une manière pratique d'ajouter des classes conditionnellement à des
+éléments, plutôt que d'utiliser des expressions conditionnelles dans les attributs `class` :
 
 ```svelte
-<!-- These are equivalent -->
+<!-- ces écritures sont équivalentes -->
 <div class={isCool ? 'cool' : ''}>...</div>
 <div class:cool={isCool}>...</div>
 ```
 
-As with other directives, we can use a shorthand when the name of the class coincides with the value:
+Comme pour les autres directives, il est possible d'utiliser une syntaxe raccourcie lorsque le nom
+de la classe correspond avec celui de la variable :
 
 ```svelte
 <div class:cool>...</div>
 ```
 
-Multiple `class:` directives can be added to a single element:
+Plusieurs directives `class:` peuvent être ajoutées à un même élément :
 
 ```svelte
-<div class:cool class:lame={!cool} class:potato>...</div>
+<div class:cool class:nul={!cool} class:patate>...</div>
 ```

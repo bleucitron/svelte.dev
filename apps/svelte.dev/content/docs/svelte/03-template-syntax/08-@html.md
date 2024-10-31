@@ -2,7 +2,7 @@
 title: {@html ...}
 ---
 
-To inject raw HTML into your component, use the `{@html ...}` tag:
+Pour injecter du HTML brut dans vos composants, utilisez la balise `{@html ...}` :
 
 ```svelte
 <article>
@@ -10,19 +10,24 @@ To inject raw HTML into your component, use the `{@html ...}` tag:
 </article>
 ```
 
-> [!NOTE] Make sure that you either escape the passed string or only populate it with values that are under your control in order to prevent [XSS attacks](https://owasp.org/www-community/attacks/xss/). Never render unsanitized content.
+> [!NOTE] Assurez-vous soit d'échapper la chaîne fournie, soit de ne fournir que des valeurs qui
+> sont sous votre contrôle pour votre protéger d'éventuelles attaques
+> [XSS](https://owasp.org/www-community/attacks/xss/). N'affichez jamais de contenu non nettoyé.
 
-The expression should be valid standalone HTML — this will not work, because `</div>` is not valid HTML:
+L'expression doit être du HTML valide et autonome – le code suivant ne fonctionne pas, car `</div>`
+n'est pas du code HTML valide :
 
 ```svelte
-{@html '<div>'}content{@html '</div>'}
+{@html '<div>'}contenu{@html '</div>'}
 ```
 
-It also will not compile Svelte code.
+De plus, si vous fournissez du code Svelte, celui-ci ne sera pas compilé.
 
-## Styling
+## Style [!VO]Styling
 
-Content rendered this way is 'invisible' to Svelte and as such will not receive [scoped styles](scoped-styles) — in other words, this will not work, and the `a` and `img` styles will be regarded as unused:
+Le contenu affiché de cette manière est "invisible" pour Svelte, et ne sera donc pas concerné par
+les [styles scopés](scoped-styles) – autrement dit, le code suivant ne fonctionnera pas, et les
+styles de `a` et `img` seront considérés comme non utilisés :
 
 <!-- prettier-ignore -->
 ```svelte
@@ -38,7 +43,7 @@ Content rendered this way is 'invisible' to Svelte and as such will not receive 
 </style>
 ```
 
-Instead, use the `:global` modifier to target everything inside the `<article>`:
+Utilisez plutôt le modificateur `:global` pour cibler tout ce qui se trouve dans l'`<article>` :
 
 <!-- prettier-ignore -->
 ```svelte

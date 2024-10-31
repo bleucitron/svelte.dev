@@ -2,7 +2,9 @@
 title: {@debug ...}
 ---
 
-The `{@debug ...}` tag offers an alternative to `console.log(...)`. It logs the values of specific variables whenever they change, and pauses code execution if you have devtools open.
+La balise `{@debug ...}` offre une alternative à `console.log(...)`. Elle permet de logger les
+valeurs de variables spécifiques lorsqu'elles changent, et met en pause l'exécution si vous avez les
+outils de développement ouverts.
 
 ```svelte
 <script>
@@ -14,22 +16,24 @@ The `{@debug ...}` tag offers an alternative to `console.log(...)`. It logs the 
 
 {@debug user}
 
-<h1>Hello {user.firstname}!</h1>
+<h1>Coucou {user.firstname} !</h1>
 ```
 
-`{@debug ...}` accepts a comma-separated list of variable names (not arbitrary expressions).
+`{@debug ...}` attend une liste de noms de variables séparés par des virgules (mais pas
+d'expressions arbitraires).
 
 ```svelte
-<!-- Compiles -->
+<!-- Compile -->
 {@debug user}
 {@debug user1, user2, user3}
 
-<!-- WON'T compile -->
+<!-- ne compile PAS -->
 {@debug user.firstname}
 {@debug myArray[0]}
 {@debug !isReady}
 {@debug typeof user === 'object'}
 ```
 
-The `{@debug}` tag without any arguments will insert a `debugger` statement that gets triggered when _any_ state changes, as opposed to the specified variables.
+La balise `{@debug}` utilisée sans aucun argument va ajouter une déclaration `debugger` qui sera
+déclenchée lorsque _n'importe_ quel état change, plutôt que celui de variables spécifiques.
 

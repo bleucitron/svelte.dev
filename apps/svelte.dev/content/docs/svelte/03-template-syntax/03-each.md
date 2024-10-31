@@ -12,7 +12,10 @@ title: {#each ...}
 {#each expression as name, index}...{/each}
 ```
 
-Iterating over values can be done with an each block. The values in question can be arrays, array-like objects (i.e. anything with a `length` property), or iterables like `Map` and `Set` — in other words, anything that can be used with `Array.from`.
+Vous pouvez itérer sur des valeurs en utilisant un bloc `#each`. Les valeurs en questions peuvent
+être des tableaux, des objets similaires à des tableaux (c-à-d tout ce qui possède une propriété
+`length`), ou des itérables comme `Map` et `Set` – autrement dit, tout ce qui peut être utilisé avec
+`Array.from`.
 
 ```svelte
 <h1>Shopping list</h1>
@@ -23,7 +26,8 @@ Iterating over values can be done with an each block. The values in question can
 </ul>
 ```
 
-An each block can also specify an _index_, equivalent to the second argument in an `array.map(...)` callback:
+Un bloc `#each` peut également préciser un _index_, correspondant au deuxième argument d'un callback
+`array.map(...)`.
 
 ```svelte
 {#each items as item, i}
@@ -31,7 +35,7 @@ An each block can also specify an _index_, equivalent to the second argument in 
 {/each}
 ```
 
-## Keyed each blocks
+## Les blocs `each` à clé [!VO]Keyed each blocks
 
 ```svelte
 <!--- copy: false  --->
@@ -43,20 +47,25 @@ An each block can also specify an _index_, equivalent to the second argument in 
 {#each expression as name, index (key)}...{/each}
 ```
 
-If a _key_ expression is provided — which must uniquely identify each list item — Svelte will use it to diff the list when data changes, rather than adding or removing items at the end. The key can be any object, but strings and numbers are recommended since they allow identity to persist when the objects themselves change.
+Si une expression _key_ est fournie – qui se doit d'identifier de manière unique chaque élément de
+la liste – Svelte va s'en servir pour remplacer finement les éléments de la liste lorsque celle-ci
+change, plutôt que d'ajouter ou supprimer les éléments à la fin. La clé (_key_) peut être n'importe
+quel objet, mais les chaînes de caractères et les nombres sont recommandés car il permettent à
+l'identité de persister lorsque les objets eux-mêmes changent.
 
 ```svelte
 {#each items as item (item.id)}
 	<li>{item.name} x {item.qty}</li>
 {/each}
 
-<!-- or with additional index value -->
+<!-- ou avec la valeur d'index additionnelle -->
 {#each items as item, i (item.id)}
 	<li>{i + 1}: {item.name} x {item.qty}</li>
 {/each}
 ```
 
-You can freely use destructuring and rest patterns in each blocks.
+Vous pouvez déstructurer librement ou utiliser comme bon vous semble le paramètre de reste dans les
+blocs `#each`.
 
 ```svelte
 {#each items as { id, name, qty }, i (id)}
@@ -72,7 +81,7 @@ You can freely use destructuring and rest patterns in each blocks.
 {/each}
 ```
 
-## Each blocks without an item
+## Blocs `each` sans élément [!VO]Each blocks without an item
 
 ```svelte
 <!--- copy: false  --->
@@ -84,7 +93,9 @@ You can freely use destructuring and rest patterns in each blocks.
 {#each expression, index}...{/each}
 ```
 
-In case you just want to render something `n` times, you can omit the `as` part ([demo](/playground/untitled#H4sIAAAAAAAAE3WR0W7CMAxFf8XKNAk0WsSeUEaRpn3Guoc0MbQiJFHiMlDVf18SOrZJ48259_jaVgZmxBEZZ28thgCNFV6xBdt1GgPj7wOji0t2EqI-wa_OleGEmpLWiID_6dIaQkMxhm1UdwKpRQhVzWSaVORJNdvWpqbhAYVsYQCNZk8thzWMC_DCHMZk3wPSThNQ088I3mghD9UwSwHwlLE5PMIzVFUFq3G7WUZ2OyUvU3JOuZU332wCXTRmtPy1NgzXZtUFp8WFw9536uWqpbIgPEaDsJBW90cTOHh0KGi2XsBq5-cT6-3nPauxXqHnsHJnCFZ3CvJVkyuCQ0mFF9TZyCQ162WGvteLKfG197Y3iv_pz_fmS68Hxt8iPBPj5HscP8YvCNX7uhYCAAA=)):
+Dans le cas où vous souhaitez uniquement afficher quelque chose `n` fois, vous pouvez omettre le
+`as`
+([demo](/playground/untitled#H4sIAAAAAAAAE3WR0W7CMAxFf8XKNAk0WsSeUEaRpn3Guoc0MbQiJFHiMlDVf18SOrZJ48259_jaVgZmxBEZZ28thgCNFV6xBdt1GgPj7wOji0t2EqI-wa_OleGEmpLWiID_6dIaQkMxhm1UdwKpRQhVzWSaVORJNdvWpqbhAYVsYQCNZk8thzWMC_DCHMZk3wPSThNQ088I3mghD9UwSwHwlLE5PMIzVFUFq3G7WUZ2OyUvU3JOuZU332wCXTRmtPy1NgzXZtUFp8WFw9536uWqpbIgPEaDsJBW90cTOHh0KGi2XsBq5-cT6-3nPauxXqHnsHJnCFZ3CvJVkyuCQ0mFF9TZyCQ162WGvteLKfG197Y3iv_pz_fmS68Hxt8iPBPj5HscP8YvCNX7uhYCAAA=)):
 
 ```svelte
 <div class="chess-board">
@@ -96,19 +107,19 @@ In case you just want to render something `n` times, you can omit the `as` part 
 </div>
 ```
 
-## Else blocks
+## Blocs `else` [!VO]Else blocks
 
 ```svelte
 <!--- copy: false  --->
 {#each expression as name}...{:else}...{/each}
 ```
 
-An each block can also have an `{:else}` clause, which is rendered if the list is empty.
+Un bloc `#each` peut également avoir une clause `{:else}`, qui sera affichée si la liste est vide.
 
 ```svelte
 {#each todos as todo}
 	<p>{todo.text}</p>
 {:else}
-	<p>No tasks today!</p>
+	<p>Rien à faire aujourd'hui !</p>
 {/each}
 ```

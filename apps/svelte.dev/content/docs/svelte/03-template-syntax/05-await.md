@@ -22,50 +22,54 @@ title: {#await ...}
 {#await expression catch name}...{/await}
 ```
 
-Await blocks allow you to branch on the three possible states of a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) — pending, fulfilled or rejected.
+Les blocs `await` vous permettent de gérer les trois états possible d'une
+[`Promise`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+(_promesse_) – en attente, résolue, ou rejetée.
 
 ```svelte
 {#await promise}
-	<!-- promise is pending -->
-	<p>waiting for the promise to resolve...</p>
+	<!-- la promesse est en attente -->
+	<p>en attente de la résolution de la promesse...</p>
 {:then value}
-	<!-- promise was fulfilled or not a Promise -->
-	<p>The value is {value}</p>
+	<!-- la promesse a été résolue ou bien ce n'est pas une promesse -->
+	<p>La valeur vaut {value}</p>
 {:catch error}
-	<!-- promise was rejected -->
-	<p>Something went wrong: {error.message}</p>
+	<!-- la promesse a été rejetée -->
+	<p>Quelque chose s'est mal passé : {error.message}</p>
 {/await}
 ```
 
-> [!NOTE] During server-side rendering, only the pending branch will be rendered.
+> [!NOTE] Lors du rendu côté serveur, seule la branche d'attente sera considérée.
 >
-> If the provided expression is not a `Promise`, only the `:then` branch will be rendered, including during server-side rendering.
+> Si l'expression fournie n'est pas une `Promise`, seule la branche `:then` sera considérée, même
+> lors du rendu côté serveur.
 
-The `catch` block can be omitted if you don't need to render anything when the promise rejects (or no error is possible).
+Le bloc `catch` peut être omis si vous n'avez pas besoin d'afficher quoi que ce soit lors que la
+promesse est rejetée (ou si aucune erreur n'est possible).
 
 ```svelte
 {#await promise}
-	<!-- promise is pending -->
-	<p>waiting for the promise to resolve...</p>
+	<!-- la promesse est en attente -->
+	<p>en attente de la résolution de la promesse...</p>
 {:then value}
-	<!-- promise was fulfilled -->
-	<p>The value is {value}</p>
+	<!-- la promesse a été résolue ou bien ce n'est pas une promesse -->
+	<p>La valeur vaut {value}</p>
 {/await}
 ```
 
-If you don't care about the pending state, you can also omit the initial block.
+Si l'état d'attente ne vous intéresse pas, vous pouvez aussi ignorer le bloc initial.
 
 ```svelte
 {#await promise then value}
-	<p>The value is {value}</p>
+	<p>La valeur vaut {value}</p>
 {/await}
 ```
 
-Similarly, if you only want to show the error state, you can omit the `then` block.
+De même, si vous souhaitez uniquement afficher l'état d'erreur, vous pouvez ignorer le bloc `then`.
 
 ```svelte
 {#await promise catch error}
-	<p>The error is {error}</p>
+	<p>Voici l'erreur : {error}</p>
 {/await}
 ```
 

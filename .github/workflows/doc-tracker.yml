@@ -32,3 +32,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte/02-runes
+  track-docs-svelte-03:
+    runs-on: ubuntu-latest
+    name: Checking Docs Svelte 03
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/svelte/03-template-syntax

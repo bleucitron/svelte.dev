@@ -2,11 +2,15 @@
 title: transition:
 ---
 
-A _transition_ is triggered by an element entering or leaving the DOM as a result of a state change.
+Une _transition_ est déclenchée par un élément qui entre ou sort du DOM suite à un changement
+d'état.
 
-When a block (such as an `{#if ...}` block) is transitioning out, all elements inside it, including those that do not have their own transitions, are kept in the DOM until every transition in the block has been completed.
+Lorsqu'un bloc (comme un bloc `{#if ...}`) transitionne vers sa sortie, tous les éléments qu'il
+contient, incluant ceux n'ayant pas leurs propres transitions, sont gardés dans le DOM jusqu'à ce
+que chaque transition du bloc ait été appliquée.
 
-The `transition:` directive indicates a _bidirectional_ transition, which means it can be smoothly reversed while the transition is in progress.
+La directive `transition:` indique une transition _bidirectionnelle_, ce qui signifie qu'elle peut
+être inversée en douceur lorsque la transition est en cours.
 
 ```svelte
 <script>
@@ -15,44 +19,48 @@ The `transition:` directive indicates a _bidirectional_ transition, which means 
 	let visible = $state(false);
 </script>
 
-<button onclick={() => visible = !visible}>toggle</button>
+<button onclick={() => visible = !visible}>basculer</button>
 
 {#if visible}
-	<div +++transition:fade+++>fades in and out</div>
+	<div +++transition:fade+++>entre et sort en s'estompant</div>
 {/if}
 ```
 
-## Built-in transitions
+## Transitions intégrées [!VO]Built-in transitions
 
-A selection of built-in transitions can be imported from the [`svelte/transition`](svelte-transition) module.
+Une sélection de transitions intégrées peut être importée depuis le module
+[`svelte/transition`](svelte-transition).
 
 ## Local vs global
 
-Transitions are local by default. Local transitions only play when the block they belong to is created or destroyed, _not_ when parent blocks are created or destroyed.
+Les transitions sont locales par défaut. Les transitions locales sont jouées uniquement lorsque le
+bloc auquel elles appartiennent est créé ou détruit, mais _pas_ lorsque les blocs parent sont créés
+ou détruits.
 
 ```svelte
 {#if x}
 	{#if y}
-		<p transition:fade>fades in and out only when y changes</p>
+		<p transition:fade>entre et sort en s'estompant uniquement lorsque y change</p>
 
-		<p transition:fade|global>fades in and out when x or y change</p>
+		<p transition:fade|global>entre et sort en s'estompant uniquement lorsque x et y changent</p>
 	{/if}
 {/if}
 ```
 
-## Transition parameters
+## Paramètres de transition [!VO]Transition parameters
 
-Transitions can have parameters.
+Les transitions peuvent avoir des paramètres.
 
-(The double `{{curlies}}` aren't a special syntax; this is an object literal inside an expression tag.)
+(Les doubles `{{accolades}}` ne sont pas une syntaxe spéciale ; il s'agit simplement d'un objet
+défini au sein d'une balise d'expression.)
 
 ```svelte
 {#if visible}
-	<div transition:fade={{ duration: 2000 }}>fades in and out over two seconds</div>
+	<div transition:fade={{ duration: 2000 }}>entre et sort en s'estompant pendant 2 secondes</div>
 {/if}
 ```
 
-## Custom transition functions
+## Fonctions de transition personnalisées [!VO]Custom transition functions
 
 ```js
 /// copy: false
@@ -66,11 +74,17 @@ transition = (node: HTMLElement, params: any, options: { direction: 'in' | 'out'
 }
 ```
 
-Transitions can use custom functions. If the returned object has a `css` function, Svelte will generate keyframes for a [web animation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API).
+Les transitions peuvent utiliser des fonctions personnalisées. Si l'objet renvoyé a une fonction
+`css`, Svelte va générer des keyframes d'[animation
+web](https://developer.mozilla.org/fr/docs/Web/API/Web_Animations_API).
 
-The `t` argument passed to `css` is a value between `0` and `1` after the `easing` function has been applied. _In_ transitions run from `0` to `1`, _out_ transitions run from `1` to `0` — in other words, `1` is the element's natural state, as though no transition had been applied. The `u` argument is equal to `1 - t`.
+L'argument `t` passé à `css` est une valeur entre `0` et `1` après l'application de la fonction
+`easing`. Les transitions _entrantes_ vont de `0` à `1`, les transitions _sortantes_ vont de `1` à
+`0` – autrement dit, `1` représente l'élément dans son état normal, sans qu'aucune transition ne lui
+ait été appliquée. L'argument `u` est égal à `1 - t`.
 
-The function is called repeatedly _before_ the transition begins, with different `t` and `u` arguments.
+La fonction est appelée de manière répétée _avant_ le début de la transition, avec des valeurs de
+`t` et `u` différentes.
 
 ```svelte
 <!--- file: App.svelte --->
@@ -97,13 +111,16 @@ The function is called repeatedly _before_ the transition begins, with different
 </script>
 
 {#if visible}
-	<div in:whoosh>whooshes in</div>
+	<div in:whoosh>entre en trombe</div>
 {/if}
 ```
 
-A custom transition function can also return a `tick` function, which is called _during_ the transition with the same `t` and `u` arguments.
+Une fonction de transition personnalisée peut également renvoyer une fonction `tick`, qui sera
+appelée _pendant_ la transition avec les mêmes arguments `t` et `u`.
 
-> [!NOTE] If it's possible to use `css` instead of `tick`, do so — web animations can run off the main thread, preventing jank on slower devices.
+> [!NOTE] Si vous avez la possibilité d'utiliser `css` au lieu de `tick`, faites-le - les animations
+> web sont gérées hors du fil d'exécution principal (_main thread_), ce qui permet d'éviter des
+> ralentissements sur des appareils moins performants.
 
 ```svelte
 <!--- file: App.svelte --->
@@ -118,7 +135,8 @@ A custom transition function can also return a `tick` function, which is called 
 		const valid = node.childNodes.length === 1 && node.childNodes[0].nodeType === Node.TEXT_NODE;
 
 		if (!valid) {
-			throw new Error(`This transition only works on elements with a single text node child`);
+			throw new Error(`Cette transition ne fonctionne que sur des éléments ayant un unique noeud
+enfant de type texte`);
 		}
 
 		const text = node.textContent;
@@ -135,21 +153,25 @@ A custom transition function can also return a `tick` function, which is called 
 </script>
 
 {#if visible}
-	<p in:typewriter={{ speed: 1 }}>The quick brown fox jumps over the lazy dog</p>
+	<p in:typewriter={{ speed: 1 }}>Portez ce vieux whisky au juge blond qui fume</p>
 {/if}
 ```
 
-If a transition returns a function instead of a transition object, the function will be called in the next microtask. This allows multiple transitions to coordinate, making [crossfade effects](/tutorial/deferred-transitions) possible.
+Si une transition renvoie une fonction au lieu d'un objet de transition, la fonction sera appelée
+dans la micro-tâche suivante. Cela permet de coordonner plusieurs transitions, rendant les [effets
+de crossfade](/tutorial/deferred-transitions) possibles.
 
-Transition functions also receive a third argument, `options`, which contains information about the transition.
+Les fonctions de transitions acceptent également un troisième argument, `options`, qui peut contenir
+des informations à propos de la transition.
 
-Available values in the `options` object are:
+Les valeurs disponibles dans l'objet `options` sont :
 
-- `direction` - one of `in`, `out`, or `both` depending on the type of transition
+- `direction` – `in`, `out`, ou `both` selon le type de transition
 
-## Transition events
+## Évènements de transition [!VO]Transition events
 
-An element with transitions will dispatch the following events in addition to any standard DOM events:
+Un élément possédant des transitions va déclencher les évènements suivants en plus des évènements
+standards du DOM :
 
 - `introstart`
 - `introend`
@@ -160,12 +182,12 @@ An element with transitions will dispatch the following events in addition to an
 {#if visible}
 	<p
 		transition:fly={{ y: 200, duration: 2000 }}
-		onintrostart={() => (status = 'intro started')}
-		onoutrostart={() => (status = 'outro started')}
-		onintroend={() => (status = 'intro ended')}
-		onoutroend={() => (status = 'outro ended')}
+		onintrostart={() => (status = "l'entrée a démarré")}
+		onoutrostart={() => (status = 'la sortie a démarré')}
+		onintroend={() => (status = "l'entrée est terminée")}
+		onoutroend={() => (status = 'la sortie est terminée')}
 	>
-		Flies in and out
+		Entre et sort en volant
 	</p>
 {/if}
 ```

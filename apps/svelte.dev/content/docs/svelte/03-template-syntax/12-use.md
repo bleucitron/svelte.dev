@@ -2,29 +2,31 @@
 title: use:
 ---
 
-Actions are functions that are called when an element is mounted. They are added with the `use:` directive, and will typically use an `$effect` so that they can reset any state when the element is unmounted:
+Les actions sont des fonctions appelées lorsqu'un élément est monté. Elles sont ajoutées grâce à la
+directive `use:`, et vont généralement utiliser un `$effect` afin qu'elles puissent réinitialiser
+n'importe quel état lorsque l'élément est démonté.
 
 ```svelte
 <!--- file: App.svelte --->
 <script>
 	/** @type {import('svelte/action').Action} */
 	function myaction(node) {
-		// the node has been mounted in the DOM
+		// le node a été monté dans le DOM
 
 		$effect(() => {
-			// setup goes here
+			// la mise en place se fait ici
 
 			return () => {
-				// teardown goes here
+				// le nettoyage ici
 			};
 		});
 	}
 </script>
 
-<div use:myaction>...</div>
+<div use:monaction>...</div>
 ```
 
-An action can be called with an argument:
+Une action peut être exécutée avec un argument :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -35,17 +37,22 @@ An action can be called with an argument:
 	}
 </script>
 
-<div use:myaction={+++data+++}>...</div>
+<div use:monaction={+++data+++}>...</div>
 ```
 
-The action is only called once (but not during server-side rendering) — it will _not_ run again if the argument changes.
+L'action est exécutée une seule fois (mais pas pendant le rendu côté serveur) – elle ne sera _pas_
+rejouée si l'argument change.
 
 > [!LEGACY]
-> Prior to the `$effect` rune, actions could return an object with `update` and `destroy` methods, where `update` would be called with the latest value of the argument if it changed. Using effects is preferred.
+> Avant l'introduction de la rune `$effect`, les actions pouvaient renvoyer un objet avec les
+> méthodes `update` et `destroy`, où `update` était exécutée avec la valeur de l'argument la plus
+> récente. L'utilisation d'effets est à prioriser.
 
-## Typing
+## Typage [!VO]Typing
 
-The `Action` interface receives three optional type arguments — a node type (which can be `Element`, if the action applies to everything), a parameter, and any custom event handlers created by the action:
+L'interface `Action` attend trois arguments de types, tous optionnels – un type de noeud (qui peut
+être `Element` si l'action s'applique à tout type de noeud), un paramètre, et n'importe quel
+gestionnaire d'évènement personnalisé créé par l'action :
 
 ```svelte
 <!--- file: App.svelte --->

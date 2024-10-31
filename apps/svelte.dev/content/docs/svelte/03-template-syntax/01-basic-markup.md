@@ -1,12 +1,14 @@
 ---
-title: Basic markup
+title: Bases du markup
 ---
 
-Markup inside a Svelte component can be thought of as HTML++.
+Le markup présent dans un composant Svelte peut être vu comme du HTML++.
 
-## Tags
+## Balises [!VO]Tags
 
-A lowercase tag, like `<div>`, denotes a regular HTML element. A capitalised tag or a tag that uses dot notation, such as `<Widget>` or `<my.stuff>`, indicates a _component_.
+Une balise en minuscules, comme `<div>`, représente un élément HTML standard. Une balise en
+majuscules ou une balise utilisant un point, comme `<Widget>` ou `<mon.machin>`, représente un
+_composant_.
 
 ```svelte
 <script>
@@ -18,9 +20,9 @@ A lowercase tag, like `<div>`, denotes a regular HTML element. A capitalised tag
 </div>
 ```
 
-## Element attributes
+## Attributs des éléments [!VO]Element attributes
 
-By default, attributes work exactly like their HTML counterparts.
+Par défaut, les attributs fonctionnent exactement comme leurs homologues HTML.
 
 ```svelte
 <div class="foo">
@@ -28,99 +30,131 @@ By default, attributes work exactly like their HTML counterparts.
 </div>
 ```
 
-As in HTML, values may be unquoted.
+Comme en HTML, les valeurs peuvent être fournies sans guillemets.
 
 <!-- prettier-ignore -->
 ```svelte
 <input type=checkbox />
 ```
 
-Attribute values can contain JavaScript expressions.
+Les valeurs d'attributs peuvent contenir des expressions JavaScript.
 
 ```svelte
 <a href="page/{p}">page {p}</a>
 ```
 
-Or they can _be_ JavaScript expressions.
+Ou peuvent _être_ des expressions JavaScript.
 
 ```svelte
 <button disabled={!clickable}>...</button>
 ```
 
-Boolean attributes are included on the element if their value is [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) and excluded if it's [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy).
+Les attributs booléens sont inclus sur l'élément si leur valeur est
+[truthy](https://developer.mozilla.org/fr/docs/Glossary/Truthy) et exclus si leur valeur est
+[falsy](https://developer.mozilla.org/fr/docs/Glossary/Falsy).
 
-All other attributes are included unless their value is [nullish](https://developer.mozilla.org/en-US/docs/Glossary/Nullish) (`null` or `undefined`).
+Tous les autres attributs sont inclus sauf si leur valeur est
+[nullish](https://developer.mozilla.org/fr/docs/Glossary/Nullish) (`null` ou `undefined`).
 
 ```svelte
-<input required={false} placeholder="This input field is not required" />
-<div title={null}>This div has no title attribute</div>
+<input required={false} placeholder="Ce champ n'est pas requis" />
+<div title={null}>Cette div n'a pas d'attribut de titre</div>
 ```
 
-> [!NOTE] Quoting a singular expression does not affect how the value is parsed, but in Svelte 6 it will cause the value to be coerced to a string:
+
+> [!NOTE] Mettre une expression entre guillemets n'a pas d'effet sur comment la valeur est lue, mais
+> en Svelte 6 cela entraînera la transformation de la valeur en string :
 >
 > <!-- prettier-ignore -->
 > ```svelte
 > <button disabled="{number !== 42}">...</button>
 > ```
 
-When the attribute name and value match (`name={name}`), they can be replaced with `{name}`.
+Lorsque le nom de l'attribut correspond au nom de sa valeur (`name={name}`), l'écriture peut
+être remplacée par `{name}`.
 
 ```svelte
 <button {disabled}>...</button>
-<!-- equivalent to
+<!-- équivalent à
 <button disabled={disabled}>...</button>
 -->
 ```
 
-## Component props
+## Props de composant [!VO]Component props
 
-By convention, values passed to components are referred to as _properties_ or _props_ rather than _attributes_, which are a feature of the DOM.
+Par convention, les valeurs passées aux composants sont appelées `_propriétés`, ou `_props`, plutôt
+qu'_attributs_, qui sont une fonctionnalité du DOM.
 
-As with elements, `name={name}` can be replaced with the `{name}` shorthand.
+Comme pour les éléments, `name={name}` peut être remplacé par le raccourci `{name}`.
 
 ```svelte
-<Widget foo={bar} answer={42} text="hello" />
+<Widget foo={bar} answer={42} text="coucou" />
 ```
 
-_Spread attributes_ allow many attributes or properties to be passed to an element or component at once.
+Les _attributs décomposés_ permettre de fournir d'un coup plusieurs attributs ou propriétés à un
+élément ou composant.
 
-An element or component can have multiple spread attributes, interspersed with regular ones.
+Un élément ou composant peut avoir plusieurs attributs décomposés, ponctués d'attributs normaux.
 
 ```svelte
 <Widget {...things} />
 ```
 
-## Events
+## Évènements [!VO]Events
 
-Listening to DOM events is possible by adding attributes to the element that start with `on`. For example, to listen to the `click` event, add the `onclick` attribute to a button:
+Écouter des évènements DOM est possible en ajoutant à un élément des attributs commençant par `on`.
+Par exemple, pour écouter l'évènement `click`, ajoutez l'attribut `onclick` à un bouton :
 
 ```svelte
-<button onclick={() => console.log('clicked')}>click me</button>
+<button onclick={() =>cliquez moi</button>
 ```
 
-Event attributes are case sensitive. `onclick` listens to the `click` event, `onClick` listens to the `Click` event, which is different. This ensures you can listen to custom events that have uppercase characters in them.
+Les attributs d'évènements sont sensibles à la casse. `onclick` écoute l'évènement `click`,
+`onClick` écoute l'évènement `Click`, ce qui n'est pas la même chose. Ceci vous assure de pouvoir
+écouter des évènements personnalisés ayant des majuscules dans leur nom.
 
-Because events are just attributes, the same rules as for attributes apply:
+Puisque les évènements sont juste des attributs, les règles des attributs s'appliquent :
 
-- you can use the shorthand form: `<button {onclick}>click me</button>`
-- you can spread them: `<button {...thisSpreadContainsEventAttributes}>click me</button>`
+- vous pouvez utiliser la forme raccourcie : `<button {onclick}>cliquez moi</button>`
+- vous pouvez les décomposer : `<button {...thisSpreadContainsEventAttributes}>cliquez moi</button>`
 
-Timing-wise, event attributes always fire after events from bindings (e.g. `oninput` always fires after an update to `bind:value`). Under the hood, some event handlers are attached directly with `addEventListener`, while others are _delegated_.
+En termes de timing, les attributs d'évènement sont toujours déclenchés après les évènements venant
+de liaisons (par ex. `oninput` est toujours déclenché après une mise à jour via `bind:value`). Sous
+le capot, certains gestionnaires d'évènement sont directement attachés avec `addEventListener`,
+tandis que d'autres sont _délégués_.
 
-When using `ontouchstart` and `ontouchmove` event attributes, the handlers are [passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#using_passive_listeners) for better performance. This greatly improves responsiveness by allowing the browser to scroll the document immediately, rather than waiting to see if the event handler calls `event.preventDefault()`.
+Lors de l'utilisation d'attributs d'évènement `ontouchstart` et `ontouchmove`, les gestionnaires
+sont
+[passifs](https://developer.mozilla.org/fr/docs/Web/API/EventTarget/addEventListener#using_passive_listeners)
+pour des raisons de performance. Cela améliore notablement la responsivité en laissant le navigateur
+parcourir le document immédiatement, plutôt que d'attendre de savoir si le gestionnaire d'évènement
+exécute `event.preventDefault()`.
 
-In the very rare cases that you need to prevent these event defaults, you should use [`on`](svelte-events#on) instead (for example inside an action).
+Dans les rares cas où vous auriez besoin d'empêcher le comportement par défaut de ces évènements,
+vous devriez plutôt utiliser [`on`](svelte-events#on) (par exemple dans une action).
 
-### Event delegation
+### Délégation d'évènement [!VO]Event delegation
 
-To reduce memory footprint and increase performance, Svelte uses a technique called event delegation. This means that for certain events — see the list below — a single event listener at the application root takes responsibility for running any handlers on the event's path.
+Pour réduire l'empreinte mémoire et améliorer les performances, Svelte utilise une technique appelée
+délégation d'évènement. Ceci signifie que pour certains évènements – voir la liste plus bas – un
+unique gestionnaire d'évènement "racine" prend la responsabilité de jouer tout gestionnaire présent
+dans le parcours de l'évènement.
 
-There are a few gotchas to be aware of:
+Il y a quelques inconvénients à avoir en tête :
 
-- when you manually dispatch an event with a delegated listener, make sure to set the `{ bubbles: true }` option or it won't reach the application root
-- when using `addEventListener` directly, avoid calling `stopPropagation` or the event won't reach the application root and handlers won't be invoked. Similarly, handlers added manually inside the application root will run _before_ handlers added declaratively deeper in the DOM (with e.g. `onclick={...}`), in both capturing and bubbling phases. For these reasons it's better to use the `on` function imported from `svelte/events` rather than `addEventListener`, as it will ensure that order is preserved and `stopPropagation` is handled correctly.
+- lorsque vous générez manuellement un évènement avec un gestionnaire délégué, assurez-vous de
+définir l'option `{ bubbles: true }` ou bien l'évènement n'atteindra jamais la racine de
+l'application.
+- lorsque vous utilisez `addEventListener` directement, éviter d'appeler `stopPropagation` ou bien
+l'évènement n'atteindra pas la racine de l'application et les gestionnaires ne seront pas invoqués.
+De même, les gestionnaires ajoutés manuellement à la racine de l'application seront exécutés _avant_
+les gestionnaires ajoutés déclarativement plus profondément dans le DOM (c-à-d avec
+`onclick={...}`), à la fois pour les phases de capture et de bubbling. C'est pour ces raisons qu'il
+est préférable d'utiliser la fonction `on` importée depuis `svelte/events` plutôt que d'utiliser
+`addEventListener`, puisque cela vous assurera que l'ordre est préservé et que `stopPropagation` est
+géré correctement.
 
-The following event handlers are delegated:
+Les gestionnaires des évènements suivants sont délégués :
 
 - `beforeinput`
 - `click`
@@ -146,17 +180,21 @@ The following event handlers are delegated:
 - `touchmove`
 - `touchstart`
 
-## Text expressions
+## Expressions texte [!VO]Text expressions
 
-A JavaScript expression can be included as text by surrounding it with curly braces.
+Une expression JavaScript peut être incluse en tant que texte en l'entourant d'accolades.
 
 ```svelte
 {expression}
 ```
 
-Curly braces can be included in a Svelte template by using their [HTML entity](https://developer.mozilla.org/docs/Glossary/Entity) strings: `&lbrace;`, `&lcub;`, or `&#123;` for `{` and `&rbrace;`, `&rcub;`, or `&#125;` for `}`.
+Les accolades peuvent être incluses dans un template Svelte en utilisant leur chaîne de caractères
+d'[entité HTML](https://developer.mozilla.org/fr/docs/Glossary/Entity) : `&lbrace;`, `&lcub;`, or
+`&#123;` pour `{` et `&rbrace;`, `&rcub;`, ou `&#125;` pour `}`.
 
-If you're using a regular expression (`RegExp`) [literal notation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#literal_notation_and_constructor), you'll need to wrap it in parentheses.
+Si vous utilisez la [notation
+litérale](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp#literal_notation_and_constructor)
+d'une expression régulière (`RegExp`), vous devrez l'entourer de parenthèses :
 
 <!-- prettier-ignore -->
 ```svelte
@@ -166,36 +204,42 @@ If you're using a regular expression (`RegExp`) [literal notation](https://devel
 <div>{(/^[A-Za-z ]+$/).test(value) ? x : y}</div>
 ```
 
-The expression will be stringified and escaped to prevent code injections. If you want to render HTML, use the `{@html}` tag instead.
+L'expression sera transformée en chaîne de caractères et échappée pour éviter les injections de
+code. Si vous souhaitez afficher du HTML, utilisez plutôt la balise `{@html}`.
 
 ```svelte
-{@html potentiallyUnsafeHtmlString}
+{@html uneChaineDeCaracteresPotentiellementDangereuse}
 ```
 
-> [!NOTE] Make sure that you either escape the passed string or only populate it with values that are under your control in order to prevent [XSS attacks](https://owasp.org/www-community/attacks/xss/)
+> [!NOTE] Assurez-vous soit d'échapper la chaîne fournie, soit de ne fournir que des valeurs qui
+> sont sous votre contrôle pour votre protéger d'éventuelles attaques
+> [XSS](https://owasp.org/www-community/attacks/xss/).
 
-## Comments
+## Commentaires [!VO]Comments
 
-You can use HTML comments inside components.
+Vous pouvez écrire des commentaires HTML au sein de vos composants.
 
 ```svelte
-<!-- this is a comment! --><h1>Hello world</h1>
+<!-- ceci est un commentaire ! --><h1>Coucou tout le monde</h1>
 ```
 
-Comments beginning with `svelte-ignore` disable warnings for the next block of markup. Usually, these are accessibility warnings; make sure that you're disabling them for a good reason.
+Les commentaires commençant par `svelte-ignore` désactivent les warnings pour le bloc de markup
+suivant. Ces sont généralement des warnings d'accessibilité ; ne les désactivez que pour une bonne
+raison.
 
 ```svelte
 <!-- svelte-ignore a11y-autofocus -->
 <input bind:value={name} autofocus />
 ```
 
-You can add a special comment starting with `@component` that will show up when hovering over the component name in other files.
+Vous pouvez ajouter un commentaire spécial commençant par `@component` qui s'affichera lorsque vous
+survolerez le nom du composant dans d'autres fichiers.
 
 ````svelte
 <!--
 @component
-- You can use markdown here.
-- You can also use code blocks here.
+- Vous pouvez utiliser la syntaxe Markdown ici.
+- Vous pouvez aussi utiliser des blocs de code ici.
 - Usage:
   ```html
   <Main name="Arethra">
@@ -207,7 +251,7 @@ You can add a special comment starting with `@component` that will show up when 
 
 <main>
 	<h1>
-		Hello, {name}
+		Coucou {name}
 	</h1>
 </main>
 ````

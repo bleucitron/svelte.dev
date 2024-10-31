@@ -2,12 +2,16 @@
 title: in: and out:
 ---
 
-The `in:` and `out:` directives are identical to [`transition:`](transition), except that the resulting transitions are not bidirectional — an `in` transition will continue to 'play' alongside the `out` transition, rather than reversing, if the block is outroed while the transition is in progress. If an out transition is aborted, transitions will restart from scratch.
+Les directives `in:` et `out:` sont identiques à [`transition:`](transition), excepté le fait que
+les transitions ainsi créées ne sont pas bidirectionnelles - une transition `in` va continuer
+d'être "jouée" en parallèle de la transition `out`, plutôt que d'être inversée, si le bloc est sorti
+du DOM pendant que la transition `in` est toujours en cours. Si une transition `out` est annulée,
+les transitions vont reprendre du début.
 
 ```svelte
 <script>
   import { fade, fly } from 'svelte/transition';
-  
+
   let visible = $state(false);
 </script>
 
@@ -17,6 +21,6 @@ The `in:` and `out:` directives are identical to [`transition:`](transition), ex
 </label>
 
 {#if visible}
-	<div in:fly={{ y: 200 }} out:fade>flies in, fades out</div>
+	<div in:fly={{ y: 200 }} out:fade>entre en volant, sort en s'estompant</div>
 {/if}
 ```

@@ -2,7 +2,7 @@
 title: {@const ...}
 ---
 
-The `{@const ...}` tag defines a local constant.
+La balise `{@const ...}` définit une constante locale.
 
 ```svelte
 {#each boxes as box}
@@ -11,4 +11,5 @@ The `{@const ...}` tag defines a local constant.
 {/each}
 ```
 
-`{@const}` is only allowed as an immediate child of a block — `{#if ...}`, `{#each ...}`, `{#snippet ...}` and so on — or a `<Component />`.
+L'usage de `{@const}` est uniquement autorisé immédiatement en enfant d'un bloc - `{#if ...}`,
+`{#each ...}`, `{#snippet ...}`, etc. – ou d'un `<Composant />`.

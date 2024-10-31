@@ -2,22 +2,27 @@
 title: animate:
 ---
 
-An animation is triggered when the contents of a [keyed each block](each#Keyed-each-blocks) are re-ordered. Animations do not run when an element is added or removed, only when the index of an existing data item within the each block changes. Animate directives must be on an element that is an _immediate_ child of a keyed each block.
+Une animation est déclenchée lorsque le contenu d'un [bloc `each` à clé](each#Keyed-each-blocks) est
+réordonné. Les animations ne sont pas joués lorsqu'un élément est ajouté ou enlevé, uniquement
+lorsque l'indice d'un élément existant au sein du bloc `each` change. Les directives d'animation
+doivent être appliquées sur des éléments _immédiatement_ enfant d'un bloc `each` à clé.
 
-Animations can be used with Svelte's [built-in animation functions](svelte-animate) or [custom animation functions](#Custom-animation-functions).
+Les animation peuvent être utilisées avec les [fonctions d'animation intégrées](svelte-animate) à
+Svelte ou avec des [fonctions d'animation personnalisées](#Custom-animation-functions).
 
 ```svelte
-<!-- When `list` is reordered the animation will run -->
+<!-- l'animation sera jouée lorsque `list` est réordonnée -->
 {#each list as item, index (item)}
 	<li animate:flip>{item}</li>
 {/each}
 ```
 
-## Animation Parameters
+## Paramètres d'animation [!VO]Animation Parameters
 
-As with actions and transitions, animations can have parameters.
+Comme pour les actions et les transitions, les animations peuvent avoir des paramètres.
 
-(The double `{{curlies}}` aren't a special syntax; this is an object literal inside an expression tag.)
+(Les doubles `{{accolades}}` ne sont pas une syntaxe spéciale ; il s'agit simplement d'un objet
+défini au sein d'une balise d'expression.)
 
 ```svelte
 {#each list as item, index (item)}
@@ -25,7 +30,7 @@ As with actions and transitions, animations can have parameters.
 {/each}
 ```
 
-## Custom animation functions
+## Fonctions d'animation personnalisées [!VO]Custom animation functions
 
 ```js
 /// copy: false
@@ -39,13 +44,22 @@ animation = (node: HTMLElement, { from: DOMRect, to: DOMRect } , params: any) =>
 }
 ```
 
-Animations can use custom functions that provide the `node`, an `animation` object and any `parameters` as arguments. The `animation` parameter is an object containing `from` and `to` properties each containing a [DOMRect](https://developer.mozilla.org/en-US/docs/Web/API/DOMRect#Properties) describing the geometry of the element in its `start` and `end` positions. The `from` property is the DOMRect of the element in its starting position, and the `to` property is the DOMRect of the element in its final position after the list has been reordered and the DOM updated.
+Les animations peuvent utiliser des fonctions personnalisées fournissant un `node`, un objet
+d'`animation` et tout `parameters` comme arguments. Le paramètre `animation` est un objet contenant
+les propriétés `from` et `to`, chacune contenant un
+[DOMRect](https://developer.mozilla.org/fr/docs/Web/API/DOMRect#Properties) décrivant la géométrie
+de l'élément dans ses positions `start` et `end`. La propriété `from` est le DOMRect de l'élément
+dans sa position de départ, la propriété `to` est le DOMRect de l'élément dans sa position finale
+après que la liste ait été réordonnée et le DOM mis à jour.
 
-If the returned object has a `css` method, Svelte will create a [web animation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) that plays on the element.
+Si l'objet renvoyé a une méthode `css`, Svelte va créer une [animation
+web](https://developer.mozilla.org/fr/docs/Web/API/Web_Animations_API) qui sera jouée sur l'élément.
 
-The `t` argument passed to `css` is a value that goes from `0` and `1` after the `easing` function has been applied. The `u` argument is equal to `1 - t`.
+L'argument `t` passé à `css` est une valeur entre `0` et `1` après l'application de la fonction
+`easing`. L'argument `u` est égal à `1 - t`.
 
-The function is called repeatedly _before_ the animation begins, with different `t` and `u` arguments.
+La fonction est appelée de manière répétée _avant_ le début de la transition, avec des valeurs de
+`t` et `u` différentes.
 
 <!-- TODO: Types -->
 
@@ -79,9 +93,13 @@ The function is called repeatedly _before_ the animation begins, with different 
 {/each}
 ```
 
-A custom animation function can also return a `tick` function, which is called _during_ the animation with the same `t` and `u` arguments.
+Une fonction d'animation personnalisée peut également renvoyer une fonction `tick`, qui sera appelée
+_pendant_ l'animation avec les mêmes arguments `t` et `u`.
 
-> [!NOTE] If it's possible to use `css` instead of `tick`, do so — web animations can run off the main thread, preventing jank on slower devices.
+
+> [!NOTE] Si vous avez la possibilité d'utiliser `css` au lieu de `tick`, faites-le - les animations
+> web sont gérées hors du fil d'exécution principal (_main thread_), ce qui permet d'éviter des
+> ralentissements sur des appareils moins performants.
 
 ```svelte
 <!--- file: App.svelte --->
@@ -103,7 +121,7 @@ A custom animation function can also return a `tick` function, which is called _
 			delay: 0,
 			duration: Math.sqrt(d) * 120,
 			easing: cubicOut,
-			tick: (t, u) => Object.assign(node.style, { color: t > 0.5 ? 'Pink' : 'Blue' })
+			tick: (t, u) => Object.assign(node.style, { color: t > 0.5 ? 'Rose' : 'Bleu' })
 		};
 	}
 </script>

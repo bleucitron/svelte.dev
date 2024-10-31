@@ -1,10 +1,14 @@
-﻿---
+---
 title: bind:
 ---
 
-Data ordinarily flows down, from parent to child. The `bind:` directive allows data to flow the other way, from child to parent.
+D"ordinaire, les données circulent vers le bas, du parent vers ses enfants. La directive `bind:`
+permet de faire circuler les données dans l'autre sens, de l'enfant vers le parent.
 
-The general syntax is `bind:property={expression}`, where `expression` is an _lvalue_ (i.e. a variable or an object property). When the expression is an identifier with the same name as the property, we can omit the expression — in other words these are equivalent:
+La syntaxe générale est `bind:property={expression}`, où `expression` est une _lvalue_ (c-à-d une
+variable ou une propriété d'objet). Lorsque l'expression est un identifiant du même nom que la
+propriété, il est possible d'omettre l'expression – autrement dit ces deux écritures sont
+équivalentes :
 
 <!-- prettier-ignore -->
 ```svelte
@@ -12,10 +16,13 @@ The general syntax is `bind:property={expression}`, where `expression` is an _lv
 <input bind:value />
 ```
 
+Svelte crée un gestionnaire d'évènement qui met à jour la valeur liée. Si un élément a déjà un
+gestionnaire pour le même évènement, ce gestionnaire sera déclenché avant que la valeur liée soit
+mise à jour.
 
-Svelte creates an event listener that updates the bound value. If an element already has a listener for the same event, that listener will be fired before the bound value is updated.
-
-Most bindings are _two-way_, meaning that changes to the value will affect the element and vice versa. A few bindings are _readonly_, meaning that changing their value will have no effect on the element.
+La plupart des liaisons sont à _double sens_ (_two-way_), ce qui signifie que toute modification de
+la valeur va impacter l'élément est vice-versa. Quelques liaisons sont en _lecture seule_
+(_readonly_), ce qui signifie que les changements de valeur n'auront aucun effet sur l'élément.
 
 ## Function bindings
 
@@ -42,19 +49,23 @@ In the case of readonly bindings like [dimension bindings](#Dimensions), the `ge
 
 ## `<input bind:value>`
 
-A `bind:value` directive on an `<input>` element binds the input's `value` property:
+Une directive `bind:value` sur un élément `<input>` crée une liaison avec la propriété `value` de
+l'input :
 
 <!-- prettier-ignore -->
 ```svelte
 <script>
-	let message = $state('hello');
+	let message = $state('coucou');
 </script>
 
 <input bind:value={message} />
 <p>{message}</p>
 ```
 
-In the case of a numeric input (`type="number"` or `type="range"`), the value will be coerced to a number ([demo](/playground/untitled#H4sIAAAAAAAAE6WPwYoCMQxAfyWEPeyiOOqx2w74Hds9pBql0IllmhGXYf5dKqwiyILsLXnwwsuI-5i4oPkaUX8yo7kCnKNQV7dNzoty4qSVBSr8jG-Poixa0KAt2z5mbb14TaxA4OCtKCm_rz4-f2m403WltrlrYhMFTtcLNkoeFGqZ8yhDF7j3CCHKzpwoDexGmqCL4jwuPUJHZ-dxVcfmyYGe5MAv-La5pbxYFf5Z9Zf_UJXb-sEMquFgJJhBmGyTW5yj8lnRaD_w9D1dAKSSj7zqAQAA)):
+Dans le cas d'un input numérique (`type="number"` ou `type="range"`), la valeur sera transformée en
+nombre
+([démo](/playground/untitled#H4sIAAAAAAAAE6WPwYoCMQxAfyWEPeyiOOqx2w74Hds9pBql0IllmhGXYf5dKqwiyILsLXnwwsuI-5i4oPkaUX8yo7kCnKNQV7dNzoty4qSVBSr8jG-Poixa0KAt2z5mbb14TaxA4OCtKCm_rz4-f2m403WltrlrYhMFTtcLNkoeFGqZ8yhDF7j3CCHKzpwoDexGmqCL4jwuPUJHZ-dxVcfmyYGe5MAv-La5pbxYFf5Z9Zf_UJXb-sEMquFgJJhBmGyTW5yj8lnRaD_w9D1dAKSSj7zqAQAA))
+:
 
 ```svelte
 <script>
@@ -75,9 +86,12 @@ In the case of a numeric input (`type="number"` or `type="range"`), the value wi
 <p>{a} + {b} = {a + b}</p>
 ```
 
-If the input is empty or invalid (in the case of `type="number"`), the value is `undefined`.
+Si l'input est vide ou invalide (dans le cas de `type="number"`), la valeur sera `undefined`.
 
-Since 5.6.0, if an `<input>` has a `defaultValue` and is part of a form, it will revert to that value instead of the empty string when the form is reset. Note that for the initial render the value of the binding takes precedence unless it is `null` or `undefined`.
+Depuis la version 5.6.0, si un `<input>` faisant partie d'un formulaire possède une valeur par
+défaut `defaultValue`, il récupèrera cette valeur par défaut plutôt que la chaîne de caractères vide
+lors de la réinitialisation du formulaire. Notez que pour le rendu initial, la valeur de la liaison
+est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 
 ```svelte
 <script>
@@ -85,26 +99,31 @@ Since 5.6.0, if an `<input>` has a `defaultValue` and is part of a form, it will
 </script>
 
 <form>
-	<input bind:value defaultValue="not the empty string">
-	<input type="reset" value="Reset">
+	<input bind:value defaultValue="pas la string vide">
+	<input type="reset" value="Réinitialiser">
 </form>
 ```
 
 > [!NOTE]
-> Use reset buttons sparingly, and ensure that users won't accidentally click them while trying to submit the form.
+> Utilisez les boutons de réinitialisation avec prudence, et assurez-vous que les utilisateurs et
+> utilisatrices ne cliquent pas dessus accidentellement lorsqu'ils souhaitent soumettre le
+> formulaire.
 
 ## `<input bind:checked>`
 
-Checkbox and radio inputs can be bound with `bind:checked`:
+Les inputs de type checkbox et radio peuvent être liés avec `bind:checked` :
 
 ```svelte
 <label>
 	<input type="checkbox" bind:checked={accepted} />
-	Accept terms and conditions
+	Accepter les conditions générales
 </label>
 ```
 
-Since 5.6.0, if an `<input>` has a `defaultChecked` attribute and is part of a form, it will revert to that value instead of `false` when the form is reset. Note that for the initial render the value of the binding takes precedence unless it is `null` or `undefined`.
+Depuis la version 5.6.0, si un `<input>` faisant partie d'un formulaire possède une valeur par
+défaut `defaultChecked`, il récupèrera cette valeur par défaut plutôt que `false` lors de la
+réinitialisation du formulaire. Notez que pour le rendu initial, la valeur de la liaison
+est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 
 ```svelte
 <script>
@@ -113,61 +132,73 @@ Since 5.6.0, if an `<input>` has a `defaultChecked` attribute and is part of a f
 
 <form>
 	<input type="checkbox" bind:checked defaultChecked={true}>
-	<input type="reset" value="Reset">
+	<input type="reset" value="Réinitialiser">
 </form>
 ```
 
 ## `<input bind:group>`
 
-Inputs that work together can use `bind:group`.
+Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`.
 
 ```svelte
 <script>
-	let tortilla = $state('Plain');
+	let tortilla = $state('Nature');
 
 	/** @type {Array<string>} */
 	let fillings = $state([]);
 </script>
 
-<!-- grouped radio inputs are mutually exclusive -->
-<input type="radio" bind:group={tortilla} value="Plain" />
-<input type="radio" bind:group={tortilla} value="Whole wheat" />
-<input type="radio" bind:group={tortilla} value="Spinach" />
+<!-- les inputs radio groupés sont mutuellement exclusifs -->
+<input type="radio" bind:group={tortilla} value="Nature" />
+<input type="radio" bind:group={tortilla} value="Blé complet" />
+<input type="radio" bind:group={tortilla} value="Épinards" />
 
-<!-- grouped checkbox inputs populate an array -->
-<input type="checkbox" bind:group={fillings} value="Rice" />
-<input type="checkbox" bind:group={fillings} value="Beans" />
-<input type="checkbox" bind:group={fillings} value="Cheese" />
-<input type="checkbox" bind:group={fillings} value="Guac (extra)" />
+<!-- les inputs checkbox groupés remplissent un tableau -->
+<input type="checkbox" bind:group={fillings} value="Riz" />
+<input type="checkbox" bind:group={fillings} value="Haricots" />
+<input type="checkbox" bind:group={fillings} value="Fromage" />
+<input type="checkbox" bind:group={fillings} value="Guacamole (extra)" />
 ```
 
-> [!NOTE] `bind:group` only works if the inputs are in the same Svelte component.
+> [!NOTE] `bind:group` ne fonctionne que si les inputs sont dans le même composant Svelte.
 
 ## `<input bind:files>`
 
-On `<input>` elements with `type="file"`, you can use `bind:files` to get the [`FileList` of selected files](https://developer.mozilla.org/en-US/docs/Web/API/FileList). When you want to update the files programmatically, you always need to use a `FileList` object. Currently `FileList` objects cannot be constructed directly, so you need to create a new [`DataTransfer`](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer) object and get `files` from there.
+Vous pouvez utiliser `bind:files` sur les éléments `<input>` de `type="file"` pour obtenir une
+[`FileList` des fichiers sélectionnés](https://developer.mozilla.org/fr/docs/Web/API/FileList).
+Lorsque vous souhaitez mettre à jour les fichiers programmatiquement, vous pouvez toujours utiliser
+un objet `FileList`. Actuellement les objets `FileList` ne peuvent pas être construits directement,
+vous aurez besoin de d'abord créer un nouvel objet
+[`DataTransfer`](https://developer.mozilla.org/fr/docs/Web/API/DataTransfer) et en extraire les
+`files`.
 
 ```svelte
 <script>
 	let files = $state();
 
 	function clear() {
-		files = new DataTransfer().files; // null or undefined does not work
+		files = new DataTransfer().files; // null ou undefined ne fonctionne pas
 	}
 </script>
 
-<label for="avatar">Upload a picture:</label>
+<label for="avatar">Envoyer une image :</label>
 <input accept="image/png, image/jpeg" bind:files id="avatar" name="avatar" type="file" />
-<button onclick={clear}>clear</button>
+<button onclick={clear}>supprimer</button>
 ```
 
-`FileList` objects also cannot be modified, so if you want to e.g. delete a single file from the list, you need to create a new `DataTransfer` object and add the files you want to keep.
+Les objets `FileList` ne peuvent pas non plus être modifiés. Si vous souhaitez par ex. supprimer un
+fichier de la liste, vous devez créer un nouvel objet `DataTransfer` et y ajouter uniquement les
+fichiers que vous souhaitez garder.
 
-> [!NOTE] `DataTransfer` may not be available in server-side JS runtimes. Leaving the state that is bound to `files` uninitialized prevents potential errors if components are server-side rendered.
+> [!NOTE] `DataTransfer` peut ne pas être disponible dans certains runtimes JS de serveur. Ne pas
+> initialiser l'état lié aux `files` permet d'éviter de potentielles erreurs si les composants sont
+> générés côté serveur.
 
 ## `<select bind:value>`
 
-A `<select>` value binding corresponds to the `value` property on the selected `<option>`, which can be any value (not just strings, as is normally the case in the DOM).
+Une liaison sur la valeur d'un élément `<select>` correspond à la propriété `value` de l'`<option>`
+sélectionnée, ce qui peut être n'importe quelle valeur (pas uniquement des chaînes de caractères,
+comme c'est normalement le cas dans le DOM).
 
 ```svelte
 <select bind:value={selected}>
@@ -177,29 +208,34 @@ A `<select>` value binding corresponds to the `value` property on the selected `
 </select>
 ```
 
-A `<select multiple>` element behaves similarly to a checkbox group. The bound variable is an array with an entry corresponding to the `value` property of each selected `<option>`.
+Un élément `<select multiple>` se comporte comme un groupe de checkbox. La variable liée est un
+tableau ayant une entrée correspondant à la propriété `value` de chaque `<option>` sélectionnée.
 
 ```svelte
 <select multiple bind:value={fillings}>
-	<option value="Rice">Rice</option>
-	<option value="Beans">Beans</option>
-	<option value="Cheese">Cheese</option>
-	<option value="Guac (extra)">Guac (extra)</option>
+	<option value="Riz">Riz</option>
+	<option value="Haricots">Haricots</option>
+	<option value="Fromage">Fromage</option>
+	<option value="Guacamole (extra)">Guacamole (extra)</option>
 </select>
 ```
 
-When the value of an `<option>` matches its text content, the attribute can be omitted.
+Lorsque la valeur d'une `<option>` correspond à son contenu tezte, l'attribut n'est pas nécessaire.
 
 ```svelte
 <select multiple bind:value={fillings}>
-	<option>Rice</option>
-	<option>Beans</option>
-	<option>Cheese</option>
-	<option>Guac (extra)</option>
+	<option>Riz</option>
+	<option>Haricots</option>
+	<option>Fromage</option>
+	<option>Guacamole (extra)</option>
 </select>
 ```
 
-You can give the `<select>` a default value by adding a `selected` attribute to the`<option>` (or options, in the case of `<select multiple>`) that should be initially selected. If the `<select>` is part of a form, it will revert to that selection when the form is reset. Note that for the initial render the value of the binding takes precedence if it's not `undefined`.
+Vous pouvez fournir au `<select>` une valeur par défaut en ajoutant l'attribut `selected` à
+l'`<option>` (ou à plusieurs `<option>` dans le cas d'un `<select multiple>`) qui doit être
+initialement sélectionnée. Si le `<select>` fait partie d'un formulaire, il sera réinitialisé à
+cette séletion initiale lors de la réinitialisation du formulaire. Notez que pour le rendu initial,
+la valeur de la liaison est prioritaire sauf s'il cette valeur est `undefined`.
 
 ```svelte
 <select bind:value={selected}>
@@ -211,23 +247,23 @@ You can give the `<select>` a default value by adding a `selected` attribute to 
 
 ## `<audio>`
 
-`<audio>` elements have their own set of bindings — five two-way ones...
+Les éléments `<audio>` ont leur propre jeu de liaisons – cinq à double sens...
 
-- [`currentTime`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime)
-- [`playbackRate`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate)
-- [`paused`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/paused)
-- [`volume`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/volume)
-- [`muted`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/muted)
+- [`currentTime`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/currentTime)
+- [`playbackRate`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/playbackRate)
+- [`paused`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/paused)
+- [`volume`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/volume)
+- [`muted`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/muted)
 
-...and seven readonly ones:
+... et sept en lecture seule :
 
-- [`duration`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/duration)
-- [`buffered`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/buffered)
-- [`paused`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/paused)
-- [`seekable`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seekable)
-- [`seeking`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/seeking_event)
-- [`ended`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/ended)
-- [`readyState`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState)
+- [`duration`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/duration)
+- [`buffered`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/buffered)
+- [`paused`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/paused)
+- [`seekable`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/seekable)
+- [`seeking`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/seeking_event)
+- [`ended`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/ended)
+- [`readyState`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/readyState)
 
 ```svelte
 <audio src={clip} bind:duration bind:currentTime bind:paused></audio>
@@ -235,35 +271,39 @@ You can give the `<select>` a default value by adding a `selected` attribute to 
 
 ## `<video>`
 
-`<video>` elements have all the same bindings as [#audio] elements, plus readonly [`videoWidth`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/videoWidth) and [`videoHeight`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement/videoHeight) bindings.
+Les éléments `<video>` ont les mêmes liaisons que les éléments [#audio], auxquels viennent s'ajouter
+les liaisons en lecture seule
+[`videoWidth`](https://developer.mozilla.org/fr/docs/Web/API/HTMLVideoElement/videoWidth) et
+[`videoHeight`](https://developer.mozilla.org/fr/docs/Web/API/HTMLVideoElement/videoHeight).
 
 ## `<img>`
 
-`<img>` elements have two readonly bindings:
+Les éléments `<img>` ont deux liaisons en lecture seule :
 
-- [`naturalWidth`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalWidth)
-- [`naturalHeight`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalHeight)
+- [`naturalWidth`](https://developer.mozilla.org/fr/docs/Web/API/HTMLImageElement/naturalWidth)
+- [`naturalHeight`](https://developer.mozilla.org/fr/docs/Web/API/HTMLImageElement/naturalHeight)
 
 ## `<details bind:open>`
 
-`<details>` elements support binding to the `open` property.
+Les éléments `<details>` acceptent une liaison sur la propriété `open`.
 
 ```svelte
 <details bind:open={isOpen}>
-	<summary>How do you comfort a JavaScript bug?</summary>
-	<p>You console it.</p>
+	<summary>Comment réconforter un bug JavaScript ?</summary>
+	<p>En le consolant.</p>
 </details>
 ```
 
-## Contenteditable bindings
+## Liaison Contenteditable [!VO]Contenteditable bindings
 
-Elements with the `contenteditable` attribute support the following bindings:
+Les élément ayant l'attribut `contenteditable` acceptent les liaisons suivantes :
 
-- [`innerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
-- [`innerText`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)
-- [`textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+- [`innerHTML`](https://developer.mozilla.org/fr/docs/Web/API/Element/innerHTML)
+- [`innerText`](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/innerText)
+- [`textContent`](https://developer.mozilla.org/fr/docs/Web/API/Node/textContent)
 
-> [!NOTE] There are [subtle differences between `innerText` and `textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent#differences_from_innertext).
+> [!NOTE] Il y a des [différences subtiles entre `innerText` et
+> `textContent`](https://developer.mozilla.org/fr/docs/Web/API/Node/textContent#differences_from_innertext)
 
 <!-- for some reason puts the comment and html on same line -->
 <!-- prettier-ignore -->
@@ -273,12 +313,13 @@ Elements with the `contenteditable` attribute support the following bindings:
 
 ## Dimensions
 
-All visible elements have the following readonly bindings, measured with a `ResizeObserver`:
+Tous les éléments visibles acceptent les liaisons suivantes en lecture seule, dont les valeurs sont
+mesurées avec `ResizeObserver` :
 
-- [`clientWidth`](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientWidth)
-- [`clientHeight`](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight)
-- [`offsetWidth`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetWidth)
-- [`offsetHeight`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight)
+- [`clientWidth`](https://developer.mozilla.org/fr/docs/Web/API/Element/clientWidth)
+- [`clientHeight`](https://developer.mozilla.org/fr/docs/Web/API/Element/clientHeight)
+- [`offsetWidth`](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/offsetWidth)
+- [`offsetHeight`](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/offsetHeight)
 
 ```svelte
 <div bind:offsetWidth={width} bind:offsetHeight={height}>
@@ -295,7 +336,10 @@ All visible elements have the following readonly bindings, measured with a `Resi
 bind:this={dom_node}
 ```
 
-To get a reference to a DOM node, use `bind:this`. The value will be `undefined` until the component is mounted — in other words, you should read it inside an effect or an event handler, but not during component initialisation:
+Pour obtenir la référence d'un noeud du DOM, utilisez `bind:this`. La valeur liée sera `undefined`
+jusqu'à ce que le composant soit monté – autrement dit, vous ne devriez vous servir de cette valeur
+que dans un effet ou dans un gestionnaire d'évènement, mais pas lors de l'initialisation du
+composant.
 
 ```svelte
 <script>
@@ -311,55 +355,65 @@ To get a reference to a DOM node, use `bind:this`. The value will be `undefined`
 <canvas bind:this={canvas} />
 ```
 
-Components also support `bind:this`, allowing you to interact with component instances programmatically.
+Les composants acceptent aussi des liaisons `bind:this`, vous permettant d'interagir
+programmatiquement avec les instances de composant.
 
 ```svelte
 <!--- file: App.svelte --->
 <ShoppingCart bind:this={cart} />
 
-<button onclick={() => cart.empty()}> Empty shopping cart </button>
+<button onclick={() => cart.empty()}> Panier vide </button>
 ```
 
 ```svelte
 <!--- file: ShoppingCart.svelte --->
 <script>
-	// All instance exports are available on the instance object
+	// Tous les exports d'instance sont accessibles sur l'objet de l'instance
 	export function empty() {
 		// ...
 	}
 </script>
 ```
 
-## bind:_property_ for components
+## bind:_property_ pour les composants [!VO]bind:property for components
 
 ```svelte
 bind:property={variable}
 ```
 
-You can bind to component props using the same syntax as for elements.
+Vous pouvez créer des liaisons avec des props de composant en utilisant la même syntaxe que pour les
+éléments.
 
 ```svelte
 <Keypad bind:value={pin} />
 ```
 
-While Svelte props are reactive without binding, that reactivity only flows downward into the component by default. Using `bind:property` allows changes to the property from within the component to flow back up out of the component.
+Même si les props Svelte sont réactives sans avoir besoin de liaison, cette réactivité est par
+défaut descendante vers le composant. Utiliser `bind:property` vous permet de changer la propriété
+depuis l'intérieur du composant pour faire remonter sa valeur en dehors du composant.
 
-To mark a property as bindable, use the [`$bindable`]($bindable) rune:
-
-```svelte
-<script>
-	let { readonlyProperty, bindableProperty = $bindable() } = $props();
-</script>
-```
-
-Declaring a property as bindable means it _can_ be used using `bind:`, not that it _must_ be used using `bind:`.
-
-Bindable properties can have a fallback value:
+Pour définir une propriété comme acceptant une liaison (_bindable_), utilisez la rune
+[`$bindable`]($bindable) :
 
 ```svelte
 <script>
-	let { bindableProperty = $bindable('fallback value') } = $props();
+	let { propEnLectureSeule, propAcceptantUneLiaison = $bindable() } = $props();
 </script>
 ```
 
-This fallback value _only_ applies when the property is _not_ bound. When the property is bound and a fallback value is present, the parent is expected to provide a value other than `undefined`, else a runtime error is thrown. This prevents hard-to-reason-about situations where it's unclear which value should apply.
+Déclarer une propriété comme bindable signifie qu'elle _peut_ être utilisée avec `bind:`, pas
+qu'elle _doit_ être utilisée avec `bind:`.
+
+Les propriétés bindables peuvent avoir des valeurs par défaut :
+
+```svelte
+<script>
+	let { propAcceptantUneLiaison = $bindable('valeur par défaut') } = $props();
+</script>
+```
+
+Cette valeur par défaut s'applique _seulement_ lorsque la propriété n'est pas liée. Si la propriété
+est liée et une valeur par défaut est définie, le parent se doit de fournir une valeur autre que
+`undefined`, sans quoi une erreur de runtime sera levée. Ceci permet d'éviter les situations où il
+est difficile de comprendre quelle devrait être la bonne valeur utilisée.
+

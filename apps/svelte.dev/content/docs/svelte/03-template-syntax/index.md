@@ -1,3 +1,3 @@
 ---
-title: Template syntax
+title: Syntaxe de template
 ---

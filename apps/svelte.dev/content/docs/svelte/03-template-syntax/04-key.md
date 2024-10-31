@@ -7,7 +7,8 @@ title: {#key ...}
 {#key expression}...{/key}
 ```
 
-Key blocks destroy and recreate their contents when the value of an expression changes. When used around components, this will cause them to be reinstantiated and reinitialised:
+Les blocs `key` détruisent et recréent leur contenu lorsque la valeur d'une expression change.
+Lorsqu'utilisés autour de composants, ils déclenchent leur réinstanciation et réinitialisation :
 
 ```svelte
 {#key value}
@@ -15,7 +16,8 @@ Key blocks destroy and recreate their contents when the value of an expression c
 {/key}
 ```
 
-It's also useful if you want a transition to play whenever a value changes:
+C'est également utile si vous souhaitez déclencher une transition à chaque fois qu'une valeur change
+:
 
 ```svelte
 {#key value}
