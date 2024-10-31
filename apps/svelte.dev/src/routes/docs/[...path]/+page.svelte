@@ -16,8 +16,8 @@
 
 	const repo = $derived.by(() => {
 		const name = data.document.slug.split('/')[1];
-		const link = 'docs/' + data.document.file.split('/').slice(2).join('/');
-		return `https://github.com/sveltejs/${name}/edit/main/documentation/${link}`;
+		const link = data.document.file.split('/').slice(2).join('/');
+		return `https://github.com/bleucitron/svelte.dev/edit/french/apps/svelte.dev/content/docs/${name}/${link}`;
 	});
 
 	onMount(() => {

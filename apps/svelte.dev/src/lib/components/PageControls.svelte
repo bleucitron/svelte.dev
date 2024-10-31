@@ -18,14 +18,14 @@
 
 <p class="edit">
 	<a href={repo}>
-		<Icon name="edit" /> Edit this page on GitHub
+		<Icon name="edit" /> Modifier cette page sur Github
 	</a>
 </p>
 
 <div class="controls">
 	<div class="flex">
-		<span class:faded={!prev}>previous</span>
-		<span class="next" class:faded={!next}>next</span>
+		<span class:faded={!prev}>précédent</span>
+		<span class="next" class:faded={!next}>suivant</span>
 	</div>
 
 	<div class="flex">
