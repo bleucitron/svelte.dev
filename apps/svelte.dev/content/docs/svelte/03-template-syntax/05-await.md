@@ -73,7 +73,9 @@ De même, si vous souhaitez uniquement afficher l'état d'erreur, vous pouvez ig
 {/await}
 ```
 
-> [!NOTE] You can use `#await` with [`import(...)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) to render components lazily:
+> [!NOTE] Vous pouvez utiliser `#await` avec
+> [`import(...)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import)
+> pour afficher des composants de manière différée :
 >
 > ```svelte
 > {#await import('./Component.svelte') then { default: Component }}
