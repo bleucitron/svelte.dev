@@ -58,3 +58,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte/04-styling
+  track-docs-svelte-05:
+    runs-on: ubuntu-latest
+    name: Checking Docs Svelte 05
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/svelte/05-special-elements
