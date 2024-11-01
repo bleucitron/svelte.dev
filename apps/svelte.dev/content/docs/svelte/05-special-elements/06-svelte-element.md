@@ -6,13 +6,19 @@ title: <svelte:element>
 <svelte:element this={expression} />
 ```
 
-The `<svelte:element>` element lets you render an element that is unknown at author time, for example because it comes from a CMS. Any properties and event listeners present will be applied to the element.
+L'élément `<svelte:element>` vous permet d'afficher un élément dont le type n'est pas connu au
+moment de l'écriture du code, par exemple lorsqu'il vient d'un CMS. Toute propriété ou gestionnaire
+d'évènement présents seront ajoutés à l'élément.
 
-The only supported binding is `bind:this`, since Svelte's built-in bindings do not work with generic elements.
+La seule liaison possible est `bind:this`, puisque les liaisons intégrées de Svelte ne fonctionnent
+pas avec les éléments génériques.
 
-If `this` has a nullish value, the element and its children will not be rendered.
+Si `this` a une valeur nullish, l'élément et ses enfants ne seront pas affichés.
 
-If `this` is the name of a [void element](https://developer.mozilla.org/en-US/docs/Glossary/Void_element) (e.g., `br`) and `<svelte:element>` has child elements, a runtime error will be thrown in development mode:
+Si `this` est le nom d'un [élément
+vide](https://developer.mozilla.org/fr/docs/Glossary/Void_element) (comme `br`) et
+`<svelte:element>` possède des éléments enfant, une erreur sera levée à l'exécution en mode
+développement :
 
 ```svelte
 <script>
@@ -20,11 +26,13 @@ If `this` is the name of a [void element](https://developer.mozilla.org/en-US/do
 </script>
 
 <svelte:element this={tag}>
-	This text cannot appear inside an hr element
+	Ce texte ne peut pas apparaître dans un élément hr
 </svelte:element>
 ```
 
-Svelte tries its best to infer the correct namespace from the element's surroundings, but it's not always possible. You can make it explicit with an `xmlns` attribute:
+Svelte fait tout son possible d'inférer le namespace adéquat en fonction de ce qui entoure
+l'élément, mais ce n'est pas toujours possible. Vous pouvez le rendre explicite en lui ajoutant
+l'attribut `xmlns` :
 
 ```svelte
 <svelte:element this={tag} xmlns="http://www.w3.org/2000/svg" />

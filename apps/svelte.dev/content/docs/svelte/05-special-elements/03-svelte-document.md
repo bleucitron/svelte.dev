@@ -10,19 +10,22 @@ title: <svelte:document>
 <svelte:document bind:prop={value} />
 ```
 
-Similarly to `<svelte:window>`, this element allows you to add listeners to events on `document`, such as `visibilitychange`, which don't fire on `window`. It also lets you use [actions](use) on `document`.
+Comme pour `<svelte:window>`, cet élément vous permet d'ajouter des gestionnaires aux évènements du
+`document`, comme `visibilitychange`, qui ne se produit pas sur `window`. Cela vous permet aussi
+d'utiliser des [actions](use) sur le `document`.
 
-As with `<svelte:window>`, this element may only appear the top level of your component and must never be inside a block or element.
+À l'instar de `<svelte:window>`, cet élément ne peut être défini	qu'à la racine de votre composant,
+et ne peut donc pas être placé dans un bloc ou un élément.
 
 ```svelte
 <svelte:document onvisibilitychange={handleVisibilityChange} use:someAction />
 ```
 
-You can also bind to the following properties:
+Vous pouvez aussi lier les propriétés suivantes :
 
 - `activeElement`
 - `fullscreenElement`
 - `pointerLockElement`
 - `visibilityState`
 
-All are readonly.
+Toutes sont en lecture seule.

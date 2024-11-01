@@ -6,13 +6,15 @@ title: <svelte:head>
 <svelte:head>...</svelte:head>
 ```
 
-This element makes it possible to insert elements into `document.head`. During server-side rendering, `head` content is exposed separately to the main `body` content.
+Cet élément vos permet d'ajouter des éléments dans le `document.head`. Lors du rendu côté serveur,
+le contenu de `head` est exposé séparément du contenu du `body`.
 
-As with `<svelte:window>`, `<svelte:document>` and `<svelte:body>`, this element may only appear at the top level of your component and must never be inside a block or element.
+À l'instar de `<svelte:window>`, `<svelte:document>` et `<svelte:body>`, cet élément ne peut être
+défini qu'à la racine de votre composant, et ne peut donc pas être placé dans un bloc ou un élément.
 
 ```svelte
 <svelte:head>
 	<title>Hello world!</title>
-	<meta name="description" content="This is where the description goes for SEO" />
+	<meta name="description" content="La description utile au SEO se définit ici" />
 </svelte:head>
 ```

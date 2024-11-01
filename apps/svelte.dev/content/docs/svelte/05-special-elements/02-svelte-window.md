@@ -10,21 +10,24 @@ title: <svelte:window>
 <svelte:window bind:prop={value} />
 ```
 
-The `<svelte:window>` element allows you to add event listeners to the `window` object without worrying about removing them when the component is destroyed, or checking for the existence of `window` when server-side rendering.
+L'élement `<svelte:window>` vous permet d'ajouter des gestionnaires d'évènement à l'objet `window`
+sans vous soucier de les supprimer lorsque que le composant est détruit, ni vérifier l'existance de
+`window` lors du rendu côté serveur.
 
-This element may only appear at the top level of your component — it cannot be inside a block or element.
+Cet élément ne peut être défini qu'à la racine de votre composant – il ne peut pas être dans un bloc
+ou un élément.
 
 ```svelte
 <script>
 	function handleKeydown(event) {
-		alert(`pressed the ${event.key} key`);
+		alert(`la touche ${event.key} a été enfoncée !`);
 	}
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 ```
 
-You can also bind to the following properties:
+Vous pouvez aussi lier les propriétés suivantes :
 
 - `innerWidth`
 - `innerHeight`
@@ -32,13 +35,17 @@ You can also bind to the following properties:
 - `outerHeight`
 - `scrollX`
 - `scrollY`
-- `online` — an alias for `window.navigator.onLine`
+- `online` — un alias de `window.navigator.onLine`
 - `devicePixelRatio`
 
-All except `scrollX` and `scrollY` are readonly.
+Toutes exceptées `scrollX` et `scrollY` sont en lecture seule.
 
 ```svelte
 <svelte:window bind:scrollY={y} />
 ```
 
-> [!NOTE] Note that the page will not be scrolled to the initial value to avoid accessibility issues. Only subsequent changes to the bound variable of `scrollX` and `scrollY` will cause scrolling. If you have a legitimate reason to scroll when the component is rendered, call `scrollTo()` in an `$effect`.
+> [!NOTE] Notez que la page ne défilera pas automatiquement à la valeur initiale pour éviter des
+> problèmes d'accessibilité. Seuls les changements de valeur de `scrollX` et `scrollY` (lorsque
+> liées) ayant lieu après l'initialisation du composant déclencheront un défilement. Si vous avez
+> une raison légitime de faire défiler lors du rendu du composant, vous pouvez appeler `scrollTo()`
+> dans un `$effect`.
