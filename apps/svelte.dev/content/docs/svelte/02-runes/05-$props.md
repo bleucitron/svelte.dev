@@ -48,7 +48,8 @@ définit pas une prop donnée :
 let { adjective = 'content' } = $props();
 ```
 
-> [!NOTE] Les valeurs par défaut ne sont pas transformées en proxys d'état réactifs.
+> [!NOTE] Les valeurs par défaut ne sont pas transformées en proxys d'état réactifs (voir [Mise à
+> jour des props](#Updating-props) pour plus d'infos).
 
 ## Renommer des props [!VO]Renaming props
 
