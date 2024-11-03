@@ -6,42 +6,56 @@ title: Stores
 - how to write
 - TODO should the details for the store methods belong to the reference section? -->
 
-A _store_ is an object that allows reactive access to a value via a simple _store contract_. The [`svelte/store` module](../svelte-store) contains minimal store implementations which fulfil this contract.
+Un _store_ est un objet qui permet des accès réactifs à une valeur via un simple _contrat de store_.
+Le [module `svelte/store`](../svelte-store) contient des implémentations minimales de stores
+satisfaisant ce contrat.
 
-Any time you have a reference to a store, you can access its value inside a component by prefixing it with the `$` character. This causes Svelte to declare the prefixed variable, subscribe to the store at component initialisation and unsubscribe when appropriate.
+Chaque fois que vous avez une référence à un store, vous pouvez accéder à sa valeur au sein d'un
+composant en utilisant le caractère `$`. Ceci va indiquer à Svelte qu'il doit déclarer la variable
+préfixée, s'abonner aux changements du store au moment de l'initialisation du composant, et s'en
+désabonner lorsqu'approprié.
 
-Assignments to `$`-prefixed variables require that the variable be a writable store, and will result in a call to the store's `.set` method.
+Les assignations à des variables préfixées avec `$` nécessitent que la variable non préfixée soit un
+store d'écriture, et va conduire à un appel à la méthode `.set` du store.
 
-Note that the store must be declared at the top level of the component — not inside an `if` block or a function, for example.
+Notez que le store doit être déclaré à la racine du composant – et non dans un bloc `#if` ou une
+fonction, par exemple.
 
-Local variables (that do not represent store values) must _not_ have a `$` prefix.
+Les variables locales (qui ne représentent pas des valeurs de store) ne doivent _pas_ être préfixées
+pas `$`.
 
 ```svelte
 <script>
 	import { writable } from 'svelte/store';
 
 	const count = writable(0);
-	console.log($count); // logs 0
+	console.log($count); // affiche 0
 
 	count.set(1);
-	console.log($count); // logs 1
+	console.log($count); // affiche 1
 
 	$count = 2;
-	console.log($count); // logs 2
+	console.log($count); // affiche 2
 </script>
 ```
 
-## When to use stores
+## Quand utiliser des stores
 
-Prior to Svelte 5, stores were the go-to solution for creating cross-component reactive states or extracting logic. With runes, these use cases have greatly diminished.
+Avant Svelte 5, les stores étaient la solution à utiliser pour créer des états réactifs accessibles
+dans différents composant, ou bien pour factoriser de la logique. Avec les runes, les besoins
+d'utilisation de stores se sont grandement réduits.
 
-- when extracting logic, it's better to take advantage of runes' universal reactivity: You can use runes outside the top level of components and even place them into JavaScript or TypeScript files (using a `.svelte.js` or `.svelte.ts` file ending)
-- when creating shared state, you can create a `$state` object containing the values you need and then manipulate said state
+- lorsque vous voulez factoriser de la logique, il est plus efficace de tirer profit de la
+réactivité universelle des runes : vous pouvez utiliser les runes en dehors de la racine d'un
+composant, et même vous en servir dans des fichiers JavaScript ou TypeScript (en utilisant les
+extensions `.svelte.js` ou `.svelte.ts`)
+- lorsque vous voulez créer un état partagé, vous pouvez créer un objet `$state` contenant les
+valeurs dont vous avez besoin et ensuite manipuler cet état
 
 ```ts
 /// file: state.svelte.js
 export const userState = $state({
-	name: 'name',
+	name: 'nom',
 	/* ... */
 });
 ```
@@ -54,25 +68,34 @@ export const userState = $state({
 
 <p>User name: {userState.name}</p>
 <button onclick={() => {
-	userState.name = 'new name';
+	userState.name = 'nouveau nom';
 }}>
-	change name
+	modifier le nom
 </button>
 ```
 
-Stores are still a good solution when you have complex asynchronous data streams or it's important to have more manual control over updating values or listening to changes. If you're familiar with RxJs and want to reuse that knowledge, the `$` also comes in handy for you.
+Les stores sont toujours une bonne solution lorsque vous avez des flux de données asynchrones
+complexes, ou lorsqu'il est important que vous contrôliez manuellement la mise à jour des valeurs ou
+l'écoute des changements. Si vous êtes familier•e•s de RxJs et souhaitez vous servir de ces
+connaissances, le `$` peut être pratique pour vous.
 
 ## svelte/store
 
-The `svelte/store` module contains a minimal store implementation which fulfil the store contract. It provides methods for creating stores that you can update from the outside, stores you can only update from the inside, and for combining and deriving stores.
+Le module `svelte/store` contient une implémentation de store minimale qui satisfait le contrat de
+store. Il fournit des méthodes pour créer des stores que vous pouvez mettre à jour depuis
+l'extérieur, des stores que vous pouvez créer depuis l'intérieur, et des méthodes pour combiner et
+dériver des stores.
 
 ### `writable`
 
-Function that creates a store which has values that can be set from 'outside' components. It gets created as an object with additional `set` and `update` methods.
+Fonction qui crée un store dont les valeurs peuvent être définies depuis l'"extérieur" des
+composants. Ils sont créés en tant qu'objets avec des méthodes additionnelles `set` et `update`.
 
-`set` is a method that takes one argument which is the value to be set. The store value gets set to the value of the argument if the store value is not already equal to it.
+`set` est une méthode qui prend un argument qui est la valeur à définir. La valeur du store devient
+la valeur de passée en argument si la valeur du store n'est pas déjà égale à cette valeur.
 
-`update` is a method that takes one argument which is a callback. The callback takes the existing store value as its argument and returns the new value to be set to the store.
+`update` est une méthode qui prend un callback en argument. Le callback prend la valeur existante du
+store comme argument et renvoie une nouvelle valeur définissant la nouvelle valeur du store.
 
 ```js
 /// file: store.js
@@ -82,38 +105,47 @@ const count = writable(0);
 
 count.subscribe((value) => {
 	console.log(value);
-}); // logs '0'
+}); // affiche '0'
 
-count.set(1); // logs '1'
+count.set(1); // affiche '1'
 
-count.update((n) => n + 1); // logs '2'
+count.update((n) => n + 1); // affiche '2'
 ```
 
-If a function is passed as the second argument, it will be called when the number of subscribers goes from zero to one (but not from one to two, etc). That function will be passed a `set` function which changes the value of the store, and an `update` function which works like the `update` method on the store, taking a callback to calculate the store's new value from its old value. It must return a `stop` function that is called when the subscriber count goes from one to zero.
+Si une fonction est passée en deuxième argument, elle sera exécutée lorsque le nombre d'abonnés
+passe de zéro à un (mais pas de un à deux, etc.). Cette fonction a comme arguments une fonction
+`set` qui change la valeur du store, et une fonction `update` qui fonctionne comme la méthode
+`update` du store, prenant un callback en argument pour calculer la nouvelle valeur du store à
+partir de l'ancienne valeur. Cette fonction doit renvoyer une fonction `stop` qui sera appelée
+lorsque le nombre d'abonnés passe de un à zéro.
 
 ```js
 /// file: store.js
 import { writable } from 'svelte/store';
 
 const count = writable(0, () => {
-	console.log('got a subscriber');
-	return () => console.log('no more subscribers');
+	console.log('premier abonné');
+	return () => console.log('plus aucun abonné');
 });
 
-count.set(1); // does nothing
+count.set(1); // rien ne se passe
 
 const unsubscribe = count.subscribe((value) => {
 	console.log(value);
-}); // logs 'got a subscriber', then '1'
+}); // affiche 'premier abonné', puis '1'
 
-unsubscribe(); // logs 'no more subscribers'
+unsubscribe(); // affiche 'plus aucun abonné'
 ```
 
-Note that the value of a `writable` is lost when it is destroyed, for example when the page is refreshed. However, you can write your own logic to sync the value to for example the `localStorage`.
+Notez que la valeur de `writable` est perdue lorsque celui-ci est détruit, par exemple lorsque la
+page est rafraîchie. Cependant, vous pouvez ecrire votre propre logique pour synchroniser la valeur
+avec par exemple le `localStorage`.
 
 ### `readable`
 
-Creates a store whose value cannot be set from 'outside', the first argument is the store's initial value, and the second argument to `readable` is the same as the second argument to `writable`.
+Crée un store dont la valeur ne peut être lue depuis l'"extérieur" ; le premier argument est la
+valeur initiale du store, le deuxième argument est le même que le deuxième argument de
+`writable`.
 
 ```ts
 import { readable } from 'svelte/store';
@@ -130,7 +162,7 @@ const time = readable(new Date(), (set) => {
 
 const ticktock = readable('tick', (set, update) => {
 	const interval = setInterval(() => {
-		update((sound) => (sound === 'tick' ? 'tock' : 'tick'));
+		update((sound) => (sound === 'tic' ? 'tac' : 'tic'));
 	}, 1000);
 
 	return () => clearInterval(interval);
@@ -139,9 +171,11 @@ const ticktock = readable('tick', (set, update) => {
 
 ### `derived`
 
-Derives a store from one or more other stores. The callback runs initially when the first subscriber subscribes and then whenever the store dependencies change.
+Crée un store qui dérive d'un ou plusieurs stores. Le callback est exécuté une première fois lorsque
+le premier abonné s'abonne, et à chaque fois que les dépendances du store changent de valeur.
 
-In the simplest version, `derived` takes a single store, and the callback returns a derived value.
+Dans la version la plus simple, `derived` prend un seul store, et le callback renvoie une valeur
+dérivée.
 
 ```ts
 // @filename: ambient.d.ts
@@ -160,9 +194,13 @@ import { derived } from 'svelte/store';
 const doubled = derived(a, ($a) => $a * 2);
 ```
 
-The callback can set a value asynchronously by accepting a second argument, `set`, and an optional third argument, `update`, calling either or both of them when appropriate.
+Le callback peut définir une valeur de manière asynchrone en acceptant un deuxième argument, `set`,
+ainsi qu'un troisième argument optionnel, `update`, et en exécutant l'un ou l'autre
+lorsqu'approprié.
 
-In this case, you can also pass a third argument to `derived` — the initial value of the derived store before `set` or `update` is first called. If no initial value is specified, the store's initial value will be `undefined`.
+Dans ce cas, vous pouvez aussi passer un troisième argument à `derived` – la valeur initiale du
+store dérivé avant que `set` ou `update` ne soit exécuté pour la première fois. Si aucune valeur
+initiale n'est définie, la valeur initiale du store sera `undefined`.
 
 ```ts
 // @filename: ambient.d.ts
@@ -190,12 +228,13 @@ const delayed = derived(
 const delayedIncrement = derived(a, ($a, set, update) => {
 	set($a);
 	setTimeout(() => update((x) => x + 1), 1000);
-	// every time $a produces a value, this produces two
-	// values, $a immediately and then $a + 1 a second later
+	// chaque fois que $a change sa valeur, ceci met à jour le store
+	// dérivé avec deux valeurs, $a immédiatement puis $a + 1 une seconde plus tard
 });
 ```
 
-If you return a function from the callback, it will be called when a) the callback runs again, or b) the last subscriber unsubscribes.
+Si le callback renvoie une fonction, celle-ci sera exécutée a) juste avant que le callback soit de
+nouveau exécuté, ou lorsque b) le dernier abonné se désabonne.
 
 ```ts
 // @filename: ambient.d.ts
@@ -226,7 +265,8 @@ const tick = derived(
 );
 ```
 
-In both cases, an array of arguments can be passed as the first argument instead of a single store.
+Dans les deux cas, un tableau d'arguments peut être passé en premier argument à la place d'un seul
+et unique store.
 
 ```ts
 // @filename: ambient.d.ts
@@ -253,7 +293,9 @@ const delayed = derived([a, b], ([$a, $b], set) => {
 
 ### `readonly`
 
-This simple helper function makes a store readonly. You can still subscribe to the changes from the original one using this new readable store.
+Cette fonction est un simple utilitaire pour créer un store en lecture seule à partir d'un store
+existante. Vous pouvez toujours vous abonner aux changements du store original en utilisant le
+nouveau store.
 
 ```js
 import { readonly, writable } from 'svelte/store';
@@ -270,9 +312,12 @@ readableStore.set(2); // ERROR
 
 ### `get`
 
-Generally, you should read the value of a store by subscribing to it and using the value as it changes over time. Occasionally, you may need to retrieve the value of a store to which you're not subscribed. `get` allows you to do so.
+En général, vous devriez lire la valeur d'un store en vous y abonnant et en vous servant de la
+valeur lorsque celle-ci évolue dans le temps. Occasionnellement, vous pourriez avoir besoin de
+récupérer la valeur d'un store auquel vous n'êtes pas abonné. `get` vous permet de faire cela.
 
-> [!NOTE] This works by creating a subscription, reading the value, then unsubscribing. It's therefore not recommended in hot code paths.
+> [!NOTE] Ceci fonctionne en créant un abonnement, en lisant la vvaleur, puis en se désabonnant. Il
+> est donc recommandé de ne pas s'en servir dans du code pouvant impacter la performance.
 
 ```ts
 // @filename: ambient.d.ts
@@ -291,17 +336,31 @@ import { get } from 'svelte/store';
 const value = get(store);
 ```
 
-## Store contract
+## Contrat de store [!VO]Store contract
 
 ```ts
 // @noErrors
 store = { subscribe: (subscription: (value: any) => void) => (() => void), set?: (value: any) => void }
 ```
 
-You can create your own stores without relying on [`svelte/store`](../svelte-store), by implementing the _store contract_:
+Vous pouvez créer vos propres stores sans vous baser sur [`svelte/store`](../svelte-store), en
+implémentant le _contrat de store_ vous-même :
 
-1. A store must contain a `.subscribe` method, which must accept as its argument a subscription function. This subscription function must be immediately and synchronously called with the store's current value upon calling `.subscribe`. All of a store's active subscription functions must later be synchronously called whenever the store's value changes.
-2. The `.subscribe` method must return an unsubscribe function. Calling an unsubscribe function must stop its subscription, and its corresponding subscription function must not be called again by the store.
-3. A store may _optionally_ contain a `.set` method, which must accept as its argument a new value for the store, and which synchronously calls all of the store's active subscription functions. Such a store is called a _writable store_.
+1. Un store doit contenir une méthode `.subscribe`, qui doit accepter en argument une fonction
+	 d'abonnement. Cette fonction d'abonnement doit être exécutée immédiatement et de manière
+synchrone avec la valeur plus récente du store lorsque `.subscribe` est appelée. Toutes les
+fonctions d'abonnement actives d'un store doivent ensuite être appelées de manière synchrone lorsque
+la valeur du store est mise à jour.
+2. La méthode `.subscribe` doit renvoyer une fonction de désabonnement. Exécuter une fonction de
+	 désabonnement doit arrêter son abonnement, et la fonction d'abonnement correspondante ne doit
+ensuite plus être appelée par le store.
+3. Un store  peut _optionnellement_ contenir une méthode `.set`, qui doit accepter en argument une
+	 nouvelle valeur pour le store, et qui appellera de manière synchrone toutes les fonctions
+d'abonnement actives du store. Un tel store est appelé un _store d'écriture_.
 
-For interoperability with RxJS Observables, the `.subscribe` method is also allowed to return an object with an `.unsubscribe` method, rather than return the unsubscription function directly. Note however that unless `.subscribe` synchronously calls the subscription (which is not required by the Observable spec), Svelte will see the value of the store as `undefined` until it does.
+Pour des raisons d'interopérabilité avec les Observables de RxJs, la méthode `.subscribe` est aussi
+autorisée à renvoyer un objet avec une méthode `.unsubscribe`, plutôt que de renvoyer directement
+une fonction de désabonnement. Notez cependant qu'à moins que `.subscribe` n'appelle de manière
+synchrone la fonction d'abonnement (ce qui n'est pas requis par la spécification d'Observable),
+Svelte verra la valeur du store comme étant `undefined`, et ce jusqu'à ce que la fonction
+d'abonnement soit exécutée.
