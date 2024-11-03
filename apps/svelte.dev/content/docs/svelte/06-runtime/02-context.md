@@ -1,13 +1,16 @@
 ---
-title: Context
+title: Contexte
 ---
 
 <!-- - get/set/hasContext
 - how to use, best practises (like encapsulating them) -->
 
-Most state is component-level state that lives as long as its component lives. There's also section-wide or app-wide state however, which also needs to be handled somehow.
+La plupart du temps, un état concerne un uniquement un composant, et existe concrètement tant que
+son composant existe dans l'application. Cependant il également possible de créer des états qui
+concernent toute une section de l'application, voir l'application toute entière, et ces états-là
+sont être gérés un peu différemment.
 
-The easiest way to do that is to create global state and just import that.
+La façon la plus simple de faire cela est de créer un état global et de l'importer.
 
 ```ts
 /// file: state.svelte.js
@@ -27,16 +30,21 @@ export const myGlobalState = $state({
 </script>
 ```
 
-This has a few drawbacks though:
+Cette technique a toutefois quelques inconvénients :
 
-- it only safely works when your global state is only used client-side - for example, when you're building a single page application that does not render any of your components on the server. If your state ends up being managed and updated on the server, it could end up being shared between sessions and/or users, causing bugs
-- it may give the false impression that certain state is global when in reality it should only used in a certain part of your app
+- cela ne fonctionne vraiment de manière sécurisée que si votre état global est uniquement utilisé
+côté client – par exemple lorsque vous créez une application de type SPA qui ne construit aucun de
+ses composants sur le serveur. Si votre état se trouve être géré et mis à jour sur le serveur, il
+est très probable que cet état soit partagé entre les sessions et/ou les utilisateurs, provoquant
+des bugs et des failles de sécurité
+- cela peut donner la fausse impression que certains états sont globaux alors qu'ils ne concernent
+en réalité qu'une petite portion de votre application
 
-To solve these drawbacks, Svelte provides a few `context` primitives which alleviate these problems.
+Svelte fournit quelques primitives de `context`e qui permettent de résoudre ces problèmes.
 
-## Setting and getting context
+## Définir et récupérer un contexte [!VO]Setting and getting context
 
-To associate an arbitrary object with the current component, use `setContext`.
+Pour associer un objet arbitraire avec le composant actuel, utiliser `setContext`.
 
 ```svelte
 <script>
@@ -46,7 +54,8 @@ To associate an arbitrary object with the current component, use `setContext`.
 </script>
 ```
 
-The context is then available to children of the component (including slotted content) with `getContext`.
+Ce contexte est alors rendu disponible aux enfants du composant (dont le contenu défini dans des
+slots), en utilisant `getContext`.
 
 ```svelte
 <script>
@@ -56,14 +65,17 @@ The context is then available to children of the component (including slotted co
 </script>
 ```
 
-`setContext` and `getContext` solve the above problems:
+`setContext` et `getContext` permettent de résoudre les problèmes listés plus haut :
 
-- the state is not global, it's scoped to the component. That way it's safe to render your components on the server and not leak state
-- it's clear that the state is not global but rather scoped to a specific component tree and therefore can't be used in other parts of your app
+- votre état n'est pas global, il est cantonné au scope du composant. Ainsi construire votre
+composant sur le serveur est sécurisé et ne va pas faire "fuiter" l'état
+- il est évident que l'état n'est pas global, mais plutôt restreint à un composant spécifique et à
+son arbre d'enfants, et ne peut alors pas être utilisé dans d'autres parties de votre application
 
-> [!NOTE] `setContext`/`getContext` must be called during component initialisation.
+> [!NOTE] `setContext`/`getContext` doivent être exécutées lors de l'initialisation du composant.
 
-Context is not inherently reactive. If you need reactive values in context then you can pass a `$state` object into context, whose properties _will_ be reactive.
+Le contexte n'est pas réactif en soi. Si vous avez besoin de valeurs réactives dans votre contexte,
+vous pouvez alors lui passer un objet `$state`, dont les propriétés _seront_ réactives.
 
 ```svelte
 <!--- file: Parent.svelte --->
@@ -74,7 +86,7 @@ Context is not inherently reactive. If you need reactive values in context then 
 	setContext('counter', value);
 </script>
 
-<button onclick={() => value.count++}>increment</button>
+<button onclick={() => value.count++}>incrémenter</button>
 ```
 
 ```svelte
@@ -85,22 +97,25 @@ Context is not inherently reactive. If you need reactive values in context then 
 	const value = getContext('counter');
 </script>
 
-<p>Count is {value.count}</p>
+<p>Le compteur vaut {value.count}</p>
 ```
 
-To check whether a given `key` has been set in the context of a parent component, use `hasContext`.
+Pour vérifier si une clé `key` a déjà été définie dans le contexte d'un composant parent, utiliser
+`hasContext`.
 
 ```svelte
 <script>
 	import { hasContext } from 'svelte';
 
 	if (hasContext('key')) {
-		// do something
+		// faire quelque chose
 	}
 </script>
 ```
 
-You can also retrieve the whole context map that belongs to the closest parent component using `getAllContexts`. This is useful, for example, if you programmatically create a component and want to pass the existing context to it.
+Vous pouvez aussi récupérer l'entièreté du contexte appartenant au composant parent le plus proche
+en utilisant `getAllContexts`. Ceci est utile, par exemple, si vous créez un composant
+programmatiquement et souhaitez lui fournir le contexte existant.
 
 ```svelte
 <script>
@@ -110,9 +125,10 @@ You can also retrieve the whole context map that belongs to the closest parent c
 </script>
 ```
 
-## Encapsulating context interactions
+## Encapsuler les interactions de contexte [!VO]Encapsulating context interactions
 
-The above methods are very unopinionated about how to use them. When your app grows in scale, it's worthwhile to encapsulate setting and getting the context into functions and properly type them.
+Lorsque vous application grandit, il peut être pertinent d'encapsuler la définition et la
+récupération du contexte dans des fonctions utilitaires correctement typées.
 
 ```ts
 // @errors: 2304

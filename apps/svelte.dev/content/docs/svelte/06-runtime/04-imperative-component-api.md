@@ -1,5 +1,5 @@
 ---
-title: Imperative component API
+title: API de composant impérative
 ---
 
 <!-- better title needed?
@@ -10,11 +10,14 @@ title: Imperative component API
 - hydrate
 - how they interact with each other -->
 
-Every Svelte application starts by imperatively creating a root component. On the client this component is mounted to a specific element. On the server, you want to get back a string of HTML instead which you can render. The following functions help you achieve those tasks.
+Chaque application Svelte débute par créer un composant racine de manière impérative. Sur le client
+ce composant racine est monté sur un élément spécifique. Sur le serveur, vous souhaitez plutôt
+renvoyer une chaîne de caractères HTML à construire plus tard. Les fonctions suivantes vous aident à
+réaliser ces actions.
 
 ## `mount`
 
-Instantiates a component and mounts it to the given target:
+Instancie un composant et le monte sur la cible fournie :
 
 ```js
 // @errors: 2322
@@ -27,13 +30,18 @@ const app = mount(App, {
 });
 ```
 
-You can mount multiple components per page, and you can also mount from within your application, for example when creating a tooltip component and attaching it to the hovered element.
+Vous pouvez monter plusieurs composants par page, et vous pouvez également monter des composants
+depuis votre application, par exemple lorsque vous créez un composant d'infobulle et voulez
+l'attacher à l'élément survolé.
 
-Note that unlike calling `new App(...)` in Svelte 4, things like effects (including `onMount` callbacks, and action functions) will not run during `mount`. If you need to force pending effects to run (in the context of a test, for example) you can do so with `flushSync()`.
+Notez les effets (dont les callbacks `onMount` et les fonctions d'action) ne seront pas exécutés
+lors de l'exécution de `mount` ce qui est au contraire le cas lors de l'exécution de `new App(...)`
+en Svelte 4. Si vous avez besoin de forcer l'exécution d'effets en attente (par exemple dans le
+contexte d'un test par exemple), vous pouvez le faire grâce à `flushSync()`.
 
 ## `unmount`
 
-Unmounts a component created with [`mount`](#mount) or [`hydrate`](#hydrate):
+Démonte un composant créé avec [`mount`(#mount)] ou [`hydrate`](#hydrate) :
 
 ```js
 // @errors: 1109
@@ -42,13 +50,15 @@ import App from './App.svelte';
 
 const app = mount(App, {...});
 
-// later
+// plus tard...
 unmount(app);
 ```
 
 ## `render`
 
-Only available on the server and when compiling with the `server` option. Takes a component and returns an object with `body` and `head` properties on it, which you can use to populate the HTML when server-rendering your app:
+Seulement disponible sur le serveur et lorsque vous compilez avec l'option `server`. Prend un
+composant en argument et renvoie un objet avec des propriétés `body` et `head`, qui vous pouvez
+utiliser pour remplir le HTML lorsque vous effectuez le rendu côté serveur de votre application :
 
 ```js
 // @errors: 2724 2305 2307
@@ -58,13 +68,14 @@ import App from './App.svelte';
 const result = render(App, {
 	props: { some: 'property' }
 });
-result.body; // HTML for somewhere in this <body> tag
-result.head; // HTML for somewhere in this <head> tag
+result.body; // HTML à mettre quelque part dans une balise `<body>`
+result.head; // HTML à mettre quelque part dans une balise `<head>`
 ```
 
 ## `hydrate`
 
-Like `mount`, but will reuse up any HTML rendered by Svelte's SSR output (from the [`render`](#render) function) inside the target and make it interactive:
+Similaire à `mount`, mais va réutiliser tout HTML construit par le rendu côté serveur de Svelte
+(venant de la fonction [`render`(#render)]) au sein de l'élément cible, puis le rendre interactif :
 
 ```js
 // @errors: 2322
@@ -77,4 +88,5 @@ const app = hydrate(App, {
 });
 ```
 
-As with `mount`, effects will not run during `hydrate` — use `flushSync()` immediately afterwards if you need them to.
+Comme pour `mount`, les effets ne seront pas exécutées lors de l'exécution de `hydrate` – exécutez
+`flushSync()` immédiatement après si vous en avez besoin.
