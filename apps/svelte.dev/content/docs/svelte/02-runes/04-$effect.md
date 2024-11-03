@@ -14,9 +14,9 @@ Mais vous pouvez aussi créer vos propres effets avec la rune `$effect`, ce qui 
 avez besoin de synchroniser un système extérieur (que ce soit une librairie, un élément
 `<canvas>`, ou quelque chose sur le réseau) avec un état au sein de votre application Svelte.
 
-> [!NOTE] Évitez de trop vous servir des effets ! Lorsque trop de choses sont gérés via des effets,
+> [!NOTE] Évitez de trop vous servir d'`$effect` ! Lorsque trop de choses sont gérés via des effets,
 > le code devient difficile à comprendre et à maintenir. Voir la partie [quand ne pas utiliser
-> d'effet](#When-not-to-use-effect) pour en savoir plus sur les moyens de les éviter.
+> `$effect`](#When-not-to-use-effect) pour en savoir plus sur les moyens de les éviter.
 
 Vos effets sont exécutés après le montage du composant dans le DOM, et lors d'une
 [micro-tâche](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide) juste
