@@ -61,40 +61,41 @@
 <div class="page">
 	<h1>Documentation</h1>
 	<p>
-		Head to the <a href="/docs/svelte">Svelte</a> or <a href="/docs/kit">SvelteKit</a> reference docs,
-		or choose your adventure:
+		Explorer la doc de référence de <a href="/docs/svelte">Svelte</a> ou
+		<a href="/docs/kit">SvelteKit</a>, ou bien choisissez votre aventure :
 	</p>
 
 	<div class="options">
 		<a href="/tutorial">
-			<h2>I&rsquo;m brand new here</h2>
+			<h2>Je suis nouveau ou nouvelle ici</h2>
 			<p>
-				We recommend starting with the interactive tutorial, which will teach you how to use Svelte
-				right here in your browser.
+				Nous vous recommandons de commencer par le tutoriel interactif, qui vous apprendra comment
+				vous servir de Svelte sans sortir de votre navigateur.
 			</p>
 		</a>
 
 		<a href="/docs/svelte/v5-migration-guide">
-			<h2>I&rsquo;m migrating an app from Svelte 4</h2>
+			<h2>Je veux migrer une application depuis Svelte 4</h2>
 			<p>
-				If you&rsquo;re already experienced with an older version of Svelte, the migration guide
-				will bring you up to speed on the changes in Svelte 5.
+				Si vous avez de l&rsquo;expérience avec une version antérieure de Svelte, le guide de
+				migration vous mettra à jour des changements de Svelte 5.
 			</p>
 		</a>
 
 		<a href="/playground">
-			<h2>I just want to try it out</h2>
+			<h2>Je veux juste essayer Svelte</h2>
 			<p>
-				Head over to the playground to see examples, create your own Svelte apps in the browser, and
-				share them with other people.
+				Dirigez-vous vers le bac à sable pour voir des exemples, créer vos propres applications dans
+				votre navigateur, et les partager avec d&rsquo;autres personnes.
 			</p>
 		</a>
 
 		<a href="/chat" class="external">
-			<h2>Help! I'm stuck</h2>
+			<h2>À l'aide ! Je suis coincé•e</h2>
 			<p>
-				Join our Discord server where you can hang out with fellow Svelte users and ask them
-				questions. It's like an LLM but with people.
+				Rejoignez notre serveur Discord où vous pourrez discuter avec d&rsquo;autres utilisateurs et
+				utilisatrices de Svelte, et leur poser vos questions. Ça marche comme un LLM, mais avec des
+				gens.
 			</p>
 		</a>
 	</div>
