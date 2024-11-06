@@ -1,20 +1,28 @@
 ---
-title: Testing
+title: Tests
 ---
 
-Testing helps you write and maintain your code and guard against regressions. Testing frameworks help you with that, allowing you to describe assertions or expectations about how your code should behave. Svelte is unopinionated about which testing framework you use — you can write unit tests, integration tests, and end-to-end tests using solutions like [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.io/), [Cypress](https://www.cypress.io/) and [Playwright](https://playwright.dev/).
+Les tests vous aident à écrire et maintenir votre code et vous protègent contre les régressions. Les
+frameworks de test vous aident à ça, vous permettant de décrire des assertions ou des attentes sur
+le comportement de votre code. Svelte ne vous oriente pas sur tel ou tel framework à utiliser – vous
+pouvez écrire des tests unitaires, des tests d'intégration, des tests end-to-end en utilisant des
+solutions comme [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.io/),
+[Cypress](https://www.cypress.io/) et [Playwright](https://playwright.dev/)
 
-## Unit and integration testing using Vitest
+## Tests unitaires et d'intégration avec Vitest [!VO]Unit and integration testing using Vitest
 
-Unit tests allow you to test small isolated parts of your code. Integration tests allow you to test parts of your application to see if they work together. If you're using Vite (including via SvelteKit), we recommend using [Vitest](https://vitest.dev/).
+Les tests unitaires vous permettent de tester des petites parties isolées de votre code. Les tests
+d'intégration vous permettent de vérifier comment des morceaux de votre application fonctionnent
+ensemble. Si vous utilisez Vite (notamment via SvelteKit), nous vous recommandons d'utiliser
+[Vitest](https://vitest.dev/).
 
-To get started, install Vitest:
+Pour commencer, installer Vitest :
 
 ```bash
 npm install -D vitest
 ```
 
-Then adjust your `vite.config.js`:
+Puis ajuster votre fichier `vite.config.js` :
 
 <!-- prettier-ignore -->
 ```js
@@ -23,7 +31,8 @@ import { defineConfig } from +++'vitest/config'+++;
 
 export default defineConfig({
 	// ...
-	// Tell Vitest to use the `browser` entry points in `package.json` files, even though it's running in Node
+	// Dit à Vitest d'utiliser les points d'entrée `browser` dans les fichiers `package.json`, même si
+	// Vitest utilise Node
 	resolve: process.env.VITEST
 		? {
 				conditions: ['browser']
@@ -32,9 +41,11 @@ export default defineConfig({
 });
 ```
 
-> [!NOTE] If loading the browser version of all your packages is undesirable, because (for example) you also test backend libraries, [you may need to resort to an alias configuration](https://github.com/testing-library/svelte-testing-library/issues/222#issuecomment-1909993331)
+> [!NOTE] Si charger la version navigateur de tous vos paquets n'est pas possible, parce que vous
+> testez également des librairies backend, [vous pourriez avoir également besoin d'une configuration
+> d'alias](https://github.com/testing-library/svelte-testing-library/issues/222#issuecomment-1909993331)
 
-You can now write unit tests for code inside your `.js/.ts` files:
+Vous pouvez maintenant écrire vos tests unitaires dans des fichiers `.js/.ts` :
 
 ```js
 /// file: multiplier.svelte.test.js
@@ -53,9 +64,12 @@ test('Multiplier', () => {
 });
 ```
 
-### Using runes inside your test files
+### Utiliser les runes dans vos fichiers de test [!VO]Using runes inside your test files
 
-It is possible to use runes inside your test files. First ensure your bundler knows to route the file through the Svelte compiler before running the test by adding `.svelte` to the filename (e.g `multiplier.svelte.test.js`). After that, you can use runes inside your tests.
+Il est possible d'utiliser les runes dans vos fichiers de test. Assurez-vous d'abord que votre
+bundler sache diriger le fichier à travers le compilateur Svelte avant que le test soit lancé, et ce
+en ajoutant `.svelte` au nom du fichier (par ex. `multiplier.svelte.test.js`). Vous pourrez ensuite
+utiliser les runes dans vos tests.
 
 ```js
 /// file: multiplier.svelte.test.js
@@ -75,7 +89,7 @@ test('Multiplier', () => {
 });
 ```
 
-If the code being tested uses effects, you need to wrap the test inside `$effect.root`:
+Si le code testé utilise des effets, vous aurez besoin de placer le test dans un `$effect.root` :
 
 ```js
 /// file: logger.svelte.test.js
@@ -83,15 +97,15 @@ import { flushSync } from 'svelte';
 import { expect, test } from 'vitest';
 import { logger } from './logger.svelte.js';
 
-test('Effect', () => {
+test('Effet', () => {
 	const cleanup = $effect.root(() => {
 		let count = $state(0);
 
-		// logger uses an $effect to log updates of its input
+		// logger utilise un $effect pour afficher les mises à jour de son input
 		let log = logger(() => count);
 
-		// effects normally run after a microtask,
-		// use flushSync to execute all pending effects synchronously
+		// les effets sont en général exécutés après une micro-tâche,
+		// utiliser `flushSync` pour exécuter tous les effets en attente de manière synchrone
 		flushSync();
 		expect(log.value).toEqual([0]);
 
@@ -105,19 +119,22 @@ test('Effect', () => {
 });
 ```
 
-### Component testing
+### Tests de composants [!VO]Component testing
 
-It is possible to test your components in isolation using Vitest.
+Il est possible de tester vos composants en isolation en utilisant Vitest.
 
-> [!NOTE] Before writing component tests, think about whether you actually need to test the component, or if it's more about the logic _inside_ the component. If so, consider extracting out that logic to test it in isolation, without the overhead of a component
+> [!NOTE] Avant d'écrire des tests de composant, posez-vous la question de si vous avez réellement
+> besoin de tester le composant, ou si vous souhaitez plutôt tester la logique _au sein_ de votre
+> composant. Si c'est le cas, envisagez d'extraire cette logique afin de pouvoir la tester
+> indépendamment du composant.
 
-To get started, install jsdom (a library that shims DOM APIs):
+Pour commencer, installer jsdom (une librairie qui simule les APIs du DOM) :
 
 ```bash
 npm install -D jsdom
 ```
 
-Then adjust your `vite.config.js`:
+Puis ajustez votre `vite.config.js` :
 
 ```js
 /// file: vite.config.js
@@ -128,12 +145,16 @@ export default defineConfig({
 		/* ... */
 	],
 	test: {
-		// If you are testing components client-side, you need to setup a DOM environment.
-		// If not all your files should have this environment, you can use a
-		// `// @vitest-environment jsdom` comment at the top of the test files instead.
+		// Si vous testez des composants côté client, vous aurez besoin de mettre en place un
+		// environnement DOM. Si tous vos fichiers ne sont pas compatibles avec cet environnement, vous
+		// pouvez plutôt ajouter un commentaire `// @vitest-environment jsdom` en haut des fichiers de
+		// test.
+
 		environment: 'jsdom'
 	},
-	// Tell Vitest to use the `browser` entry points in `package.json` files, even though it's running in Node
+
+	// Dit à Vitest d'utiliser les points d'entrée `browser` dans les fichiers `package.json`, même si
+	// Vitest utilise Node
 	resolve: process.env.VITEST
 		? {
 				conditions: ['browser']
@@ -142,7 +163,8 @@ export default defineConfig({
 });
 ```
 
-After that, you can create a test file in which you import the component to test, interact with it programmatically and write expectations about the results:
+Vous pouvez ensuite créer un fichier de test dans lequel importer le composant à tester, interagir
+avec lui programmatiquement et définir les résultats attendus :
 
 ```js
 /// file: component.test.js
@@ -151,26 +173,31 @@ import { expect, test } from 'vitest';
 import Component from './Component.svelte';
 
 test('Component', () => {
-	// Instantiate the component using Svelte's `mount` API
+	// Instantier le composant en utilisant l'API Svelte `mount`
 	const component = mount(Component, {
-		target: document.body, // `document` exists because of jsdom
+		target: document.body, // `document` existe grâce à jsdom
 		props: { initial: 0 }
 	});
 
 	expect(document.body.innerHTML).toBe('<button>0</button>');
 
-	// Click the button, then flush the changes so you can synchronously write expectations
+	// Clic sur le bouton, puis synchronisation des changements pour définir les attentes de manière
+	// synchrone
 	document.body.querySelector('button').click();
 	flushSync();
 
 	expect(document.body.innerHTML).toBe('<button>1</button>');
 
-	// Remove the component from the DOM
+	// Suppression du composant du DOM
 	unmount(component);
 });
 ```
 
-While the process is very straightforward, it is also low level and somewhat brittle, as the precise structure of your component may change frequently. Tools like [@testing-library/svelte](https://testing-library.com/docs/svelte-testing-library/intro/) can help streamline your tests. The above test could be rewritten like this:
+Même le processus est plutôt simple à mettre en place, celui-ci est aussi bas niveau et plutôt
+fragile, puisque la structure de composant peut beaucoup évoluer. Des outils comme
+[@testing-library/svelte](https://testing-library.com/docs/svelte-testing-library/intro/) peuvent
+aider à industrialiser l'écriture de vos tests. Le test ci-dessus peut ainsi être ré-écrit comme
+ceci :
 
 ```js
 /// file: component.test.js
@@ -191,15 +218,27 @@ test('Component', async () => {
 });
 ```
 
-When writing component tests that involve two-way bindings, context or snippet props, it's best to create a wrapper component for your specific test and interact with that. `@testing-library/svelte` contains some [examples](https://testing-library.com/docs/svelte-testing-library/example).
+Lorsque vous écrivez des tests de composant qui impliquent des liaisons à double sens, du contexte
+ou des props de snippet, il est recommandé de créer un composant parent spécifiquement pour votre
+test, et interagir avec ce composant. `@testing-library/svelte` montre quelques [exemples de cette
+technique](https://testing-library.com/docs/svelte-testing-library/example).
 
-## E2E tests using Playwright
+## Tests E2E avec Playwright [!VO]E2E tests using Playwright
 
-E2E (short for 'end to end') tests allow you to test your full application through the eyes of the user. This section uses [Playwright](https://playwright.dev/) as an example, but you can also use other solutions like [Cypress](https://www.cypress.io/) or [NightwatchJS](https://nightwatchjs.org/).
+Les tests E2E ("end to end" en anglais, qui se traduit par "de bout en bout") vous permettent de
+tester votre application toute entière depuis le point de vue de vos utilisateurs. Cette section
+prend [Playwright](https://playwright.dev/) comme exemple, mais vous pouvez aussi utiliser d'autres
+solutions comme [Cypress](https://www.cypress.io/) ou [NightwatchJS](https://nightwatchjs.org/).
 
-To get started with Playwright, either install it via [the VS Code extension](https://playwright.dev/docs/getting-started-vscode), or install it from the command line using `npm init playwright`. It is also part of the setup CLI when you run `npx sv create`.
+Pour commencer à utiliser Playwright, vous pouvez soit l'installer via l'[extension VS
+Code](https://playwright.dev/docs/getting-started-vscode), soit l'installer depuis votre ligne de
+commande en utilisant `npm init playwright`. Vous pouvez aussi l'installer via le CLI d'installation
+de Svelte, qui se lance avec `npx sv create`.
 
-After you've done that, you should have a `tests` folder and a Playwright config. You may need to adjust that config to tell Playwright what to do before running the tests - mainly starting your application at a certain port:
+Une fois l'installation terminée, vous devriez voir apparaître un dossier `tests` ainsi qu'un
+fichier de configuration de Playwright. Il se peut que vous ayez besoin d'ajuster cette
+configuration pour dire à Playwright ce qu'il doit faire avant de lancer les tests – principalement
+lancer votre application sur un port particulier :
 
 ```js
 /// file: playwright.config.js
@@ -215,14 +254,15 @@ const config = {
 export default config;
 ```
 
-You can now start writing tests. These are totally unaware of Svelte as a framework, so you mainly interact with the DOM and write assertions.
+Vous pouvez maintenant commencer à écrire vos tests. Ils n'ont aucune conscience que Svelte existe
+en tant que framework, il vous faudra donc surtout interagir avec le DOM, et écrire vos assertions.
 
 ```js
 // @errors: 2307 7031
 /// file: tests/hello-world.spec.js
 import { expect, test } from '@playwright/test';
 
-test('home page has expected h1', async ({ page }) => {
+test("la page d'accueil a le h1 prévu", async ({ page }) => {
 	await page.goto('/');
 	await expect(page.locator('h1')).toBeVisible();
 });
