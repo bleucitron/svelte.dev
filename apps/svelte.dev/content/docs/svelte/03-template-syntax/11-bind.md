@@ -327,7 +327,10 @@ mesurées avec `ResizeObserver` :
 </div>
 ```
 
-> [!NOTE] `display: inline` elements do not have a width or height (except for elements with 'intrinsic' dimensions, like `<img>` and `<canvas>`), and cannot be observed with a `ResizeObserver`. You will need to change the `display` style of these elements to something else, such as `inline-block`.
+> [!NOTE] Les éléments `display: inline` n'ont pas de largeur ou de hauteur (sauf pour les éléments
+> avec des dimensions "intrinsèques", comme `<img>` et `<canvas>`), et ne peuvent pas être observés
+> avec `ResizeObserver`. Vous aurez besoin de changer le style `display` de ces éléments à une autre
+> valeur, comme `inline-block`.
 
 ## bind:this
 

@@ -38,4 +38,5 @@ l'attribut `xmlns` :
 <svelte:element this={tag} xmlns="http://www.w3.org/2000/svg" />
 ```
 
-`this` needs to be a valid DOM element tag, things like `#text` or `svelte:head` will not work.
+`this` doit être un nom d'élément DOM valide, des valeurs comme `#text` ou `svelte:head` ne
+fonctionneront pas.
