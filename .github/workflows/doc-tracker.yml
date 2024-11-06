@@ -84,3 +84,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte/06-runtime
+  track-docs-svelte-07:
+    runs-on: ubuntu-latest
+    name: Checking Docs Svelte 07
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/svelte/07-misc
