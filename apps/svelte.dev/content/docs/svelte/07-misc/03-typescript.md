@@ -253,7 +253,7 @@ peuvent leur être fournis :
 	import type { Component } from 'svelte';
 
 	interface Props {
-		// seuls les composants qui au plus la propriété "prop"
+		// seuls les composants qui ont au plus la propriété "prop"
 		// peuvent être fournis
 		ComposantDynamique: Component<{ prop: string }>;
 	}
