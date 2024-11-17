@@ -1,18 +1,30 @@
 ---
-title: Svelte 5 migration guide
+title: Guide de migration vers Svelte 5
 ---
 
-Version 5 comes with an overhauled syntax and reactivity system. While it may look different at first, you'll soon notice many similarities. This guide goes over the changes in detail and shows you how to upgrade. Along with it, we also provide information on _why_ we did these changes.
+La version 5 apporte une syntaxe et un système de réactivité revisités. Bien qu'il paraisse très
+différent au premier abord, vous remarquerez très vite des ressemblances. Ce guide passe en revue
+les changements de manière détaillée et vous aide à faire votre mise à jour. De plus, nous
+fournissons également quelques informations sur _pourquoi_ nous avons fait ces changements.
 
-You don't have to migrate to the new syntax right away - Svelte 5 still supports the old Svelte 4 syntax, and you can mix and match components using the new syntax with components using the old and vice versa. We expect many people to be able to upgrade with only a few lines of code changed initially. There's also a [migration script](#Migration-script) that helps you with many of these steps automatically.
+Vous n'avez pas besoin de migrer vers la nouvelle syntaxe tout de suite – Svelte 5 continue de
+supporter la syntaxe de la version 4, et il est possible de mélanger des composants utilisant la
+nouvelle syntaxe avec des composants utilisant l'ancienne syntaxe. Nous pensons que beaucoup de gens
+seront capables de mettre à jour Svelte en changeant initialement uniquement quelques lignes de
+code. Nous proposons également un [script de migration](#Migration-script) qui vous aide avec
+beaucoup de ces étapes automatiquement.
 
-## Reactivity syntax changes
+## Nouvelle syntaxe de réactivité [!VO]Reactivity syntax changes
 
-At the heart of Svelte 5 is the new runes API. Runes are basically compiler instructions that inform Svelte about reactivity. Syntactically, runes are functions starting with a dollar-sign.
+La nouvelle API de runes est au coeur de Svelte 5. Les runes sont simplement des instructions pour
+le compilateur qui informent Svelte à propos de la réactivité attendue. Syntactiquement, les runes
+sont des fonctions dont le nom commence par un `$`.
 
 ### let -> $state
 
-In Svelte 4, a `let` declaration at the top level of a component was implicitly reactive. In Svelte 5, things are more explicit: a variable is reactive when created using the `$state` rune. Let's migrate the counter to runes mode by wrapping the counter in `$state`:
+En Svelte 4, une déclaration `let` à la racine d'un composant était implicitement réactive. En
+Svelte 5 les choses sont plus explicites : une variable est réactive lorsqu'elle a créée avec la
+rune `$state`. Migrons le compteur ci-dessous en rune en l'entourant d'un `$state` :
 
 ```svelte
 <script>
@@ -20,14 +32,24 @@ In Svelte 4, a `let` declaration at the top level of a component was implicitly 
 </script>
 ```
 
-Nothing else changes. `count` is still the number itself, and you read and write directly to it, without a wrapper like `.value` or `getCount()`.
+Rien d'autre ne change. `count` est toujours le nombre lui-même, et vous pouvez le lire ou le
+modifier directement, sans aucun intermédiaire comme `.value` ou `getCount()`.
 
-> [!DETAILS] Why we did this
-> `let` being implicitly reactive at the top level worked great, but it meant that reactivity was constrained - a `let` declaration anywhere else was not reactive. This forced you to resort to using stores when refactoring code out of the top level of components for reuse. This meant you had to learn an entirely separate reactivity model, and the result often wasn't as nice to work with. Because reactivity is more explicit in Svelte 5, you can keep using the same API outside the top level of components. Head to [the tutorial](/tutorial) to learn more.
+> [!DETAILS] Pourquoi ce changement
+> Le fait qu'une déclaration `let` à la racine d'un composant soit implicitement réactive
+> fonctionnait très bien, mais cela impliquait que la réactivité était contrainte - déclarer un
+> `let` à un autre endroit ne le rendait pas réactif. Cela vous forçait à utiliser des stores
+> lorsque vous souhaitiez sortir du code d'un composant pour le réutiliser ailleurs. Cela signifiait
+> également que vous deviez apprendre un modèle de réactivité complètement distinct, et au final
+> cela se révélait souvent moins simple. Puisque la réactivité est plus explicite avec Svelte 5,
+> vous pouvez continuer d'utiliser la même API en dehors de la racine des composants. Allez sur le
+> [tutoriel](/tutorial) pour en apprendre plus.
 
 ### $: -> $derived/$effect
 
-In Svelte 4, a `$:` statement at the top level of a component could be used to declare a derivation, i.e. state that is entirely defined through a computation of other state. In Svelte 5, this is achieved using the `$derived` rune:
+Avec Svelte 4, une déclaration `$:` à la racine d'un composant pouvait être utilisée pour déclarer
+une dérivation, c-à-d un état entièrement défini par un calcul utilisant un autre état. Avec Svelte
+5, ceci s'écrit en utilisant la rune `$derived` :
 
 ```svelte
 <script>
@@ -36,44 +58,63 @@ In Svelte 4, a `$:` statement at the top level of a component could be used to d
 </script>
 ```
 
-As with `$state`, nothing else changes. `double` is still the number itself, and you read it directly, without a wrapper like `.value` or `getDouble()`.
+Comme avec `$state`, rien d'autre ne change. `double` est toujours le nombre lui-même, et vous
+pouvez le lire directement, sans intermédiaire comme `.value` ou `getDouble()`.
 
-A `$:` statement could also be used to create side effects. In Svelte 5, this is achieved using the `$effect` rune:
+Une déclaration `$:` pouvait également être utilisée pour créer des effets de bord. Avec Svelte 5,
+nous pouvons le faire en utilisant la rune `$effect` :
 
 ```svelte
 <script>
 	let count = +++$state(+++0+++)+++;
 	---$:---+++$effect(() =>+++ {
 		if (count > 5) {
-			alert('Count is too high!');
+			alert('Le compteur est trop élevé');
 		}
 	}+++);+++
 </script>
 ```
 
-> [!DETAILS] Why we did this
-> `$:` was a great shorthand and easy to get started with: you could slap a `$:` in front of most code and it would somehow work. This intuitiveness was also its drawback the more complicated your code became, because it wasn't as easy to reason about. Was the intent of the code to create a derivation, or a side effect? With `$derived` and `$effect`, you have a bit more up-front decision making to do (spoiler alert: 90% of the time you want `$derived`), but future-you and other developers on your team will have an easier time.
+> [!DETAILS] Pourquoi ce changement
+> `$:` était un raccourci simple et efficace pour débuter : vous pouviez placer un `$:` devant la
+> plupart de votre code, et cela fonctionnait. L'intuitivité était également un inconvénient lorsque
+> votre code devenait de plus en plus complexe, parce que cela devenait difficile de raisonner sur
+> les liens de réactivité entre les différents morceaux de code. L'intention de ce code était-elle
+> de créer une dérivation, ou un effet de bord ? Avec `$derived` et `$effect`, vous devez choisir
+> entre les deux (spoiler alert : 90% du temps vous voulez `$derived`), mais le futur-vous et les
+> autres développeurs et développeuses de votre équipe vous remercieront.
 >
-> There were also gotchas that were hard to spot:
+> Il y avait également quelques inconvénients difficiles à détecter :
 >
-> - `$:` only updated directly before rendering, which meant you could read stale values in-between rerenders
-> - `$:` only ran once per tick, which meant that statements may run less often than you think
-> - `$:` dependencies were determined through static analysis of the dependencies. This worked in most cases, but could break in subtle ways during a refactoring where dependencies would be for example moved into a function and no longer be visible as a result
-> - `$:` statements were also ordered by using static analysis of the dependencies. In some cases there could be ties and the ordering would be wrong as a result, needing manual interventions. Ordering could also break while refactoring code and some dependencies no longer being visible as a result.
+> - `$:` ne se mettait à jour que juste avant le rendu, ce qui signifiait que vous pouviez lire des
+>   valeurs périmées entre deux rendus
+> - `$:` n'était exécuté qu'une seule fois par tick, ce qui impliquait que des déclarations
+>   pouvaient être exécutées moins souvent que vous ne le pensiez
+> - les dépendances de `$:` étaient déterminées via analyse statique. Ceci fonctionnait dans la
+>   plupart des cas, mais pouvait casser de manière subtile au cours d'un refactor lors duquel les
+>   dépendances sont déplacées dans une fonction et ne sont en conséquence plus visibles
+> - les déclarations `$:` étaient également ordonnées en utilisant l'analyse statique des
+>   dépendances. Dans certains cas, il pouvait y avoir des égalités et l'ordre en résultait mauvais,
+>   demandant des interventions manuelles. L'ordre pouvait aussi se briser lors d'un refactor qui
+>   rendrait "invisibles" certaines dépendances
 >
-> Lastly, it wasn't TypeScript-friendly (our editor tooling had to jump through some hoops to make it valid for TypeScript), which was a blocker for making Svelte's reactivity model truly universal.
+> Enfin, cette syntaxe n'était pas vraiment compatible avec TypeScript (notre outillage d'éditeur
+> devait faire des circonvolutions pour le rendre compatible avec TypeScript), ce qui était bloquant
+> pour rendre le modèle de réactivité de Svelte vraiment universel.
 >
-> `$derived` and `$effect` fix all of these by
+> `$derived` et `$effect` résolvent tous ces problèmes :
 >
-> - always returning the latest value
-> - running as often as needed to be stable
-> - determining the dependencies at runtime, and therefore being immune to refactorings
-> - executing dependencies as needed and therefore being immune to ordering problems
-> - being TypeScript-friendly
+> - ils renvoient toujours la valeur la plus à jour
+> - ils sont exécutés aussi souvent que nécéssaire pour rester stable
+> - ils déterminent leurs dépendances lors de l'exécution, et sont donc insensibles aux refactors
+> - ils exécutent leurs dépendences correctement et sont donc insensibles aux problèmes d'ordre
+> - ils sont adaptés à l'utilisation de TypeScript
 
 ### export let -> $props
 
-In Svelte 4, properties of a component were declared using `export let`. Each property was one declaration. In Svelte 5, all properties are declared through the `$props` rune, through destructuring:
+Avec Svelte 4, les propriétés d'un composant étaient déclarées en utilisant `export let`. Chaque
+propriété nécessitait une déclaration. Avec Svelte 5, toutes les propriétés sont déclarées avec la
+rune `$props`, via déstructuration :
 
 ```svelte
 <script>
@@ -83,23 +124,26 @@ In Svelte 4, properties of a component were declared using `export let`. Each pr
 </script>
 ```
 
-There are multiple cases where declaring properties becomes less straightforward than having a few `export let` declarations:
+Il y a plusieurs cas dans lesquels la déclaration de propriétés est moins évidente que simplement
+déclarer quelques `export let` :
 
-- you want to rename the property, for example because the name is a reserved identifier (e.g. `class`)
-- you don't know which other properties to expect in advance
-- you want to forward every property to another component
+- vous souhaitez renommer la propriété, par exemple parce que le nom est en conflit avec un
+identifiant réservé (`class` par ex.)
+- vous ne savez pas à l'avance à quelles autres propriétés vous attendre
+- vous souhaitez transférer toutes les propriétés à un autre composant
 
-All these cases need special syntax in Svelte 4:
+Toutes ces situations nécessitent une syntaxe spéciale avec Svelte 4 :
 
-- renaming: `export { klass as class}`
-- other properties: `$$restProps`
-- all properties `$$props`
+- renommer : `export { klass as class}`
+- autres propriétés : `$$restProps`
+- toutes les propriétés : `$$props`
 
-In Svelte 5, the `$props` rune makes this straightforward without any additional Svelte-specific syntax:
+Avec Svelte 5, la rune `$props` rend ces situations plus simples sans ajouter de syntaxe spécifique
+à Svelte :
 
-- renaming: use property renaming `let { class: klass } = $props();`
-- other properties: use spreading `let { foo, bar, ...rest } = $props();`
-- all properties: don't destructure `let props = $props();`
+- renommer : utilisez le renommage de propriété `let { class: klass } = $props();`
+- autres propriétés : utilisez la décomposition `let { foo, bar, ...rest } = $props();`
+- toutes les propriétés : ne déstructurez pas `let props = $props();`
 
 ```svelte
 <script>
@@ -107,17 +151,24 @@ In Svelte 5, the `$props` rune makes this straightforward without any additional
 	export { klass as class};---
 	+++let { class: klass, ...rest } = $props();+++
 </script>
-<button class={klass} {...---$$restProps---+++rest+++}>click me</button>
+<button class={klass} {...---$$restProps---+++rest+++}>cliquez moi</button>
 ```
 
-> [!DETAILS] Why we did this
-> `export let` was one of the more controversial API decisions, and there was a lot of debate about whether you should think about a property being `export`ed or `import`ed. `$props` doesn't have this trait. It's also in line with the other runes, and the general thinking reduces to "everything special to reactivity in Svelte is a rune".
+> [!DETAILS] Pourquoi ce changement
+> `export let` était l'un des choix d'API les plus controversés, et il y a eu beaucoup de débats
+> autour de si vous deviez pensez aux propriétés comme étant `export`ées ou `import`ées. `$props`
+> n'a pas ce problème. De plus, cette syntaxe est alignée avec les autres runes, dont la philosophie
+> générale peut se résumer par "toute ce qui est relatif à la réactivité en Svelte est une rune".
 >
-> There were also a lot of limitations around `export let`, which required additional API, as shown above. `$props` unite this in one syntactical concept that leans heavily on regular JavaScript destructuring syntax.
+> Il y avait également beaucoup de limitations liées à `export let`, qui requiert des API
+> additionnelles, comme montré plus haut. `$props` réunit toutes ces API en un unique concept
+> syntactique qui repose énormément sur la syntaxe JavaScript classique de déstructuration.
 
-## Event changes
+## Changements sur les évènements [!VO]Event changes
 
-Event handlers have been given a facelift in Svelte 5. Whereas in Svelte 4 we use the `on:` directive to attach an event listener to an element, in Svelte 5 they are properties like any other (in other words - remove the colon):
+La gestion des évènements a été refondue avec Svelte 5. Alors qu'avec Svelte 4 il faut utiliser la
+directive `:on` pour attacher un gestionnaire d'évènement à un élément, avec Svelte 5 ce ne sont que
+des propriétés comme n'importe quelles autres (autrement dit, enlevez le `:`) :
 
 ```svelte
 <script>
@@ -125,11 +176,11 @@ Event handlers have been given a facelift in Svelte 5. Whereas in Svelte 4 we us
 </script>
 
 <button on---:---click={() => count++}>
-	clicks: {count}
+	clics : {count}
 </button>
 ```
 
-Since they're just properties, you can use the normal shorthand syntax...
+Puisque ce ne sont que des propriétés, vous pouvez utiliser la syntaxe raccourcie...
 
 ```svelte
 <script>
@@ -141,17 +192,20 @@ Since they're just properties, you can use the normal shorthand syntax...
 </script>
 
 <button {onclick}>
-	clicks: {count}
+	clics : {count}
 </button>
 ```
 
-...though when using a named event handler function it's usually better to use a more descriptive name.
+... même si lorsque vous utilisez un gestionnaire d'évènement personnalisé il est généralement
+recommandé d'utiliser un nom plus descriptif.
 
-### Component events
+### Évènements de composant [!VO]Component events
 
-In Svelte 4, components could emit events by creating a dispatcher with `createEventDispatcher`.
+Avec Svelte 4, les composants pouvaient émettre des évènements en créant un dispatcher avec
+`createEventDispatcher`.
 
-This function is deprecated in Svelte 5. Instead, components should accept _callback props_ - which means you then pass functions as properties to these components:
+Cette fonction est dépréciée avec Svelte 5. À la place, les composants doivent accepter des _props
+de callback_ – ce qui signifie que vous passez des fonctions comme propriétés à ces composants :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -178,7 +232,7 @@ This function is deprecated in Svelte 5. Instead, components should accept _call
 />
 
 {#if burst}
-	<button onclick={reset}>new balloon</button>
+	<button onclick={reset}>nouveau ballon</button>
 	<span class="boom">💥</span>
 {:else}
 	<span class="balloon" style="scale: {0.01 * size}">
@@ -198,19 +252,20 @@ This function is deprecated in Svelte 5. Instead, components should accept _call
 </script>
 
 <button onclick={() => ---dispatch('inflate', power)---+++inflate(power)+++}>
-	inflate
+	gongler
 </button>
 <button onclick={() => ---dispatch('deflate', power)---+++deflate(power)+++}>
-	deflate
+	dégonfler
 </button>
 <button onclick={() => power--}>-</button>
-Pump power: {power}
+Puissance de la pompe : {power}
 <button onclick={() => power++}>+</button>
 ```
 
-### Bubbling events
+### Remonter des évènements [!VO]Bubbling events
 
-Instead of doing `<button on:click>` to 'forward' the event from the element to the component, the component should accept an `onclick` callback prop:
+Plutôt que d'écrire `<button on:click>` pour "relayer" un évènement depuis l'élément vers le
+composant, le composant devrait accepter une prop de callback `onclick` :
 
 ```svelte
 <script>
@@ -218,11 +273,12 @@ Instead of doing `<button on:click>` to 'forward' the event from the element to 
 </script>
 
 <button ---on:click--- +++{onclick}+++>
-	click me
+	cliquez moi
 </button>
 ```
 
-Note that this also means you can 'spread' event handlers onto the element along with other props instead of tediously forwarding each event separately:
+Notez que ceci signifie également que vous pouvez _spread_ les gestionnaires d'évènement sur un
+élément avec les autres propriétés plutôt que relayer péniblement chaque évènement séparément :
 
 ```svelte
 <script>
@@ -230,21 +286,25 @@ Note that this also means you can 'spread' event handlers onto the element along
 </script>
 
 <button ---{...$$props} on:click on:keydown on:all_the_other_stuff--- +++{...props}+++>
-	click me
+	cliquez moi
 </button>
 ```
 
-### Event modifiers
+### Modificateurs d'évènement [!VO]Event modifiers
 
-In Svelte 4, you can add event modifiers to handlers:
+Avec Svelte 4, vous pouvez ajouter des modificateurs aux gestionnaires d'évènement :
 
 ```svelte
 <button on:click|once|preventDefault={handler}>...</button>
 ```
 
-Modifiers are specific to `on:` and as such do not work with modern event handlers. Adding things like `event.preventDefault()` inside the handler itself is preferable, since all the logic lives in one place rather than being split between handler and modifiers.
+Les modificateurs sont spécifiques à `on:` et ne sont pas compatibles avec la nouvelle syntaxe de
+gestion des évènements. L'ajout de choses comme `event.preventDefault()` dans le gestionnaire
+lui-même est préférable, puisque toute la logique est placée à un seul endroit plutôt que d'être
+séparée entre gestionnaire et modificateur.
 
-Since event handlers are just functions, you can create your own wrappers as necessary:
+Puisque les gestionnaires d'évènements ne sont que des fonctions, vous pouvez créer vos propres
+wrappers si nécessaire :
 
 ```svelte
 <script>
@@ -266,25 +326,32 @@ Since event handlers are just functions, you can create your own wrappers as nec
 <button onclick={once(preventDefault(handler))}>...</button>
 ```
 
-There are three modifiers — `capture`, `passive` and `nonpassive` — that can't be expressed as wrapper functions, since they need to be applied when the event handler is bound rather than when it runs.
+Il y a trois modificateurs – `capture`, `passive` et `nonpassive` – qui ne peuvent pas être
+exprimés comme des fonctions wrapper, puisqu'ils doivent être appliqués lorsque le gestionnaire
+d'évènement est lié et non lorsqu'il est exécuté.
 
-For `capture`, we add the modifier to the event name:
+Pour `capture`, le modificateur s'ajoute au nom de l'évènement :
 
 ```svelte
 <button onclickcapture={...}>...</button>
 ```
 
-Changing the [`passive`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#using_passive_listeners) option of an event handler, meanwhile, is not something to be done lightly. If you have a use case for it — and you probably don't! — then you will need to use an action to apply the event handler yourself.
+Changer l'option
+[`passive`](https://developer.mozilla.org/fr/docs/Web/API/EventTarget/addEventListener#am%C3%A9lioration_des_performances_de_d%C3%A9filement_avec_les_%C3%A9couteurs_passifs)
+d'un gestionnaire d'évènement n'est en revanche pas quelque chose à prendre à la légère. Si vous
+avez un cas d'usage – et ce n'est probablement pas le cas ! – il vous faudra utiliser une action
+pour ajouter le gestionnaire d'évènement vous-même.
 
-### Multiple event handlers
+### Gestionnaires multiples [!VO]Multiple event handlers
 
-In Svelte 4, this is possible:
+Avec Svelte 4, ceci est possible :
 
 ```svelte
 <button on:click={one} on:click={two}>...</button>
 ```
 
-Duplicate attributes/properties on elements — which now includes event handlers — are not allowed. Instead, do this:
+Les attributs/propriétés dupliquées – ce qui inclut donc maintenant les gestionnaires d'évènement –
+ne sont pas permis. À la place, faites ceci :
 
 ```svelte
 <button
@@ -297,7 +364,8 @@ Duplicate attributes/properties on elements — which now includes event handler
 </button>
 ```
 
-When spreading props, local event handlers must go _after_ the spread, or they risk being overwritten:
+Lorsque vous "étalez" des props, les gestionnaires d'évènement locaux doivent être appliqués _après_
+le spread, ou ils risquent d'être écrasés :
 
 ```svelte
 <button
@@ -311,41 +379,67 @@ When spreading props, local event handlers must go _after_ the spread, or they r
 </button>
 ```
 
-> [!DETAILS] Why we did this
-> `createEventDispatcher` was always a bit boilerplate-y:
+> [!DETAILS] Pourquoi ce changement
+> `createEventDispatcher` a toujours été un peu pénible à utiliser :
 >
-> - import the function
-> - call the function to get a dispatch function
-> - call said dispatch function with a string and possibly a payload
-> - retrieve said payload on the other end through a `.detail` property, because the event itself was always a `CustomEvent`
+> - importer la fonction
+> - appeler la fonction pour obtenir une fonction de dispatch
+> - exécuter la fonction de dispatch avec une chaîne de caractères et éventuellement une payload
+> - récupérer la payload en question de l'autre côté via la propriété `.detail`, car l'évènement
+>   lui-même était systématiquement un `CustomEvent`
 >
-> It was always possible to use component callback props, but because you had to listen to DOM events using `on:`, it made sense to use `createEventDispatcher` for component events due to syntactical consistency. Now that we have event attributes (`onclick`), it's the other way around: Callback props are now the more sensible thing to do.
+> Il a toujours été possible d'utiliser des props de callback pour les composants, mais parce qu'il
+> était nécessaire d'écouter les évènements du DOM avec `on:`, cela avait du sens d'utiliser
+> `createEventDispatcher` pour les évènements de composant pour garder une consistance syntactique.
+> Maintenant que nous avons les attributs d'évènement (`onclick`), c'est le contraire : les props de
+> callback sont maintenant la méthode recommandée.
 >
-> The removal of event modifiers is arguably one of the changes that seems like a step back for those who've liked the shorthand syntax of event modifiers. Given that they are not used that frequently, we traded a smaller surface area for more explicitness. Modifiers also were inconsistent, because most of them were only useable on DOM elements.
+> La suppression des modificateurs d'évènement est indiscutablement un des changements ressemblant
+> le plus à un retour en arrière pour celles et ceux qui ont apprécié la syntaxe raccourcie des
+> modificateurs d'évènement. Étant donné qu'ils ne sont pas utilisés si souvent que ça, nous avons
+> choisi de privilégier le côté explicite plutôt qu'une surface plus restreinte. Les modificateurs
+> étaient également inconsistents, puisque la plupart d'entre eux n'étaient utilisables que sur des
+> éléments DOM.
 >
-> Multiple listeners for the same event are also no longer possible, but it was something of an anti-pattern anyway, since it impedes readability: if there are many attributes, it becomes harder to spot that there are two handlers unless they are right next to each other. It also implies that the two handlers are independent, when in fact something like `event.stopImmediatePropagation()` inside `one` would prevent `two` from being called.
+> L'utilisation de plusieurs gestionnaires pour le même évènement n'est également plus possible,
+> mais cela était de toutes façon une méthode non-recommandée, car elle compliquait la lecture du
+> code : s'il y avait beaucoup d'attributs, il devenait difficile de se rendre compte qu'il y avait
+> deux gestionnaires à moins qu'ils ne soient positionnés juste à côté l'un de l'autre. De plus,
+> cela laissait entendre que les deux gestionaires étaient indépendants, alors que quelque chose
+> comme `event.stopImmediatePropagation()` dans `one` empêcherait `two` d'être exécuté.
 >
-> By deprecating `createEventDispatcher` and the `on:` directive in favour of callback props and normal element properties, we:
+> En dépréciant `createEventDispatcher` et la directive `on:` en faveur des props de callback et des
+> propriétés normales d'éléments, cela nous permet de :
 >
-> - reduce Svelte's learning curve
-> - remove boilerplate, particularly around `createEventDispatcher`
-> - remove the overhead of creating `CustomEvent` objects for events that may not even have listeners
-> - add the ability to spread event handlers
-> - add the ability to know which event handlers were provided to a component
-> - add the ability to express whether a given event handler is required or optional
-> - increase type safety (previously, it was effectively impossible for Svelte to guarantee that a component didn't emit a particular event)
+> - réduire la courbe d'apprentissage de Svelte
+> - supprimer du boilerplate, particulièrement autour de `createEventDispatcher`
+> - supprimer le surcoût de créer des objets `CustomEvent` pour des évènements qui n'ont peut-être
+>   même pas de gestionnaire associé
+> - ajouter la possibilité de spread les gestionnaires d'évènement
+> - ajouter la possibilité de savoir quels gestionnaires sont fournis au composant
+> - ajouter la possibilité d'exprimer si un gestionnaire donné est requis ou optionnel
+> - augmenter la sécurité du typage (auparavant, il était dans les faits impossible pour Svelte de
+>   garantir qu'un composant n'émettait pas un évènement particulier)
 
-## Snippets instead of slots
+## Des snippets plutôt que des slots [!VO]Snippets instead of slots
 
-In Svelte 4, content can be passed to components using slots. Svelte 5 replaces them with snippets which are more powerful and flexible, and as such slots are deprecated in Svelte 5.
+Avec Svelte 4, du contenu peut être passé aux composants en utilisant des slots. Svelte 5 les
+remplace par les snippets, qui sont plus puissants et plus flexibles. En conséquence, les slots sont
+dépréciés par Svelte 5.
 
-They continue to work, however, and you can mix and match snippets and slots in your components.
+Ils continuent toutefois de fonctionner, et vous pouvez mélanger les snippets et les slots dans vos
+composants.
 
-When using custom elements, you should still use `<slot />` like before. In a future version, when Svelte removes its internal version of slots, it will leave those slots as-is, i.e. output a regular DOM tag instead of transforming it.
+Lorsque vous utilisez des éléments personnalisés, vous devez toujours utiliser `<slot />` comme
+avant. Dans une version future, lorsque Svelte supprimera sa version interne des slots, les slots
+des éléments personnalisés seront laissés tels quels, c-à-d générant une vraie balise DOM plutôt que
+de la transformer.
 
-### Default content
+### Contenu par défaut [!VO]Default content
 
-In Svelte 4, the easiest way to pass a piece of UI to the child was using a `<slot />`. In Svelte 5, this is done using the `children` prop instead, which is then shown with `{@render children()}`:
+Avec Svelte 4, la façon la plus simple de passer un morceau d'interface à un enfant était d'utiliser
+un `<slot />`. Avec Svelte 5, vous pouvez faire cela en utilisant plutôt la prop `children`, qui
+s'utilise avec `{@render children()}` :
 
 ```svelte
 <script>
@@ -356,9 +450,11 @@ In Svelte 4, the easiest way to pass a piece of UI to the child was using a `<sl
 +++{@render children?.()}+++
 ```
 
-### Multiple content placeholders
+### Contenu générique multiple [!VO]Multiple content placeholders
 
-If you wanted multiple UI placeholders, you had to use named slots. In Svelte 5, use props instead, name them however you like and `{@render ...}` them:
+Si vous souhaitiez plusieurs morceaux d'interface génériques, vous deviez utiliser les slots nommés.
+Avec Svelte 5, vous pouvez plutôt utiliser des props, les nommer comme vous le souhaitez et les
+afficher avec `{@render ...}` :
 
 ```svelte
 <script>
@@ -381,9 +477,10 @@ If you wanted multiple UI placeholders, you had to use named slots. In Svelte 5,
 </footer>
 ```
 
-### Passing data back up
+### Remonter des données [!VO]Passing data back up
 
-In Svelte 4, you would pass data to a `<slot />` and then retrieve it with `let:` in the parent component. In Svelte 5, snippets take on that responsibility:
+Avec Svelte 4, vouss pouviez passer des données à un `<slot />` puis les récupérer avec `let:` dans
+le composant parent. Avec Svelte 5, les snippets ont désormais cette responsabilité :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -395,9 +492,9 @@ In Svelte 4, you would pass data to a `<slot />` and then retrieve it with `let:
 	+++{#snippet item(text)}+++
 		<span>{text}</span>
 	+++{/snippet}+++
-	---<span slot="empty">No items yet</span>---
+	---<span slot="empty">Pas encore d'éléments</span>---
 	+++{#snippet empty()}
-		<span>No items yet</span>
+		<span>Pas encore d'éléments</span>
 	{/snippet}+++
 </List>
 ```
@@ -423,36 +520,63 @@ In Svelte 4, you would pass data to a `<slot />` and then retrieve it with `let:
 {/if}
 ```
 
-> [!DETAILS] Why we did this
-> Slots were easy to get started with, but the more advanced the use case became, the more involved and confusing the syntax became:
+> [!DETAILS] Pourquoi ce changement
+> Les slots étaient simples à prendre en main, mais dans les cas d'usage avancés, la syntaxe
+> devenait de plus en plus confuse et complexe :
 >
-> - the `let:` syntax was confusing to many people as it _creates_ a variable whereas all other `:` directives _receive_ a variable
-> - the scope of a variable declared with `let:` wasn't clear. In the example above, it may look like you can use the `item` slot prop in the `empty` slot, but that's not true
-> - named slots had to be applied to an element using the `slot` attribute. Sometimes you didn't want to create an element, so we had to add the `<svelte:fragment>` API
-> - named slots could also be applied to a component, which changed the semantics of where `let:` directives are available (even today us maintainers often don't know which way around it works)
+> - la syntaxe `let:` n'était pas claire pour beaucoup de gens car elle _crée_ une variable alors
+>   que toutes les autres directives `:` _reçoivent_ une variable
+> - le scope d'une variable déclarée avec `let:` n'était pas clair. Dans l'example ci-dessus, il
+>   semble que vous puissiez utiliser la prop de slot `item` dans le slot `empty`, mais ce n'est en
+>   réalité pas possible
+> - les slots nommés devaient être utilisés sur un élément utilisant l'attribut `slot`. Parfois vous
+>   ne vouliez pas créer un élément, et il a donc fallu ajouter l'API `<svelte:fragment>`
+> - les slots nommés pouvaient aussi être utilisés sur un composant, ce qui changeait la sémantique
+>   de où les directives `let:` sont disponibles (même encore aujourd'hui les mainteneurs du projet
+>   ne se souviennent pas toujours de comment ça fonctionne précisément)
 >
-> Snippets solve all of these problems by being much more readable and clear. At the same time they're more powerful as they allow you to define sections of UI that you can render _anywhere_, not just passing them as props to a component.
+> Les snippets résolvent tous ces problèmes en étant beaucoup clairs et lisibles. Ils sont de plus
+> plus puissants puisqu'ils vous permettent de définir des sections d'interface que vous pouvez
+> afficer _partout_, et pas seulement en les passant en props à un composant.
 
-## Migration script
+## Script de migration [!VO]Migration script
 
-By now you should have a pretty good understanding of the before/after and how the old syntax relates to the new syntax. It probably also became clear that a lot of these migrations are rather technical and repetitive - something you don't want to do by hand.
+Vous devriez avoir maintenant une idée plus claire des changements apportés, notamment ce que change
+la nouvelle syntaxe par rapport à l'ancienne. Vous avez probablement également compris que beaucoup
+de ces migrations sont plutôt techniques et répétitives – des choses que vous n'avez pas envie de
+faire à la main.
 
-We thought the same, which is why we provide a migration script to do most of the migration automatically. You can upgrade your project by using `npx sv migrate svelte-5`. This will do the following things:
+Nous sommes d'accord, c'est pourquoi nous fournissons un script de migration pour faire la plupart
+de ces migrations automatiquement. Vous pouvez migrer votre projet en utilisant `npx sv migrate
+svelte-5`. Ceci va faire les choses suivantes :
 
-- bump core dependencies in your `package.json`
-- migrate to runes (`let` -> `$state` etc)
-- migrate to event attributes for DOM elements (`on:click` -> `onclick`)
-- migrate slot creations to render tags (`<slot />` -> `{@render children()}`)
-- migrate slot usages to snippets (`<div slot="x">...</div>` -> `{#snippet x()}<div>...</div>{/snippet}`)
-- migrate obvious component creations (`new Component(...)` -> `mount(Component, ...)`)
+- mettre à jour les versions des dépendences principales dans votre `package.json`
+- migrer votre code pour utiliser les runes (`let` -> `$state` etc.)
+- migrer les éléments DOM pour qu'ils utilisent les attributs d'évènements (`on:click` -> `onclick`)
+- migrer les créations de slots pour utiliser les balises de rendu (`<slot />` -> `{@render children()}`)
+- migrer l'utilisation des slots pour utiliser des snippets (`<div slot="x">...</div>` -> `{#snippet
+x()}<div>...</div>{/snippet}`)
+- migrer les créations évidentes de composant (`new Component(...)` -> `mount(Component, ...)`)
 
-You can also migrate a single component in VS Code through the `Migrate Component to Svelte 5 Syntax` command, or in our Playground through the `Migrate` button.
+Vous pouvez aussi migrer un seul composant à la fois dans VS Code via la commande `Migrate Component
+to Svelte 5 Syntax`, ou dans notre bac à sable via le bouton `Migrer`.
 
-Not everything can be migrated automatically, and some migrations need manual cleanup afterwards. The following sections describe these in more detail.
+Tout ne sera pas migré automatiquement, et certaines migrations auront besoin d'un nettoyage manuel
+a posteriori. Les sections suivantes fournissent plus de détails sur ces situations.
 
 ### run
 
-You may see that the migration script converts some of your `$:` statements to a `run` function which is imported from `svelte/legacy`. This happens if the migration script couldn't reliably migrate the statement to a `$derived` and concluded this is a side effect instead. In some cases this may be wrong and it's best to change this to use a `$derived` instead. In other cases it may be right, but since `$:` statements also ran on the server but `$effect` does not, it isn't safe to transform it as such. Instead, `run` is used as a stopgap solution. `run` mimics most of the characteristics of `$:`, in that it runs on the server once, and runs as `$effect.pre` on the client (`$effect.pre` runs _before_ changes are applied to the DOM; most likely you want to use `$effect` instead).
+Vous remarquerez peut-être que le script de migration convertit certaines de vos déclarations `$:`
+en une fonction `run` qui est importée depuis `svelte/legacy`. Ceci se produit si le script de
+migration n'a pas pu déterminer avec certitude si une déclaration devrait être migrée en une rune
+`$derived`, et en a déduit qu'il s'agissait d'un effet de bord. Dans certains cas il se peut que
+cela soit faux, et il sera alors recommandé de le modifier manuellement pour utiliser plutôt un
+`$derived`. Dans d'autres cas cela sera correct, mais puisque les déclarations `$:` sont également
+exécutées sur le serveur alors que `$effect` non, c'est un changement risqué à faire tel quel. À la
+place `run` est utilisé comme bouche-trou. `run` reproduit la plupart des caractéristiques de `$:`,
+en ce qu'il n'est exécuté sur le serveur qu'une seule fois, et est exécuté comme `$effect.pre` sur
+le client (`$effect.pre` est joué _avant_ que les changements ne soient appliqués au DOM ; dans la
+plupart des cas vous voudrez utiliser plutôt `$effect`).
 
 ```svelte
 <script>
@@ -464,9 +588,13 @@ You may see that the migration script converts some of your `$:` statements to a
 </script>
 ```
 
-### Event modifiers
+### Modificateurs d'évènements [!VO]Event modifiers
 
-Event modifiers are not applicable to event attributes (e.g. you can't do `onclick|preventDefault={...}`). Therefore, when migrating event directives to event attributes, we need a function-replacement for these modifiers. These are imported from `svelte/legacy`, and should be migrated away from in favor of e.g. just using `event.preventDefault()`.
+Les modificateurs d'évènements ne sont pas applicables sur les attributs d'évènement (c-à-d que vous
+ne pouvez pas écrire `onclick|preventDefault={...}`). En conséquence, lorsque vous migrez des
+directives d'évènement vers des attributs d'évènement, une fonction est nécessaire pour remplacer
+ces modificateurs. Ces fonctions sont importées depuis `svelte/legacy`, et devraient être remplacées
+à terme par l'usage, par exemple, de `event.preventDefault()`.
 
 ```svelte
 <script>
@@ -479,19 +607,31 @@ Event modifiers are not applicable to event attributes (e.g. you can't do `oncli
 		// ...
 	})}
 >
-	click me
+	cliquez moi
 </button>
 ```
 
-### Things that are not automigrated
+### Choses non auto-migrées [!VO]Things that are not automigrated
 
-The migration script does not convert `createEventDispatcher`. You need to adjust those parts manually. It doesn't do it because it's too risky because it could result in breakage for users of the component, which the migration script cannot find out.
+Le script de migration ne convertit pas `createEventDispatcher`. Vous devrez les migrer
+manuellement. La raison est qu'il est trop risqué de le faire automatiquement, cela pourrait
+entraîner des incohérences problématiques pour les consommateurs du composant, ce que le script de
+migration ne peut pas détecter.
 
-The migration script does not convert `beforeUpdate/afterUpdate`. It doesn't do it because it's impossible to determine the actual intent of the code. As a rule of thumb you can often go with a combination of `$effect.pre` (runs at the same time as `beforeUpdate` did) and `tick` (imported from `svelte`, allows you to wait until changes are applied to the DOM and then do some work).
+Le script de migration ne convertit pas `beforeUpdate/afterUpdate`. Il ne le fait pas car il est
+impossible de déterminer l'intention sous-jacente du code concerné. En règle générale, vous pouvez
+les migrer en utilisant une combinaison de `$effect.pre` (est exécuté au même moment que l'était
+`beforeUpdate`) et `tick` (importé depuis `svelte`, qui vous permet d'attendre que les changements
+soient appliqués au DOM pour exécuter du code).
 
-## Components are no longer classes
+## Les composants ne sont plus des classes [!VO]Components are no longer classes
 
-In Svelte 3 and 4, components are classes. In Svelte 5 they are functions and should be instantiated differently. If you need to manually instantiate components, you should use `mount` or `hydrate` (imported from `svelte`) instead. If you see this error using SvelteKit, try updating to the latest version of SvelteKit first, which adds support for Svelte 5. If you're using Svelte without SvelteKit, you'll likely have a `main.js` file (or similar) which you need to adjust:
+En Svelte 3 et 4, les composants sont des classes. En Svelte 5 ce sont des fonctions et doivent donc
+être instanciés différemment. Si vous avez besoin d'instancier manuellement des composants, vous
+devriez plutôt utiliser `mount` ou `hydrate` (importés depuis `svelte`). Si vous voyez cette erreur
+en utilisant SvelteKit, essayez d'abord de mettre à jour SvelteKit, car sa version la plus récente
+fournit le support de Svelte 5. Si vous utilisez Svelte sans SvelteKit, vous aurez certainement un
+fichier `main.js` (ou similaire) que vous ajuster comme ceci :
 
 ```js
 +++import { mount } from 'svelte';+++
@@ -503,9 +643,15 @@ import App from './App.svelte'
 export default app;
 ```
 
-`mount` and `hydrate` have the exact same API. The difference is that `hydrate` will pick up the Svelte's server-rendered HTML inside its target and hydrate it. Both return an object with the exports of the component and potentially property accessors (if compiled with `accessors: true`). They do not come with the `$on`, `$set` and `$destroy` methods you may know from the class component API. These are its replacements:
+`mount` et `hydrate` ont exactement la même API. La différence est que `hydrate` va récupérer le
+HTML rendu sur le serveur par Svelte, le placer à l'endroit de sa cible, et l'hydrater. Les deux
+renvoient un objet avec les exports du composant et potentiellement les accesseurs de propriété (si
+compilé avec `accessors: true`). En revanche, elles n'ont pas de méthodes `$on`, `$set`, et
+`$destroy` que vous connaissez peut-être de la précédente API utilisant les classes. Voici leurs
+remplacements :
 
-For `$on`, instead of listening to events, pass them via the `events` property on the options argument.
+Pour remplacer `$on`, plutôt que d'écouter les évènements, passez les via la propriété `events` dans
+l'argument d'options.
 
 ```js
 +++import { mount } from 'svelte';+++
@@ -516,9 +662,12 @@ app.$on('event', callback);---
 +++const app = mount(App, { target: document.getElementById("app"), events: { event: callback } });+++
 ```
 
-> [!NOTE] Note that using `events` is discouraged — instead, [use callbacks](#Event-changes)
+> [!NOTE] Notez que l'utilisation de `events` n'est pas recommandée – utilisez plutôt des
+> [callbacks](#Event-changes)
 
-For `$set`, use `$state` instead to create a reactive property object and manipulate it. If you're doing this inside a `.js` or `.ts` file, adjust the ending to include `.svelte`, i.e. `.svelte.js` or `.svelte.ts`.
+Pour remplacer `$set`, utilisez `$state` pour créer un object de propriétés réactives et les
+manipuler. Si vous faites ceci dans un fichier `.js` ou `.ts`, pensez à ajuster le nom du fichier
+pour y inclure `.svelte`, c-à-d `.svelte.js` ou `.svelte.ts`.
 
 ```js
 +++import { mount } from 'svelte';+++
@@ -531,7 +680,7 @@ const app = mount(App, { target: document.getElementById("app"), props });
 props.foo = 'baz';+++
 ```
 
-For `$destroy`, use `unmount` instead.
+Pour remplacer `$destroy`, utilisez `unmount`.
 
 ```js
 +++import { mount, unmount } from 'svelte';+++
@@ -543,7 +692,9 @@ app.$destroy();---
 unmount(app);+++
 ```
 
-As a stop-gap-solution, you can also use `createClassComponent` or `asClassComponent` (imported from `svelte/legacy`) instead to keep the same API known from Svelte 4 after instantiating.
+Comme solution bouche-trou, vous pouvez également utiliser `createClassComponent` ou
+`asClassComponent` (importés depuis `svelte/legacy`) pour garder la même API post-instantiation que
+Svelte 4.
 
 ```js
 +++import { createClassComponent } from 'svelte/legacy';+++
@@ -555,7 +706,12 @@ import App from './App.svelte'
 export default app;
 ```
 
-If this component is not under your control, you can use the `compatibility.componentApi` compiler option for auto-applied backwards compatibility, which means code using `new Component(...)` keeps working without adjustments (note that this adds a bit of overhead to each component). This will also add `$set` and `$on` methods for all component instances you get through `bind:this`.
+Si le composant en question n'est pas sous votre contrôle, vous pouvez utiliser l'option de
+compilateur `compatibility.componentApi` pour obternir une rétro-compatibilité automatique, ce qui
+implique que le code utilisant `new Component(...)` continuera de fonctionner sans ajustements
+(notez que ceci rajoute du code supplémentaire pour tous vos composants). Ceci va également ajouter
+les méthodes `$set` et `$on` pour toutes les instances de composants que vous obtiendrez via
+`bind:this`.
 
 ```js
 /// svelte.config.js
@@ -568,25 +724,37 @@ export default {
 };
 ```
 
-Note that `mount` and `hydrate` are _not_ synchronous, so things like `onMount` won't have been called by the time the function returns and the pending block of promises will not have been rendered yet (because `#await` waits a microtask to wait for a potentially immediately-resolved promise). If you need that guarantee, call `flushSync` (import from `'svelte'`) after calling `mount/hydrate`.
+Notez que `mount` et `hydrate` ne sont _pas_ synchrones, ce que implique que des choses comme
+`onMount` n'auront pas été appelées au moment où la fonction termine son exécution et que les blocs
+de promesses n'auront pas encore été rendus (parce que `#await` attend la fin d'une micro-tâche pour
+réagir à la potentielle résolution immédiate d'une promesse). Si vous avez besoin de ces garanties,
+appelez `flushSync` (importé depuis `svelte`) après avoir appelé `mount` ou `hydrate`.
 
-### Server API changes
+### Changements de l'API serveur [!VO]Server API changes
 
-Similarly, components no longer have a `render` method when compiled for server side rendering. Instead, pass the function to `render` from `svelte/server`:
+De même, les composants n'ont plus de méthode `render` lorsqu'ils sont compilés pour le rendu côté
+serveur. Passez plutôt la fonction à `render` importé depuis `svelte/server` :
 
 ```js
 +++import { render } from 'svelte/server';+++
 import App from './App.svelte';
 
----const { html, head } = App.render({ props: { message: 'hello' }});---
-+++const { html, head } = render(App, { props: { message: 'hello' }});+++
+---const { html, head } = App.render({ props: { message: 'salut' }});---
++++const { html, head } = render(App, { props: { message: 'salut' }});+++
 ```
 
-In Svelte 4, rendering a component to a string also returned the CSS of all components. In Svelte 5, this is no longer the case by default because most of the time you're using a tooling chain that takes care of it in other ways (like SvelteKit). If you need CSS to be returned from `render`, you can set the `css` compiler option to `'injected'` and it will add `<style>` elements to the `head`.
+Avec Svelte 4, le rendu d'un composant en chaîne de caractères fournissait aussi le CSS pour tous
+les composants. Avec Svelte 5 ce n'est plus le cas par défaut, car la plupart du temps vous utilisez
+un outillage qui s'occupe de gérer cela d'une autre manière (SvelteKit par exemple). Si vous avez
+besoin que `render` vous fournisse le CSS, vous pouvez mettre l'option de compilateur `injected` à
+`'injected'`, les éléments `<style>` seront alors ajoutés au `head`.
 
-### Component typing changes
+### Changements sur le typage de composant [!VO]Component typing changes
 
-The change from classes towards functions is also reflected in the typings: `SvelteComponent`, the base class from Svelte 4, is deprecated in favour of the new `Component` type which defines the function shape of a Svelte component. To manually define a component shape in a `d.ts` file:
+Le passage des classes aux fonctions pour les composants est aussi reflété dans le typage :
+`SvelteComponent`, la classe de base en Svelte 4, est dépréciée en faveur du nouveau type
+`Component` qui définit la forme de la fonction d'un composant Svelte. Pour définir manuellement une
+forme de composant dans un fichier `.d.ts`, vous pouvez écrire :
 
 ```ts
 import type { Component } from 'svelte';
@@ -595,7 +763,7 @@ export declare const MyComponent: Component<{
 }>;
 ```
 
-To declare that a component of a certain type is required:
+Pour déclarer qu'un composant d'un certain type est requis :
 
 ```svelte
 <script lang="ts">
@@ -614,48 +782,72 @@ To declare that a component of a certain type is required:
 <svelte:component this={component} foo="bar" />
 ```
 
-The two utility types `ComponentEvents` and `ComponentType` are also deprecated. `ComponentEvents` is obsolete because events are defined as callback props now, and `ComponentType` is obsolete because the new `Component` type is the component type already (e.g. `ComponentType<SvelteComponent<{ prop: string }>>` == `Component<{ prop: string }>`).
+Les deux types utilitaires `ComponentEvents` et `ComponentType` sont aussi dépréciés.
+`ComponentEvents` est obsolète car les évènements sont désormais définis en tant que props de
+callback, et `ComponentType` est obsolète car le nouveau type `Component` est déjà le type du
+composant (c-à-d `ComponentType<SvelteComponent<{ prop: string }>>` == `Component<{ prop: string
+}>`).
 
-### bind:this changes
+### Changements liés à `bind:this`
 
-Because components are no longer classes, using `bind:this` no longer returns a class instance with `$set`, `$on` and `$destroy` methods on it. It only returns the instance exports (`export function/const`) and, if you're using the `accessors` option, a getter/setter-pair for each property.
+Puisque les composants ne sont plus des classes, utiliser `bind:this` ne renvoie plus une instance
+de classe possédant les méthodes `$set`, `$on` et `$destroy`. Cela renvoie uniquement les exports de
+l'instance (`export function` / `export const`) et, si vous utilisez l'option `accessors`, une paire
+de getter/setter pour chaque propriété.
 
-## Whitespace handling changed
+## Gestion des espaces [!VO]Whitespace handling changed
 
-Previously, Svelte employed a very complicated algorithm to determine if whitespace should be kept or not. Svelte 5 simplifies this which makes it easier to reason about as a developer. The rules are:
+Auparavant, Svelte utilisait un algorithme très complexe pour déterminer si les espace devaient être
+gardés ou non. Svelte 5 simplifie ce processus, ce qui en rend la compréhension plus simple pour les
+développeurs et développeuses. Les règles sont :
 
-- Whitespace between nodes is collapsed to one whitespace
-- Whitespace at the start and end of a tag is removed completely
-- Certain exceptions apply such as keeping whitespace inside `pre` tags
+- Les espaces entre noeuds sont fusionnés en un seul
+- Les espaces au début et à la fin d'une balise sont complètement supprimés
+- Il y a quelques exceptions comme celle de garder les espaces au sein des balises `pre`
 
-As before, you can disable whitespace trimming by setting the `preserveWhitespace` option in your compiler settings or on a per-component basis in `<svelte:options>`.
+Comme avant, vous pouvez désactiver la réduction des espaces en utilisant l'option
+`preserveWhitespace` dans les paramètres de compilation, ou composant par composant dans
+`<svelte:option>`.
 
-## Modern browser required
+## Un navigateur moderne est requis [!VO]Modern browser required
 
-Svelte 5 requires a modern browser (in other words, not Internet Explorer) for various reasons:
+Svelte 5 requiert un navigateur moderne (autrement dit, pas Internet Explorer) pour plusieurs
+raisons :
 
-- it uses [`Proxies`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
-- elements with `clientWidth`/`clientHeight`/`offsetWidth`/`offsetHeight` bindings use a [`ResizeObserver`](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) rather than a convoluted `<iframe>` hack
-- `<input type="range" bind:value={...} />` only uses an `input` event listener, rather than also listening for `change` events as a fallback
+- il se sert des
+[`Proxies`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
+- les éléments avec des liaisons `clientWidth`/`clientHeight`/`offsetWidth`/`offsetHeight` utilisent
+	[`ResizeObserver`](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) plutôt qu'une
+	bidouille tordue impliquant une `iframe`
+- `<input type="range" bind:value={...} />` ne se sert que d'un gestionnaire d'évènement `input`,
+plutôt qu'également écouter les évènements `change` comme fallback
 
-The `legacy` compiler option, which generated bulkier but IE-friendly code, no longer exists.
+L'option de compilateur `legacy`, qui générait beaucoup de code mais qui permettait de supporter
+Internet Explorer, n'existe plus.
 
-## Changes to compiler options
+## Changements des options de compilateur [!VO]Changes to compiler options
 
-- The `false`/`true` (already deprecated previously) and the `"none"` values were removed as valid values from the `css` option
-- The `legacy` option was repurposed
-- The `hydratable` option has been removed. Svelte components are always hydratable now
-- The `enableSourcemap` option has been removed. Source maps are always generated now, tooling can choose to ignore it
-- The `tag` option was removed. Use `<svelte:options customElement="tag-name" />` inside the component instead
-- The `loopGuardTimeout`, `format`, `sveltePath`, `errorMode` and `varsReport` options were removed
+- Les valeurs `false`/`true` (déjà dépréciées précédemment) et `"none"` ne sont plus des valeurs
+valides pour l'option `css`
+- L'option `legacy` a un rôle différent
+- L'option `hydratable` a été supprimée. Les composants Svelte sont désormais toujours hydratables
+- L'option `enableSourcemap` a été supprimée. Les sourcemaps sont désormais toujours générés, votre
+	outillage peut choisir de les ignorer
+- L'option `tag` a été supprimée. Utilisez plutôt `<svelte:options customElement="tag-name" />` au
+dans votre fichier de composant
+- Les options `loopGuardTimeout`, `format`, `sveltePath`, `errorMode` et `varsReport` ont été
+supprimées
 
-## The `children` prop is reserved
+## La prop `children` est réservée [!VO]The `children` prop is reserved
 
-Content inside component tags becomes a snippet prop called `children`. You cannot have a separate prop by that name.
+Le contenu dans une balise de composant devient une prop de snippet appelée `children`. Vous ne
+pouvez pas avoir une prop distincte qui porte ce nom.
 
-## Dot notation indicates a component
+## La notation "point" indique un composant [!VO]Dot notation indicates a component
 
-In Svelte 4, `<foo.bar>` would create an element with a tag name of `"foo.bar"`. In Svelte 5, `foo.bar` is treated as a component instead. This is particularly useful inside `each` blocks:
+Avec Svelte 4, `<foo.bar>` créait un élément avec un nom de balise `"foo.bar"`. Avec Svelte 5,
+`foo.bar` est à la place traité comme un composant. Cette syntaxe est particulièrement utile dans
+les blocs `#each` :
 
 ```svelte
 {#each items as item}
@@ -663,31 +855,43 @@ In Svelte 4, `<foo.bar>` would create an element with a tag name of `"foo.bar"`.
 {/each}
 ```
 
-## Breaking changes in runes mode
+## Breaking changes en mode runes [!VO]Breaking changes in runes mode
 
-Some breaking changes only apply once your component is in runes mode.
+Certains breaking changes concernent uniquement les composants en mode runes.
 
-### Bindings to component exports are not allowed
+### Les liaisons à des exports de composant sont interdites [!VO]Bindings to component exports are not allowed
 
-Exports from runes mode components cannot be bound to directly. For example, having `export const foo = ...` in component `A` and then doing `<A bind:foo />` causes an error. Use `bind:this` instead — `<A bind:this={a} />` — and access the export as `a.foo`. This change makes things easier to reason about, as it enforces a clear separation between props and exports.
+Les exports provenant de composants en mode runes ne peuvent pas être impliquées directement dans
+une liaison. Par exemple, écrire `export const foo = ...` dans le composant `A` puis écrire `<A
+bind:foo />` provoque une erreur. Utilisez plutôt `bind:this` – `<A bind:this={a} />` – et accédez à
+l'export via `a.foo`. Ce changement clarifie la séparation entre props et exports.
 
-### Bindings need to be explicitly defined using `$bindable()`
+### Les liaisons doivent être explicitement définies avec `$bindable()` [!VO]Bindings need to be explicitly defined using `$bindable()`
 
-In Svelte 4 syntax, every property (declared via `export let`) is bindable, meaning you can `bind:` to it. In runes mode, properties are not bindable by default: you need to denote bindable props with the `$bindable` rune.
+Avec la syntaxe de Svelte 4, chaque propriété (déclarée via `export let`) peut accepter une liaison,
+ce qui signifie que vous pouvez la lier avec `bind:`. En mode runes, les propriétés ne sont pas
+liables par défait : vous devez les marquer comme props de liaison avec la rune `$bindable`.
 
-If a bindable property has a default value (e.g. `let { foo = $bindable('bar') } = $props();`), you need to pass a non-`undefined` value to that property if you're binding to it. This prevents ambiguous behavior — the parent and child must have the same value — and results in better performance (in Svelte 4, the default value was reflected back to the parent, resulting in wasteful additional render cycles).
+Si une propriété de liaison a une valeur par défaut (par ex. `let { foo = $bindable('bar') } =
+$props();`), vous devez lui passer une valeur non-`undefined` si vous décidez de lui créer une
+liaison. Ceci empêche des comportements ambigus – le parent et l'enfant doivent avoir la même valeur
+– et permet de meilleures performances (en Svelte 4, la valeur par défaut était reflétée sur le
+parent, ce qui entraînait des cycles de rendu additionnels).
 
-### `accessors` option is ignored
+### L'option `accessors` est ignorée [!VO]`accessors` option is ignored
 
-Setting the `accessors` option to `true` makes properties of a component directly accessible on the component instance. In runes mode, properties are never accessible on the component instance. You can use component exports instead if you need to expose them.
+Définir l'option `accessors` à `true` rend les propriétés d'un composant directement accessibles sur
+l'instance du composant. En mode runes, les propriétés ne sont jamais accessibles sur l'instance du
+composant. Si vous avez besoin de les exposer, vous pouvez plutôt utiliser les exports de composant.
 
-### `immutable` option is ignored
+### L'option `immutable` est ignorée [!VO]`immutable` option is ignored
 
-Setting the `immutable` option has no effect in runes mode. This concept is replaced by how `$state` and its variations work.
+Définir l'option `immutable` n'a pas d'effet en mode runes. Ce concept est remplacé par la façon
+dont `$state` et ses variations fonctionnent.
 
-### Classes are no longer "auto-reactive"
+### Les classes ne sont plus "auto-réactives" [!VO]Classes are no longer "auto-reactive"
 
-In Svelte 4, doing the following triggered reactivity:
+Avec Svelte 4, faire la chose suivante déclenche la réactivité :
 
 ```svelte
 <script>
@@ -698,13 +902,20 @@ In Svelte 4, doing the following triggered reactivity:
 >
 ```
 
-This is because the Svelte compiler treated the assignment to `foo.value` as an instruction to update anything that referenced `foo`. In Svelte 5, reactivity is determined at runtime rather than compile time, so you should define `value` as a reactive `$state` field on the `Foo` class. Wrapping `new Foo()` with `$state(...)` will have no effect — only vanilla objects and arrays are made deeply reactive.
+Ceci s'explique par le fait que le compilateur de Svelte considère l'assignation à `foo.value` comme
+une instruction pour mettre à jour tout ce qui référence `foo`. Avec Svelte 5, la réactivité est
+déterminée au moment de l'exécution plutôt qu'à la compilation, ce qui implique que vous devriez
+définir `value` comme un champ réactif `$state` sur la classe `Foo`. Entourer `new Foo()` avec
+`$state(...)` n'aura aucun effet – seuls les objets simples et les tableaux sont profondément
+réactifs.
 
-### `<svelte:component>` is no longer necessary
+### `<svelte:component>` n'est plus nécessaire [!VO]`<svelte:component>` is no longer necessary
 
-In Svelte 4, components are _static_ — if you render `<Thing>`, and the value of `Thing` changes, [nothing happens](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). To make it dynamic you must use `<svelte:component>`.
+En Svelte 4, les composants sont _statiques_ – si vous rendez `<Thing>`, que la valeur de `Thing`
+change, [rien ne se produit](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). Pour le
+rendre dynamique vous devez utiliser `<svelte:component>`.
 
-This is no longer true in Svelte 5:
+Ce n'est plus le cas avec Svelte 5 :
 
 ```svelte
 <script>
@@ -719,71 +930,88 @@ This is no longer true in Svelte 5:
 	<option value={B}>B</option>
 </select>
 
-<!-- these are equivalent -->
+<!-- ces deux écritures sont équivalentes -->
 <Thing />
 <svelte:component this={Thing} />
 ```
 
-### Touch and wheel events are passive
+### Les évènements `touch` et `wheel` sont passifs [!VO]Touch and wheel events are passive
 
-When using `onwheel`, `onmousewheel`, `ontouchstart` and `ontouchmove` event attributes, the handlers are [passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#using_passive_listeners) to align with browser defaults. This greatly improves responsiveness by allowing the browser to scroll the document immediately, rather than waiting to see if the event handler calls `event.preventDefault()`.
+Lorsque vous utilisez les attributs d'évènements `onwheel`, `onmousewheel`, `ontouchstart` et
+`ontouchmove`, les gestionnaires y sont attachés en mode
+[passif](https://developer.mozilla.org/fr/docs/Web/API/EventTarget/addEventListener#using_passive_listeners)
+pour être en phase avec le comportement par défaut des navigateurs. Ceci améliore significativement
+la responsivité en permettant au navigateur de faire défiler le document immédiatement, plutôt que
+d'attendre de voir si le gestionnaire d'évènement appelle `event.preventDefault()`.
 
-In the very rare cases that you need to prevent these event defaults, you should use [`on`](/docs/svelte/svelte-events#on) instead (for example inside an action).
+Dans les très rares cas où vous auriez besoin de ne pas avoir ce comportement par défaut, vous
+pouvez alors utiliser [`on`](/docs/svelte/svelte-events#on) (par exemple au sein d'une action).
 
-### Attribute/prop syntax is stricter
+### La syntaxe des attributs/props est plus stricte [!VO]Attribute/prop syntax is stricter
 
-In Svelte 4, complex attribute values needn't be quoted:
+Avec Svelte 4, les valeurs complexes d'attribut n'ont pas besoin d'être en guillemets :
 
 <!-- prettier-ignore -->
 ```svelte
-<Component prop=this{is}valid />
+<Component prop=ceci{est}valide />
 ```
 
-This is a footgun. In runes mode, if you want to concatenate stuff you must wrap the value in quotes:
+Cette écriture est une mauvaise idée. En mode runes, si vous souhaitez concaténer des choses, vous
+devez entourer la valeur de guillemets :
 
 ```svelte
-<Component prop="this{is}valid" />
+<Component prop="ceci{est}valide" />
 ```
 
-Note that Svelte 5 will also warn if you have a single expression wrapped in quotes, like `answer="{42}"` — in Svelte 6, that will cause the value to be converted to a string, rather than passed as a number.
+Notez que Svelte 5 vous préviendra également si vous avez une expression simple entre guillements,
+comme `reponse="{42}"` – en Svelte 6, ceci entraînera la conversion de la valeur en chaîne de
+caractères, plutôt que de la passer en tant que nombre.
 
-### HTML structure is stricter
+### La structure HTML est plus stricte [!VO]HTML structure is stricter
 
-In Svelte 4, you were allowed to write HTML code that would be repaired by the browser when server side rendering it. For example you could write this...
+Avec Svelte 4, vous étiez autorisé•e à écrire du code HTML rendu côté serveur qui serait ensuite
+réparé par le navigateur. Vous pouviez par exemple écrire ceci...
 
 ```svelte
 <table>
 	<tr>
-		<td>hi</td>
+		<td>salut</td>
 	</tr>
 </table>
 ```
 
-... and the browser would auto-insert a `<tbody>` element:
+... et le navigateur insérait automatiquement un élément `<tbody>` :
 
 ```svelte
 <table>
 	<tbody>
 		<tr>
-			<td>hi</td>
+			<td>salut</td>
 		</tr>
 	</tbody>
 </table>
 ```
 
-Svelte 5 is more strict about the HTML structure and will throw a compiler error in cases where the browser would repair the DOM.
+Svelte 5 est plus strict au niveau de la structure HTML et lèvera une erreur de compilation dans les
+cas où le navigateur aurait besoin de réparer le DOM.
 
-## Other breaking changes
+## Autres breaking changes [!VO]Other breaking changes
 
-### Stricter `@const` assignment validation
+### Validation de l'assignation à `@const` plus stricte [!VO]Stricter `@const` assignment validation
 
-Assignments to destructured parts of a `@const` declaration are no longer allowed. It was an oversight that this was ever allowed.
+Les assignations à des parties déstructurées d'une déclaration `@const` ne sont plus permises. Cela
+n'aurait jamais dû être possible.
 
-### :is(...) and :where(...) are scoped
+### `:is(...)` et `:where(...)` sont scopés [!VO]:is(...) and :where(...) are scoped
 
-Previously, Svelte did not analyse selectors inside `:is(...)` and `:where(...)`, effectively treating them as global. Svelte 5 analyses them in the context of the current component. As such, some selectors may now be treated as unused if they were relying on this treatment. To fix this, use `:global(...)` inside the `:is(...)/:where(...)` selectors.
+Auparavant, Svelte n'analysait pas les sélecteurs au sein de `:is(...)` et de `:where(...)`, les
+traitant de facto comme globaux. Svelte 5 les analyse dans le contexte du composant courant. Ainsi,
+certains sélecteurs peuvent désormais être traités comme non utilisés s'ils ne se basaient que sur
+ces traitements. Pour corriger cela, utilisez `:global(...)` dans les sélecteurs
+`:is(...)`/`:where(...)`.
 
-When using Tailwind's `@apply` directive, add a `:global` selector to preserve rules that use Tailwind-generated `:is(...)` selectors:
+Si vous utilisez la directive Tailwind `@apply`, ajoutez un sélecteur `:global` pour conserver les
+règles qui utilisent les sélecteurs `:is(...)` générés par Tailwind :
 
 <!-- prettier-ignore -->
 ```css
@@ -792,112 +1020,155 @@ main +++:global+++ {
 }
 ```
 
-### CSS hash position no longer deterministic
+### La position du hash CSS n'est plus déterministe [!VO]CSS hash position no longer deterministic
 
-Previously Svelte would always insert the CSS hash last. This is no longer guaranteed in Svelte 5. This is only breaking if you [have very weird css selectors](https://stackoverflow.com/questions/15670631/does-the-order-of-classes-listed-on-an-item-affect-the-css).
+Auparavant, Svelte insérait systématiquement le hash CSS en dernière position. Ce n'est plus garanti
+avec Svelte 5. Ce changement est problématique si vous [avez des sélecteurs CSS
+bizarres](https://stackoverflow.com/questions/15670631/does-the-order-of-classes-listed-on-an-item-affect-the-css).
 
-### Scoped CSS uses :where(...)
+### Le CSS scopé utilisé :where(...) [!VO]Scoped CSS uses :where(...)
 
-To avoid issues caused by unpredictable specificity changes, scoped CSS selectors now use `:where(.svelte-xyz123)` selector modifiers alongside `.svelte-xyz123` (where `xyz123` is, as previously, a hash of the `<style>` contents). You can read more detail [here](https://github.com/sveltejs/svelte/pull/10443).
+Pour éviter les problèmes causés par des changements de spécificité imprévisibles, les sélecteurs
+CSS scopés utilisent désormais des modificateurs de sélecteurs de type `:where(.svelte-xyz123)` en
+combinaison avec `.svelte-xyz123`, (où `xyz123` est, comme avant, un hash du contenu de `<style>`).
+Vous pouvez en apprendre plus ce sujet [ici](https://github.com/sveltejs/svelte/pull/10443).
 
-In the event that you need to support ancient browsers that don't implement `:where`, you can manually alter the emitted CSS, at the cost of unpredictable specificity changes:
+Dans le cas où vous avez besoin de supporter d'anciens navigateurs qui n'implémentent pas `:where`,
+vous pouvez modifier manuellement le CSS généré, en contrepartie de changements de spécificité
+imprévisibles :
 
 ```js
 // @errors: 2552
 css = css.replace(/:where\((.+?)\)/, '$1');
 ```
 
-### Error/warning codes have been renamed
+### Les codes d'erreur et d'avertissement ont été renommés [!VO]Error/warning codes have been renamed
 
-Error and warning codes have been renamed. Previously they used dashes to separate the words, they now use underscores (e.g. foo-bar becomes foo_bar). Additionally, a handful of codes have been reworded slightly.
+Les codes d'erreur et d'avertissement ont été renommés. Ils utilisaient précédemment des tirets pour
+séparer les mots, ils utilisent désormais des tirets bas (par ex. `foo-bar` devient `foo_bar`). De
+plus, un petit nombre de codes ont été légèrement reformulés.
 
-### Reduced number of namespaces
+### Le nombre de namespaces a été réduit [!VO]Reduced number of namespaces
 
-The number of valid namespaces you can pass to the compiler option `namespace` has been reduced to `html` (the default), `mathml` and `svg`.
+Le nombre de namespaces valides que vous pouvez passer à l'option de compilateur `namespace` a été
+réduit à `html` (par défaut), `mathml` et `svg`.
 
-The `foreign` namespace was only useful for Svelte Native, which we're planning to support differently in a 5.x minor.
+Le namespace `foreign` était uniquement utile pour Svelte Native, que nous prévoyons de supporter de
+manière différente dans une mise à jour mineure 5.x future.
 
-### beforeUpdate/afterUpdate changes
+### Changements concernant `beforeUpdate`/`afterUpdate` [!VO]beforeUpdate/afterUpdate changes
 
-`beforeUpdate` no longer runs twice on initial render if it modifies a variable referenced in the template.
+`beforeUpdate` n'est plus exécuté deux fois au rendu initial si son callback modifie une variable
+référencée dans le template.
 
-`afterUpdate` callbacks in a parent component will now run after `afterUpdate` callbacks in any child components.
+Les callbacks `afteUpdate` d'un composant parent sont désormais exécutés après les callbacks
+`afterUpdate` des composants enfants.
 
-`beforeUpdate/afterUpdate` no longer run when the component contains a `<slot>` and its content is updated.
+`beforeUpdate/afterUpdate` ne sont plus exécutées lorsque le composant contient un `<slot>` et que
+son contenu est mis à jour.
 
-Both functions are disallowed in runes mode — use `$effect.pre(...)` and `$effect(...)` instead.
+Les deux fonctions ne sont plus autorisées en mode runes – utilisez `$effect.pre(...)` et
+`$effect(...)` à la place.
 
-### `contenteditable` behavior change
+### Changement du comportement de `contenteditable` [!VO]`contenteditable` behavior change
 
-If you have a `contenteditable` node with a corresponding binding _and_ a reactive value inside it (example: `<div contenteditable=true bind:textContent>count is {count}</div>`), then the value inside the contenteditable will not be updated by updates to `count` because the binding takes full control over the content immediately and it should only be updated through it.
+Si vous avez un noeud `contenteditable` avec une liaison attachée _et_ une valeur réactive utilisé
+dans son contenu (exemple : `<div contenteditable=true bind:textContent>count vaut {count}</div>`),
+alors la valeur au sein de `contenteditable` ne sera pas mise à jour par les mises à jour de `count`
+car la liaison prend immédiatement le contrôle total du contenu, qui sera donc uniquement mis à jour
+à travers cette liaison.
 
-### `oneventname` attributes no longer accept string values
+### Les attributs `oneventname` n'acceptent plus de valeurs de type string [!VO]`oneventname` attributes no longer accept string values
 
-In Svelte 4, it was possible to specify event attributes on HTML elements as a string:
+En Svelte 4, il était possible de préciser des attributs d'évènement sous forme de chaînes de
+caractères sur des éléments HTML :
 
 ```svelte
-<button onclick="alert('hello')">...</button>
+<button onclick="alert('salut')">...</button>
 ```
 
-This is not recommended, and is no longer possible in Svelte 5, where properties like `onclick` replace `on:click` as the mechanism for adding event handlers.
+Ceci n'est pas recommandé, et n'est plus possible en Svelte 5, où les propriétés comme `onclick`
+remplacent `on:click` comme mécanisme pour l'ajout de gestionnaires d'évènement.
 
-### `null` and `undefined` become the empty string
+### `null` et `undefined` deviennent la chaîne de caractères vide [!VO]`null` and `undefined` become the empty string
 
-In Svelte 4, `null` and `undefined` were printed as the corresponding string. In 99 out of 100 cases you want this to become the empty string instead, which is also what most other frameworks out there do. Therefore, in Svelte 5, `null` and `undefined` become the empty string.
+En Svelte 4, `null` et `undefined` était affichés comme leur chaîne de caractères correspondante.
+Dans 99 cas sur 100 vous souhaitez plutôt qu'ils soient remplacés par la chaîne de caractères vide,
+ce qui est également ce que la plupart des autres frameworks existants font. En conséquence, en
+Svelte 5, `null` et `undefined` deviennent la chaîne de caractères vide.
 
-### `bind:files` values can only be `null`, `undefined` or `FileList`
+### Les valeurs de `bind:files` peuvent uniquement être `null`, `undefined` ou `FileList` [!VO]`bind:files` values can only be `null`, `undefined` or `FileList`
 
-`bind:files` is now a two-way binding. As such, when setting a value, it needs to be either falsy (`null` or `undefined`) or of type `FileList`.
+La liaison `bind:files` est désormais à double sens. Dès lors, lorsque vous définissez une valeur,
+celle-ci doit être soit falsy (`null` ou `undefined`) soit de type `FileList`.
 
-### Bindings now react to form resets
+### Les liaisons réagissent désormais aux réinitialisations de formulaires [!VO]Bindings now react to form resets
 
-Previously, bindings did not take into account `reset` event of forms, and therefore values could get out of sync with the DOM. Svelte 5 fixes this by placing a `reset` listener on the document and invoking bindings where necessary.
+Auparavant, les liaisons ne prennaient pas en compte les évènement `reset` des formulaires, ce qui
+impliquait que leurs valeurs pouvaient se désynchroniser du DOM. Svelte 5 corrige cela en plaçant un
+gestionnaire `reset` sur le document et en invoquant les liaisons lorsque nécéssaire.
 
-### `walk` no longer exported
+### `walk` n'est plus exportée [!VO]`walk` no longer exported
 
-`svelte/compiler` reexported `walk` from `estree-walker` for convenience. This is no longer true in Svelte 5, import it directly from that package instead in case you need it.
+Le module `svelte/compiler` ré-exportait `walk` depuis `estree-walker` par commodité. Ce n'est plus
+le cas avec Svelte 5 ; importez le directement depuis ce `estree-walker` si vous en avez besoin.
 
-### Content inside `svelte:options` is forbidden
+### Le contenu dans `svelte:options` est interdit [!VO]Content inside `svelte:options` is forbidden
 
-In Svelte 4 you could have content inside a `<svelte:options />` tag. It was ignored, but you could write something in there. In Svelte 5, content inside that tag is a compiler error.
+Avec Svelte 4 vous pouviez avoir du contenu dans une balise `<svelte:options />`. Ce contenu était
+ignoré, mais vous pouviez y écrire quelque chose. Avec Svelte 5, le contenu dans cette balise
+provoque une erreur de compilation.
 
-### `<slot>` elements in declarative shadow roots are preserved
+### Les éléments `<slot>` dans des shadowroot sont préservés [!VO]`<slot>` elements in declarative shadow roots are preserved
 
-Svelte 4 replaced the `<slot />` tag in all places with its own version of slots. Svelte 5 preserves them in the case they are a child of a `<template shadowrootmode="...">` element.
+Svelte 4 remplaçait toutes les balises `<slot />` avec sa propre version des slots. Svelte 5 les
+conserve dans le cas où ils sont enfants d'un élément `<template shadowrootmode="...">`.
 
-### `<svelte:element>` tag must be an expression
+### La balise `<svelte:element>` doit être une expression [!VO]`<svelte:element>` tag must be an expression
 
-In Svelte 4, `<svelte:element this="div">` is valid code. This makes little sense — you should just do `<div>`. In the vanishingly rare case that you _do_ need to use a literal value for some reason, you can do this:
+En Svelte 4, `<svelte:element this="div">` est du code valide. Ceci n'a que peu de sens – vous
+devriez simplement écrire `<div>`. Dans le cas extrêmement rare où vous _avez besoin_ d'utiliser une
+valeur litérale pour une raison précise, vous pouvez faire ceci :
 
 ```svelte
 <svelte:element this=+++{+++"div"+++}+++>
 ```
 
-Note that whereas Svelte 4 would treat `<svelte:element this="input">` (for example) identically to `<input>` for the purposes of determining which `bind:` directives could be applied, Svelte 5 does not.
+Notez que là où Svelte 4 traitait `<svelte:element this="input">` (par exemple) de la même manière
+que `<input>` pour déterminer quelles directives `bind:` pouvaient être appliquées, ce n'est pas le
+cas de Svelte 5.
 
-### `mount` plays transitions by default
+### `mount` joue les transitions par défaut [!VO]`mount` plays transitions by default
 
-The `mount` function used to render a component tree plays transitions by default unless the `intro` option is set to `false`. This is different from legacy class components which, when manually instantiated, didn't play transitions by default.
+La fonction `mount` utilisée pour rendre un arbre de composant joue par défaut les transitions à
+moins que l'option `intro` ait pour valeur `false`. Ceci diffère des anciens composants (qui étaient
+des classes) qui, lorsqu'instanciés manuellement, ne jouaient pas les transitions par défaut.
 
-### `<img src={...}>` and `{@html ...}` hydration mismatches are not repaired
+### Les incohérences d'hydratation de `<img src={...}>` and `{@html ...}` ne sont pas réparées [!VO]`<img src={...}>` and `{@html ...}` hydration mismatches are not repaired
 
-In Svelte 4, if the value of a `src` attribute or `{@html ...}` tag differ between server and client (a.k.a. a hydration mismatch), the mismatch is repaired. This is very costly: setting a `src` attribute (even if it evaluates to the same thing) causes images and iframes to be reloaded, and reinserting a large blob of HTML is slow.
+En Svelte 4, si la valeur d'un attribut `src` ou d'une balise `{@html ...}` différait entre le
+server et le client (situation connue sous le nom d'"incohérence d'hydratation"), l'incohérence est
+corrigée. Ceci a un coût élevé : définir un attribut `src` (même si sa valeur ne change pas)
+déclenche le chargement des images et des iframes, et réinsérer un gros morceau d'HTML est un
+procédé lent.
 
-Since these mismatches are extremely rare, Svelte 5 assumes that the values are unchanged, but in development will warn you if they are not. To force an update you can do something like this:
+Puisque ces incohérences sont extrêmement rares, Svelte 5 suppose que les valeurs n'ont pas changé,
+mais en mode développement, Svelte 5 vous préviendra qu'elles sont différentes. Pour forcer la mise
+à jour, vous pouvez faire quelque chose comme ça :
 
 ```svelte
 <script>
 	let { markup, src } = $props();
 
 	if (typeof window !== 'undefined') {
-		// stash the values...
+		// gardez les valeurs...
 		const initial = { markup, src };
 
-		// unset them...
+		// mettez-les à undefined...
 		markup = src = undefined;
 
 		$effect(() => {
-			// ...and reset after we've mounted
+			// ... et réinitialisez-les après le montage du composant
 			markup = initial.markup;
 			src = initial.src;
 		});
@@ -908,16 +1179,25 @@ Since these mismatches are extremely rare, Svelte 5 assumes that the values are 
 <img {src} />
 ```
 
-### Hydration works differently
+### L'hydratation fonctionne différemment [!VO]Hydration works differently
 
-Svelte 5 makes use of comments during server side rendering which are used for more robust and efficient hydration on the client. As such, you shouldn't remove comments from your HTML output if you intend to hydrate it, and if you manually authored HTML to be hydrated by a Svelte component, you need to adjust that HTML to include said comments at the correct positions.
+Svelte 5 utilise des commentaires lors du rendu côté serveur, commentaires qui sont utilisés pour
+une hydratation plus robuste et plus efficace sur le client. Dès lors, vous ne devriez pas supprimer
+ces commentaires du HTML généré si vous avez l'intention de l'hydrater ; de plus, si vous avez
+manuellement écrit du HTML qui doit être hydraté par un composant Svelte, vous devez ajuster ce HTML
+pour inclure ces commentaires aux endroits adéquats.
 
-### `onevent` attributes are delegated
+### Les attributs `onevent` sont délégués [!VO]`onevent` attributes are delegated
 
-Event attributes replace event directives: Instead of `on:click={handler}` you write `onclick={handler}`. For backwards compatibility the `on:event` syntax is still supported and behaves the same as in Svelte 4. Some of the `onevent` attributes however are delegated, which means you need to take care to not stop event propagation on those manually, as they then might never reach the listener for this event type at the root.
+Les attributs d'évènement remplacent les directives : plutôt que d'écrire `on:click={gestionnaire}`,
+vous écrivez désormais `onclick={gestionnaire}`. Pour des raisons de rétro-compatibilité, la syntaxe
+`on:event` est toujours supportée et se comporte comme en Svelte 4. Certains des attributs `onevent`
+sont cependant délégués, car ils se peut qu'ils n'atteignent jamais le gestionnaire de ce type
+d'évènement à la racine.
 
-### `--style-props` uses a different element
+### `--style-props` utilise un élément différent [!VO]`--style-props` uses a different element
 
-Svelte 5 uses an extra `<svelte-css-wrapper>` element instead of a `<div>` to wrap the component when using CSS custom properties.
+Svelte 5 utilise un élément `<svelte-css-wrapper>` supplémentaire plutôt qu'une `<div>` pour
+entourer le composant lorsque vous utilisez des propriétés CSS personnalisées.
 
 <!-- TODO in final docs, add link to corresponding section for more details -->
