@@ -1,85 +1,130 @@
 ---
-title: Frequently asked questions
+title: Foire aux questions
 ---
 
-## I'm new to Svelte. Where should I start?
+## Je débute avec Svelte. Par où dois-je commencer ? [!VO]I'm new to Svelte. Where should I start?
 
-We think the best way to get started is playing through the interactive [tutorial](/tutorial). Each step there is mainly focused on one specific aspect and is easy to follow. You'll be editing and running real Svelte components right in your browser.
+Nous pensons que la meilleure manière de commencer est de jouer avec le [tutoriel](/tutorial)
+interactif. Chacune de ses étapes est dédiée à un aspect particulier et est facile à suivre. Vous
+modifierez et exécuterez des vrais composants Svelte directement dans votre navigateur.
 
-Five to ten minutes should be enough to get you up and running. An hour and a half should get you through the entire tutorial.
+Cinq à dix minutes devraient vous suffire pour vous mettre en jambes. Une heure et demie devrait
+vous amener à la fin du tutoriel.
 
-## Where can I get support?
+## Où puis-je obtenir de l'aide ? [!VO]Where can I get support?
 
-If your question is about certain syntax, the [reference docs](/docs/svelte) are a good place to start.
+Si votre problème concerne une syntaxe particulière, la [documentation de référence](/docs/svelte)
+devrait répondre à la plupart de vos questions.
 
-Stack Overflow is a popular forum to ask code-level questions or if you’re stuck with a specific error. Read through the existing questions tagged with [Svelte](https://stackoverflow.com/questions/tagged/svelte+or+svelte-3) or [ask your own](https://stackoverflow.com/questions/ask?tags=svelte)!
+Stack Overflow est un forum populaire permettant de poser des questions orientées code ou de
+demander de l'aide sur une erreur spécifique. Vous pouvez parcourir les questions existantes avec le
+label [Svelte](https://stackoverflow.com/questions/tagged/svelte+or+svelte-3) ou poser [votre propre
+question](https://stackoverflow.com/questions/ask?tags=svelte) !
 
-There are online forums and chats which are a great place for discussion about best practices, application architecture or just to get to know fellow Svelte users. [Our Discord](/chat) or [the Reddit channel](https://www.reddit.com/r/sveltejs/) are examples of that. If you have an answerable code-level question, Stack Overflow is usually a better fit.
+Il existe également des forums et chats en ligne qui permettent de discuter au sujet des bonnes
+pratiques, de l'architecture d'application, ou simplement si vous souhaitez rencontrer d'autres
+utilisateurs et utilisatrices de Svelte. [Notre Discord](/chat) ou le [canal
+Reddit](https://www.reddit.com/r/sveltejs/) en sont de bons exemples. Si vous avez une question
+relative à du code qui vous semble être une question que quelqu'un d'autre a déjà posée, Stack
+Overflow est généralement plus adapté.
 
-## Are there any third-party resources?
+## Y a t'il des ressources tierces ? [!VO]Are there any third-party resources?
 
-Svelte Society maintains a [list of books and videos](https://sveltesociety.dev/resources).
+Svelte Society maintient une [liste de livres et vidéos](https://sveltesociety.dev/resources).
 
-## How can I get VS Code to syntax-highlight my .svelte files?
+## Comment activer la coloration syntaxique de VS Code pour mes fichiers .svelte ? [!VO]How can I get VS Code to syntax-highlight my .svelte files?
 
-There is an [official VS Code extension for Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+Il y a une [extension VS Code officielle pour
+Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
-## Is there a tool to automatically format my .svelte files?
+## Y a t'il un outil pour formatter automatiquement mes fichiers .svelte ? [!VO]Is there a tool to automatically format my .svelte files?
 
-You can use prettier with the [prettier-plugin-svelte](https://www.npmjs.com/package/prettier-plugin-svelte) plugin.
+Vous pouvez utiliser Prettier avec le plugin
+[prettier-plugin-svelte](https://www.npmjs.com/package/prettier-plugin-svelte).
 
-## How do I document my components?
+## Comment documenter mes composants ? [!VO]How do I document my components?
 
-In editors which use the Svelte Language Server you can document Components, functions and exports using specially formatted comments.
+Dans les éditeurs qui supportent le Language Server de Svelte, vous pouvez documenter vos
+composants, fonctions et exports en utilisant des commentaires dédiés.
 
 ````svelte
 <script>
-	/** What should we call the user? */
-	export let name = 'world';
+	/** Comment appeler l'utilisateur ? */
+	export let name = 'tout le monde';
 </script>
 
 <!--
 @component
-Here's some documentation for this component.
-It will show up on hover.
+Voici de la documentation pour ce composant.
+Elle s'affichera au survol.
 
-- You can use markdown here.
-- You can also use code blocks here.
-- Usage:
+- vous pouvez écrire du Markdown ici
+- vous pouvez aussi écrire des blocs de code ici
+- Usage :
   ```tsx
   <main name="Arethra">
   ```
 -->
 <main>
 	<h1>
-		Hello, {name}
+		Bonjour, {name}
 	</h1>
 </main>
 ````
 
-Note: The `@component` is necessary in the HTML comment which describes your component.
+Note : le `@component` est nécessaire dans le commentaire HTML qui décrit votre composant.
 
-## Does Svelte scale?
+## Est-ce que Svelte passe à l'échelle ? [!VO]Does Svelte scale?
 
-There will be a blog post about this eventually, but in the meantime, check out [this issue](https://github.com/sveltejs/svelte/issues/2546).
+Nous prévoyons d'écrire un article de blog sur le sujet, mais en attendant, vous pouvez aller vous
+informer sur cette [issue](https://github.com/sveltejs/svelte/issues/2546).
 
-## Is there a UI component library?
+## Y a t'il une librairie de composants ? [!VO]Is there a UI component library?
 
-There are several UI component libraries as well as standalone components. Find them under the [design systems section of the components page](https://sveltesociety.dev/packages?category=design-system) on the Svelte Society website.
+Il existe plusieurs librairies de composants. Vous pouvez les retrouver dans la [section "Design
+systems" de la page des composants](https://sveltesociety.dev/packages?category=design-system) sur
+le site de Svelte Society.
 
-## How do I test Svelte apps?
+## Comment tester une application Svelte ? [!VO]How do I test Svelte apps?
 
-How your application is structured and where logic is defined will determine the best way to ensure it is properly tested. It is important to note that not all logic belongs within a component - this includes concerns such as data transformation, cross-component state management, and logging, among others. Remember that the Svelte library has its own test suite, so you do not need to write tests to validate implementation details provided by Svelte.
+La façon dont votre application est structurée et comment sa logique est définie vont déterminer la
+meilleure manière de vous assurer qu'elle est correctement testée. Il est important de noter que
+toutes les logiques ne sont pas bonnes à mettre dans des composants - ceci inclut des sujets comme
+la transformation de données, la gestion d'état inter-composants, l'affichage de logs, entre autres
+choses. Rappelez-vous que la librairie Svelte a sa propre suite de tests, vous n'avez donc pas
+besoin d'écrire des tests pour valider les implémentations de comportements fournis par Svelte.
 
-A Svelte application will typically have three different types of tests: Unit, Component, and End-to-End (E2E).
+Une application Svelte peut avoir généralement trois niveaux de tests : Unitaires, Composant, et
+End-to-End (E2E)
 
-_Unit Tests_: Focus on testing business logic in isolation. Often this is validating individual functions and edge cases. By minimizing the surface area of these tests they can be kept lean and fast, and by extracting as much logic as possible from your Svelte components more of your application can be covered using them. When creating a new SvelteKit project, you will be asked whether you would like to setup [Vitest](https://vitest.dev/) for unit testing. There are a number of other test runners that could be used as well.
+_Tests Unitaires_ : l'objectif est de tester la logique métier en isolation. Il s'agit souvent de
+valider des fonctions individuelles et des cas marginaux. Vous pouvez les garder légers et rapides à
+exécuter en minimisant la zone de responsabilité de ces tests, et si vous sortez un maximum de
+logique de vos composants Svelte, vous pourrez tester une plus grande partie de votre application
+grâce à eux. Lorsque vous créez un nouveau projet SvelteKit, vous aurez la possibilité de mettre en
+place [Vitest](https://vitest.dev/) pour vos tests unitaires. Il existe d'autres librairies dédiées
+aux tests unitaires que vous pouvez également utiliser.
 
-_Component Tests_: Validating that a Svelte component mounts and interacts as expected throughout its lifecycle requires a tool that provides a Document Object Model (DOM). Components can be compiled (since Svelte is a compiler and not a normal library) and mounted to allow asserting against element structure, listeners, state, and all the other capabilities provided by a Svelte component. Tools for component testing range from an in-memory implementation like jsdom paired with a test runner like [Vitest](https://vitest.dev/) to solutions that leverage an actual browser to provide a visual testing capability such as [Playwright](https://playwright.dev/docs/test-components) or [Cypress](https://www.cypress.io/).
+_Tests de Composant_ : Valider qu'un composant Svelte se monte correctement et se comporte comme
+prévu lors de son cycle de vie requiert un outillage fournissant un Document Object Model (DOM). Les
+composants peuvent être compilés (puisque Svelte est un compilateur et non une simple librairie) et
+montés pour permettre des assertions sur la structure des éléments, les gestionnaires d'évènement,
+l'état, et toute autre fonctionnalité fournie par un composant Svelte. Les outils pour tester des
+composants vont de l'implémentation en mémoire comme jsdom couplée à un test runner comme
+[Vitest](https://vitest.dev/), jusqu'à des solutions qui embarquent un vrai navigateur pour fournir
+des fonctionnalités de tests visuels comme [Playwright](https://playwright.dev/docs/test-components)
+ou [Cypress](https://www.cypress.io/).
 
-_End-to-End Tests_: To ensure your users are able to interact with your application it is necessary to test it as a whole in a manner as close to production as possible. This is done by writing end-to-end (E2E) tests which load and interact with a deployed version of your application in order to simulate how the user will interact with your application. When creating a new SvelteKit project, you will be asked whether you would like to setup [Playwright](https://playwright.dev/) for end-to-end testing. There are many other E2E test libraries available for use as well.
+_Tests End-to-End_ : Pour vous assurer que vos utilisateurs et utilisatrices sont capables
+d'interagir avec votre application, il est nécessaire de la considérer comme un tout et de la tester
+d'une manière qui soit la plus proche possible des conditions de production. Vous pouvez faire cela
+en écrivant des tests end-to-end (E2E) qui chargent une version déployée de votre application et
+interagissent avec elle pour simuler la manière dont quelqu'un le ferait. Lorsque vous créez un
+nouveau projet SvelteKit, vous avez la possibilité de mettre en place
+[Playwright](https://playwright.dev/) pour vos tests end-to-end. Il existe également plusieurs
+autres librairies de tests E2E si vous le souhaitez.
 
-Some resources for getting started with testing:
+Voici quelques ressources pour vous lancer dans les tests :
 
 - [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/example/)
 - [Svelte Component Testing in Cypress](https://docs.cypress.io/guides/component-testing/svelte/overview)
@@ -88,43 +133,85 @@ Some resources for getting started with testing:
 - [Test Svelte components using Vitest & Playwright](https://davipon.hashnode.dev/test-svelte-component-using-vitest-playwright)
 - [Component testing with WebdriverIO](https://webdriver.io/docs/component-testing/svelte)
 
-## Is there a router?
+## Y a t'il un routeur ? [!VO]Is there a router?
 
-The official routing library is [SvelteKit](/docs/kit). SvelteKit provides a filesystem router, server-side rendering (SSR), and hot module reloading (HMR) in one easy-to-use package. It shares similarities with Next.js for React.
+La librairie officielle de routing est [SvelteKit](/docs/kit). SvelteKit fournit un routeur basé sur
+le système de fichiers, du rendu côté serveur (SSR), et du rafraîchissement instantané de modules
+(HMR), le tout dans une seule et même librairie simple à utiliser. C'est un outil similaire à
+Next.js pour React.
 
-However, you can use any router library. A lot of people use [page.js](https://github.com/visionmedia/page.js). There's also [navaid](https://github.com/lukeed/navaid), which is very similar. And [universal-router](https://github.com/kriasoft/universal-router), which is isomorphic with child routes, but without built-in history support.
+Cependant, vous pouvez utiliser n'importe quelle librairie de routing. Beaucoup de gens utilisent
+[page.js](https://github.com/visionmedia/page.js). Il y a également
+[navaid](https://github.com/lukeed/navaid), qui est très similaire. Ainsi que
+[universal-router](https://github.com/kriasoft/universal-router), qui est isomorphe sur les routes
+enfant, mais sans support d'historique intégré.
 
-If you prefer a declarative HTML approach, there's the isomorphic [svelte-routing](https://github.com/EmilTholin/svelte-routing) library and a fork of it called [svelte-navigator](https://github.com/mefechoel/svelte-navigator) containing some additional functionality.
+Si vous préférez une approche HTML déclarative, vous pouvez utiliser la librairie isomorphe
+[svelte-routing](https://github.com/EmilTholin/svelte-routing) ainsi qu'un fork de celle-ci appelé
+[svelte-navigator](https://github.com/mefechoel/svelte-navigator) qui inclut des fonctionnalités
+supplémentaires.
 
-If you need hash-based routing on the client side, check out [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router) or [abstract-state-router](https://github.com/TehShrike/abstract-state-router/).
+Si vous avez besoin de routing basé sur des hashs côté client, renseignez-vous sur
+[svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router) ou
+[abstract-state-router](https://github.com/TehShrike/abstract-state-router/).
 
-[Routify](https://routify.dev) is another filesystem-based router, similar to SvelteKit's router. Version 3 supports Svelte's native SSR.
+[Routify](https://routify.dev) est un autre routeur basé sur le système de fichiers, similaire au
+routeur de SvelteKit. Sa version 3 supporte le SSR natif de Svelte.
 
-You can see a [community-maintained list of routers on sveltesociety.dev](https://sveltesociety.dev/packages?category=routers).
+Vous pouvez retrouver une [liste maintenue par la communauté des routeurs disponibles sur
+sveltesociety.dev](https://sveltesociety.dev/packages?category=routers).
 
-## How do I write a mobile app with Svelte?
+## Comment construire une application mobile avec Svelte [!VO]How do I write a mobile app with Svelte?
 
-While most mobile apps are written without using JavaScript, if you'd like to leverage your existing Svelte components and knowledge of Svelte when building mobile apps, you can turn a [SvelteKit SPA](https://kit.svelte.dev/docs/single-page-apps) into a mobile app with [Tauri](https://v2.tauri.app/start/frontend/sveltekit/) or [Capacitor](https://capacitorjs.com/solution/svelte). Mobile features like the camera, geolocation, and push notifications are available via plugins for both platforms.
+Même si la plupart des applications mobiles sont construites sans JavaScript, si vous souhaitez
+capitaliser sur vos composants et votre connaissance de Svelte pour construire une application
+mobile, vous pouvez transformer une [SPA SvelteKit](https://kit.svelte.dev/docs/single-page-apps) en
+une application mobile en utilisant [Tauri](https://v2.tauri.app/start/frontend/sveltekit/) ou
+[Capacitor](https://capacitorjs.com/solution/svelte). Les fonctionnalités mobile comme la caméra, la
+géolocalisation ou les notifications push sont disponibles via des plugins pour chacune des
+plateformes.
 
-Svelte Native was an option available for Svelte 4, but note that Svelte 5 does not currently support it. Svelte Native lets you write NativeScript apps using Svelte components that contain [NativeScript UI components](https://docs.nativescript.org/ui/) rather than DOM elements, which may be familiar for users coming from React Native.
+Svelte Native était une option disponible pour Svelte 4, mais Svelte 5 n'est actuellement pas
+compatible. Svelte Native vous permet d'écrire des apps NativeScript en utilisant des composants
+Svelte contenant des [composants d'UI NativeScript](https://docs.nativescript.org/ui/) plutôt que
+des éléments DOM, ce qui est similaire à ce que React Native permet.
 
-## Can I tell Svelte not to remove my unused styles?
+## Puis-je dire à Svelte de ne pas supprimer mes styles non utilisés ? [!VO]Can I tell Svelte not to remove my unused styles?
 
-No. Svelte removes the styles from the component and warns you about them in order to prevent issues that would otherwise arise.
+Non. Svelte supprime les styles inutiles de vos composants et vous en avertit pour éviter
+d'éventuels problèmes qui pourraient en découler.
 
-Svelte's component style scoping works by generating a class unique to the given component, adding it to the relevant elements in the component that are under Svelte's control, and then adding it to each of the selectors in that component's styles. When the compiler can't see what elements a style selector applies to, there would be two bad options for keeping it:
+Le scoping des styles de composant de Svelte fonctionne en générant une classe unique pour chaque
+composant, l'ajoutant aux éléments concernés sous le contrôle de Svelte présents dans le composant,
+puis en l'ajoutant à tous les sélecteurs dans les styles de ce composant. Lorsque le compilateur ne
+peut pas savoir à quels éléments un sélecteur de style doit d'appliquer, le garder conduirait à deux
+mauvaises options :
 
-- If it keeps the selector and adds the scoping class to it, the selector will likely not match the expected elements in the component, and they definitely won't if they were created by a child component or `{@html ...}`.
-- If it keeps the selector without adding the scoping class to it, the given style will become a global style, affecting your entire page.
+- S'il garde le sélecteur et y ajoute la classe de scope, le sélecteur ne va probablement pas
+correspondre aux éléments attendus dans le composant, et encore moins s'ils ont été créés par un
+composant enfant ou par `{@html ...}`.
+- S'il garde le sélecteur sans y ajouter la classe de scope, le style correspondant devient un style
+global, impactant toute votre page.
 
-If you need to style something that Svelte can't identify at compile time, you will need to explicitly opt into global styles by using `:global(...)`. But also keep in mind that you can wrap `:global(...)` around only part of a selector. `.foo :global(.bar) { ... }` will style any `.bar` elements that appear within the component's `.foo` elements. As long as there's some parent element in the current component to start from, partially global selectors like this will almost always be able to get you what you want.
+Si vous avez besoin de styliser quelque chose que Svelte ne peut pas identifier au moment de la
+compilation, vous aurez besoin d'utiliser explicitement des styles globaux via `:global(...)`. Mais
+rappelez-vous que vous pouvez utiliser `:global(...)` autour de certaines parties d'un sélecteur.
+`.foo :global(.bar) { ... }` va s'appliquer à tout élément `.bar` qui serait présent dans les
+éléments `.foo` au sein du composant. Tant qu'il y a un élément parent comme source dans le
+composant actuel, les sélecteurs globaux partiels comme celui-là avant devraient satisfaire vos
+besoins dans l'immense majorité des cas.
 
-## Is Svelte v2 still available?
+## Svelte 2 est-il toujours disponible ? [!VO]Is Svelte v2 still available?
 
-New features aren't being added to it, and bugs will probably only be fixed if they are extremely nasty or present some sort of security vulnerability.
+Aucune nouvelle fonctionnalité n'y est ajouté, et aucun bug ne sera vraisemblablement corrigé, à
+moins qu'ils ne soient véritablement affreux ou qu'ils présentent des risques graves de sécurité.
 
-The documentation is still available [here](https://v2.svelte.dev/guide).
+La documenation est toujours disponible [ici](https://v2.svelte.dev/guide) (en anglais uniquement).
 
-## How do I do hot module reloading?
+## Comment puis-je activer le hot module reloading ? [!VO]How do I do hot module reloading?
 
-We recommend using [SvelteKit](/docs/kit), which supports HMR out of the box and is built on top of [Vite](https://vitejs.dev/) and [svelte-hmr](https://github.com/sveltejs/svelte-hmr). There are also community plugins for [rollup](https://github.com/rixo/rollup-plugin-svelte-hot) and [webpack](https://github.com/sveltejs/svelte-loader).
+Nous recommandons d'utiliser [SvelteKit](/docs/kit), qui supporte par défaut le HMR et est construit
+sur la base de [Vite](https://vitejs.dev/) et de
+[svelte-hmr](https://github.com/sveltejs/svelte-hmr). Il existe également des plugins maintenus par
+la communauté pour [rollup](https://github.com/rixo/rollup-plugin-svelte-hot) et
+[webpack](https://github.com/sveltejs/svelte-loader).
