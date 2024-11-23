@@ -438,7 +438,7 @@
 
 			&.deprecated {
 				p:first-child::before {
-					content: 'Deprecated ';
+					content: 'Déprécié';
 					font: var(--sk-font-ui-medium);
 					text-transform: uppercase;
 					color: var(--sk-fg-4);

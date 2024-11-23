@@ -97,3 +97,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte/07-misc
+  track-docs-svelte-98:
+    runs-on: ubuntu-latest
+    name: Checking Docs Svelte 98
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/svelte/98-reference

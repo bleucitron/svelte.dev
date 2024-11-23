@@ -30,10 +30,11 @@ import {
 
 ## SvelteComponent
 
-This was the base class for Svelte components in Svelte 4. Svelte 5+ components
-are completely different under the hood. For typing, use `Component` instead.
-To instantiate components, use `mount` instead.
-See [migration guide](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) for more info.
+Ceci était la classe de base pour les composants Svelte en Svelte 4. Les composants Svelte 5+ sont
+d'une nature complètement différente. Pour le typeage, utilisez plutôt `Component`. Pour instancier
+des composants, utilisez plutôt `mount`.
+Voir le [guide de migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 <div class="ts-block">
 
@@ -53,7 +54,8 @@ static element?: typeof HTMLElement;
 
 <div class="ts-block-property-details">
 
-The custom element version of the component. Only present if compiled with the `customElement` compiler option
+La version "élément personnalisé" du composant. Seulement présente si le composant est compilé avec
+l'option de compilateur `customElement`.
 
 </div>
 </div>
@@ -77,9 +79,10 @@ constructor(options: ComponentConstructorOptions<Properties<Props, Slots>>);
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> This constructor only exists when using the `asClassComponent` compatibility helper, which
-is a stop-gap solution. Migrate towards using `mount` instead. See
-[migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) for more info.
+- <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez
+l'utilitaire de compatibilité `asClassComponent`, qui est une solution bouche-trou. Voir le [guide de
+migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 </div>
 
@@ -96,9 +99,10 @@ $destroy(): void;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> This method only exists when using one of the legacy compatibility helpers, which
-is a stop-gap solution. See [migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-for more info.
+- <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
+utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
+migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 </div>
 
@@ -118,9 +122,10 @@ $on<K extends Extract<keyof Events, string>>(
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> This method only exists when using one of the legacy compatibility helpers, which
-is a stop-gap solution. See [migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-for more info.
+- <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
+utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
+migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 </div>
 
@@ -137,22 +142,23 @@ $set(props: Partial<Props>): void;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> This method only exists when using one of the legacy compatibility helpers, which
-is a stop-gap solution. See [migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-for more info.
+- <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
+utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
+migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 </div>
 
 </div>
 </div></div>
 
-
-
 ## SvelteComponentTyped
 
 <blockquote class="tag deprecated note">
 
-Use `Component` instead. See [migration guide](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) for more information.
+Utilisez plutôt `Component`. Voir le [guide de
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+plus d'infos.
 
 </blockquote>
 
@@ -168,21 +174,19 @@ class SvelteComponentTyped<
 
 </div>
 
-
-
 ## afterUpdate
 
 <blockquote class="tag deprecated note">
 
-Use [`$effect`](/docs/svelte/$effect) instead
+Utilisez plutôt [`$effect`}(/docs/svelte/$effect)
 
 </blockquote>
 
-Schedules a callback to run immediately after the component has been updated.
+Programme l'exécution d'un callback immédiatement après la mise à jour du composant.
 
-The first time the callback runs will be after the initial `onMount`.
+La première exécution du callback aura lieu après le `onMount` initial.
 
-In runes mode use `$effect` instead.
+En mode runes, utilisez plutôt `$effect`.
 
 <div class="ts-block">
 
@@ -198,15 +202,15 @@ function afterUpdate(fn: () => void): void;
 
 <blockquote class="tag deprecated note">
 
-Use [`$effect.pre`](/docs/svelte/$effect#$effect.pre) instead
+Utilisez plutôt [`$effect.pre`](/docs/svelte/$effect#$effect.pre).
 
 </blockquote>
 
-Schedules a callback to run immediately before the component is updated after any state change.
+Programme l'exécution d'un callback immédiatement avant la mise à jour du composant.
 
-The first time the callback runs will be before the initial `onMount`.
+La première exécution du callback aura lieu avant le `onMount` initial.
 
-In runes mode use `$effect.pre` instead.
+En mode runes, utilisez plutôt `$effect.pre`.
 
 <div class="ts-block">
 
@@ -222,25 +226,30 @@ function beforeUpdate(fn: () => void): void;
 
 <blockquote class="tag deprecated note">
 
-Use callback props and/or the `$host()` rune instead — see [migration guide](/docs/svelte/v5-migration-guide#Event-changes-Component-events)
+Utilisez plutôt des props de callback et/ou la rune `$host()` – voir le [guide de
+migration](/docs/svelte/v5-migration-guide#Event-changes-Component-events).
 
 </blockquote>
 
-Creates an event dispatcher that can be used to dispatch [component events](/docs/svelte/legacy-on#Component-events).
-Event dispatchers are functions that can take two arguments: `name` and `detail`.
+Crée un générateur d'évènement qui peut être utilisé pour générer des [évènements de
+composant](/docs/svelte/legacy-on#Component-events). Les générateurs d'évènement sont des fonctions
+qui prennent deux arguments : `name` et `detail`.
 
-Component events created with `createEventDispatcher` create a
-[CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent).
-These events do not [bubble](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture).
-The `detail` argument corresponds to the [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
-property and can contain any type of data.
+Les évènements de composant créés avec `createEventDispatcher` créent un
+[CustomEvent](https://developer.mozilla.org/fr/docs/Web/API/CustomEvent). Ces évènements ne
+["bubblent"](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#Event_bubbling_and_capture)
+pas. L'argument `detail` correspond à la propriété
+[CustomEvent.detail](https://developer.mozilla.org/fr/docs/Web/API/CustomEvent/detail) et peut
+contenir tout type de données.
 
-The event dispatcher can be typed to narrow the allowed event names and the type of the `detail` argument:
+Le générateur d'évènement peut être typé pour réduire les noms d'évènement autorisés et typer
+l'argument `detail` :
+
 ```ts
 const dispatch = createEventDispatcher<{
- loaded: never; // does not take a detail argument
- change: string; // takes a detail argument of type string, which is required
- optional: number | null; // takes an optional detail argument of type number
+ loaded: never; // ne prend pas d'argument detail
+ change: string; // prend un argument detail obligatoire de type string
+ optional: number | null; // prend un argument detail optionnel de type number
 }>();
 ```
 
@@ -258,7 +267,7 @@ function createEventDispatcher<
 
 ## createRawSnippet
 
-Create a snippet programmatically
+Crée un snippet programmtiquement.
 
 <div class="ts-block">
 
@@ -277,7 +286,8 @@ function createRawSnippet<Params extends unknown[]>(
 
 ## flushSync
 
-Synchronously flushes any pending state changes and those that result from it.
+Force le traitement de manière synchrone de tout changement d'état en attente (et de tous ceux qui
+en résultent).
 
 <div class="ts-block">
 
@@ -291,9 +301,9 @@ function flushSync(fn?: (() => void) | undefined): void;
 
 ## getAllContexts
 
-Retrieves the whole context map that belongs to the closest parent component.
-Must be called during component initialisation. Useful, for example, if you
-programmatically create a component and want to pass the existing context to it.
+Récupère la map complète des contextes appartenant au composant parent le plus proche. Doit être
+exécuté pendant l'initialisation du composant. Utile, par exemple, si vous créez programmatiquement
+un composant et souhaitez lui passer les contexte existant.
 
 <div class="ts-block">
 
@@ -309,8 +319,8 @@ function getAllContexts<
 
 ## getContext
 
-Retrieves the context that belongs to the closest parent component with the specified `key`.
-Must be called during component initialisation.
+Récupère le contexte nommé `key` appartenant au composant parent le plus proche. Doit être exécuté
+pendant l'initialisation du composant.
 
 <div class="ts-block">
 
@@ -324,8 +334,8 @@ function getContext<T>(key: any): T;
 
 ## hasContext
 
-Checks whether a given `key` has been set in the context of a parent component.
-Must be called during component initialisation.
+Vérifie si une clé `key` a été définie dans le contexte d'un composant parent. Doit être exécuté
+pendant l'initialisation du composant.
 
 <div class="ts-block">
 
@@ -339,7 +349,8 @@ function hasContext(key: any): boolean;
 
 ## hydrate
 
-Hydrates a component on the given target and returns the exports and potentially the props (if compiled with `accessors: true`) of the component
+Hydrate un composant sur la cible donnée et renvoie les exports et potentiellement les props du
+composant (si compilé avec `accessors: true`).
 
 <div class="ts-block">
 
@@ -377,8 +388,9 @@ function hydrate<
 
 ## mount
 
-Mounts a component to the given target and returns the exports and potentially the props (if compiled with `accessors: true`) of the component.
-Transitions will play during the initial render unless the `intro` option is set to `false`.
+Monte un composant sur la cible donnée et renvoie les exports et potentiellement les props du
+composant (si compilé avec `accessors: true`). Les transitions seront jouées pendant le rendu
+initial à moins que l'option `intro` soit définie à `false`.
 
 <div class="ts-block">
 
@@ -400,10 +412,10 @@ function mount<
 
 ## onDestroy
 
-Schedules a callback to run immediately before the component is unmounted.
+Programme l'exécution d'un callback immédiatement avant le démontage du composant.
 
-Out of `onMount`, `beforeUpdate`, `afterUpdate` and `onDestroy`, this is the
-only one that runs inside a server-side component.
+Parmi `onMount`, `beforeUpdate`, `afterUpdate` et `onDestroy`, `onDestroy` est la seule fonction qui
+est exécutée pendant le rendu côté serveur du composant.
 
 <div class="ts-block">
 
@@ -417,13 +429,15 @@ function onDestroy(fn: () => any): void;
 
 ## onMount
 
-The `onMount` function schedules a callback to run as soon as the component has been mounted to the DOM.
-It must be called during the component's initialisation (but doesn't need to live *inside* the component;
-it can be called from an external module).
+La fonction `onMount` programme l'exécution d'un callback immédiatement avant le montage du
+composant dans le DOM. Cette fonction doit être exécutée pendant l'initialisation du composant (mais
+n'a pas besoin de vivre *dans* le composant ; elle peut être exécutée depuis un module extérieur).
 
-If a function is returned _synchronously_ from `onMount`, it will be called when the component is unmounted.
+Si une fonction est renvoyée de manière _synchrone_ depuis `onMount`, celle-ci sera appelée lorsque
+le composant sera démonté.
 
-`onMount` does not run inside [server-side components](/docs/svelte/svelte-server#render).
+`onMount` n'est pas exécutée lors du [rendu côté serveur des
+composants](/docs/svelte/svelte-server#render).
 
 <div class="ts-block">
 
@@ -442,11 +456,12 @@ function onMount<T>(
 
 ## setContext
 
-Associates an arbitrary `context` object with the current component and the specified `key`
-and returns that object. The context is then available to children of the component
-(including slotted content) with `getContext`.
+Associe un objet de `context` arbitraire avec le composant courant et la clé fournie `key`, et
+renvoie cet objet. Le contexte est rendu disponible pour les enfants du composant (incluant les
+contenus slottés) avec `getContext`.
 
-Like lifecycle functions, this must be called during component initialisation.
+Comme pour les fonctions de cycle de vie, cette fonction doit être exécutée lors de l'initialisation
+du composant.
 
 <div class="ts-block">
 
@@ -460,7 +475,8 @@ function setContext<T>(key: any, context: T): T;
 
 ## tick
 
-Returns a promise that resolves once any pending state changes have been applied.
+Renvoie une promesse qui sera résolue lorsque tous les changements d'état en attente auront été
+appliqués.
 
 <div class="ts-block">
 
@@ -474,7 +490,7 @@ function tick(): Promise<void>;
 
 ## unmount
 
-Unmounts a component that was previously mounted using `mount` or `hydrate`.
+Démonte un composant précédemment monté avec `mount` ou `hydrate`.
 
 <div class="ts-block">
 
@@ -488,12 +504,12 @@ function unmount(component: Record<string, any>): void;
 
 ## untrack
 
-When used inside a [`$derived`](/docs/svelte/$derived) or [`$effect`](/docs/svelte/$effect),
-any state read inside `fn` will not be treated as a dependency.
+Lorsqu'utilisé dans un [`$derived`](/docs/svelte/$derived) ou un [`$effect`](/docs/svelte/$effect),
+tout état lu dans la fonction `fn` ne sera pas traité comme dépendance.
 
 ```ts
 $effect(() => {
-	// this will run when `data` changes, but not when `time` changes
+	// ceci sera exécuté lorsque `data` change, mais pas lorsque `time` change
 	save(data, {
 		timestamp: untrack(() => time)
 	});
@@ -512,20 +528,22 @@ function untrack<T>(fn: () => T): T;
 
 ## Component
 
-Can be used to create strongly typed Svelte components.
+Peut être utilisé pour créer des composants Svelte fortement typés.
 
-#### Example:
+#### Exemple :
 
-You have component library on npm called `component-library`, from which
-you export a component called `MyComponent`. For Svelte+TypeScript users,
-you want to provide typings. Therefore you create a `index.d.ts`:
+Vous avez une librairie de composants sur npm appelée `component-library`, à partir de laquelle vous
+exportez un composant appelé `MyComponent`. Vous souhaitez fournir du typage pour les personnes
+utilisant Svelte+TypeScript. Vous créez donc un fichier `index.d.ts` :
+
 ```ts
 import type { Component } from 'svelte';
 export declare const MyComponent: Component<{ foo: string }> {}
 ```
-Typing this makes it possible for IDEs like VS Code with the Svelte extension
-to provide intellisense and to use the component like this in a Svelte file
-with TypeScript:
+Typer de cette manière permet aux IDEs comme VS Code ayant l'extension Svelte de fournir les
+fonctionnalités intellisense, et donc d'utiliser le composants comme ceci dans un fichier Svelte
+avec TypeScript :
+
 ```svelte
 <script lang="ts">
 	import { MyComponent } from "component-library";
@@ -552,15 +570,15 @@ interface Component<
 	props: Props
 ): {
 	/**
-	 * @deprecated This method only exists when using one of the legacy compatibility helpers, which
-	 * is a stop-gap solution. See [migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-	 * for more info.
+	 * @deprecated Cette méthode n'existe que lorsque vous utilisez un des utilitaires de
+	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
+	 * pour plus d'infos.
 	 */
 	$on?(type: string, callback: (e: any) => void): () => void;
 	/**
-	 * @deprecated This method only exists when using one of the legacy compatibility helpers, which
-	 * is a stop-gap solution. See [migration guide](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-	 * for more info.
+	 * @deprecated Cette méthode n'existe que lorsque vous utilisez un des utilitaires de
+	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes).
+	 * pour plus d'infos.
 	 */
 	$set?(props: Partial<Props>): void;
 } & Exports;
@@ -570,8 +588,8 @@ interface Component<
 
 <div class="ts-block-property-bullets">
 
-- `internal` An internal object used by Svelte. Do not use or modify.
-- `props` The props passed to the component.
+- `internal` Un objet interne utilisé par Svelte. Ne pas utiliser ou modifier.
+- `props` Les props passées au composant.
 
 </div>
 
@@ -586,7 +604,8 @@ element?: typeof HTMLElement;
 
 <div class="ts-block-property-details">
 
-The custom element version of the component. Only present if compiled with the `customElement` compiler option
+La version "élément personnalisé" du composant. Seulement présente si le composant est compilé avec
+l'option de compilateur `customElement`.
 
 </div>
 </div></div>
@@ -596,9 +615,11 @@ The custom element version of the component. Only present if compiled with the `
 <blockquote class="tag deprecated note">
 
 In Svelte 4, components are classes. In Svelte 5, they are functions.
-Use `mount` instead to instantiate components.
-See [migration guide](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
-for more info.
+
+Utilisez plutôt `mount` pour instancier des composants.
+Voir [guide de
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
+pour plus d'infos.
 
 </blockquote>
 
@@ -695,7 +716,7 @@ $$inline?: boolean;
 
 <blockquote class="tag deprecated note">
 
-The new `Component` type does not have a dedicated Events type. Use `ComponentProps` instead.
+Le nouveau type `Component` n'a pas de type dédié pour les Events. Utilisez plutôt `ComponentProps`.
 
 </blockquote>
 
@@ -712,7 +733,7 @@ type ComponentEvents<Comp extends SvelteComponent> =
 
 ## ComponentInternals
 
-Internal implementation details that vary between environments
+Détails d'implémentation interne qui changent selon l'environnement.
 
 <div class="ts-block">
 
@@ -724,21 +745,21 @@ type ComponentInternals = Branded<{}, 'ComponentInternals'>;
 
 ## ComponentProps
 
-Convenience type to get the props the given component expects.
+Type utilitaire pour obtenir les props qu'un certain composant attend.
 
-Example: Ensure a variable contains the props expected by `MyComponent`:
+Exemple : vous voulez vous assurer qu'une variable contient les props attendues par `MyComponent` :
 
 ```ts
 import type { ComponentProps } from 'svelte';
 import MyComponent from './MyComponent.svelte';
 
-// Errors if these aren't the correct props expected by MyComponent.
+// Affiche une erreur si on ne fournit pas les bonnes props à MyComponent.
 const props: ComponentProps<typeof MyComponent> = { foo: 'bar' };
 ```
 
-> [!NOTE] In Svelte 4, you would do `ComponentProps<MyComponent>` because `MyComponent` was a class.
+> [!NOTE] En Svelte 4, vous feriez `ComponentProps<MyComponent>` car `MyComponent` était une classe.
 
-Example: A generic function that accepts some component and infers the type of its props:
+Exemple : une fonction générique qui accepte un composant et en déduit le type de ses props :
 
 ```ts
 import type { Component, ComponentProps } from 'svelte';
@@ -749,7 +770,8 @@ function withProps<TComponent extends Component<any>>(
 	props: ComponentProps<TComponent>
 ) {};
 
-// Errors if the second argument is not the correct props expected by the component in the first argument.
+// Affiche une erreur si le deuxième argument ne correspond pas aux props attendues par le composant
+// fourni en premier argument.
 withProps(MyComponent, { foo: 'bar' });
 ```
 
@@ -772,7 +794,7 @@ type ComponentProps<
 
 <blockquote class="tag deprecated note">
 
-This type is obsolete when working with the new `Component` type.
+Ce type est obsolète lorsque vous utilisez le nouveau type `Component`.
 
 </blockquote>
 
@@ -788,7 +810,9 @@ type ComponentType<
 			: Record<string, any>
 	>
 ) => Comp) & {
-	/** The custom element version of the component. Only present if compiled with the `customElement` compiler option */
+	/** La version "élément personnalisé" du composant. N'est présent que si le composant est compilé
+	 *  avec l'option de compilateur `customElement`.
+	 */
 	element?: typeof HTMLElement;
 };
 ```
@@ -822,7 +846,7 @@ interface EventDispatcher<
 
 ## MountOptions
 
-Defines the options accepted by the `mount()` function.
+Définit les options acceptées par la fonction `mount()`.
 
 <div class="ts-block">
 
@@ -831,24 +855,25 @@ type MountOptions<
 	Props extends Record<string, any> = Record<string, any>
 > = {
 	/**
-	 * Target element where the component will be mounted.
+	 * L'élément cible où le composant doit être monté.
 	 */
 	target: Document | Element | ShadowRoot;
 	/**
-	 * Optional node inside `target`. When specified, it is used to render the component immediately before it.
+	 * Un noeud optionnel dans `target`. Lorsque fourni, il est utilisé pour rendre le composant juste
+	 * immédiatement avant lui.
 	 */
 	anchor?: Node;
 	/**
-	 * Allows the specification of events.
-	 * @deprecated Use callback props instead.
+	 * Permet la spécification des évènements.
+	 * @deprecated Utilisez plutôt les props de callback.
 	 */
 	events?: Record<string, (e: any) => any>;
 	/**
-	 * Can be accessed via `getContext()` at the component level.
+	 * Peut être obtenu via `getContext()` au niveau du composant.
 	 */
 	context?: Map<any, any>;
 	/**
-	 * Whether or not to play transitions on initial render.
+	 * Si oui ou non il faut jouer les transitions lors du rendu initial.
 	 * @default true
 	 */
 	intro?: boolean;
@@ -871,13 +896,13 @@ type MountOptions<
 
 ## Snippet
 
-The type of a `#snippet` block. You can use it to (for example) express that your component expects a snippet of a certain type:
+Le type d'un bloc `$snippet`. Vous pouvez l'utilisez pour (par exemple) exprimer le fait que votre
+composant attend un snippet d'un certain type :
+
 ```ts
 let { banner }: { banner: Snippet<[{ text: string }]> } = $props();
 ```
-You can only call a snippet through the `{@render ...}` tag.
-
-/docs/svelte/snippet
+Vous pouvez uniquement appeler un snippet via la [balise `{@render ...}`](/docs/svelte/snippet).
 
 <div class="ts-block">
 
@@ -890,16 +915,14 @@ interface Snippet<Parameters extends unknown[] = []> {/*…*/}
 ```dts
 (
 	this: void,
-	// this conditional allows tuples but not arrays. Arrays would indicate a
-	// rest parameter type, which is not supported. If rest parameters are added
-	// in the future, the condition can be removed.
+	// cette condition autorise les tuples mais pas les tableaux. Utiliser des tableaux nécessiterait
+	// un type de paramètre de reste, ce qui n'est pas supporté. Si les paramètre de reste sont
+  // ajoutés dans le futur, cette condition pourra être supprimée.
 	...args: number extends Parameters['length'] ? never : Parameters
 ): {
-	'{@render ...} must be called with a Snippet': "import type { Snippet } from 'svelte'";
+	'{@render ...} doit être appelée avec un Snippet': "import type { Snippet } from 'svelte'";
 } & typeof SnippetReturn;
 ```
 
 <div class="ts-block-property-details"></div>
 </div></div>
-
-
