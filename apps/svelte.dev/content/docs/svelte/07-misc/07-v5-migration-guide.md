@@ -855,9 +855,9 @@ les blocs `#each` :
 {/each}
 ```
 
-## Breaking changes en mode runes [!VO]Breaking changes in runes mode
+## Changements bloquants en mode runes [!VO]Breaking changes in runes mode
 
-Certains breaking changes concernent uniquement les composants en mode runes.
+Certains changements bloquants concernent uniquement les composants en mode runes.
 
 ### Les liaisons à des exports de composant sont interdites [!VO]Bindings to component exports are not allowed
 
@@ -995,7 +995,7 @@ réparé par le navigateur. Vous pouviez par exemple écrire ceci...
 Svelte 5 est plus strict au niveau de la structure HTML et lèvera une erreur de compilation dans les
 cas où le navigateur aurait besoin de réparer le DOM.
 
-## Autres breaking changes [!VO]Other breaking changes
+## Autres changements bloquants [!VO]Other breaking changes
 
 ### Validation de l'assignation à `@const` plus stricte [!VO]Stricter `@const` assignment validation
 

@@ -8,9 +8,9 @@ script de migration pour migrer certains de ces changements automatiquement : `n
 svelte-migrate@latest svelte-4`.
 
 Si vous maintenez une librairie, vous devriez envisager le support à la fois de la version et de la
-version 3, et pas uniquement de la version 4. Puisque la plupart des breaking changes ne concernent
-que peu de personnes, cela devrait être possible sans trop d'efforts. Et pensez à mettre également à
-jour la gamme de versions de votre `peerDependencies`.
+version 3, et pas uniquement de la version 4. Puisque la plupart des changements bloquants ne
+concernent que peu de personnes, cela devrait être possible sans trop d'efforts. Et pensez à mettre
+également à jour la gamme de versions de votre `peerDependencies`.
 
 ## Versions minimum requises [!VO]Minimum version requirements
 
@@ -298,7 +298,7 @@ instructions sur comment migrer. Alternativement, vous pouvez créer un nouveau 
 `npm create svelte@latest`, sélectionner l'option eslint (et éventuellement TypeScript), puis copier
 les fichiers correspondants dans votre projet existant.
 
-## Autres breaking changes [!VO]Other breaking changes
+## Autres changements bloquants [!VO]Other breaking changes
 
 - l'attribut `inert` est maintenant appliqué aux éléments en train de sortir du DOM pour les rendre
 	invisibles aux technologies d'assistance et éviter les interactions.
