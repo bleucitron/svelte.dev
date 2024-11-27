@@ -19,7 +19,7 @@ import {
 
 ## VERSION
 
-The current version, as set in package.json.
+La version actuelle, telle que définie dans `package.json`.
 
 /docs/svelte-compiler#svelte-version
 
@@ -35,7 +35,8 @@ const VERSION: string;
 
 ## compile
 
-`compile` converts your `.svelte` source code into a JavaScript module that exports a component
+`compile` convertit vos fichiers `.svelte` source en des modules JavaScript qui exportent un
+composant.
 
 <div class="ts-block">
 
@@ -52,7 +53,8 @@ function compile(
 
 ## compileModule
 
-`compileModule` takes your JavaScript source code containing runes, and turns it into a JavaScript module.
+`compileModule` prend votre code JavaScript contentant des runes, et le transforme en modules
+JavaScript.
 
 <div class="ts-block">
 
@@ -69,8 +71,9 @@ function compileModule(
 
 ## migrate
 
-Does a best-effort migration of Svelte code towards using runes, event attributes and render tags.
-May throw an error if the code is too complex to migrate automatically.
+Fait de son mieux pour migrer du code Svelte vers la syntaxe utilisant les runes, des attributs
+d'évènement et des balises `@render`. Peut lever des erreurs si le code est trop complexe pour
+effectuer la migration de manière automatique.
 
 <div class="ts-block">
 
@@ -97,10 +100,11 @@ function migrate(
 
 ## parse
 
-The parse function parses a component, returning only its abstract syntax tree.
+La fonction `parse` parse un composant, ne renvoyant que son Arbre Syntaxique Abstrait (AST).
 
-The `modern` option (`false` by default in Svelte 5) makes the parser return a modern AST instead of the legacy AST.
-`modern` will become `true` by default in Svelte 6, and the option will be removed in Svelte 7.
+L'option `modern` (`false` par défaut en Svelte 5) oblige le parser à renvoyer un AST moderne plutôt
+qu'un AST legacy. `modern` aura pour valeur par défaut `true` en Svelte 6, et l'option sera
+supprimée en Svelte 7.
 
 <div class="ts-block">
 
@@ -136,8 +140,9 @@ function parse(
 
 ## preprocess
 
-The preprocess function provides convenient hooks for arbitrarily transforming component source code.
-For example, it can be used to convert a `<style lang="sass">` block into vanilla CSS.
+La fonction `preprocess` fournit des hooks pratiques pour transformer du code source de composant
+selon vos besoins. Par exemple, elle peut être utilisée pour convertir un bloc `<style lang="sass">`
+en du CSS classique.
 
 <div class="ts-block">
 
@@ -161,7 +166,7 @@ function preprocess(
 
 <blockquote class="tag deprecated note">
 
-Replace this with `import { walk } from 'estree-walker'`
+Remplacez ceci par `import { walk } from 'estree-walker'`
 
 </blockquote>
 
@@ -197,20 +202,20 @@ namespace AST {
 	export interface Root extends BaseNode {
 		type: 'Root';
 		/**
-		 * Inline options provided by `<svelte:options>` — these override options passed to `compile(...)`
+		 * Les options inline fournies par `<svelte:options>` - celles-ci écrasent celles passées à `compile(...)`
 		 */
 		options: SvelteOptions | null;
 		fragment: Fragment;
-		/** The parsed `<style>` element, if exists */
+		/** L'élément `<style>` parsé, s'il existe */
 		css: Css.StyleSheet | null;
-		/** The parsed `<script>` element, if exists */
+		/** L'élément `<script>` parsé, s'il existe */
 		instance: Script | null;
-		/** The parsed `<script module>` element, if exists */
+		/** L'élément `<script module>` parsé, s'il existe */
 		module: Script | null;
 	}
 
 	export interface SvelteOptions {
-		// start/end info (needed for warnings and for our Prettier plugin)
+		// des infos start/end (nécéssaires pour les warnings et pour notre plugin Prettier)
 		start: number;
 		end: number;
 		// options
@@ -237,7 +242,7 @@ namespace AST {
 				}
 			>;
 			/**
-			 * Is of type
+			 * Est de type
 			 * ```ts
 			 * (ceClass: new () => HTMLElement) => new () => HTMLElement
 			 * ```
@@ -247,36 +252,36 @@ namespace AST {
 		attributes: Attribute[];
 	}
 
-	/** Static text */
+	/** Texte statique */
 	export interface Text extends BaseNode {
 		type: 'Text';
-		/** Text with decoded HTML entities */
+		/** Du texte avec les entités HTML décodées */
 		data: string;
-		/** The original text, with undecoded HTML entities */
+	  /** Le texte original, avec les entités HTML non décodées */
 		raw: string;
 	}
 
-	/** A (possibly reactive) template expression — `{...}` */
+	/** Une expression de template (possiblement réactive) - `{...}` */
 	export interface ExpressionTag extends BaseNode {
 		type: 'ExpressionTag';
 		expression: Expression;
 	}
 
-	/** A (possibly reactive) HTML template expression — `{@html ...}` */
+	/** Une expression de template HTML (possiblement réactive) - `{@html...}` */
 	export interface HtmlTag extends BaseNode {
 		type: 'HtmlTag';
 		expression: Expression;
 	}
 
-	/** An HTML comment */
+	/** Un commentaire HTML */
 	// TODO rename to disambiguate
 	export interface Comment extends BaseNode {
 		type: 'Comment';
-		/** the contents of the comment */
+	  /** le contenu du commentaire */
 		data: string;
 	}
 
-	/** A `{@const ...}` tag */
+	/** Une balise `{@const ...}` */
 	export interface ConstTag extends BaseNode {
 		type: 'ConstTag';
 		declaration: VariableDeclaration & {
@@ -289,13 +294,13 @@ namespace AST {
 		};
 	}
 
-	/** A `{@debug ...}` tag */
+	/** Une balise `{@debug ...}` */
 	export interface DebugTag extends BaseNode {
 		type: 'DebugTag';
 		identifiers: Identifier[];
 	}
 
-	/** A `{@render foo(...)} tag */
+	/** Une balise `{@render foo(...)} */
 	export interface RenderTag extends BaseNode {
 		type: 'RenderTag';
 		expression:
@@ -305,42 +310,42 @@ namespace AST {
 			  });
 	}
 
-	/** An `animate:` directive */
+	/** Une directive `animate:` */
 	export interface AnimateDirective extends BaseNode {
 		type: 'AnimateDirective';
-		/** The 'x' in `animate:x` */
+		/** Le 'x' de `animate:x` */
 		name: string;
-		/** The y in `animate:x={y}` */
+		/** Le 'y' de `animate:x={y}` */
 		expression: null | Expression;
 	}
 
-	/** A `bind:` directive */
+	/** Une directive `bind:` */
 	export interface BindDirective extends BaseNode {
 		type: 'BindDirective';
-		/** The 'x' in `bind:x` */
+		/** Le 'x' de `bind:x` */
 		name: string;
-		/** The y in `bind:x={y}` */
+		/** Le 'y' in `bind:x={y}` */
 		expression:
 			| Identifier
 			| MemberExpression
 			| SequenceExpression;
 	}
 
-	/** A `class:` directive */
+	/** Une directive `class:` */
 	export interface ClassDirective extends BaseNode {
 		type: 'ClassDirective';
-		/** The 'x' in `class:x` */
+		/** Le 'x' de `class:x` */
 		name: 'class';
-		/** The 'y' in `class:x={y}`, or the `x` in `class:x` */
+		/** Le 'y' de `class:x={y}`, ou le `x` de `class:x` */
 		expression: Expression;
 	}
 
-	/** A `let:` directive */
+	/** Une directive `let:` */
 	export interface LetDirective extends BaseNode {
 		type: 'LetDirective';
-		/** The 'x' in `let:x` */
+		/** Le 'x' de `let:x` */
 		name: string;
-		/** The 'y' in `let:x={y}` */
+		/** Le 'y' de `let:x={y}` */
 		expression:
 			| null
 			| Identifier
@@ -348,22 +353,22 @@ namespace AST {
 			| ObjectExpression;
 	}
 
-	/** An `on:` directive */
+	/** Une directive `on:` */
 	export interface OnDirective extends BaseNode {
 		type: 'OnDirective';
-		/** The 'x' in `on:x` */
+		/** Le 'x' de `on:x` */
 		name: string;
-		/** The 'y' in `on:x={y}` */
+		/** Le 'y' de `on:x={y}` */
 		expression: null | Expression;
 		modifiers: string[];
 	}
 
-	/** A `style:` directive */
+	/** Une directive `style:` */
 	export interface StyleDirective extends BaseNode {
 		type: 'StyleDirective';
-		/** The 'x' in `style:x` */
+		/** Le 'x' de `style:x` */
 		name: string;
-		/** The 'y' in `style:x={y}` */
+		/** Le 'y' de `style:x={y}` */
 		value:
 			| true
 			| ExpressionTag
@@ -372,26 +377,26 @@ namespace AST {
 	}
 
 	// TODO have separate in/out/transition directives
-	/** A `transition:`, `in:` or `out:` directive */
+	/** Une directive `transition:`, `in:` ou `out:` */
 	export interface TransitionDirective extends BaseNode {
 		type: 'TransitionDirective';
-		/** The 'x' in `transition:x` */
+		/** Le 'x' de `transition:x` */
 		name: string;
-		/** The 'y' in `transition:x={y}` */
+		/** Le 'y' de `transition:x={y}` */
 		expression: null | Expression;
 		modifiers: Array<'local' | 'global'>;
-		/** True if this is a `transition:` or `in:` directive */
+		/** `true` si ceci est une directive `transition:` ou `in:` */
 		intro: boolean;
-		/** True if this is a `transition:` or `out:` directive */
+		/** `true` si ceci est une directive `transition:` ou `out:` */
 		outro: boolean;
 	}
 
-	/** A `use:` directive */
+	/** Une directive `use:` */
 	export interface UseDirective extends BaseNode {
 		type: 'UseDirective';
-		/** The 'x' in `use:x` */
+		/** Le 'x' de `use:x` */
 		name: string;
-		/** The 'y' in `use:x={y}` */
+		/** Le 'y' de `use:x={y}` */
 		expression: null | Expression;
 	}
 
@@ -458,7 +463,7 @@ namespace AST {
 		name: 'svelte:head';
 	}
 
-	/** This is only an intermediate representation while parsing, it doesn't exist in the final AST */
+	/** Ceci n'est qu'une représentation intermédiaire lors du parsing, elle n'existe pas dans l'AST final */
 	export interface SvelteOptionsRaw extends BaseElement {
 		type: 'SvelteOptions';
 		name: 'svelte:options';
@@ -474,7 +479,7 @@ namespace AST {
 		name: 'svelte:window';
 	}
 
-	/** An `{#each ...}` block */
+	/** Un bloc `{#each ...}` */
 	export interface EachBlock extends BaseNode {
 		type: 'EachBlock';
 		expression: Expression;
@@ -486,7 +491,7 @@ namespace AST {
 		key?: Expression;
 	}
 
-	/** An `{#if ...}` block */
+	/** Un `{#if ...}` */
 	export interface IfBlock extends BaseNode {
 		type: 'IfBlock';
 		elseif: boolean;
@@ -495,14 +500,14 @@ namespace AST {
 		alternate: Fragment | null;
 	}
 
-	/** An `{#await ...}` block */
+	/** Un bloc `{#await ...}` */
 	export interface AwaitBlock extends BaseNode {
 		type: 'AwaitBlock';
 		expression: Expression;
 		// TODO can/should we move these inside the ThenBlock and CatchBlock?
-		/** The resolved value inside the `then` block */
+	  /** La valeur résolue dans le bloc `then` */
 		value: Pattern | null;
-		/** The rejection reason inside the `catch` block */
+		/** La raison du rejet dans le bloc `catch` */
 		error: Pattern | null;
 		pending: Fragment | null;
 		then: Fragment | null;
@@ -526,7 +531,7 @@ namespace AST {
 		type: 'Attribute';
 		name: string;
 		/**
-		 * Quoted/string values are represented by an array, even if they contain a single expression like `"{x}"`
+	   * Les valeurs entre guillemets sont représentées par un tableau, même si elles ne contiennent pas d'expression comme `"{x}"`
 		 */
 		value:
 			| true
@@ -576,8 +581,9 @@ name?: string;
 
 <div class="ts-block-property-details">
 
-Sets the name of the resulting JavaScript class (though the compiler will rename it if it would otherwise conflict with other variables in scope).
-If unspecified, will be inferred from `filename`
+Définit le nom de la classe JavaScript compilée (même si le compilateur la renommera si elle devait
+être en conflit avec d'autres variables dans le scope).
+Si non spécifié, sera inférée depuis `filename`.
 
 </div>
 </div>
@@ -592,11 +598,12 @@ customElement?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, tells the compiler to generate a custom element constructor instead of a regular Svelte component.
+Si `true`, dit au compilateur de générer un constructeur d'élément personnalisé plutôt qu'un
+composant Svelte classique.
 
 </div>
 </div>
@@ -611,12 +618,15 @@ accessors?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
-- <span class="tag deprecated">deprecated</span> This will have no effect in runes mode
+- <span class="tag">par défaut</span> `false`
+- <span class="tag deprecated">déprécié</span> Ceci n'aura aucun effet en modes runes
 
 </div>
 
-If `true`, getters and setters will be created for the component's props. If `false`, they will only be created for readonly exported values (i.e. those declared with `const`, `class` and `function`). If compiling with `customElement: true` this option defaults to `true`.
+Si `true`, des getters et setters seront créés pour les props du composant. Si `false`, ils ne
+seront créés que pour des valeurs exportées (par ex. celles déclarées avec `const`, `class`, et
+`function`).
+Si compilée avec `customElement: true`, cette option vaut par défaut `true`.
 
 </div>
 </div>
@@ -631,11 +641,11 @@ namespace?: Namespace;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `'html'`
+- <span class="tag">par défaut</span> `'html'`
 
 </div>
 
-The namespace of the element; e.g., `"html"`, `"svg"`, `"mathml"`.
+Le namespace de l'élément ; par ex. `"html"`, `"svt"`, `"mathml"`.
 
 </div>
 </div>
@@ -650,13 +660,13 @@ immutable?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
-- <span class="tag deprecated">deprecated</span> This will have no effect in runes mode
+- <span class="tag">par défaut</span> `false`
+- <span class="tag deprecated">déprécié</span> Ceci n'aura aucun effet en mode runes
 
 </div>
 
-If `true`, tells the compiler that you promise not to mutate any objects.
-This allows it to be less conservative about checking whether values have changed.
+Si `true`, dit au compilateur que vous promettez de ne jamais muter d'objet.
+Ceci lui permet d'être moins conservatif lors des vérifications de changements de valeur.
 
 </div>
 </div>
@@ -669,9 +679,15 @@ css?: 'injected' | 'external';
 
 <div class="ts-block-property-details">
 
-- `'injected'`: styles will be included in the `head` when using `render(...)`, and injected into the document (if not already present) when the component mounts. For components compiled as custom elements, styles are injected to the shadow root.
-- `'external'`: the CSS will only be returned in the `css` field of the compilation result. Most Svelte bundler plugins will set this to `'external'` and use the CSS that is statically generated for better performance, as it will result in smaller JavaScript bundles and the output can be served as cacheable `.css` files.
-This is always `'injected'` when compiling with `customElement` mode.
+- `'injected'` : les styles seront inclus dans le `head` lors de `render(...)`, et injectés dans le
+document (si non déjà présents) lorsque le composant sera monté. Pour les composants compilés en
+tant qu'éléments personnalisés, les styles sont injectés dans le shadow root.
+- `'external'` : le CSS ne sera renvoyé que dans le champ `css` du résultat de compilation. La
+plupart des plugins Svelte de bundler mettent cette option à `'external` et utilisent le CSS qui est
+généré statiquement pour obtenir de meilleures performances, puisque cela conduit à des bundles
+JavaScript plus petits, et que l'output peut être servi en tant que fichiers `.css` pouvant être mis
+en cache.
+Cette option vaut toujours `'injected'` lorsque vous compilez avec l'option `customElement`.
 
 </div>
 </div>
@@ -686,12 +702,13 @@ cssHash?: CssHashGetter;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `undefined`
+- <span class="tag">par défaut</span> `undefined`
 
 </div>
 
-A function that takes a `{ hash, css, name, filename }` argument and returns the string that is used as a classname for scoped CSS.
-It defaults to returning `svelte-${hash(css)}`.
+Une fonction qui prend un argument de forme `{ hash, css, name, filename }` et renvoie la chaîne de
+caractères utilisée comme nom de classe pour le CSS scopé.
+Par défaut elle renvoie `svelte-${hash(css)}`.
 
 </div>
 </div>
@@ -706,11 +723,11 @@ preserveComments?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, your HTML comments will be preserved in the output. By default, they are stripped out.
+Si `true`, vos commentaires HTML seront préservés dans l'output. Par défaut ils sont supprimés.
 
 </div>
 </div>
@@ -725,11 +742,12 @@ preserveWhitespace?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, whitespace inside and between elements is kept as you typed it, rather than removed or collapsed to a single space where possible.
+Si `true`, les espaces dans et entre les éléments sont gardés tels que vous les avez écrits, plutôt
+supprimés ou fusionnés en un seul espace lorsque c'est possible.
 
 </div>
 </div>
@@ -744,17 +762,21 @@ runes?: boolean | undefined;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `undefined`
+- <span class="tag">par défaut</span> `undefined`
 
 </div>
 
-Set to `true` to force the compiler into runes mode, even if there are no indications of runes usage.
-Set to `false` to force the compiler into ignoring runes, even if there are indications of runes usage.
-Set to `undefined` (the default) to infer runes mode from the component code.
-Is always `true` for JS/TS modules compiled with Svelte.
-Will be `true` by default in Svelte 6.
-Note that setting this to `true` in your `svelte.config.js` will force runes mode for your entire project, including components in `node_modules`,
-which is likely not what you want. If you're using Vite, consider using [dynamicCompileOptions](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md#dynamiccompileoptions) instead.
+Définir à `true` pour forcer le compilateur en mode runes, même s'il n'y a pas d'indications de
+l'usage de runes.
+Définir à `false` pour forcer le compilateur à ignorer le mode runes, même s'il y
+a des indications de l'usage de runes.
+Définir à `undefined` (valeur par défaut) pour inférer le mode runes à partir du code du composant.
+Vaut toujours `true` pour les modules JS/TS compilés avec Svelte.
+Vaudra `true` par défaut en Svelte 6.
+Notez que définir cette valeur à `true` dans votre `svelte.config.js` va forcer le mode runes pour
+tout votre projet, en incluant les composants dans `node_modules`, ce qui n'est probablement pas ce
+que vous souhaitez. Si vous utilisez Vite, envisagez plutôt l'utilisation de
+[`dynamicCompileOptions`](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md#dynamiccompileoptions)
 
 </div>
 </div>
@@ -773,7 +795,8 @@ discloseVersion?: boolean;
 
 </div>
 
-If `true`, exposes the Svelte major version in the browser by adding it to a `Set` stored in the global `window.__svelte.v`.
+Si `true`, expose la version majeure de Svelte dans le navigateur en l'ajoutant à un `Set` stocké
+dans l'objet global `window.__svelte.v`.
 
 </div>
 </div>
@@ -788,7 +811,8 @@ compatibility?: {/*…*/}
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> Use these only as a temporary solution before migrating your code
+- <span class="tag deprecated">déprécié</span> Utilisez ceci uniquement comme une solution
+temporaire avant de migrer votre code
 
 </div>
 
@@ -802,13 +826,14 @@ componentApi?: 4 | 5;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `5`
+- <span class="tag">par défaut</span> `5`
 
 </div>
 
-Applies a transformation so that the default export of Svelte files can still be instantiated the same way as in Svelte 4 —
-as a class when compiling for the browser (as though using `createClassComponent(MyComponent, {...})` from `svelte/legacy`)
-or as an object with a `.render(...)` method when compiling for the server
+Applique une transformation de sorte que les exports par défaut des fichiers Svelte puisse toujours
+être instanciés de la même façon qu'ils l'étaient en Svelte 4 – une classe lorsque vous compilez
+pour le navigateur (comme si vous utilisiez `createClassComponent(MyComponent, {...})` depuis
+`svelte/legacy`) ou un objet avec une méthode `.render(...)` lorsque vous compilez pour le serveur.
 
 </div>
 </div></div>
@@ -826,12 +851,12 @@ sourcemap?: object | string;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `null`
+- <span class="tag">par défaut</span> `null`
 
 </div>
 
-An initial sourcemap that will be merged into the final output sourcemap.
-This is usually the preprocessor sourcemap.
+Une sourcemap initiale qui sera fusionnée dans la sourcemap finale.
+C'est en général la sourcemap du préprocesseur.
 
 </div>
 </div>
@@ -846,11 +871,11 @@ outputFilename?: string;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `null`
+- <span class="tag">par défaut</span> `null`
 
 </div>
 
-Used for your JavaScript sourcemap.
+Utilisé pour la sourcemap JavaScript.
 
 </div>
 </div>
@@ -865,11 +890,11 @@ cssOutputFilename?: string;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `null`
+- <span class="tag">par défaut</span> `null`
 
 </div>
 
-Used for your CSS sourcemap.
+Utilisé pour la sourcemap CSS.
 
 </div>
 </div>
@@ -884,11 +909,11 @@ hmr?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, compiles components with hot reloading support.
+Si `true`, compile les composants de manière compatible avec le hot module reloading.
 
 </div>
 </div>
@@ -903,19 +928,19 @@ modernAst?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, returns the modern version of the AST.
-Will become `true` by default in Svelte 6, and the option will be removed in Svelte 7.
+Si `true`, renvoie la version moderne de l'AST.
+Vaudra `true` par défaut dans Svelte 6, et l'option sera supprimée dans Svelte 7.
 
 </div>
 </div></div>
 
 ## CompileResult
 
-The return value of `compile` from `svelte/compiler`
+La valeur de retour de `compile` importée depuis `svelte/compiler`.
 
 <div class="ts-block">
 
@@ -931,7 +956,7 @@ js: {/*…*/}
 
 <div class="ts-block-property-details">
 
-The compiled JavaScript
+Le JavaScript compilé
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -941,7 +966,7 @@ code: string;
 
 <div class="ts-block-property-details">
 
-The generated code
+Le code généré
 
 </div>
 </div>
@@ -953,7 +978,7 @@ map: SourceMap;
 
 <div class="ts-block-property-details">
 
-A source map
+Une sourcemap
 
 </div>
 </div></div>
@@ -965,16 +990,16 @@ A source map
 
 ```dts
 css: null | {
-	/** The generated code */
+	/** Le code généré */
 	code: string;
-	/** A source map */
+	/** Une sourcemap */
 	map: SourceMap;
 };
 ```
 
 <div class="ts-block-property-details">
 
-The compiled CSS
+Le CSS compilé
 
 </div>
 </div>
@@ -987,10 +1012,12 @@ warnings: Warning[];
 
 <div class="ts-block-property-details">
 
-An array of warning objects that were generated during compilation. Each warning has several properties:
-- `code` is a string identifying the category of warning
-- `message` describes the issue in human-readable terms
-- `start` and `end`, if the warning relates to a specific location, are objects with `line`, `column` and `character` properties
+Un tableau d'objets de warnings qui ont été généré pendant la compilation. Chaque warning a
+plusieurs propriétés :
+- `code` est une chaîne de caractères identifiant la catégory du warning
+- `message` décrit le problème en des termes lisibles par l'humain
+- `start` et `end`, si le warning est relatif à une position précise, sont des objets avec les
+propriétés `line`, `column` et `character`
 
 </div>
 </div>
@@ -1003,7 +1030,7 @@ metadata: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Metadata about the compiled component
+Les métadonnées concernant le composant compilé
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -1013,8 +1040,9 @@ runes: boolean;
 
 <div class="ts-block-property-details">
 
-Whether the file was compiled in runes mode, either because of an explicit option or inferred from usage.
-For `compileModule`, this is always `true`
+Si oui ou non le fichier a été compilé en mode runes, soit via une option explicite, soit inféré
+depuis l'usage.
+Avec l'option `compileModule`, ceci vaudra toujours `true`.
 
 </div>
 </div></div>
@@ -1030,25 +1058,26 @@ ast: any;
 
 <div class="ts-block-property-details">
 
-The AST
+L'AST
 
 </div>
 </div></div>
 
 ## MarkupPreprocessor
 
-A markup preprocessor that takes a string of code and returns a processed version.
+Un préprocesseur de markup qui prend une chaîne de caractères représentant du code et en renvoie une
+version compilée.
 
 <div class="ts-block">
 
 ```dts
 type MarkupPreprocessor = (options: {
 	/**
-	 * The whole Svelte file content
+	 * Le contenu complet du fichier Svelte
 	 */
 	content: string;
 	/**
-	 * The filename of the Svelte file
+	 * Le nom du fichier Svelte
 	 */
 	filename?: string;
 }) => Processed | void | Promise<Processed | void>;
@@ -1074,11 +1103,12 @@ dev?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
-If `true`, causes extra code to be added that will perform runtime checks and provide debugging information during development.
+Si `true`, provoque l'ajout de code supplémentaire pour effectuer des vérifications lors de
+l'exécution et fournir des informations de debug lors du développement.
 
 </div>
 </div>
@@ -1093,13 +1123,13 @@ generate?: 'client' | 'server' | false;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `'client'`
+- <span class="tag">par défaut</span> `'client'`
 
 </div>
 
-If `"client"`, Svelte emits code designed to run in the browser.
-If `"server"`, Svelte emits code suitable for server-side rendering.
-If `false`, nothing is generated. Useful for tooling that is only interested in warnings.
+Si `"client"`, Svelte émet du code prévu pour être exécuté dans le navigateur.
+Si `"server"`, Svelte émet du code prévu pour le rendu côté serveur.
+Si `false`, rien n'est généré. Utile pour de l'outillage qui ne sert qu'aux warnings.
 
 </div>
 </div>
@@ -1112,7 +1142,7 @@ filename?: string;
 
 <div class="ts-block-property-details">
 
-Used for debugging hints and sourcemaps. Your bundler plugin will set it automatically.
+Utile pour les aides au debug et les sourcemaps. Votre plugin de bundler le définit automatiquement.
 
 </div>
 </div>
@@ -1127,11 +1157,12 @@ rootDir?: string;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `process.cwd() on node-like environments, undefined elsewhere`
+- <span class="tag">par défaut</span> `process.cwd() dans les environnements similairess à Node, undefined ailleurs`
 
 </div>
 
-Used for ensuring filenames don't leak filesystem information. Your bundler plugin will set it automatically.
+Utile pour s'assurer que les noms de fichiers ne fassent pas fuiter des informations sur le système
+de fichiers. Votre plugin de bundler le définit automatiquement.
 
 </div>
 </div>
@@ -1144,34 +1175,36 @@ warningFilter?: (warning: Warning) => boolean;
 
 <div class="ts-block-property-details">
 
-A function that gets a `Warning` as an argument and returns a boolean.
-Use this to filter out warnings. Return `true` to keep the warning, `false` to discard it.
+Une fonction qui prend un `Warning` en argument et renvoie un booléen.
+Utilisez ceci pour filtrer les warnings. Renvoyez `true` pour garder le warning, `false` pour
+l'ignorer.
 
 </div>
 </div></div>
 
 ## Preprocessor
 
-A script/style preprocessor that takes a string of code and returns a processed version.
+Un préprocesseur de script et de style qui prend en argument une chaîne de caractères représentant
+du code et renvoie une version processée.
 
 <div class="ts-block">
 
 ```dts
 type Preprocessor = (options: {
 	/**
-	 * The script/style tag content
+	 * Le contenu de la balise de script ou de style
 	 */
 	content: string;
 	/**
-	 * The attributes on the script/style tag
+	 * Les attributs de la balise de script ou de style
 	 */
 	attributes: Record<string, string | boolean>;
 	/**
-	 * The whole Svelte file content
+	 * Le contenu complet du fichier Svelte
 	 */
 	markup: string;
 	/**
-	 * The filename of the Svelte file
+	 * Le nom du fichier Svelte
 	 */
 	filename?: string;
 }) => Processed | void | Promise<Processed | void>;
@@ -1181,7 +1214,7 @@ type Preprocessor = (options: {
 
 ## PreprocessorGroup
 
-A preprocessor group is a set of preprocessors that are applied to a Svelte file.
+Un group de préprocesseur est un ensemble de préprocesseurs qui sont appliqués à un fichier Svelte.
 
 <div class="ts-block">
 
@@ -1197,7 +1230,7 @@ name?: string;
 
 <div class="ts-block-property-details">
 
-Name of the preprocessor. Will be a required option in the next major version
+Nom du préprocesseur. Sera une option obligatoire dans la prochaine version majeure
 
 </div>
 </div>
@@ -1231,7 +1264,8 @@ script?: Preprocessor;
 
 ## Processed
 
-The result of a preprocessor run. If the preprocessor does not return a result, it is assumed that the code is unchanged.
+Le résultat d'une exécution de préprocesseur. Si le préprocesseur ne renvoie pas de résultat, on
+suppose que le code n'a pas changé.
 
 <div class="ts-block">
 
@@ -1247,7 +1281,7 @@ code: string;
 
 <div class="ts-block-property-details">
 
-The new code
+Le nouveau code
 
 </div>
 </div>
@@ -1260,7 +1294,7 @@ map?: string | object;
 
 <div class="ts-block-property-details">
 
-A source map mapping back to the original code
+Une sourcemap renvoyant vers le code original
 
 </div>
 </div>
@@ -1273,7 +1307,7 @@ dependencies?: string[];
 
 <div class="ts-block-property-details">
 
-A list of additional files to watch for changes
+Une liste de fichiers additionnels dont il faut écouter les changements
 
 </div>
 </div>
@@ -1286,7 +1320,8 @@ attributes?: Record<string, string | boolean>;
 
 <div class="ts-block-property-details">
 
-Only for script/style preprocessors: The updated attributes to set on the tag. If undefined, attributes stay unchanged.
+Uniquement pour les préprocesseurs de script ou de style : les attributs mis à jour à définir sur la
+balise. Si `undefined`, les attributs ne seront pas modifiés.
 
 </div>
 </div>

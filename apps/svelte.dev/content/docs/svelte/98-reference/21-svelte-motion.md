@@ -19,12 +19,13 @@ import {
 
 <blockquote class="since note">
 
-Available since 5.8.0
+Disponible à partir de la version 5.8.0
 
 </blockquote>
 
-A wrapper for a value that behaves in a spring-like fashion. Changes to `spring.target` will cause `spring.current` to
-move towards it over time, taking account of the `spring.stiffness` and `spring.damping` parameters.
+Un utilitaire permettant de créer un valeur évoluant à la manière d'un ressort. Les changements de
+valeur de `spring.target` vont déclencher l'évolution de `spring.current` vers cette valeur au cours
+du temps, en prenant en compte les paramètres de `spring.stiffness` et `spring.damping`.
 
 ```svelte
 <script>
@@ -60,8 +61,8 @@ static of<U>(fn: () => U, options?: SpringOpts): Spring<U>;
 
 <div class="ts-block-property-details">
 
-Create a spring whose value is bound to the return value of `fn`. This must be called
-inside an effect root (for example, during component initialisation).
+Crée un ressort dont la valeur est liée à la valeur de retour de `fn`. Ceci doit être appelé à la
+racine d'un effet (par exemple, pendant l'initialisation d'un composant).
 
 ```svelte
 <script>
@@ -84,12 +85,13 @@ set(value: T, options?: SpringUpdateOpts): Promise<void>;
 
 <div class="ts-block-property-details">
 
-Sets `spring.target` to `value` and returns a `Promise` that resolves if and when `spring.current` catches up to it.
+Met la valeur de `spring.target` à `value` et renvoie une `Promise` qui se résout si et lorsque
+`spring.current` atteint cette valeur.
 
-If `options.instant` is `true`, `spring.current` immediately matches `spring.target`.
+Si `options.instant` vaut `true`, `spring.current` vaut immédiatement `spring.target`.
 
-If `options.preserveMomentum` is provided, the spring will continue on its current trajectory for
-the specified number of milliseconds. This is useful for things like 'fling' gestures.
+Si `options.preserveMomentum` est fournie, le ressort va continuer sur sa trajectoire pendant le
+nombre de millisecondes fourni. Cela permet de simuler des mouvements plus "relâchés".
 
 </div>
 </div>
@@ -129,8 +131,8 @@ target: T;
 
 <div class="ts-block-property-details">
 
-The end value of the spring.
-This property only exists on the `Spring` class, not the legacy `spring` store.
+La valeur finale du ressort.
+Cette propriété n'existe que sur la classe `Spring`, pas sur le store legacy `spring`.
 
 </div>
 </div>
@@ -143,8 +145,8 @@ get current(): T;
 
 <div class="ts-block-property-details">
 
-The current value of the spring.
-This property only exists on the `Spring` class, not the legacy `spring` store.
+La valeur courante du ressort.
+Cette propriété n'existe que sur la classe `Spring`, pas sur le store legacy `spring`.
 
 </div>
 </div></div>
@@ -155,12 +157,13 @@ This property only exists on the `Spring` class, not the legacy `spring` store.
 
 <blockquote class="since note">
 
-Available since 5.8.0
+Disponible à partir de la version 5.8.0
 
 </blockquote>
 
-A wrapper for a value that tweens smoothly to its target value. Changes to `tween.target` will cause `tween.current` to
-move towards it over time, taking account of the `delay`, `duration` and `easing` options.
+Un utilitaire permettant de créer une valeur évoluant de manière "douce" vers sa valeur finale. Les
+changements de valeur de `tween.target` vont déclencher l'évolution de `tween.current` vers cette
+valeur au cours du temps, en prenant en compte les options `delay`, `duration`, et `easing`.
 
 ```svelte
 <script>
@@ -187,8 +190,8 @@ static of<U>(fn: () => U, options?: TweenedOptions<U> | undefined): Tween<U>;
 
 <div class="ts-block-property-details">
 
-Create a tween whose value is bound to the return value of `fn`. This must be called
-inside an effect root (for example, during component initialisation).
+Crée un tween dont la valeur est liée à la valeur de retour de `fn`.
+Ceci doit être appelé à la racine d'un effet (par exemple, pendant l'initialisation d'un composant).
 
 ```svelte
 <script>
@@ -220,9 +223,10 @@ set(value: T, options?: TweenedOptions<T> | undefined): Promise<void>;
 
 <div class="ts-block-property-details">
 
-Sets `tween.target` to `value` and returns a `Promise` that resolves if and when `tween.current` catches up to it.
+Met la valeur de `tween.target` à `value` et renvoie une `Promise` qui se résout si et lorsque que
+`tween.current` atteint cette valeur.
 
-If `options` are provided, they will override the tween's defaults.
+Si des `options` sont fournies, elles vont écraser les valeurs par défaut du tween.
 
 </div>
 </div>
@@ -308,11 +312,15 @@ const prefersReducedMotion: MediaQuery;
 
 <blockquote class="tag deprecated note">
 
-Use [`Spring`](/docs/svelte/svelte-motion#Spring) instead
+Utilisez plutôt [`Spring`](/docs/svelte/svelte-motion#Spring)
 
 </blockquote>
 
-The spring function in Svelte creates a store whose value is animated, with a motion that simulates the behavior of a spring. This means when the value changes, instead of transitioning at a steady rate, it "bounces" like a spring would, depending on the physics parameters provided. This adds a level of realism to the transitions and can enhance the user experience.
+La fonction `spring` de Svelte crée un store dont la valeur est animée avec un mouvement qui simule
+le comportement d'un ressort. Ceci signifie que lorsque la valeur du store change, au lieu de
+transitionner avec un mouvement linéaire, elle "rebondit" comme le ferait un ressort, en fonction
+des paramètres physiques fournis. Ceci ajoute un certain niveau de réalisme aux mouvements et
+permet d'améliorer l'expérience utilisateur.
 
 <div class="ts-block">
 
@@ -331,11 +339,12 @@ function spring<T = any>(
 
 <blockquote class="tag deprecated note">
 
-Use [`Tween`](/docs/svelte/svelte-motion#Tween) instead
+Utilisez plutôt [`Tween`](/docs/svelte/svelte-motion#Tween)
 
 </blockquote>
 
-A tweened store in Svelte is a special type of store that provides smooth transitions between state values over time.
+La fonction `tweened` de Svelte crée un store spécial permettant de fournir des transitions de
+valeur "douces" au fil du temps.
 
 <div class="ts-block">
 
@@ -377,7 +386,8 @@ update: (fn: Updater<T>, opts?: SpringUpdateOpts) => Promise<void>;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> Only exists on the legacy `spring` store, not the `Spring` class
+- <span class="tag deprecated">déprécié</span> N'existe que sur le store legacy `spring`, pas sur la
+classe `Spring`
 
 </div>
 
@@ -394,7 +404,8 @@ subscribe(fn: (value: T) => void): Unsubscriber;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> Only exists on the legacy `spring` store, not the `Spring` class
+- <span class="tag deprecated">déprécié</span> N'existe que sur le store legacy `spring`, pas sur la
+classe `Spring`
 
 </div>
 

@@ -2,7 +2,9 @@
 title: svelte/legacy
 ---
 
-This module provides various functions for use during the migration, since some features can't be replaced one to one with new features. All imports are marked as deprecated and should be migrated away from over time.
+Ce module fournit plusieurs fonctions à utiliser pendant votre migration, puisque certaines
+anciennes fonctionnalités ne peuvent pas être remplacées à l'identique par de nouvelles. Tous les
+imports sont étiquetés dépréciés et doivent être migrés manuellement quand vous en aurez l'occasion.
 
 
 
@@ -29,11 +31,12 @@ import {
 
 <blockquote class="tag deprecated note">
 
-Use this only as a temporary solution to migrate your imperative component code to Svelte 5.
+
+N'utilisez ceci qu'en tant que solution temporaire pour migrer votre code impératif vers Svelte 5.
 
 </blockquote>
 
-Takes the component function and returns a Svelte 4 compatible component constructor.
+Prend la fonction du composant et renvoie un constructeur de composant compatible avec Svelte 4.
 
 <div class="ts-block">
 
@@ -60,11 +63,13 @@ function asClassComponent<
 
 <blockquote class="tag deprecated note">
 
-Use this only as a temporary solution to migrate your automatically delegated events in Svelte 5.
+N'utilisez ceci qu'en tant que solution temporaire pour migrer automatiquement des évènments
+délégués vers Svelte 5.
 
 </blockquote>
 
-Function to create a `bubble` function that mimic the behavior of `on:click` without handler available in svelte 4.
+Fonction pour créer une fonction `bubble` qui mime le comportement Svelte 4 de `on:click` sans
+gestionnaire associé.
 
 <div class="ts-block">
 
@@ -82,11 +87,12 @@ function createBubbler(): (
 
 <blockquote class="tag deprecated note">
 
-Use this only as a temporary solution to migrate your imperative component code to Svelte 5.
+N'utilisez ceci qu'en tant que solution temporaire pour migrer votre code impératif vers Svelte 5.
 
 </blockquote>
 
-Takes the same options as a Svelte 4 component and the component function and returns a Svelte 4 compatible component.
+Prend les mêmes options qu'un composant Svelte 4 ou la fonction de composant, et renvoie un
+composant compaatible avec Svelte 4.
 
 <div class="ts-block">
 
@@ -111,7 +117,7 @@ function createClassComponent<
 
 ## handlers
 
-Function to mimic the multiple listeners available in svelte 4
+Fonction pour mimer les différents gestionnaires d'évènements disponible en Svelte 4.
 
 <div class="ts-block">
 
@@ -127,7 +133,7 @@ function handlers(
 
 ## nonpassive
 
-Substitute for the `nonpassive` event modifier, implemented as an action
+Remplacement du modificateur d'évènement `nonpassive`, implémenté comme une action.
 
 <div class="ts-block">
 
@@ -147,7 +153,7 @@ function nonpassive(
 
 ## once
 
-Substitute for the `once` event modifier
+Remplacement du modificateur d'évènement `once`.
 
 <div class="ts-block">
 
@@ -163,7 +169,7 @@ function once(
 
 ## passive
 
-Substitute for the `passive` event modifier, implemented as an action
+Remplacement du modificateur d'évènement `passive`, implémenté comme une action.
 
 <div class="ts-block">
 
@@ -183,7 +189,7 @@ function passive(
 
 ## preventDefault
 
-Substitute for the `preventDefault` event modifier
+Remplacement du modificateur d'évènement `preventDefault`.
 
 <div class="ts-block">
 
@@ -201,11 +207,13 @@ function preventDefault(
 
 <blockquote class="tag deprecated note">
 
-Use this only as a temporary solution to migrate your component code to Svelte 5.
+N'utilisez ceci qu'en tant que solution temporaire pour migrer votre code de composant vers Svelte
+5.
 
 </blockquote>
 
-Runs the given function once immediately on the server, and works like `$effect.pre` on the client.
+Exécute la fonction fournie immédiatement et une seule fois sur le serveur, et fonctionne comme
+`$effect.pre` sur le client.
 
 <div class="ts-block">
 
@@ -219,7 +227,7 @@ function run(fn: () => void | (() => void)): void;
 
 ## self
 
-Substitute for the `self` event modifier
+Remplacement du modificateur d'évènement `self`.
 
 <div class="ts-block">
 
@@ -235,7 +243,7 @@ function self(
 
 ## stopImmediatePropagation
 
-Substitute for the `stopImmediatePropagation` event modifier
+Remplacement du modificateur d'évènement `stopImmediatePropagation`.
 
 <div class="ts-block">
 
@@ -251,7 +259,7 @@ function stopImmediatePropagation(
 
 ## stopPropagation
 
-Substitute for the `stopPropagation` event modifier
+Remplacement du modificateur d'évènement `stopPropagation`.
 
 <div class="ts-block">
 
@@ -267,7 +275,7 @@ function stopPropagation(
 
 ## trusted
 
-Substitute for the `trusted` event modifier
+Remplacement du modificateur d'évènement `trusted`.
 
 <div class="ts-block">
 

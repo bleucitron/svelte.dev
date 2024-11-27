@@ -2,7 +2,9 @@
 title: svelte/reactivity
 ---
 
-Svelte provides reactive versions of various built-ins like `SvelteMap`, `SvelteSet` and `SvelteURL`. These can be imported from `svelte/reactivity` and used just like their native counterparts.
+Svelte fournit des versions réactives de différents utilitaires intégrés comme `SvelteMap`,
+`SvelteSet` et `SvelteURL`. Ces utilitaires peuvent être importés depuis `svelte/reactivity` et
+utilisés de la même manière que leurs équivalents natifs.
 
 ```svelte
 <script>
@@ -11,14 +13,14 @@ Svelte provides reactive versions of various built-ins like `SvelteMap`, `Svelte
 	const url = new SvelteURL('https://example.com/path');
 </script>
 
-<!-- changes to these... -->
+<!-- les changements de valeur de ces inputs... -->
 <input bind:value={url.protocol} />
 <input bind:value={url.hostname} />
 <input bind:value={url.pathname} />
 
 <hr />
 
-<!-- will update `href` and vice versa -->
+<!-- vont mettre à jour `url` et vice-versa -->
 <input bind:value={url.href} />
 ```
 

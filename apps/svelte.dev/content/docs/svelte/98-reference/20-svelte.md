@@ -530,7 +530,7 @@ function untrack<T>(fn: () => T): T;
 
 Peut être utilisé pour créer des composants Svelte fortement typés.
 
-#### Exemple :
+### Exemple :
 
 Vous avez une librairie de composants sur npm appelée `component-library`, à partir de laquelle vous
 exportez un composant appelé `MyComponent`. Vous souhaitez fournir du typage pour les personnes

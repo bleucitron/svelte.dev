@@ -4,19 +4,22 @@ title: svelte/action
 
 ## Action
 
-Actions are functions that are called when an element is created.
-You can use this interface to type such actions.
-The following example defines an action that only works on `<div>` elements
-and optionally accepts a parameter which it has a default value for:
+Une "action" est une fonction qui est appelée lorsqu'un élément est créé.
+Vous pouvez utiliser cette interface pour les typer.
+L'exemple qui suit définit une action qui ne fonctionne que sur des éléments `<div>` et prend en
+argument optionnel un paramètre qui a une valeur par défaut :
+
 ```ts
 export const myAction: Action<HTMLDivElement, { someProperty: boolean } | undefined> = (node, param = { someProperty: true }) => {
 	// ...
 }
 ```
-`Action<HTMLDivElement>` and `Action<HTMLDivElement, undefined>` both signal that the action accepts no parameters.
+`Action<HTMLDivElement>` et `Action<HTMLDivElement, undefined>` signalent tous les deux que l'action
+n'accepte pas de paramètre.
 
-You can return an object with methods `update` and `destroy` from the function and type which additional attributes and events it has.
-See interface `ActionReturn` for more details.
+Vous pouvez renvoyer depuis la fonction un objet avec les méthodes `update` et `destroy`, et typer
+d'éventuels attributs et évènements additionnels.
+Voir l'interface `ActionReturn` pour plus de détails.
 
 <div class="ts-block">
 
@@ -46,16 +49,19 @@ interface Action<
 
 ## ActionReturn
 
-Actions can return an object containing the two properties defined in this interface. Both are optional.
-- update: An action can have a parameter. This method will be called whenever that parameter changes,
-	immediately after Svelte has applied updates to the markup. `ActionReturn` and `ActionReturn<undefined>` both
-	mean that the action accepts no parameters.
-- destroy: Method that is called after the element is unmounted
+Les actions peuvent renvoyer un objet contenant les deux propriétés définies dans cette interface.
+Les deux sont optionnelles.
+- `update`: une action peut avoir un paramètre. Cette méthode sera appelée lorsque ce paramètre sera
+mis à jour, immédiatement après que Svelte aura appliqué les changements sur le markup.
+`ActionReturn` et `ActionReturn<undefined>` signifient tous les deux que l'action n'accepte pas de
+paramètre.
+- `destroy`: méthode qui est appelée juste après le démontage de l'élément.
 
-Additionally, you can specify which additional attributes and events the action enables on the applied element.
-This applies to TypeScript typings only and has no effect at runtime.
+De plus, vous pouvez préciser quels attributs et évènements additionnels l'action permet sur
+l'élément concerné. Ceci ne s'applique que sur les types TypeScript et n'a aucun effet lors de
+l'exécution.
 
-Example usage:
+Exemple d'utilisation :
 ```ts
 interface Attributes {
 	newprop?: string;

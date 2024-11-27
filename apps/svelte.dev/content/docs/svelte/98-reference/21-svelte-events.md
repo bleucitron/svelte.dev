@@ -11,9 +11,10 @@ import { on } from 'svelte/events';
 
 ## on
 
-Attaches an event handler to the window and returns a function that removes the handler. Using this
-rather than `addEventListener` will preserve the correct order relative to handlers added declaratively
-(with attributes like `onclick`), which use event delegation for performance reasons
+Attache un gestionnaire d'évènement à `window` et renvoie une fonction qui supprime le gestionnaire.
+Utiliser ceci plutôt que `addEventListener` va préserver l'ordre correct des gestionnaires ajoutés
+déclarativement (en utilisant des attributs comme `onclick`), qui utilisent la délégation
+d'évènements pour des raisons de performance.
 
 <div class="ts-block">
 

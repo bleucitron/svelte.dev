@@ -11,8 +11,9 @@ import { flip } from 'svelte/animate';
 
 ## flip
 
-The flip function calculates the start and end position of an element and animates between them, translating the x and y values.
-`flip` stands for [First, Last, Invert, Play](https://aerotwist.com/blog/flip-your-animations/).
+La fonction `flip` calcule les positions de départ et d'arrivée d'un élément, et anime l'élément
+entre ces deux positions, en translatant les valeurs `x` et `y`. `flip` est l'acronyme de [First,
+Last, Invert, Play](https://aerotwist.com/blog/flip-your-animations/).
 
 <div class="ts-block">
 
