@@ -291,7 +291,8 @@ function trusted(
 
 ## LegacyComponentType
 
-Support using the component as both a class and function during the transition period
+Permet d'utiliser un composant à la fois comme une classe et comme une fonction pendant la période
+de transition.
 
 <div class="ts-block">
 
