@@ -19,7 +19,7 @@ import {
 
 ## blur
 
-Animates a `blur` filter alongside an element's opacity.
+Anime un filtre de flou (`blur`) en même temps que l'opacité d'un élement.
 
 <div class="ts-block">
 
@@ -42,7 +42,11 @@ function blur(
 
 ## crossfade
 
-The `crossfade` function creates a pair of [transitions](/docs/svelte/transition) called `send` and `receive`. When an element is 'sent', it looks for a corresponding element being 'received', and generates a transition that transforms the element to its counterpart's position and fades it out. When an element is 'received', the reverse happens. If there is no counterpart, the `fallback` transition is used.
+La fonction `crossfade` crée une paire de [transitions](/docs/svelte/transition) appelées `send`
+("envoyer") et `receive` ("recevoir"). Lorsqu'un élément est "envoyé", il cherche un élément de
+"réception" correspondant, et génère une transition qui transforme l'élément vers la position de sa
+contrepartie et le fait disparaître progressivement. Lorsque l'élément est "reçu", l'inverse se
+produit. S'il n'y a pas d'élément de contrepartie, la transition `fallback` est utilisée à la place.
 
 <div class="ts-block">
 
@@ -78,7 +82,10 @@ function crossfade({
 
 ## draw
 
-Animates the stroke of an SVG element, like a snake in a tube. `in` transitions begin with the path invisible and draw the path to the screen over time. `out` transitions start in a visible state and gradually erase the path. `draw` only works with elements that have a `getTotalLength` method, like `<path>` and `<polyline>`.
+Anime le trait d'un élément SVG, comme un serpent dans un tube. Les transitions `in` commencent avec
+le path invisible et dessinent le path au fur et à mesure. Les transitions `out` commencent avec un
+path visible et l'effacent progressivement. `draw` ne fonctionne qu'avec des éléments qui ont une
+méthode `getTotalLength`, comme `<path>` et `<polyline>`.
 
 <div class="ts-block">
 
@@ -102,7 +109,8 @@ function draw(
 
 ## fade
 
-Animates the opacity of an element from 0 to the current opacity for `in` transitions and from the current opacity to 0 for `out` transitions.
+Anime l'opacité d'un élément de 0 à l'opacité courante pour les transitions `in`, et de l'opacité
+courante vers 0 pour les transitions `out`.
 
 <div class="ts-block">
 
@@ -119,7 +127,9 @@ function fade(
 
 ## fly
 
-Animates the x and y positions and the opacity of an element. `in` transitions animate from the provided values, passed as parameters to the element's default values. `out` transitions animate from the element's default values to the provided values.
+Anime les positions x et y ainsi que l'opacité d'un élément. Les transitions `in` animent depuis les
+valeurs fournies, passées en paramètres, vers les positions par défaut de l'élément. Les transitions
+`out` animent depuis les positions par défaut de l'élément vers les valeurs fournies.
 
 <div class="ts-block">
 
@@ -143,7 +153,9 @@ function fly(
 
 ## scale
 
-Animates the opacity and scale of an element. `in` transitions animate from the provided values, passed as parameters, to an element's current (default) values. `out` transitions animate from an element's default values to the provided values.
+Anime l'opacité et l'échelle d'un élément. Les transitions `in` animent depuis les valeurs fournies,
+passées en paramètres, vers les valeurs courantes (par défaut) d'un élément. Les transitions `out`
+animent depuis les valeurs courantes (par défaut) d'un élément vers les valeurs fournies.
 
 <div class="ts-block">
 
@@ -166,7 +178,7 @@ function scale(
 
 ## slide
 
-Slides an element in and out.
+Transitionne un élément en le faisant entrer ou sortir en glissant.
 
 <div class="ts-block">
 

@@ -19,8 +19,8 @@ import {
 
 ## derived
 
-Derived value store by synchronizing one or more readable stores and
-applying an aggregation function over its input values.
+Store de dérivation de valeur synchronisant un ou plusieurs stores de lecture en appliquant une
+fonction d'aggregation sur leurs valeurs.
 
 <div class="ts-block">
 
@@ -78,7 +78,7 @@ function fromStore<V>(store: Readable<V>): {
 
 ## get
 
-Get the current value from a store by subscribing and immediately unsubscribing.
+Récupère la valeur courante d'un store en s'y abonnant puis en s'y désabonnant immédiatement.
 
 <div class="ts-block">
 
@@ -92,7 +92,7 @@ function get<T>(store: Readable<T>): T;
 
 ## readable
 
-Creates a `Readable` store that allows reading by subscription.
+Crée un store `Readable` (de lecture) qui permet la lecture de sa valeur via abonnement.
 
 <div class="ts-block">
 
@@ -109,7 +109,7 @@ function readable<T>(
 
 ## readonly
 
-Takes a store and returns a new one derived from the old one that is readable.
+Prend un store et renvoie un nouveau store en lecture seule dérivé de l'original.
 
 <div class="ts-block">
 
@@ -146,7 +146,8 @@ function toStore<V>(get: () => V): Readable<V>;
 
 ## writable
 
-Create a `Writable` store that allows both updating and reading by subscription.
+Crée un store `Writable` (d'écriture) qui permet la mise à jour de sa valeur et sa lecture via
+abonnement.
 
 <div class="ts-block">
 
@@ -163,7 +164,7 @@ function writable<T>(
 
 ## Readable
 
-Readable interface for subscribing.
+Interface du store `Readable` permettant uniquement la lecture.
 
 <div class="ts-block">
 
@@ -181,20 +182,21 @@ subscribe(this: void, run: Subscriber<T>, invalidate?: () => void): Unsubscriber
 
 <div class="ts-block-property-bullets">
 
-- `run` subscription callback
-- `invalidate` cleanup callback
+- `run` callback d'abonnement
+- `invalidate` callback de nettoyage
 
 </div>
 
-Subscribe on value changes.
+Permet l'abonnement aux mises à jour de valeur.
 
 </div>
 </div></div>
 
 ## StartStopNotifier
 
-Start and stop notification callbacks.
-This function is called when the first subscriber subscribes.
+Callbacks de notification Start et Stop.
+
+Cette fonction est exécutée lorsqu'un premier abonné s'abonne.
 
 <div class="ts-block">
 
@@ -209,7 +211,7 @@ type StartStopNotifier<T> = (
 
 ## Subscriber
 
-Callback to inform of a value updates.
+Callback pour informer des mises à jour de valeur.
 
 <div class="ts-block">
 
@@ -221,7 +223,7 @@ type Subscriber<T> = (value: T) => void;
 
 ## Unsubscriber
 
-Unsubscribes from value updates.
+Permet de se désabonner des mises à jour de valeur.
 
 <div class="ts-block">
 
@@ -233,7 +235,7 @@ type Unsubscriber = () => void;
 
 ## Updater
 
-Callback to update a value.
+Callback pour mettre à jour une valeur.
 
 <div class="ts-block">
 
@@ -245,7 +247,7 @@ type Updater<T> = (value: T) => T;
 
 ## Writable
 
-Writable interface for both updating and subscribing.
+Interface du store `Writable` permettant la lecture et l'écriture.
 
 <div class="ts-block">
 
@@ -263,11 +265,11 @@ set(this: void, value: T): void;
 
 <div class="ts-block-property-bullets">
 
-- `value` to set
+- `value` valeur à définir
 
 </div>
 
-Set value and inform subscribers.
+Définit une valeur et informe les abonnés.
 
 </div>
 </div>
@@ -286,7 +288,7 @@ update(this: void, updater: Updater<T>): void;
 
 </div>
 
-Update value using callback and inform subscribers.
+Met à jour la valeur en utilisant un callback et informe les abonnés.
 
 </div>
 </div></div>

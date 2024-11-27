@@ -11,8 +11,10 @@ import { render } from 'svelte/server';
 
 ## render
 
-Only available on the server and when compiling with the `server` option.
-Takes a component and returns an object with `body` and `head` properties on it, which you can use to populate the HTML when server-rendering your app.
+Seulement disponible sur le serveur et lorsque vous compilez avec l'option `server.`
+
+Prend un composant et renvoie un objet avec les propriétés `body` et `head`, que vous pouvez
+utiliser pour remplir votre HTML lors du rendu côté serveur de votre application.
 
 <div class="ts-block">
 
