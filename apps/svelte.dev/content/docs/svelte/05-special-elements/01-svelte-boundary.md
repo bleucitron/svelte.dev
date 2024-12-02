@@ -7,44 +7,56 @@ title: <svelte:boundary>
 ```
 
 > [!NOTE]
-> This feature was added in 5.3.0
+> Cette fonctionnalité a été ajoutée avec la version 5.3.0
 
-Boundaries allow you to guard against errors in part of your app from breaking the app as a whole, and to recover from those errors.
+Les frontières (_boundaries_) vous permettent d'éviter que des erreurs se produisant dans des
+parties de votre application fassent s'effondrer l'entièreté de l'application, et de traiter
+correctement ces erreurs tout en permettant d'assurer un comportement normal.
 
-If an error occurs while rendering or updating the children of a `<svelte:boundary>`, or running any [`$effect`]($effect) functions contained therein, the contents will be removed.
+Si une erreur se produit lors du rendu ou de la mise à jour des enfants d'un élément
+`<svelte:boundary>`, ou lors de l'exécution d'une fonction [`$effect`]($effect) qui y serait
+définie, son contenu sera alors supprimé.
 
-Errors occurring outside the rendering process (for example, in event handlers) are _not_ caught by error boundaries.
+Les erreurs se produisant en dehors du processus de rendu (par exemple, dans des gestionnaires
+d'évènement) ne sont _pas_ traitées pas les frontières d'erreurs.
 
-## Properties
+## Propriétés [!VO]Properties
 
-For the boundary to do anything, one or both of `failed` and `onerror` must be provided.
+Pour que les frontières puissent fonctionner, l'une des propriétés `failed` et `onerror` doit être
+fournie en props.
 
 ### `failed`
 
-If a `failed` snippet is provided, it will be rendered with the error that was thrown, and a `reset` function that recreates the contents ([demo](/playground/hello-world#H4sIAAAAAAAAE3VRy26DMBD8lS2tFCIh6JkAUlWp39Cq9EBg06CAbdlLArL87zWGKk8ORnhmd3ZnrD1WtOjFXqKO2BDGW96xqpBD5gXerm5QefG39mgQY9EIWHxueRMinLosti0UPsJLzggZKTeilLWgLGc51a3gkuCjKQ7DO7cXZotgJ3kLqzC6hmex1SZnSXTWYHcrj8LJjWTk0PHoZ8VqIdCOKayPykcpuQxAokJaG1dGybYj4gw4K5u6PKTasSbjXKgnIDlA8VvUdo-pzonraBY2bsH7HAl78mKSHZpgIcuHjq9jXSpZSLixRlveKYQUXhQVhL6GPobXAAb7BbNeyvNUs4qfRg3OnELLj5hqH9eQZqCnoBwR9lYcQxuVXeBzc8kMF8yXY4yNJ5oGiUzP_aaf_waTRGJib5_Ad3P_vbCuaYxzeNpbU0eUMPAOKh7Yw1YErgtoXyuYlPLzc10_xo_5A91zkQL_AgAA)):
+Si un snippet `failed` est fourni, il sera rendu avec l'erreur levée et une fonction `reset`
+permettant de recréer le contenu
+([demo](/playground/hello-world#H4sIAAAAAAAAE3VRy26DMBD8lS2tFCIh6JkAUlWp39Cq9EBg06CAbdlLArL87zWGKk8ORnhmd3ZnrD1WtOjFXqKO2BDGW96xqpBD5gXerm5QefG39mgQY9EIWHxueRMinLosti0UPsJLzggZKTeilLWgLGc51a3gkuCjKQ7DO7cXZotgJ3kLqzC6hmex1SZnSXTWYHcrj8LJjWTk0PHoZ8VqIdCOKayPykcpuQxAokJaG1dGybYj4gw4K5u6PKTasSbjXKgnIDlA8VvUdo-pzonraBY2bsH7HAl78mKSHZpgIcuHjq9jXSpZSLixRlveKYQUXhQVhL6GPobXAAb7BbNeyvNUs4qfRg3OnELLj5hqH9eQZqCnoBwR9lYcQxuVXeBzc8kMF8yXY4yNJ5oGiUzP_aaf_waTRGJib5_Ad3P_vbCuaYxzeNpbU0eUMPAOKh7Yw1YErgtoXyuYlPLzc10_xo_5A91zkQL_AgAA)).
 
 ```svelte
 <svelte:boundary>
-	<FlakyComponent />
+	<ComposantFragile />
 
 	{#snippet failed(error, reset)}
-		<button onclick={reset}>oops! try again</button>
+		<button onclick={reset}>oups ! essaye encore</button>
 	{/snippet}
 </svelte:boundary>
 ```
 
 > [!NOTE]
-> As with [snippets passed to components](snippet#Passing-snippets-to-components), the `failed` snippet can be passed explicitly as a property...
+> Comme avec tout [snippet passé à un composant](snippet#Passing-snippets-to-components), le snippet
+> `failed` peut être passé explicitement comme propriété...
 >
 > ```svelte
 > <svelte:boundary {failed}>...</svelte:boundary>
 > ```
 >
-> ...or implicitly by declaring it directly inside the boundary, as in the example above.
+> ... ou implicitement en le déclarant directement dans la frontière, comme montré dans la l'exemple
+> ci-dessus.
 
 ### `onerror`
 
-If an `onerror` function is provided, it will be called with the same two `error` and `reset` arguments. This is useful for tracking the error with an error reporting service...
+Si une fonction `onerror` est fournie, celle-ci sera appelée avec les même arguments `error` et
+`reset` que le snippet `failed`. Cela est utile pour traiter les erreurs via des services de gestion
+d'erreur...
 
 ```svelte
 <svelte:boundary onerror={(e) => report(e)}>
@@ -52,7 +64,7 @@ If an `onerror` function is provided, it will be called with the same two `error
 </svelte:boundary>
 ```
 
-...or using `error` and `reset` outside the boundary itself:
+... ou pour utiliser `error` et `reset` en dehors de la frontière elle-même :
 
 ```svelte
 <script>
@@ -66,7 +78,7 @@ If an `onerror` function is provided, it will be called with the same two `error
 </script>
 
 <svelte:boundary {onerror}>
-	<FlakyComponent />
+	<ComposantFragile />
 </svelte:boundary>
 
 {#if error}
@@ -74,9 +86,10 @@ If an `onerror` function is provided, it will be called with the same two `error
 		error = null;
 		reset();
 	}}>
-		oops! try again
+		oups ! essaye encore
 	</button>
 {/if}
 ```
 
-If an error occurs inside the `onerror` function (or if you rethrow the error), it will be handled by a parent boundary if such exists.
+Si une erreur se produit dans la fonction `onerror` (ou si vous y levez une erreur), celle-ci sera
+gérée par une éventuelle frontière parente, si elle existe.
