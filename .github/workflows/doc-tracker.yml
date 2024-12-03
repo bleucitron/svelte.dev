@@ -6,9 +6,9 @@ on:
     - cron: '0 3 * * *'
 
 jobs:
-  track-docs-svelte-01:
+  track-docs-svelte:
     runs-on: ubuntu-latest
-    name: Checking Docs Svelte 01
+    name: Checking Docs Svelte
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,95 +18,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           owner: sveltejs
           repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/01-introduction
-  track-docs-svelte-02:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 02
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/02-runes
-  track-docs-svelte-03:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 03
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/03-template-syntax
-  track-docs-svelte-04:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/04-styling
-  track-docs-svelte-05:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 05
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/05-special-elements
-  track-docs-svelte-06:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 06
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/06-runtime
-  track-docs-svelte-07:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 07
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/07-misc
-  track-docs-svelte-98:
-    runs-on: ubuntu-latest
-    name: Checking Docs Svelte 98
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Svelte docs new commits
-        uses: AlexxNB/track-commits-to-issue@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: sveltejs
-          repo: svelte.dev
-          dir: apps/svelte.dev/content/docs/svelte/98-reference
+          dir: apps/svelte.dev/content/docs/svelte
