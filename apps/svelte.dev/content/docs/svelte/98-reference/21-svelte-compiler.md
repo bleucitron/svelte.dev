@@ -483,7 +483,7 @@ namespace AST {
 	export interface EachBlock extends BaseNode {
 		type: 'EachBlock';
 		expression: Expression;
-		/** The `entry` in `{#each item as entry}`. `null` if `as` part is omitted */
+		/** Le `entry` dans `{#each item as entry}`. `null` si `as` n'est pas fourni */
 		context: Pattern | null;
 		body: Fragment;
 		fallback?: Fragment;
