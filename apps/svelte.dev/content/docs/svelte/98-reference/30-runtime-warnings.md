@@ -12,7 +12,7 @@ title: Warnings d'exécution
 Assignment to `%property%` property (%location%) will evaluate to the right-hand side, not the value of `%property%` following the assignment. This may result in unexpected behaviour.
 ```
 
-Given a case like this...
+Étant donné le cas suivant...
 
 ```svelte
 <script>
@@ -23,13 +23,15 @@ Given a case like this...
 	}
 </script>
 
-<button onclick={add}>add</button>
-<p>items: {JSON.stringify(object.items)}</p>
+<button onclick={add}>ajouter</button>
+<p>éléments : {JSON.stringify(object.items)}</p>
 ```
 
-...the array being pushed to when the button is first clicked is the `[]` on the right-hand side of the assignment, but the resulting value of `object.array` is an empty state proxy. As a result, the pushed value will be discarded.
+... le tableau dans lequel on ajoute des éléments lorsque le bouton est cliqué pour la première fois
+est le `[]` à droite de l'assignation, mais la valeur résultante de `object.array` est un proxy
+d'état vide. En conséquence, la valeur ajoutée est ignorée.
 
-You can fix this by separating it into two statements:
+Vous pouvez corriger cela en séparant le code en deux morceaux :
 
 ```js
 let object = { array: [0] };
@@ -140,11 +142,16 @@ Mutating a value outside the component that created it is strongly discouraged. 
 A `$:` statement (%location%) read reactive state that was not visible to the compiler. Updates to this state will not cause the statement to re-run. The behaviour of this code will change if you migrate it to runes mode
 ```
 
-In legacy mode, a `$:` [reactive statement](https://svelte.dev/docs/svelte/legacy-reactive-assignments) re-runs when the state it _references_ changes. This is determined at compile time, by analysing the code.
+En mode legacy, une [déclaration
+réactive](https://svelte.dev/docs/svelte/legacy-reactive-assignments) avec `$:` est rejouée lorsque
+l'état qu'elle _référence_ change. Ceci est déterminé au moment de la compilation, en analysant le
+code.
 
-In runes mode, effects and deriveds re-run when there are changes to the values that are read during the function's _execution_.
+En mode runes, les effects et les dérivations sont rejouées lorsqu'il y a des changements dans les
+valeurs qui sont lues pendant l'_exécution_ de la fonction.
 
-Often, the result is the same — for example these can be considered equivalent:
+Souvent, le résultat est le même dans les deux cas – par exemple ces deux écritures peuvent être
+considérées comme équivalentes :
 
 ```js
 let a = 1, b = 2, sum = 3;
@@ -158,21 +165,26 @@ let a = 1, b = 2;
 const sum = $derived(a + b);
 ```
 
-In some cases — such as the one that triggered the above warning — they are _not_ the same:
+Dans certains cas – comme celui qui déclenche le warning ci-dessus – elles ne sont _pas_
+équivalentes :
 
 ```js
 let a = 1, b = 2, sum = 3;
 // ---cut---
 const add = () => a + b;
 
-// the compiler can't 'see' that `sum` depends on `a` and `b`, but
-// they _would_ be read while executing the `$derived` version
+// le compilateur ne peut "voir" que `sum` dépend de `a` et `b`, mais
+// elles seront bien lues pendant l'exécution de la version `$derived`
 $: sum = add();
 ```
 
-Similarly, reactive properties of [deep state](https://svelte.dev/docs/svelte/$state#Deep-state) are not visible to the compiler. As such, changes to these properties will cause effects and deriveds to re-run but will _not_ cause `$:` statements to re-run.
+De même, les propriétés réactives d'un [état
+profond](https://svelte.dev/docs/svelte/$state#Deep-state) ne sont pas visibles par le compilateur.
+Ainsi, les changements affectant ces propriétés vont déclencher la ré-exécution des effets et les
+dérivations, mais _pas_ celle des déclarations `$:`.
 
-When you [migrate this component](https://svelte.dev/docs/svelte/v5-migration-guide) to runes mode, the behaviour will change accordingly.
+Lorsque vous [migrerez ce composant](https://svelte.dev/docs/svelte/v5-migration-guide) en mode runes,
+le comportement sera celui décrit ici.
 
 ### state_proxy_equality_mismatch
 
