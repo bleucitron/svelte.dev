@@ -728,7 +728,9 @@ Cannot use explicit children snippet at the same time as implicit children conte
 An exported snippet can only reference things declared in a `<script module>`, or other exportable snippets
 ```
 
-It's possible to export a snippet from a `<script module>` block, but only if it doesn't reference anything defined inside a non-module-level `<script>`. For example you can't do this...
+Il est possible d'exporter un snipper depuis un bloc `<script module>`, mais uniquement s'il ne
+référence pas de variable définie dans un `<script>` non-module. Par exemple, vous ne pouvez pas
+faire ceci...
 
 ```svelte
 <script module>
@@ -744,7 +746,7 @@ It's possible to export a snippet from a `<script module>` block, but only if it
 {/snippet}
 ```
 
-...because `greeting` references `message`, which is defined in the second `<script>`.
+... car `greeting` référence `message`, qui est définie dans le deuxième `<script>`.
 
 ### snippet_invalid_rest_parameter
 
