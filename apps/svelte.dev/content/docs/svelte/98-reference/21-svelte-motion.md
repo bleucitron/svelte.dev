@@ -273,11 +273,13 @@ get target(): T;
 
 <blockquote class="since note">
 
-Available since 5.7.0
+Disponible depuis la version 5.7.0
 
 </blockquote>
 
-A [media query](/docs/svelte/svelte-reactivity#MediaQuery) that matches if the user [prefers reduced motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion).
+Une [media query](/docs/svelte/svelte-reactivity#MediaQuery) qui correspond au choix de
+l'utilisateur ou l'utilisatrice d'activer l'[option de réduire la quantité des
+animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion).
 
 ```svelte
 <script>
@@ -293,7 +295,7 @@ A [media query](/docs/svelte/svelte-reactivity#MediaQuery) that matches if the u
 
 {#if visible}
 	<p transition:fly={{ y: prefersReducedMotion.current ? 0 : 200 }}>
-		flies in, unless the user prefers reduced motion
+		entre en volant, sauf si l'utilisateur veut moins d'animations
 	</p>
 {/if}
 ```

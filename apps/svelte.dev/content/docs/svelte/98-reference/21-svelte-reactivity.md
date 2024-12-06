@@ -43,14 +43,16 @@ import {
 
 <blockquote class="since note">
 
-Available since 5.7.0
+Disponible depuis la version 5.7.0
 
 </blockquote>
 
-Creates a media query and provides a `current` property that reflects whether or not it matches.
+Crée une media query et fournit une propriété `current` qui reflète si oui ou non celle-ci
+correspond.
 
-Use it carefully — during server-side rendering, there is no way to know what the correct value should be, potentially causing content to change upon hydration.
-If you can use the media query in CSS to achieve the same effect, do that.
+Servez-vous en avec précaution – pendant le rendu côté serveur, il n'y a aucun moyen de connaître la
+valeur correcte, causant potentiellement des problèmes de contenu lors de l'hydratation.
+Si vous pouvez utiliser une media query en CSS pour obtenir le même résultat, faites-le.
 
 ```svelte
 <script>
@@ -59,7 +61,7 @@ If you can use the media query in CSS to achieve the same effect, do that.
 	const large = new MediaQuery('min-width: 800px');
 </script>
 
-<h1>{large.current ? 'large screen' : 'small screen'}</h1>
+<h1>{large.current ? 'écran large' : 'écran pas large'}</h1>
 ```
 
 <div class="ts-block">
@@ -78,8 +80,8 @@ constructor(query: string, matches?: boolean | undefined);
 
 <div class="ts-block-property-bullets">
 
-- `query` A media query string
-- `matches` Fallback value for the server
+- `query` Une chaîne de caractères de media query
+- `matches` Valeur de secours pour le serveur
 
 </div>
 
@@ -268,19 +270,22 @@ class SvelteURLSearchParams extends URLSearchParams {/*…*/}
 
 <blockquote class="since note">
 
-Available since 5.7.0
+Disponible depuis la version 5.7.0
 
 </blockquote>
 
-Returns a `subscribe` function that, if called in an effect (including expressions in the template),
-calls its `start` callback with an `update` function. Whenever `update` is called, the effect re-runs.
+Renvoie une fonction `subscribe` qui, si appelée dans un effet (incluant les expressions du
+template), appelle son callback `start` avec une fonction `update`. Chaque fois que `update` est
+appelée, l'effect sera rejoué.
 
-If `start` returns a function, it will be called when the effect is destroyed.
+Si `start` renvoie une fonction, celle-ci sera appelée lorsque l'effet sera détruit.
 
-If `subscribe` is called in multiple effects, `start` will only be called once as long as the effects
-are active, and the returned teardown function will only be called when all effects are destroyed.
+Si `subscribe` est appelée dans plusieurs effets, `start` ne sera appelé qu'une seule fois tant que
+les effets sont actifs, et la fonction de "destruction" renvoyée ne sera appelée que lorsque tous
+les effets concernées seront détruits.
 
-It's best understood with an example. Here's an implementation of [`MediaQuery`](/docs/svelte/svelte-reactivity#MediaQuery):
+On comprend mieux cette fonctionnalité avec un exemple. Voici l'implémentation de
+[`MediaQuery`](/docs/svelte/svelte-reactivity#MediaQuery) :
 
 ```js
 // @errors: 7031
@@ -295,10 +300,10 @@ export class MediaQuery {
 		this.#query = window.matchMedia(`(${query})`);
 
 		this.#subscribe = createSubscriber((update) => {
-			// when the `change` event occurs, re-run any effects that read `this.current`
+			// lorsque l'évènement `change` se produit, rejoue tout effet qui lit `this.current`
 			const off = on(this.#query, 'change', update);
 
-			// stop listening when all the effects are destroyed
+			// arrête d'écouter lorsque tous les effets sont détruits
 			return () => off();
 		});
 	}
@@ -306,7 +311,7 @@ export class MediaQuery {
 	get current() {
 		this.#subscribe();
 
-		// Return the current state of the query, whether or not we're in an effect
+		// renvoie l'état courant de la query, que l'on soit ou non dans un effet
 		return this.#query.matches;
 	}
 }
