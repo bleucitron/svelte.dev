@@ -43,7 +43,7 @@ import {
 
 <blockquote class="since note">
 
-Disponible depuis la version 5.7.0
+Disponible à partir de la version 5.7.0
 
 </blockquote>
 
@@ -270,7 +270,7 @@ class SvelteURLSearchParams extends URLSearchParams {/*…*/}
 
 <blockquote class="since note">
 
-Disponible depuis la version 5.7.0
+Disponible à partir de la version 5.7.0
 
 </blockquote>
 
