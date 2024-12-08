@@ -194,14 +194,14 @@ const { head, html, css } = App.render({
 
 La méthode `.render()` accepte les paramètres suivants :
 
-| parameter | par défaut | description                                        |
+| paramètre | défaut     | description                                        |
 | --------- | ---------- | -------------------------------------------------- |
 | `props`   | `{}`       | Un objet de propriétés à fournir au composant      |
 | `options` | `{}`       | Un objet d'options                                 |
 
 L'objet `options` accepte les options suivantes :
 
-| parameter | par défaut  | description                                                                           |
+| paramètre | défaut      | description                                                                           |
 | --------- | ----------- | ------------------------------------------------------------------------------------- |
 | `context` | `new Map()` | Une `Map` de paires clé-valeur représentant un contexte racine à fournir au composant |
 
