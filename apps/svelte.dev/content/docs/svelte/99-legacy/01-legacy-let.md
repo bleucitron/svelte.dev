@@ -1,10 +1,12 @@
 ---
-title: Reactive let/var declarations
+title: Déclarations réactives let/var
 ---
 
-In runes mode, reactive state is explicitly declared with the [`$state` rune]($state).
+En mode runes, un état réactif est explicitement déclaré avec la [rune `$state`]($state).
 
-In legacy mode, variables declared at the top level of a component are automatically considered _reactive_. Reassigning or mutating these variables (`count += 1` or `object.x = y`) will cause the UI to update.
+En mode legacy, les variables déclarées à la racine d'un composant sont automatiquement considérées
+comme étant _réactives_. Réassigner ou muter ces variables (`count += 1` ou `object.x = y`) provoque
+une mise à jour de l'interface.
 
 ```svelte
 <script>
@@ -12,22 +14,24 @@ In legacy mode, variables declared at the top level of a component are automatic
 </script>
 
 <button on:click={() => count += 1}>
-	clicks: {count}
+	clics: {count}
 </button>
 ```
 
-Because Svelte's legacy mode reactivity is based on _assignments_, using array methods like `.push()` and `.splice()` won't automatically trigger updates. A subsequent assignment is required to 'tell' the compiler to update the UI:
+Puisque la réactivité du mode legacy de Svelte est basée sur les _assignations_, l'utilisation de
+méthodes de tableaux comme `.push()` et `.splice()` ne déclencheront pas de mises à jour. Une
+assignation consécutive est nécessaire pour "dire" au compilateur de mettre à jour l'interface :
 
 ```svelte
 <script>
 	let numbers = [1, 2, 3, 4];
 
 	function addNumber() {
-		// this method call does not trigger an update
+		// l'exécution de cette méthode ne déclenche pas de mise à jour
 		numbers.push(numbers.length + 1);
 
-		// this assignment will update anything
-		// that depends on `numbers`
+		// cette assignation déclenche les mises à jour
+		// de tout ce qui dépend de `numbers`
 		numbers = numbers;
 	}
 </script>

@@ -2,13 +2,15 @@
 title: <svelte:fragment>
 ---
 
-The `<svelte:fragment>` element allows you to place content in a [named slot](legacy-slots) without wrapping it in a container DOM element. This keeps the flow layout of your document intact.
+L'élément	`<svelte:fragment>` permet de placer du contenu dans un [slot nommé](legacy-slots) sans
+rajouter un élément contenant supplémentaire dans le DOM, conservant ainsi intacte la structure de
+votre document.
 
 ```svelte
 <!--- file: Widget.svelte --->
 <div>
-	<slot name="header">No header was provided</slot>
-	<p>Some content between header and footer</p>
+	<slot name="header">Aucun en-tête n'a été fourni</slot>
+	<p>Du contenu entre l'en-tête et le pied-de-page</p>
 	<slot name="footer" />
 </div>
 ```
@@ -22,11 +24,11 @@ The `<svelte:fragment>` element allows you to place content in a [named slot](le
 <Widget>
 	<h1 slot="header">Hello</h1>
 	<svelte:fragment slot="footer">
-		<p>All rights reserved.</p>
+		<p>Tous droits réservés</p>
 		<p>Copyright (c) 2019 Svelte Industries</p>
 	</svelte:fragment>
 </Widget>
 ```
 
 > [!NOTE]
-> In Svelte 5+, this concept is obsolete, as snippets don't create a wrapping element
+> En Svelte 5+, ce concept est obsolète, car les snippets ne créent pas d'élément contenant

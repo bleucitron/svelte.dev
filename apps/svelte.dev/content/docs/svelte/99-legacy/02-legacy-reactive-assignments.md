@@ -1,35 +1,42 @@
 ---
-title: Reactive $: statements
+title: Déclarations réactives $:
 ---
 
-In runes mode, reactions to state updates are handled with the [`$derived`]($derived) and [`$effect`]($effect) runes.
+En mode runes, les réactions aux mises à jour d'état sont gérées avec les runes
+[`$derived`]($derived) et [`$effect`]($effect).
 
-In legacy mode, any top-level statement (i.e. not inside a block or a function) can be made reactive by prefixing it with a `$:` [label](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label). These statements run after other code in the `<script>` and before the component markup is rendered, then whenever the values that they depend on change.
+En mode legacy, toute déclaration à la racine (par ex. pas dans un bloc ou une fonction) peut être
+rendue réactive en la préfixant avec un
+[label](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label) `$:`.
+Ces déclarations sont exécutées après tout autre code du `<script>` et avant le rendu du markup du
+composant, puis lorsque les valeurs dont elles dépendent changent.
 
 ```svelte
 <script>
 	let a = 1;
 	let b = 2;
 
-	// this is a 'reactive statement', and it will re-run
-	// when `a`, `b` or `sum` change
+	// ceci est une "déclaration réactive", et sera rejouée
+	// lorsque `a`, `b` ou `sum` change
 	$: console.log(`${a} + ${b} = ${sum}`);
 
-	// this is a 'reactive assignment' — `sum` will be
-	// recalculated when `a` or `b` change. It is
-	// not necessary to declare `sum` separately
+	// ceci est une "assignatin réactive" – `sum` sera
+	// recalculée lorsque `a` ou `b` change. Il n'est
+	// pas nécessaire de déclarer `sum` séparément
 	$: sum = a + b;
 </script>
 ```
 
-Statements are ordered _topologically_ by their dependencies and their assignments: since the `console.log` statement depends on `sum`, `sum` is calculated first even though it appears later in the source.
+Les déclarations sont ordonnées _topologiquement_ par leurs dépendences et leurs assignations :
+puisque la déclaration `console.log` dépend de `sum`, `sum` est calculée en premier même si elle
+apparaît plus loin dans le code.
 
-Multiple statements can be combined by putting them in a block:
+Plusieurs déclarations peuvent être combinée en les mettant dans un bloc :
 
 ```js
 // @noErrors
 $: {
-	// recalculate `total` when `items` changes
+	// recalcule `total` lorsque `items` change
 	total = 0;
 
 	for (const item of items) {
@@ -38,18 +45,21 @@ $: {
 }
 ```
 
-The left-hand side of a reactive assignments can be an identifier, or it can be a destructuring assignment:
+La partie à gauche d'une assignation réactive peut être un identifiant, ou une assignation de
+déstructuration :
 
 ```js
 // @noErrors
 $: ({ larry, moe, curly } = stooges);
 ```
 
-## Understanding dependencies
+## Comprendre les dépendances [!VO]Understanding dependencies
 
-The dependencies of a `$:` statement are determined at compile time — they are whichever variables are referenced (but not assigned to) inside the statement.
+Les dépendances d'une déclaration `$:` sont déterminées au moment de la compilation – il s'agit de
+toutes les variables référencées (mais pas assignées) dans la déclaration.
 
-In other words, a statement like this will _not_ re-run when `count` changes, because the compiler cannot 'see' the dependency:
+En d'autres termes, une déclaration comme celle-ci ne sera _pas_ rejouée lorsque `count` change, car
+le compilateur ne peut pas "voir" la dépendance :
 
 ```js
 // @noErrors
@@ -59,7 +69,9 @@ let double = () => count * 2;
 $: doubled = double();
 ```
 
-Similarly, topological ordering will fail if dependencies are referenced indirectly: `z` will never update, because `y` is not considered 'dirty' when the update occurs. Moving `$: z = y` below `$: setY(x)` will fix it:
+De même, l'ordre topologique sera cassé si les dépendances sont référencées indirectement : `z` ne
+sera jamais mis à jour, car `y` n'est pas considérée comme ayant changé lorsque la mise à jour se
+produit. Déplacer `$: z = y` en-dessous de `$: setY(x)` permet de corriger le problème :
 
 ```svelte
 <script>
@@ -75,9 +87,11 @@ Similarly, topological ordering will fail if dependencies are referenced indirec
 </script>
 ```
 
-## Browser-only code
+## Code uniquement pour le navigateur [!VO]Browser-only code
 
-Reactive statements run during server-side rendering as well as in the browser. This means that any code that should only run in the browser must be wrapped in an `if` block:
+Les déclarations réactives sont jouées lors du rendu côté serveur ainsi que dans le navigateur. Ceci
+signifie que tout code qui devrait être uniquement exécuté dans le navigateur devrait être placé
+dans un bloc `if` :
 
 ```js
 // @noErrors

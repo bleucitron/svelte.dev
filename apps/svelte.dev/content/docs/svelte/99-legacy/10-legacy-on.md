@@ -2,9 +2,9 @@
 title: on:
 ---
 
-In runes mode, event handlers are just like any other attribute or prop.
+En mode runes, les gestionnaires d'évènements sont fournis comme n'importe quel attribut ou prop.
 
-In legacy mode, we use the `on:` directive:
+En mode legacy, il faut utiliser la directive `on:` :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -18,50 +18,57 @@ In legacy mode, we use the `on:` directive:
 </script>
 
 <button on:click={handleClick}>
-	count: {count}
+	compteur : {count}
 </button>
 ```
 
-Handlers can be declared inline with no performance penalty:
+Les gestionnaires peuvent être déclarés de manière inline sans pénaliser les performances :
 
 ```svelte
 <button on:click={() => (count += 1)}>
-	count: {count}
+	compteur : {count}
 </button>
 ```
 
-Add _modifiers_ to element event handlers with the `|` character.
+Vous pouvez ajouter des _modificateurs_ aux gestionnaires d'évènement d'éléments grâce au caractère
+`|`.
 
 ```svelte
 <form on:submit|preventDefault={handleSubmit}>
-	<!-- the `submit` event's default is prevented,
-	     so the page won't reload -->
+	<!-- le comportement par défaut de `submit` est
+				empêché, pour éviter un rechargement de la page -->
 </form>
 ```
 
-The following modifiers are available:
+Les modificateurs suivants sont disponibles :
 
-- `preventDefault` — calls `event.preventDefault()` before running the handler
-- `stopPropagation` — calls `event.stopPropagation()`, preventing the event reaching the next element
-- `stopImmediatePropagation` - calls `event.stopImmediatePropagation()`, preventing other listeners of the same event from being fired.
-- `passive` — improves scrolling performance on touch/wheel events (Svelte will add it automatically where it's safe to do so)
-- `nonpassive` — explicitly set `passive: false`
-- `capture` — fires the handler during the _capture_ phase instead of the _bubbling_ phase
-- `once` — remove the handler after the first time it runs
-- `self` — only trigger handler if `event.target` is the element itself
-- `trusted` — only trigger handler if `event.isTrusted` is `true`. I.e. if the event is triggered by a user action.
+- `preventDefault` — appelle `event.preventDefault()` avant d'exécuter le gestionnaire
+- `stopPropagation` — appelle `event.stopPropagation()`, empêchant l'évènement d'atteindre l'élément
+suivant
+- `stopImmediatePropagation` - appelle `event.stopImmediatePropagation()`, empêchant les autres
+gestionnaires du même évènement d'être exécutés
+- `passive` — améliore la performance du défilement pour les évènements touch/wheel (Svelte
+l'ajoute automatiquement lorsque cela ne pose pas de problème)
+- `nonpassive` — définit explicitement `passive: false`
+- `capture` — déclenche le gestionnaire pendant la phase de _capture_ plutôt que pendant la phase de
+_bubbling_
+- `once` — supprime le gestionnaire après sa première exécution
+- `self` — ne déclenche le gestionnaire que si `event.target` est l'élément lui-même
+- `trusted` — ne déclenche le gestionnaire que si `event.isTrusted` vaut `true`. C'est-à-dire sir
+l'évènement est déclenché par une action de l'utilisateur
 
-Modifiers can be chained together, e.g. `on:click|once|capture={...}`.
+Les modificateurs peuvent être chaînés, par ex. `on:click|once|capture={...}`.
 
-If the `on:` directive is used without a value, the component will _forward_ the event, meaning that a consumer of the component can listen for it.
+Si la directive `:on` est utilisée sans valeur, le composant va _relayer_ l'évènement, ce qui
+signifie qu'un composant parent de celui-ci peut écouter cet évènement.
 
 ```svelte
 <button on:click>
-	The component itself will emit the click event
+	Le composant lui-même va émettre l'évènement click
 </button>
 ```
 
-It's possible to have multiple event listeners for the same event:
+Il est possible d'avoir plusieurs gestionnaires d'évènement pour le même évènement :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -79,13 +86,14 @@ It's possible to have multiple event listeners for the same event:
 </script>
 
 <button on:click={increment} on:click={log}>
-	clicks: {count}
+	clics : {count}
 </button>
 ```
 
-## Component events
+## Évènements de composant [!VO]Component events
 
-Components can dispatch events by creating a _dispatcher_ when they are initialised:
+Les composants peuvent générer des évènemnts en créant un _dispatcher_ lors de leur
+initialisation :
 
 ```svelte
 <!--- file: Stepper.svelte -->
@@ -94,13 +102,15 @@ Components can dispatch events by creating a _dispatcher_ when they are initiali
 	const dispatch = createEventDispatcher();
 </script>
 
-<button on:click={() => dispatch('decrement')}>decrement</button>
-<button on:click={() => dispatch('increment')}>increment</button>
+<button on:click={() => dispatch('decrement')}>décrémenter</button>
+<button on:click={() => dispatch('increment')}>incrémenter</button>
 ```
 
-`dispatch` creates a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent). If a second argument is provided, it becomes the `detail` property of the event object.
+`dispatch` crée un [`CustomEvent`](https://developer.mozilla.org/fr/docs/Web/API/CustomEvent).
+Si un deuxième argument est fourni, il devient alors la propriété `detail` sur l'objet de
+l'évènement.
 
-A consumer of this component can listen for the dispatched events:
+Un composant parent de ce composant peut alors écouter les évènements que ce dernier émet :
 
 ```svelte
 <script>
@@ -114,15 +124,19 @@ A consumer of this component can listen for the dispatched events:
 	on:increment={() => n += 1}
 />
 
-<p>n: {n}</p>
+<p>n : {n}</p>
 ```
 
-Component events do not bubble — a parent component can only listen for events on its immediate children.
+Les évènements de composants ne "bubblent" pas – un composant parent peut uniquement écouter les
+évènements de ses enfants directs.
 
-Other than `once`, modifiers are not valid on component event handlers.
+Mis à part `once`, les modificateurs ne sont pas applicables sur les gestionnaires d'évènement de
+composant.
 
 > [!NOTE]
-> If you're planning an eventual migration to Svelte 5, use callback props instead. This will make upgrading easier as `createEventDispatcher` is deprecated:
+> Si vous prévoyez une éventuelle migration vers Svelte 5, utilisez plutôt des props de callback
+> pour vos gestionnaires d'évènement. Cela facilitera votre migration, puisque
+> `createEventDispatcher` est déprécié :
 >
 > ```svelte
 > <!--- file: Stepper.svelte --->
@@ -131,6 +145,6 @@ Other than `once`, modifiers are not valid on component event handlers.
 > 	export let increment;
 > </script>
 >
-> <button on:click={decrement}>decrement</button>
-> <button on:click={increment}>increment</button>
+> <button on:click={decrement}>décrémenter</button>
+> <button on:click={increment}>incrémenter</button>
 > ```

@@ -2,9 +2,11 @@
 title: <slot>
 ---
 
-In Svelte 5, content can be passed to components in the form of [snippets](snippet) and rendered using [render tags](@render).
+Avec Svelte 5, du contenu peut être passé aux composants sous le forme de [snippets](snippet) et
+affiché en utilisant des [balises render](@render).
 
-In legacy mode, content inside component tags is considered _slotted content_, which can be rendered by the component using a `<slot>` element:
+En mode legacy, le contenu dans les balises de composant est considéré comme du _contenu slotté_,
+qui peut être affiché par le composant en utilisant un élément `<slot>` :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -12,7 +14,7 @@ In legacy mode, content inside component tags is considered _slotted content_, w
 	import Modal from './Modal.svelte';
 </script>
 
-<Modal>This is some slotted content</Modal>
+<Modal>Ceci est du contenu slotté</Modal>
 ```
 
 ```svelte
@@ -22,11 +24,14 @@ In legacy mode, content inside component tags is considered _slotted content_, w
 </div>
 ```
 
-> [!NOTE] If you want to render a regular `<slot>` element, you can use `<svelte:element this={'slot'} />`.
+> [!NOTE] Si vous souhaitez afficher un élément `<slot>` standard, vous pouvez utiliser
+> `<svelte:element this={'slot'} />`.
 
-## Named slots
+## Slots nommés [!VO]Named slots
 
-A component can have _named_ slots in addition to the default slot. On the parent side, add a `slot="..."` attribute to an element, component or [`<svelte:fragment>`](legacy-svelte-fragment) directly inside the component tags.
+Un composant peut avoir des slots _nommés_ en plus du slot par défaut. Du côté du parent, ajoutez un
+attribut `slot="..."` à un élément, composant ou [`<svelte:fragment>`](legacy-svelte-fragment), au
+sein de la balise.
 
 ```svelte
 <!--- file: App.svelte --->
@@ -38,18 +43,18 @@ A component can have _named_ slots in addition to the default slot. On the paren
 
 {#if open}
 	<Modal>
-		This is some slotted content
+		Ceci est du contenu slotté
 
 		+++<div slot="buttons">+++
 			<button on:click={() => open = false}>
-				close
+				fermer
 			</button>
 		+++</div>+++
 	</Modal>
 {/if}
 ```
 
-On the child side, add a corresponding `<slot name="...">` element:
+Du côté de l'enfant, ajoutez un élément `<slot name="...">` correspondant :
 
 ```svelte
 <!--- file: Modal.svelte --->
@@ -60,26 +65,29 @@ On the child side, add a corresponding `<slot name="...">` element:
 </div>
 ```
 
-## Fallback content
+## Contenu par défaut [!VO]Fallback content
 
-If no slotted content is provided, a component can define fallback content by putting it inside the `<slot>` element:
+Si aucun contenu slotté n'est fourni, un composant peut définir du contenu par défaut en le
+déclarant dans l'élément `<slot>` :
 
 ```svelte
 <slot>
-	This will be rendered if no slotted content is provided
+	Ceci sera affiché si aucun contenu slotté n'est fourni
 </slot>
 ```
 
-## Passing data to slotted content
+## Fournir des données à du contenu slotté [!VO]Passing data to slotted content
 
-Slots can be rendered zero or more times and can pass values _back_ to the parent using props. The parent exposes the values to the slot template using the `let:` directive.
+Un même slot peut être affiché zéro ou plusieurs fois, et peut _remonter_ des valeurs au parent en
+utilisant des props. Le parent expose ces valeurs au template de slot en utilisant la directive
+`let:`.
 
 ```svelte
 <!--- file: FancyList.svelte --->
 <ul>
 	{#each items as data}
 		<li class="fancy">
-			<!-- 'item' here... -->
+			<!-- le `item` ici... -->
 			<slot item={process(data)} />
 		</li>
 	{/each}
@@ -88,15 +96,17 @@ Slots can be rendered zero or more times and can pass values _back_ to the paren
 
 ```svelte
 <!--- file: App.svelte --->
-<!-- ...corresponds to 'item' here: -->
+<!-- ... correspond au `item` ici : -->
 <FancyList {items} let:item={processed}>
 	<div>{processed.text}</div>
 </FancyList>
 ```
 
-The usual shorthand rules apply — `let:item` is equivalent to `let:item={item}`, and `<slot {item}>` is equivalent to `<slot item={item}>`.
+Les règles classiques de raccourci de syntaxe – `let:item` est équivalent à `let:item={item}`, et
+`<slot {item}>` est équivalent à `<slot item={item}>`.
 
-Named slots can also expose values. The `let:` directive goes on the element with the `slot` attribute.
+Les slots nommés peuvent également exposer des valeurs. La directive `let:` doit se positionner sur
+l'élément possédant l'attribut `slot`.
 
 ```svelte
 <!--- file: FancyList.svelte --->

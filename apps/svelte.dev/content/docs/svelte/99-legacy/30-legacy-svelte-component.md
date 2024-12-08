@@ -2,12 +2,14 @@
 title: <svelte:component>
 ---
 
-In runes mode, `<MyComponent>` will re-render if the value of `MyComponent` changes.
+En mode runes, `<MyComponent>` va être re-rendu si la valeur de `MyComponent` change.
 
-In legacy mode, it won't — we must use `<svelte:component>`, which destroys and recreates the component instance when the value of its `this` expression changes:
+En mode legacy, ça ne sera pas le cas – il est necéssaire d'utiliser `<svelte:component>`, qui va
+détruire et reconstruire l'instance du composant lorsque la valeur de son expression `this` sera
+mise à jour :
 
 ```svelte
 <svelte:component this={MyComponent} />
 ```
 
-If `this` is falsy, no component is rendered.
+Si `this` est falsy, aucun composant n'est rendu.

@@ -2,40 +2,47 @@
 title: export let
 ---
 
-In runes mode, [component props](basic-markup#Component-props) are declared with the [`$props`]($props) rune, allowing parent components to pass in data.
+En mode runes, les [props de composant](basic-markup#Component-props) sont déclarées avec la rune
+[`$props`]($props), ce qui permet aux composants parent de fournir des données.
 
-In legacy mode, props are marked with the `export` keyword, and can have a default value:
+En mode legacy, les props sont déclarées avec le mot-clé `export`, et peuvent avoir une valeur par
+défaut :
 
 ```svelte
 <script>
 	export let foo;
-	export let bar = 'default value';
+	export let bar = 'valeur par défaut';
 
-	// Values that are passed in as props
-	// are immediately available
+	// les valeurs qui sont passées comme props
+	// sont immédiatement disponibles
 	console.log({ foo });
 </script>
 ```
 
-The default value is used if it would otherwise be `undefined` when the component is created.
+La valeur par défaut est utilisée si celle-ci devait être `undefined` lors de la création du
+composant.
 
-> [!NOTE] Unlike in runes mode, if the parent component changes a prop from a defined value to `undefined`, it does not revert to the initial value.
+> [!NOTE] À la différence du mode runes, si le composant parent change la valeur d'une prop d'une
+> valeur définie à `undefined`, la valeur par défaut ne sera pas utilisée.
 
-Props without default values are considered _required_, and Svelte will print a warning during development if no value is provided, which you can squelch by specifying `undefined` as the default value:
+Les props sans valeur par défaut sont considérées _obligatoires_, et Svelte affichera un warning en
+mode développement si aucune valeur n'est fournie, ce que vous pouvez éviter en fournissant
+`undefined` en valeur par défaut :
 
 ```js
 export let foo +++= undefined;+++
 ```
 
-## Component exports
+## Exports de composant [!VO]Component exports
 
-An exported `const`, `class` or `function` declaration is _not_ considered a prop — instead, it becomes part of the component's API:
+Une déclaration exportée utilisant `const`, `class`, ou `function` n'est _pas_ considérée comme une
+prop – elle devient à la place une partie de l'API du composant :
 
 ```svelte
 <!--- file: Greeter.svelte--->
 <script>
 	export function greet(name) {
-		alert(`hello ${name}!`);
+		alert(`coucou ${name} !`);
 	}
 </script>
 ```
@@ -50,14 +57,15 @@ An exported `const`, `class` or `function` declaration is _not_ considered a pro
 
 <Greeter bind:this={greeter} />
 
-<button on:click={() => greeter.greet('world')}>
-	greet
+<button on:click={() => greeter.greet('tout le monde')}>
+	accueillir
 </button>
 ```
 
-## Renaming props
+## Renommer des props [!VO]Renaming props
 
-The `export` keyword can appear separately from the declaration. This is useful for renaming props, for example in the case of a reserved word:
+Le mot-clé `export` peut apparaître indépendamment de la déclaration. Ceci permet de renommer des
+props, dans le cas par exemple d'un mot réservé :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -65,8 +73,8 @@ The `export` keyword can appear separately from the declaration. This is useful 
 	/** @type {string} */
 	let className;
 
-	// creates a `class` property, even
-	// though it is a reserved word
+	// crée une propriété `class`,
+	// même s'il s'agit d'un mot réservé
 	export { className as class };
 </script>
 ```

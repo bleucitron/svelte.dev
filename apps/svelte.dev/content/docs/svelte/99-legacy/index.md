@@ -1,3 +1,3 @@
 ---
-title: Legacy APIs
+title: Anciennes APIs
 ---

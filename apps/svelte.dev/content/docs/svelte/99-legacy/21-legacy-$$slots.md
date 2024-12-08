@@ -2,16 +2,18 @@
 title: $$slots
 ---
 
-In runes mode, we know which [snippets](snippet) were provided to a component, as they're just normal props.
+En mode runes, nous connaissons quels sont les [snippets](snippet) fournis à un composant, puisque
+les snippets sont des props comme les autres.
 
-In legacy mode, the way to know if content was provided for a given slot is with the `$$slots` object, whose keys are the names of the slots passed into the component by the parent.
+En mode legacy, pour savoir si du contenu a été fourni pour un slot donné, il faut utiliser l'objet
+`$$slots`, dont les clés sont les noms des slots passés au composant par son parent.
 
 ```svelte
 <!--- file: Card.svelte --->
 <div>
 	<slot name="title" />
 	{#if $$slots.description}
-		<!-- This <hr> and slot will render only if `slot="description"` is provided. -->
+		<!-- ce <hr> et le slot ne seront affichés que si `slot="description"` est fourni -->
 		<hr />
 		<slot name="description" />
 	{/if}
@@ -22,6 +24,6 @@ In legacy mode, the way to know if content was provided for a given slot is with
 <!--- file: App.svelte --->
 <Card>
 	<h1 slot="title">Blog Post Title</h1>
-	<!-- No slot named "description" was provided so the optional slot will not be rendered. -->
+	<!-- aucun slot nommé "description" n'a été fourni, le slot optionnel ne sera donc pas affiché -->
 </Card>
 ```

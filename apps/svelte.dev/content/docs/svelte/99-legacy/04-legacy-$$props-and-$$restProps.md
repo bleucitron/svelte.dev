@@ -1,15 +1,18 @@
 ---
-title: $$props and $$restProps
+title: $$props et $$restProps
 ---
 
-In runes mode, getting an object containing all the props that were passed in is easy, using the [`$props`]($props) rune.
+En mode runes, récupérer un objet contenant toutes les props fournies est facile, en utilisant la
+rune [`$props`]($props).
 
-In legacy mode, we use `$$props` and `$$restProps`:
+En mode legacy, il faut utiliser `$$props` et `$$restProps` :
 
-- `$$props` contains all the props that were passed in, including ones that are not individually declared with the `export` keyword
-- `$$restProps` contains all the props that were passed in _except_ the ones that were individually declared
+- `$props` contient toutes les props fournies, en incluant celles individuellement déclarées avec le
+	mot-clé `export`
+- `$$restProps` contient toutes les props fournies _sauf_ celles individuellement déclarées
 
-For example, a `<Button>` component might need to pass along all its props to its own `<button>` element, except the `variant` prop:
+Par exemple, un composant `<Button>` pourrait avoir besoin de fournir toutes ses props à un élément
+`<button>`, à l'exception de la prop `variant` :
 
 ```svelte
 <script>
@@ -17,7 +20,7 @@ For example, a `<Button>` component might need to pass along all its props to it
 </script>
 
 <button {...$$restProps} class="variant-{variant} {$$props.class ?? ''}">
-	click me
+	cliquez moi
 </button>
 
 <style>
@@ -27,4 +30,5 @@ For example, a `<Button>` component might need to pass along all its props to it
 </style>
 ```
 
-In Svelte 3/4 using `$$props` and `$$restProps` creates a modest performance penalty, so they should only be used when needed.
+En Svelte 3 ou 4, utiliser `$$props` et `$$restProps` impactent légèrement les performances, ils
+doivent donc être utilisés uniquement lorsque nécessaire.

@@ -2,9 +2,10 @@
 title: <svelte:self>
 ---
 
-The `<svelte:self>` element allows a component to include itself, recursively.
+L'élément `<svelte:self>` permet à un composant de s'inclure lui-même, récursivement.
 
-It cannot appear at the top level of your markup; it must be inside an if or each block or passed to a component's slot to prevent an infinite loop.
+Cet élément ne peut pas apparaître à la racine de votre markup ; il doit être placé dans un bloc
+`if`, un bloc `each`, ou passé à un slot de composant pour ne pas créer de boucle infinie.
 
 ```svelte
 <script>
@@ -12,15 +13,15 @@ It cannot appear at the top level of your markup; it must be inside an if or eac
 </script>
 
 {#if count > 0}
-	<p>counting down... {count}</p>
+	<p>compte à rebours... {count}</p>
 	<svelte:self count={count - 1} />
 {:else}
-	<p>lift-off!</p>
+	<p>décollage !</p>
 {/if}
 ```
 
 > [!NOTE]
-> This concept is obsolete, as components can import themselves:
+> En Svelte 5+, ce concept est obsolète, car les composants peuvent s'importer eux-mêmes :
 > ```svelte
 > <!--- file: App.svelte --->
 > <script>
@@ -29,9 +30,9 @@ It cannot appear at the top level of your markup; it must be inside an if or eac
 > </script>
 >
 > {#if count > 0}
-> 	<p>counting down... {count}</p>
+> 	<p>compte à rebours... {count}</p>
 > 	<Self count={count - 1} />
 > {:else}
-> 	<p>lift-off!</p>
+> 	<p>décollage !</p>
 > {/if}
 > ```
