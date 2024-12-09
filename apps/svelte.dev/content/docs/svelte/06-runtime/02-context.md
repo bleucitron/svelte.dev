@@ -33,7 +33,7 @@ export const myGlobalState = $state({
 Cette technique a toutefois quelques inconvénients :
 
 - cela ne fonctionne vraiment de manière sécurisée que si votre état global est uniquement utilisé
-côté client – par exemple lorsque vous créez une application de type SPA qui ne construit aucun de
+côté client — par exemple lorsque vous créez une application de type SPA qui ne construit aucun de
 ses composants sur le serveur. Si votre état se trouve être géré et mis à jour sur le serveur, il
 est très probable que cet état soit partagé entre les sessions et/ou les utilisateurs, provoquant
 des bugs et des failles de sécurité

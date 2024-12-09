@@ -4,7 +4,7 @@ title: Tests
 
 Les tests vous aident à écrire et maintenir votre code et vous protègent contre les régressions. Les
 frameworks de test vous aident à ça, vous permettant de décrire des assertions ou des attentes sur
-le comportement de votre code. Svelte ne vous oriente pas sur tel ou tel framework à utiliser – vous
+le comportement de votre code. Svelte ne vous oriente pas sur tel ou tel framework à utiliser — vous
 pouvez écrire des tests unitaires, des tests d'intégration, des tests end-to-end en utilisant des
 solutions comme [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.io/),
 [Cypress](https://www.cypress.io/) et [Playwright](https://playwright.dev/)
@@ -237,7 +237,7 @@ de Svelte, qui se lance avec `npx sv create`.
 
 Une fois l'installation terminée, vous devriez voir apparaître un dossier `tests` ainsi qu'un
 fichier de configuration de Playwright. Il se peut que vous ayez besoin d'ajuster cette
-configuration pour dire à Playwright ce qu'il doit faire avant de lancer les tests – principalement
+configuration pour dire à Playwright ce qu'il doit faire avant de lancer les tests — principalement
 lancer votre application sur un port particulier :
 
 ```js

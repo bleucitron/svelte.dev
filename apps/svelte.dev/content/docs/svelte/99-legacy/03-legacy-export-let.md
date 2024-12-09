@@ -36,7 +36,7 @@ export let foo +++= undefined;+++
 ## Exports de composant [!VO]Component exports
 
 Une déclaration exportée utilisant `const`, `class`, ou `function` n'est _pas_ considérée comme une
-prop – elle devient à la place une partie de l'API du composant :
+prop — elle devient à la place une partie de l'API du composant :
 
 ```svelte
 <!--- file: Greeter.svelte--->

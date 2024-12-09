@@ -11,5 +11,5 @@ La balise `{@const ...}` définit une constante locale.
 {/each}
 ```
 
-L'usage de `{@const}` est uniquement autorisé immédiatement en enfant d'un bloc - `{#if ...}`,
-`{#each ...}`, `{#snippet ...}`, etc. – ou d'un `<Composant />`.
+L'usage de `{@const}` est uniquement autorisé immédiatement en enfant d'un bloc — `{#if ...}`,
+`{#each ...}`, `{#snippet ...}`, etc. — ou d'un `<Composant />`.

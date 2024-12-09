@@ -89,7 +89,7 @@ le site de Svelte Society.
 
 La façon dont votre application est structurée et comment sa logique est définie vont déterminer la
 meilleure manière de vous assurer qu'elle est correctement testée. Il est important de noter que
-toutes les logiques ne sont pas bonnes à mettre dans des composants - ceci inclut des sujets comme
+toutes les logiques ne sont pas bonnes à mettre dans des composants — ceci inclut des sujets comme
 la transformation de données, la gestion d'état inter-composants, l'affichage de logs, entre autres
 choses. Rappelez-vous que la librairie Svelte a sa propre suite de tests, vous n'avez donc pas
 besoin d'écrire des tests pour valider les implémentations de comportements fournis par Svelte.

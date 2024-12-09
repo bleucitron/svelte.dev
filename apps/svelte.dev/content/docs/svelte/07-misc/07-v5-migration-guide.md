@@ -7,7 +7,7 @@ différent au premier abord, vous remarquerez très vite des ressemblances. Ce g
 les changements de manière détaillée et vous aide à faire votre mise à jour. De plus, nous
 fournissons également quelques informations sur _pourquoi_ nous avons fait ces changements.
 
-Vous n'avez pas besoin de migrer vers la nouvelle syntaxe tout de suite – Svelte 5 continue de
+Vous n'avez pas besoin de migrer vers la nouvelle syntaxe tout de suite — Svelte 5 continue de
 supporter la syntaxe de la version 4, et il est possible de mélanger des composants utilisant la
 nouvelle syntaxe avec des composants utilisant l'ancienne syntaxe. Nous pensons que beaucoup de gens
 seront capables de mettre à jour Svelte en changeant initialement uniquement quelques lignes de
@@ -37,7 +37,7 @@ modifier directement, sans aucun intermédiaire comme `.value` ou `getCount()`.
 
 > [!DETAILS] Pourquoi ce changement
 > Le fait qu'une déclaration `let` à la racine d'un composant soit implicitement réactive
-> fonctionnait très bien, mais cela impliquait que la réactivité était contrainte - déclarer un
+> fonctionnait très bien, mais cela impliquait que la réactivité était contrainte — déclarer un
 > `let` à un autre endroit ne le rendait pas réactif. Cela vous forçait à utiliser des stores
 > lorsque vous souhaitiez sortir du code d'un composant pour le réutiliser ailleurs. Cela signifiait
 > également que vous deviez apprendre un modèle de réactivité complètement distinct, et au final
@@ -205,7 +205,7 @@ Avec Svelte 4, les composants pouvaient émettre des évènements en créant un 
 `createEventDispatcher`.
 
 Cette fonction est dépréciée avec Svelte 5. À la place, les composants doivent accepter des _props
-de callback_ – ce qui signifie que vous passez des fonctions comme propriétés à ces composants :
+de callback_ — ce qui signifie que vous passez des fonctions comme propriétés à ces composants :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -326,7 +326,7 @@ wrappers si nécessaire :
 <button onclick={once(preventDefault(handler))}>...</button>
 ```
 
-Il y a trois modificateurs – `capture`, `passive` et `nonpassive` – qui ne peuvent pas être
+Il y a trois modificateurs — `capture`, `passive` et `nonpassive` — qui ne peuvent pas être
 exprimés comme des fonctions wrapper, puisqu'ils doivent être appliqués lorsque le gestionnaire
 d'évènement est lié et non lorsqu'il est exécuté.
 
@@ -339,7 +339,7 @@ Pour `capture`, le modificateur s'ajoute au nom de l'évènement :
 Changer l'option
 [`passive`](https://developer.mozilla.org/fr/docs/Web/API/EventTarget/addEventListener#am%C3%A9lioration_des_performances_de_d%C3%A9filement_avec_les_%C3%A9couteurs_passifs)
 d'un gestionnaire d'évènement n'est en revanche pas quelque chose à prendre à la légère. Si vous
-avez un cas d'usage – et ce n'est probablement pas le cas ! – il vous faudra utiliser une action
+avez un cas d'usage — et ce n'est probablement pas le cas ! — il vous faudra utiliser une action
 pour ajouter le gestionnaire d'évènement vous-même.
 
 ### Gestionnaires multiples [!VO]Multiple event handlers
@@ -350,7 +350,7 @@ Avec Svelte 4, ceci est possible :
 <button on:click={one} on:click={two}>...</button>
 ```
 
-Les attributs/propriétés dupliquées – ce qui inclut donc maintenant les gestionnaires d'évènement –
+Les attributs/propriétés dupliquées — ce qui inclut donc maintenant les gestionnaires d'évènement –
 ne sont pas permis. À la place, faites ceci :
 
 ```svelte
@@ -543,7 +543,7 @@ le composant parent. Avec Svelte 5, les snippets ont désormais cette responsabi
 
 Vous devriez avoir maintenant une idée plus claire des changements apportés, notamment ce que change
 la nouvelle syntaxe par rapport à l'ancienne. Vous avez probablement également compris que beaucoup
-de ces migrations sont plutôt techniques et répétitives – des choses que vous n'avez pas envie de
+de ces migrations sont plutôt techniques et répétitives — des choses que vous n'avez pas envie de
 faire à la main.
 
 Nous sommes d'accord, c'est pourquoi nous fournissons un script de migration pour faire la plupart
@@ -662,7 +662,7 @@ app.$on('event', callback);---
 +++const app = mount(App, { target: document.getElementById("app"), events: { event: callback } });+++
 ```
 
-> [!NOTE] Notez que l'utilisation de `events` n'est pas recommandée – utilisez plutôt des
+> [!NOTE] Notez que l'utilisation de `events` n'est pas recommandée — utilisez plutôt des
 > [callbacks](#Event-changes)
 
 Pour remplacer `$set`, utilisez `$state` pour créer un object de propriétés réactives et les
@@ -863,7 +863,7 @@ Certains changements bloquants concernent uniquement les composants en mode rune
 
 Les exports provenant de composants en mode runes ne peuvent pas être impliquées directement dans
 une liaison. Par exemple, écrire `export const foo = ...` dans le composant `A` puis écrire `<A
-bind:foo />` provoque une erreur. Utilisez plutôt `bind:this` – `<A bind:this={a} />` – et accédez à
+bind:foo />` provoque une erreur. Utilisez plutôt `bind:this` — `<A bind:this={a} />` — et accédez à
 l'export via `a.foo`. Ce changement clarifie la séparation entre props et exports.
 
 ### Les liaisons doivent être explicitement définies avec `$bindable()` [!VO]Bindings need to be explicitly defined using `$bindable()`
@@ -874,7 +874,7 @@ liables par défait : vous devez les marquer comme props de liaison avec la rune
 
 Si une propriété de liaison a une valeur par défaut (par ex. `let { foo = $bindable('bar') } =
 $props();`), vous devez lui passer une valeur non-`undefined` si vous décidez de lui créer une
-liaison. Ceci empêche des comportements ambigus – le parent et l'enfant doivent avoir la même valeur
+liaison. Ceci empêche des comportements ambigus — le parent et l'enfant doivent avoir la même valeur
 – et permet de meilleures performances (en Svelte 4, la valeur par défaut était reflétée sur le
 parent, ce qui entraînait des cycles de rendu additionnels).
 
@@ -906,12 +906,12 @@ Ceci s'explique par le fait que le compilateur de Svelte considère l'assignatio
 une instruction pour mettre à jour tout ce qui référence `foo`. Avec Svelte 5, la réactivité est
 déterminée au moment de l'exécution plutôt qu'à la compilation, ce qui implique que vous devriez
 définir `value` comme un champ réactif `$state` sur la classe `Foo`. Entourer `new Foo()` avec
-`$state(...)` n'aura aucun effet – seuls les objets simples et les tableaux sont profondément
+`$state(...)` n'aura aucun effet — seuls les objets simples et les tableaux sont profondément
 réactifs.
 
 ### `<svelte:component>` n'est plus nécessaire [!VO]`<svelte:component>` is no longer necessary
 
-En Svelte 4, les composants sont _statiques_ – si vous rendez `<Thing>`, que la valeur de `Thing`
+En Svelte 4, les composants sont _statiques_ — si vous rendez `<Thing>`, que la valeur de `Thing`
 change, [rien ne se produit](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). Pour le
 rendre dynamique vous devez utiliser `<svelte:component>`.
 
@@ -964,7 +964,7 @@ devez entourer la valeur de guillemets :
 ```
 
 Notez que Svelte 5 vous préviendra également si vous avez une expression simple entre guillements,
-comme `reponse="{42}"` – en Svelte 6, ceci entraînera la conversion de la valeur en chaîne de
+comme `reponse="{42}"` — en Svelte 6, ceci entraînera la conversion de la valeur en chaîne de
 caractères, plutôt que de la passer en tant que nombre.
 
 ### La structure HTML est plus stricte [!VO]HTML structure is stricter
@@ -1067,7 +1067,7 @@ Les callbacks `afteUpdate` d'un composant parent sont désormais exécutés apr�
 `beforeUpdate/afterUpdate` ne sont plus exécutées lorsque le composant contient un `<slot>` et que
 son contenu est mis à jour.
 
-Les deux fonctions ne sont plus autorisées en mode runes – utilisez `$effect.pre(...)` et
+Les deux fonctions ne sont plus autorisées en mode runes — utilisez `$effect.pre(...)` et
 `$effect(...)` à la place.
 
 ### Changement du comportement de `contenteditable` [!VO]`contenteditable` behavior change
@@ -1126,7 +1126,7 @@ conserve dans le cas où ils sont enfants d'un élément `<template shadowrootmo
 
 ### La balise `<svelte:element>` doit être une expression [!VO]`<svelte:element>` tag must be an expression
 
-En Svelte 4, `<svelte:element this="div">` est du code valide. Ceci n'a que peu de sens – vous
+En Svelte 4, `<svelte:element this="div">` est du code valide. Ceci n'a que peu de sens — vous
 devriez simplement écrire `<div>`. Dans le cas extrêmement rare où vous _avez besoin_ d'utiliser une
 valeur litérale pour une raison précise, vous pouvez faire ceci :
 

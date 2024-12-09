@@ -202,7 +202,7 @@ namespace AST {
 	export interface Root extends BaseNode {
 		type: 'Root';
 		/**
-		 * Les options inline fournies par `<svelte:options>` - celles-ci écrasent celles passées à `compile(...)`
+		 * Les options inline fournies par `<svelte:options>` — celles-ci écrasent celles passées à `compile(...)`
 		 */
 		options: SvelteOptions | null;
 		fragment: Fragment;
@@ -261,13 +261,13 @@ namespace AST {
 		raw: string;
 	}
 
-	/** Une expression de template (possiblement réactive) - `{...}` */
+	/** Une expression de template (possiblement réactive) — `{...}` */
 	export interface ExpressionTag extends BaseNode {
 		type: 'ExpressionTag';
 		expression: Expression;
 	}
 
-	/** Une expression de template HTML (possiblement réactive) - `{@html...}` */
+	/** Une expression de template HTML (possiblement réactive) — `{@html...}` */
 	export interface HtmlTag extends BaseNode {
 		type: 'HtmlTag';
 		expression: Expression;
@@ -831,7 +831,7 @@ componentApi?: 4 | 5;
 </div>
 
 Applique une transformation de sorte que les exports par défaut des fichiers Svelte puisse toujours
-être instanciés de la même façon qu'ils l'étaient en Svelte 4 – une classe lorsque vous compilez
+être instanciés de la même façon qu'ils l'étaient en Svelte 4 — une classe lorsque vous compilez
 pour le navigateur (comme si vous utilisiez `createClassComponent(MyComponent, {...})` depuis
 `svelte/legacy`) ou un objet avec une méthode `.render(...)` lorsque vous compilez pour le serveur.
 

@@ -18,7 +18,7 @@ désabonner lorsqu'approprié.
 Les assignations à des variables préfixées avec `$` nécessitent que la variable non préfixée soit un
 store d'écriture, et va conduire à un appel à la méthode `.set` du store.
 
-Notez que le store doit être déclaré à la racine du composant – et non dans un bloc `#if` ou une
+Notez que le store doit être déclaré à la racine du composant — et non dans un bloc `#if` ou une
 fonction, par exemple.
 
 Les variables locales (qui ne représentent pas des valeurs de store) ne doivent _pas_ être préfixées
@@ -198,7 +198,7 @@ Le callback peut définir une valeur de manière asynchrone en acceptant un deux
 ainsi qu'un troisième argument optionnel, `update`, et en exécutant l'un ou l'autre
 lorsqu'approprié.
 
-Dans ce cas, vous pouvez aussi passer un troisième argument à `derived` – la valeur initiale du
+Dans ce cas, vous pouvez aussi passer un troisième argument à `derived` — la valeur initiale du
 store dérivé avant que `set` ou `update` ne soit exécuté pour la première fois. Si aucune valeur
 initiale n'est définie, la valeur initiale du store sera `undefined`.
 

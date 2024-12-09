@@ -861,7 +861,7 @@ du composant. En d'autres termes, si vous souhaitiez que `<X>` soit re-rendu si 
 jour, vous deviez soit utiliser `<svelte:component this={X}>`, soit mettre le composant dans un bloc
 `{#key X}...{/key}`.
 
-Avec Svelte 5 ce n'est plus le cas – si `X` change, `<X>` est re-rendu.
+Avec Svelte 5 ce n'est plus le cas — si `X` change, `<X>` est re-rendu.
 
 Dans certains cas la syntaxe `<object.property>` peut être également utilisée ; une variable dont le
 nom est en minuscules et possédant des propriétés est considérée comme un composant par Svelte 5.

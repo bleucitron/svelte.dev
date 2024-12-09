@@ -20,7 +20,7 @@ composant, puis lorsque les valeurs dont elles dépendent changent.
 	// lorsque `a`, `b` ou `sum` change
 	$: console.log(`${a} + ${b} = ${sum}`);
 
-	// ceci est une "assignatin réactive" – `sum` sera
+	// ceci est une "assignatin réactive" — `sum` sera
 	// recalculée lorsque `a` ou `b` change. Il n'est
 	// pas nécessaire de déclarer `sum` séparément
 	$: sum = a + b;
@@ -55,7 +55,7 @@ $: ({ larry, moe, curly } = stooges);
 
 ## Comprendre les dépendances [!VO]Understanding dependencies
 
-Les dépendances d'une déclaration `$:` sont déterminées au moment de la compilation – il s'agit de
+Les dépendances d'une déclaration `$:` sont déterminées au moment de la compilation — il s'agit de
 toutes les variables référencées (mais pas assignées) dans la déclaration.
 
 En d'autres termes, une déclaration comme celle-ci ne sera _pas_ rejouée lorsque `count` change, car

@@ -226,7 +226,7 @@ function beforeUpdate(fn: () => void): void;
 
 <blockquote class="tag deprecated note">
 
-Utilisez plutôt des props de callback et/ou la rune `$host()` – voir le [guide de
+Utilisez plutôt des props de callback et/ou la rune `$host()` — voir le [guide de
 migration](/docs/svelte/v5-migration-guide#Event-changes-Component-events).
 
 </blockquote>

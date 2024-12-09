@@ -150,7 +150,7 @@ code.
 En mode runes, les effects et les dérivations sont rejouées lorsqu'il y a des changements dans les
 valeurs qui sont lues pendant l'_exécution_ de la fonction.
 
-Souvent, le résultat est le même dans les deux cas – par exemple ces deux écritures peuvent être
+Souvent, le résultat est le même dans les deux cas — par exemple ces deux écritures peuvent être
 considérées comme équivalentes :
 
 ```js
@@ -165,7 +165,7 @@ let a = 1, b = 2;
 const sum = $derived(a + b);
 ```
 
-Dans certains cas – comme celui qui déclenche le warning ci-dessus – elles ne sont _pas_
+Dans certains cas — comme celui qui déclenche le warning ci-dessus — elles ne sont _pas_
 équivalentes :
 
 ```js

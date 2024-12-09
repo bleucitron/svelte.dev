@@ -45,7 +45,7 @@ Les modificateurs suivants sont disponibles :
 - `preventDefault` — appelle `event.preventDefault()` avant d'exécuter le gestionnaire
 - `stopPropagation` — appelle `event.stopPropagation()`, empêchant l'évènement d'atteindre l'élément
 suivant
-- `stopImmediatePropagation` - appelle `event.stopImmediatePropagation()`, empêchant les autres
+- `stopImmediatePropagation` — appelle `event.stopImmediatePropagation()`, empêchant les autres
 gestionnaires du même évènement d'être exécutés
 - `passive` — améliore la performance du défilement pour les évènements touch/wheel (Svelte
 l'ajoute automatiquement lorsque cela ne pose pas de problème)
@@ -127,7 +127,7 @@ Un composant parent de ce composant peut alors écouter les évènements que ce 
 <p>n : {n}</p>
 ```
 
-Les évènements de composants ne "bubblent" pas – un composant parent peut uniquement écouter les
+Les évènements de composants ne "bubblent" pas — un composant parent peut uniquement écouter les
 évènements de ses enfants directs.
 
 Mis à part `once`, les modificateurs ne sont pas applicables sur les gestionnaires d'évènement de

@@ -50,7 +50,7 @@ Disponible à partir de la version 5.7.0
 Crée une media query et fournit une propriété `current` qui reflète si oui ou non celle-ci
 correspond.
 
-Servez-vous en avec précaution – pendant le rendu côté serveur, il n'y a aucun moyen de connaître la
+Servez-vous en avec précaution — pendant le rendu côté serveur, il n'y a aucun moyen de connaître la
 valeur correcte, causant potentiellement des problèmes de contenu lors de l'hydratation.
 Si vous pouvez utiliser une media query en CSS pour obtenir le même résultat, faites-le.
 

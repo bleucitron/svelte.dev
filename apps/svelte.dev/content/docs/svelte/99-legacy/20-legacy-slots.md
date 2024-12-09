@@ -102,7 +102,7 @@ utilisant des props. Le parent expose ces valeurs au template de slot en utilisa
 </FancyList>
 ```
 
-Les règles classiques de raccourci de syntaxe – `let:item` est équivalent à `let:item={item}`, et
+Les règles classiques de raccourci de syntaxe — `let:item` est équivalent à `let:item={item}`, et
 `<slot {item}>` est équivalent à `<slot item={item}>`.
 
 Les slots nommés peuvent également exposer des valeurs. La directive `let:` doit se positionner sur

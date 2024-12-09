@@ -15,7 +15,7 @@
 		<p>
 			Svelte est un framework de composants qui utilise un compilateur vous permettant d'écrire de
 			manière concise des composants efficaces dans le navigateur, en utilisant des langages que
-			vous connaissez déjà – HTML, CSS et JavaScript. <strong
+			vous connaissez déjà — HTML, CSS et JavaScript. <strong
 				>C'est une déclaration d'amour au développement web.</strong
 			>
 		</p>

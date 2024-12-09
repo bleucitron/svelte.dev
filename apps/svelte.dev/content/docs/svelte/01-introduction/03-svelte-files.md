@@ -5,7 +5,7 @@ title: Fichiers .svelte
 Les composants sont les briques de base des application Svelte. Ils sont écrits dans des fichiers
 `.svelte`, en utilisant une version augmentée de HTML.
 
-Les trois sections – script, styles, et markup – sont optionnelles.
+Les trois sections — script, styles, et markup — sont optionnelles.
 
 <!-- prettier-ignore -->
 ```svelte
@@ -40,8 +40,8 @@ prochaine section.
 
 ## `<script module>`
 
-Une balise `<script>` possédant un attribut `module` n'est exécutée qu'une seule fois – la première
-fois que le module est évalué – plutôt que pour chaque instance de composant. Les variables
+Une balise `<script>` possédant un attribut `module` n'est exécutée qu'une seule fois — la première
+fois que le module est évalué — plutôt que pour chaque instance de composant. Les variables
 déclarées dans ce bloc peuvent être référencées ailleurs dans le composant, mais pas l'inverse.
 
 ```svelte

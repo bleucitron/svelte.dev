@@ -40,7 +40,7 @@ Une action peut être exécutée avec un argument :
 <div use:monaction={+++data+++}>...</div>
 ```
 
-L'action est exécutée une seule fois (mais pas pendant le rendu côté serveur) – elle ne sera _pas_
+L'action est exécutée une seule fois (mais pas pendant le rendu côté serveur) — elle ne sera _pas_
 rejouée si l'argument change.
 
 > [!LEGACY]
@@ -50,7 +50,7 @@ rejouée si l'argument change.
 
 ## Typage [!VO]Typing
 
-L'interface `Action` attend trois arguments de types, tous optionnels – un type de noeud (qui peut
+L'interface `Action` attend trois arguments de types, tous optionnels — un type de noeud (qui peut
 être `Element` si l'action s'applique à tout type de noeud), un paramètre, et n'importe quel
 gestionnaire d'évènement personnalisé créé par l'action :
 

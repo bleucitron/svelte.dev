@@ -14,7 +14,7 @@ title: {#each ...}
 
 Vous pouvez itérer sur des valeurs en utilisant un bloc `#each`. Les valeurs en questions peuvent
 être des tableaux, des objets similaires à des tableaux (c-à-d tout ce qui possède une propriété
-`length`), ou des itérables comme `Map` et `Set` – autrement dit, tout ce qui peut être utilisé avec
+`length`), ou des itérables comme `Map` et `Set` — autrement dit, tout ce qui peut être utilisé avec
 `Array.from`.
 
 ```svelte
@@ -47,8 +47,8 @@ Un bloc `#each` peut également préciser un _index_, correspondant au deuxième
 {#each expression as name, index (key)}...{/each}
 ```
 
-Si une expression _key_ est fournie – qui se doit d'identifier de manière unique chaque élément de
-la liste – Svelte va s'en servir pour remplacer finement les éléments de la liste lorsque celle-ci
+Si une expression _key_ est fournie — qui se doit d'identifier de manière unique chaque élément de
+la liste — Svelte va s'en servir pour remplacer finement les éléments de la liste lorsque celle-ci
 change, plutôt que d'ajouter ou supprimer les éléments à la fin. La clé (_key_) peut être n'importe
 quel objet, mais les chaînes de caractères et les nombres sont recommandés car il permettent à
 l'identité de persister lorsque les objets eux-mêmes changent.

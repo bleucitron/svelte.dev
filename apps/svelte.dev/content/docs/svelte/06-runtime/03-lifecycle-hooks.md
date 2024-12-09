@@ -8,7 +8,7 @@ title: Méthodes de cycle de vie
 - or skip this entirely and only have it in the reference docs? -->
 
 En Svelte 5, le cycle de vie d'un composant n'est constitué que de deux parties : sa création et sa
-destruction. Tout ce qui est entre les deux – les mises à jour des états – n'est pas directement lié
+destruction. Tout ce qui est entre les deux — les mises à jour des états — n'est pas directement lié
 au composant en tant que tel ; seuls les morceaux qui ont besoin de réagir aux changements d'état
 sont notifiés. Cela s'explique par le fait que sous le capot, la plus petite unité de changement
 n'est pas le composant, mais les effets (de rendu) qu'un composant définit lors de son
@@ -118,7 +118,7 @@ mais ne sont pas disponibles dans les composants qui utilisent les runes.
 </script>
 ```
 
-Utilisez `$effect.pre` à la place de `beforeUpdate` et `$effect` à la place de `afterUpdate` – ces
+Utilisez `$effect.pre` à la place de `beforeUpdate` et `$effect` à la place de `afterUpdate` — ces
 runes offrent un contrôle plus granulaire et réagissent uniquement aux changements qui les
 intéressent.
 
@@ -128,7 +128,7 @@ Pour implémenter une fenêtre de chat qui défile automatiquement vers le bas l
 messages sont reçus (mais uniquement si vous étiez _déjà_ en bas de la fenêtre), nous avons besoin
 de mesurer le DOM avant de le mettre à jour.
 
-En Svelte 4, nous faisons cela avec `beforeUpdate`, mais cette approche est imparfaite – elle
+En Svelte 4, nous faisons cela avec `beforeUpdate`, mais cette approche est imparfaite — elle
 s'exécute avant _chaque_ mise à jour, qu'elle soit pertinente ou non. Dans l'exemple ci-dessous,
 nous avons besoin d'ajouter des vérifications comme `updatingMessages` pour nous assurer que nous ne
 touchons pas à la position du défilement lorsque le mode sombre est activé ou désactivé.

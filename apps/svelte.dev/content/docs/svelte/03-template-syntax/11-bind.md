@@ -7,7 +7,7 @@ permet de faire circuler les données dans l'autre sens, de l'enfant vers le par
 
 La syntaxe générale est `bind:property={expression}`, où `expression` est une _lvalue_ (c-à-d une
 variable ou une propriété d'objet). Lorsque l'expression est un identifiant du même nom que la
-propriété, il est possible d'omettre l'expression – autrement dit ces deux écritures sont
+propriété, il est possible d'omettre l'expression — autrement dit ces deux écritures sont
 équivalentes :
 
 <!-- prettier-ignore -->
@@ -249,7 +249,7 @@ la valeur de la liaison est prioritaire sauf s'il cette valeur est `undefined`.
 
 ## `<audio>`
 
-Les éléments `<audio>` ont leur propre jeu de liaisons – cinq à double sens...
+Les éléments `<audio>` ont leur propre jeu de liaisons — cinq à double sens...
 
 - [`currentTime`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/currentTime)
 - [`playbackRate`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/playbackRate)
@@ -342,7 +342,7 @@ bind:this={dom_node}
 ```
 
 Pour obtenir la référence d'un noeud du DOM, utilisez `bind:this`. La valeur liée sera `undefined`
-jusqu'à ce que le composant soit monté – autrement dit, vous ne devriez vous servir de cette valeur
+jusqu'à ce que le composant soit monté — autrement dit, vous ne devriez vous servir de cette valeur
 que dans un effet ou dans un gestionnaire d'évènement, mais pas lors de l'initialisation du
 composant.
 

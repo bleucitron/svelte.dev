@@ -6,7 +6,7 @@ Les effets permettent à votre application de _faire des choses_. Lorsque Svelte
 d'effet, il détermine les états (et d'états dérivés) qui sont lus, (à moins qu'ils ne soient
 exemptés par [`untrack`](svelte#untrack)), et ré-exécute la fonction lorsque ces états changent.
 
-La plupart des effets dans une application Svelte sont créés par Svelte lui-même – c'est ce qui
+La plupart des effets dans une application Svelte sont créés par Svelte lui-même — c'est ce qui
 permet de mettre à jour le texte dans `<h1>coucou {name} !</h1>` lorsque que `name` change, par
 exemple.
 
@@ -88,8 +88,8 @@ ré-exécution de l'effet, et lorsque celui-ci est détruit
 de manière _synchrone_ à l'intérieur de son corps de fonction et l'enregistre en tant que
 dépendance. Lorsque ces dépendances changent, l'`$effect` va planifier une ré-exécution.
 
-Les valeurs qui sont lues de manière _asynchrones_ – après un `await` ou à l'intérieur d'un
-`setTimeout`, par exemple – ne seront pas considérées comme dépendances. Ici, le canvas sera repeint
+Les valeurs qui sont lues de manière _asynchrones_ — après un `await` ou à l'intérieur d'un
+`setTimeout`, par exemple — ne seront pas considérées comme dépendances. Ici, le canvas sera repeint
 lorsque `color` change, mais pas lorsque `size` change
 ([démo](/playground/untitled#H4sIAAAAAAAAE31T246bMBD9lZF3pWSlBEirfaEQqdo_2PatVIpjBrDkGGQPJGnEv1e2IZfVal-wfHzmzJyZ4cIqqdCy9M-F0blDlnqArZjmB3f72XWRHVCRw_bc4me4aDWhJstSlllhZEfbQhekkMDKfwg5PFvihMvX5OXH_CJa1Zrb0-Kpqr5jkiwC48rieuDWQbqgZ6wqFLRcvkC-hYvnkWi1dWqa8ESQTxFRjfQWsOXiWzmr0sSLhEJu3p1YsoJkNUcdZUnN9dagrBu6FVRQHAM10sJRKgUG16bXcGxQ44AGdt7SDkTDdY02iqLHnJVU6hedlWuIp94JW6Tf8oBt_8GdTxlF0b4n0C35ZLBzXb3mmYn3ae6cOW74zj0YVzDNYXRHFt9mprNgHfZSl6mzml8CMoLvTV6wTZIUDEJv5us2iwMtiJRyAKG4tXnhl8O0yhbML0Wm-B7VNlSSSd31BG7z8oIZZ6dgIffAVY_5xdU9Qrz1Bnx8fCfwtZ7v8Qc9j3nB8PqgmMWlHIID6-bkVaPZwDySfWtKNGtquxQ23Qlsq2QJT0KIqb8dL0up6xQ2eIBkAg_c1FI_YqW0neLnFCqFpwmreedJYT7XX8FVOBfwWRhXstZrSXiwKQjUhOZeMIleb5JZfHWn2Yq5pWEpmR7Hv-N_wEqT8hEEAAA=)) :
 
@@ -300,8 +300,8 @@ d'initialisation du composant.
 
 ## Quand ne pas utiliser `$effect` [!VO]When not to use `$effect`
 
-En général, `$effect` est plutôt considéré comme un dernier recours – pratique pour des choses comme
-les analytics ou la manipulation directe du DOM – plutôt qu'un outil que vous devriez utiliser
+En général, `$effect` est plutôt considéré comme un dernier recours — pratique pour des choses comme
+les analytics ou la manipulation directe du DOM — plutôt qu'un outil que vous devriez utiliser
 souvent. En particulier, évitez de vous en servir pour synchroniser un état. Plutôt que faire
 ceci...
 

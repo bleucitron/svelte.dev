@@ -80,7 +80,7 @@ web](https://developer.mozilla.org/fr/docs/Web/API/Web_Animations_API).
 
 L'argument `t` passé à `css` est une valeur entre `0` et `1` après l'application de la fonction
 `easing`. Les transitions _entrantes_ vont de `0` à `1`, les transitions _sortantes_ vont de `1` à
-`0` – autrement dit, `1` représente l'élément dans son état normal, sans qu'aucune transition ne lui
+`0` — autrement dit, `1` représente l'élément dans son état normal, sans qu'aucune transition ne lui
 ait été appliquée. L'argument `u` est égal à `1 - t`.
 
 La fonction est appelée de manière répétée _avant_ le début de la transition, avec des valeurs de
@@ -166,7 +166,7 @@ des informations à propos de la transition.
 
 Les valeurs disponibles dans l'objet `options` sont :
 
-- `direction` – `in`, `out`, ou `both` selon le type de transition
+- `direction` — `in`, `out`, ou `both` selon le type de transition
 
 ## Évènements de transition [!VO]Transition events
 

@@ -51,8 +51,8 @@ pour plus d'infos
 
 Svelte ne supporte plus le format CommonJS (CJS) en sortie de son compilateur et a également
 supprimé le hook `svelte/register` et la version du runtime CommonJS. Si vous a besoin de garder un
-format compilé CJS, envisagez l'utilisation d'un bundler pour convertir le format ESM – que Svelte
-fournit en sortie de compilation – en CJS dans une étape post-build.
+format compilé CJS, envisagez l'utilisation d'un bundler pour convertir le format ESM — que Svelte
+fournit en sortie de compilation — en CJS dans une étape post-build.
 ([#8613](https://github.com/sveltejs/svelte/issues/8613))
 
 ## Types plus stricts pour les fonctions Svelte [!VO ]Stricter types for Svelte functions
@@ -187,7 +187,7 @@ de `false` à `true` :
 {/if}
 ```
 
-Pour rendre des transitions globales, ajoutez le modificateur `|global` – ces transitions seront
+Pour rendre des transitions globales, ajoutez le modificateur `|global` — ces transitions seront
 jouées lorsque _n'importe quel_ bloc de contrôle de flux est créé ou détruit. Le script de migration
 fera ces changements pour vous.
 ([#6686](https://github.com/sveltejs/svelte/issues/6686))
@@ -203,10 +203,10 @@ Les liaisons de slot par défaut ne sont plus exposées à slots nommés et inve
 
 <Nested let:count>
 	<p>
-		count dans le slot par défaut – disponible : {count}
+		count dans le slot par défaut — disponible : {count}
 	</p>
 	<p slot="bar">
-		count dans le slot "bar" – non disponible : {count}
+		count dans le slot "bar" — non disponible : {count}
 	</p>
 </Nested>
 ```
@@ -272,7 +272,7 @@ const { code } = await preprocess(
 // style-2
 ```
 
-Ceci peut vous concerner si par exemple vous utilisez `MDsveX` – dans ce cas vous devriez vous
+Ceci peut vous concerner si par exemple vous utilisez `MDsveX` — dans ce cas vous devriez vous
 assurer qu'il est appliqué avant tout préprocesseur de script ou de style.
 
 ```js

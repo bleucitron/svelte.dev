@@ -200,7 +200,7 @@ fait implicitement partie du snippet `children` ([demo](/playground/untitled#H4s
 ```
 
 > [!NOTE] Notez que vous ne pouvez pas avoir une prop appelée `children` si vous avez également du
-> contenu au sein du composant – pour cette raison, vous devriez éviter de définir des props avec ce
+> contenu au sein du composant — pour cette raison, vous devriez éviter de définir des props avec ce
 > nom.
 
 Vous pouvez déclarer des props de snippet comme étant optionnelles. Vous pouvez soit utiliser le

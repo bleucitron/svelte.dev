@@ -18,7 +18,7 @@ défaut), `"svg"` ou `"mathml"`
 - `customElement={...}` — les [options](custom-elements#Component-options) à utiliser lorsque vous
 souhaitez compiler ce composant en composant personnalisé. Si une chaîne de caractères est fournie,
 elle est utilisée comme option `tag`
-- `css="injected"` – le composant injectera ses styles inlinés : lors du rendu côté serveur, les
+- `css="injected"` — le composant injectera ses styles inlinés : lors du rendu côté serveur, les
 styles seront injectés dans une balise `<style>` du `<head>`, lors du rendu côté client, les styles
 seront chargées via JavaScript
 
@@ -26,12 +26,12 @@ seront chargées via JavaScript
 > Svelte 4 a également les options suivantes. Elles sont dépréciées en Svelte 5 et
 > non-fonctionnelles en mode runes.
 >
-> - `immutable={true}` – vous n'utilisez jamais de données mutables, permettant au compilateur de se
+> - `immutable={true}` — vous n'utilisez jamais de données mutables, permettant au compilateur de se
 >   contenter de vérifier les équalités par référence pour déterminer si des valeurs ont changé
-> - `immutable={false}` – le comportement par défaut. Svelte sera plus conservatif au sujet de
+> - `immutable={false}` — le comportement par défaut. Svelte sera plus conservatif au sujet de
 >   déterminer si ou non des objets mutables ont changé
-> - `accessors={true}` – ajouter des getters et setters pour les props du composant
-> - `accessort={false}` – le comportement par défaut
+> - `accessors={true}` — ajouter des getters et setters pour les props du composant
+> - `accessort={false}` — le comportement par défaut
 
 ```svelte
 <svelte:options customElement="my-custom-element" />

@@ -22,8 +22,8 @@ L'expression peut être un identifiant comme `sum`, ou une expression JavaScript
 
 ## Snippets optionnels [!VO]Optional snippets
 
-Si le snippet est potentiellement `undefined` – par exemple parce que c'est une valeur pas encore
-définie – vous pouvez alors utiliser le chaînage optionnel pour ne l'afficher que lorsqu'il sera
+Si le snippet est potentiellement `undefined` — par exemple parce que c'est une valeur pas encore
+définie — vous pouvez alors utiliser le chaînage optionnel pour ne l'afficher que lorsqu'il sera
 défini :
 
 ```svelte

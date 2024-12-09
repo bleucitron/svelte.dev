@@ -2,7 +2,7 @@
 title: Propriétés personnalisées
 ---
 
-Vous pouvez fournir des propriétés CSS personnalisées – tant statiques que dynamiques – à vos
+Vous pouvez fournir des propriétés CSS personnalisées — tant statiques que dynamiques — à vos
 composants :
 
 ```svelte

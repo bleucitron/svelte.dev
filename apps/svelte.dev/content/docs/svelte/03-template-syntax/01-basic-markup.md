@@ -136,7 +136,7 @@ vous devriez plutôt utiliser [`on`](svelte-events#on) (par exemple dans une act
 ### Délégation d'évènement [!VO]Event delegation
 
 Pour réduire l'empreinte mémoire et améliorer les performances, Svelte utilise une technique appelée
-délégation d'évènement. Ceci signifie que pour certains évènements – voir la liste plus bas – un
+délégation d'évènement. Ceci signifie que pour certains évènements — voir la liste plus bas — un
 unique gestionnaire d'évènement "racine" prend la responsabilité de jouer tout gestionnaire présent
 dans le parcours de l'évènement.
 

@@ -66,7 +66,7 @@ Svelte ne peut pas connaître les props à exposer comme propriétés de l'élé
 
 Les éléments personnalisés sont créés à partir de composants Svelte avec une approche d'"emballage".
 Cela signifie que le composant Svelte interne n'a pas conscience d'être un élément personnalisé.
-L'élément personnalisé parent – celui qui "emballe" – a la responsabilité de gérer correctement son
+L'élément personnalisé parent — celui qui "emballe" — a la responsabilité de gérer correctement son
 cycle de vie.
 
 Lorsqu'un élément personnalisé est créé, le composant Svelte qu'il emballe n'est _pas_ créé tout de
@@ -80,8 +80,8 @@ problème en utilisant l'[option `extend`](#Component-options).
 
 Lorsqu'un élément personnalisé écrit en Svelte est créé ou mis à jour, le shadow DOM reflètera la
 valeur lors du prochain tick, et non immédiatement. Ainsi, les mises à jour peuvent être cumulées,
-et les modifications de DOM – qui détachent l'élément temporairement (mais de manière synchrone) du
-DOM – ne découlenet pas sur le démontage du composant interne.
+et les modifications de DOM — qui détachent l'élément temporairement (mais de manière synchrone) du
+DOM — ne découlenet pas sur le démontage du composant interne.
 
 Le composant Svelte interne est détruit lors du premier tick suivant l'exécution de
 `disconnectedCallback`.

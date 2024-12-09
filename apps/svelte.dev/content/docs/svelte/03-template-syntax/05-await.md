@@ -24,7 +24,7 @@ title: {#await ...}
 
 Les blocs `await` vous permettent de gérer les trois états possible d'une
 [`Promise`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-(_promesse_) – en attente, résolue, ou rejetée.
+(_promesse_) — en attente, résolue, ou rejetée.
 
 ```svelte
 {#await promise}

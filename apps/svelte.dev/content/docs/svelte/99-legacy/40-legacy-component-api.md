@@ -12,7 +12,7 @@ Notez que cette page ne s'applique _pas_ aux composants en mode legacy d'une app
 const component = new Component(options);
 ```
 
-Un composant prévu pour le client – c'est-à-dire un composant compilé avec `generate: 'dom'` (ou
+Un composant prévu pour le client — c'est-à-dire un composant compilé avec `generate: 'dom'` (ou
 l'option `generate` non définie) est une classe JavaScript.
 
 ```ts
@@ -53,7 +53,7 @@ Bien que les enfants de `target` sont normalement laissés intacts, `hydrate: tr
 les enfants de la cible. Pour cette raison, l'option `anchor` ne peut pas être utilisée avec
 `hydrate: true`.
 
-Le DOM existant n'a pas besoin de correspondre au composant – Svelte va "réparer" le DOM au fur et à
+Le DOM existant n'a pas besoin de correspondre au composant — Svelte va "réparer" le DOM au fur et à
 mesure.
 
 ```ts
@@ -80,7 +80,7 @@ component.$set(props);
 Définit programmatiquement des props sur une instance. `component.$set({ x: 1 })` est équivalent à
 `x = 1` dans le bloc `<script>` du composant.
 
-Appeler cette méthode programme une mise à jour lors de la prochaine micro-tâche – le DOM n'est
+Appeler cette méthode programme une mise à jour lors de la prochaine micro-tâche — le DOM n'est
 _pas_ mis à jour de manière synchrone.
 
 ```ts

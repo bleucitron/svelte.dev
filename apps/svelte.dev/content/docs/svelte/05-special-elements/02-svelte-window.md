@@ -14,7 +14,7 @@ L'élement `<svelte:window>` vous permet d'ajouter des gestionnaires d'évèneme
 sans vous soucier de les supprimer lorsque que le composant est détruit, ni vérifier l'existance de
 `window` lors du rendu côté serveur.
 
-Cet élément ne peut être défini qu'à la racine de votre composant – il ne peut pas être dans un bloc
+Cet élément ne peut être défini qu'à la racine de votre composant — il ne peut pas être dans un bloc
 ou un élément.
 
 ```svelte

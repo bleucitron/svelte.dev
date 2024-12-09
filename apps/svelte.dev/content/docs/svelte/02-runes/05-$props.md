@@ -72,7 +72,7 @@ let { a, b, c, ...others } = $props();
 ## Mise à jour des props [!VO]Updating props
 
 Les références à une prop à l'intérieur d'un composant se mettent à jour lorque la prop elle-même se
-met à jour – lorsque `count` change dans `App.svelte`, elle va également changer dans
+met à jour — lorsque `count` change dans `App.svelte`, elle va également changer dans
 `Child.svelte`. Mais le composant enfant est capable d'écraser la valeur de la prop, ce qui peut
 être utile pour des états temporaires qui ne seront pas sauvegardés
 ([démo](/playground/untitled#H4sIAAAAAAAAE6WQ0WrDMAxFf0WIQR0Wmu3VTQJln7HsIfVcZubIxlbGRvC_DzuBraN92qPula50tODZWB1RPi_IX16jLALWSOOUq6P3-_ihLWftNEZ9TVeOWBNHlNhGFYznfqCBzeRdYHh6M_YVzsFNsNs3pdpGd4eBcqPVDMrNxNDBXeSRtXioDgO1zU8ataeZ2RE4Utao924RFXQ9iHXwvoPHKpW1xY4g_Bg0cSVhKS0p560Za95612ZC02ONrD8ZJYdZp_rGQ37ff_mSP86Np2TWZaNNmdcH56P4P67K66_SXoK9pG-5dF5Z9QEAAA==)).
@@ -167,8 +167,8 @@ composant mute un état qui ne lui "appartient" pas
 </button>
 ```
 
-La valeur par défaut d'une prop non déclarée avec `$bindable` n'est pas affectée – elle n'est pas
-tranformée en proxy réactif d'état – ce qui implique que les mutations ne provoqueront pas de mise à
+La valeur par défaut d'une prop non déclarée avec `$bindable` n'est pas affectée — elle n'est pas
+tranformée en proxy réactif d'état — ce qui implique que les mutations ne provoqueront pas de mise à
 jour
 ([démo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2VkIbUVoYFraCIh7vwA4eC4G9Wta1vxpgJZ_nfkBEQp9OjxzOzTRGHlkUQlXpy9G0gq1idCL43ppDrAD84HUYheGwqieo2CP3y2Z0EU3-En79fhRIaz1slA_-nKWSbLQVRiE9SgPTetbVkfvRsYzztttugHd8RiXU6vr-jisbWb8idhN7O3bEQhmN5ZVDyMlIorcOddv_Eufq4AGmJEuG5PilEjQrnRcoV7JCTUuJlGWq7-YHYjs7NwVhmtDnVcrlA3iLmzLLGTAdaB-j736h68Oxv-JM1I0AFjoG1OzPfX023c1nhobUoT39QeKsRzS8owM8DFTG_pE6dcVl70AQAA)) :
 
@@ -187,7 +187,7 @@ jour
 ```
 
 En résumé : ne mutez pas les props. Vous pouvez soit utiliser des props de callback pour communiquer
-des changements, ou – si le parent et l'enfant partagent le même objet – utiliser la rune
+des changements, ou — si le parent et l'enfant partagent le même objet — utiliser la rune
 [`$bindable`]($bindable).
 
 ## Typage [!VO]Type safety

@@ -88,5 +88,5 @@ const app = hydrate(App, {
 });
 ```
 
-Comme pour `mount`, les effets ne seront pas exécutées lors de l'exécution de `hydrate` – exécutez
+Comme pour `mount`, les effets ne seront pas exécutées lors de l'exécution de `hydrate` — exécutez
 `flushSync()` immédiatement après si vous en avez besoin.

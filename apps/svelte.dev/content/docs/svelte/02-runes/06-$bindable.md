@@ -51,7 +51,7 @@ Désormais, un composant qui utilise `<FancyInput>` peut ajouter la directive [`
 <p>{message}</p>
 ```
 
-Le composant parent n'est pas _obligé_ d'utiliser `bind:` – il peut se contenter de fournir une prop
+Le composant parent n'est pas _obligé_ d'utiliser `bind:` — il peut se contenter de fournir une prop
 normale. Certains parents n'ont pas envie d'écouter ce que leurs enfants ont à leur dire.
 
 Dans ce cas, vous pouvez préciser une valeur par défaut à utiliser lorsqu'aucune prop n'est fournie

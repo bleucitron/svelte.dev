@@ -16,7 +16,7 @@ lorsque cet état évolue.
 ```
 
 À la différence d'autres frameworks que vous avez peut-être croisés, il n'y a pas d'API pour
-interagir avec un état – `count` est juste un nombre, et non un objet ou une fonction, et vous
+interagir avec un état — `count` est juste un nombre, et non un objet ou une fonction, et vous
 pouvez le mettre à jour comme vous mettriez à jour n'importe quelle variable.
 
 ### L'état profond [!VO]Deep state
@@ -71,7 +71,7 @@ todos.push({
 
 > [!NOTE] Lorsque vous mettez à jour les propriétés d'un Proxy, l'objet d'origine n'est _pas_ muté.
 
-Notez que si vous déstructurez une valeur réactive, les références ne sont pas réactives – comme
+Notez que si vous déstructurez une valeur réactive, les références ne sont pas réactives — comme
 pour du JavaScript classique, elles sont évaluées au moment de la déstructuration :
 
 ```js
@@ -196,7 +196,7 @@ ne s'attend pas à recevoir un proxy, comme dans le cas de `structuredClone`.
 
 ## Passer de l'état à des fonctions [!VO]Passing state into functions
 
-JavaScript est un langage qui _passe par valeur_ – lorsque vous appelez une fonction, les arguments
+JavaScript est un langage qui _passe par valeur_ — lorsque vous appelez une fonction, les arguments
 sont les _valeurs_ plutôt que les _variables_. En d'autres mots :
 
 ```js
@@ -246,7 +246,7 @@ b = 4;
 console.log(+++total()+++); // 7
 ```
 
-L'état dans Svelte fonctionne de la même façon – lorsque vous référencez quelque chose déclaré avec
+L'état dans Svelte fonctionne de la même façon — lorsque vous référencez quelque chose déclaré avec
 la rune `$state`...
 
 ```js
@@ -256,7 +256,7 @@ let b = +++$state(2)+++;
 
 ... vous accédez à sa _valeur courante_.
 
-Notez que le terme "fonctions" est large – il englobe les propriétés des proxies et les propriétés
+Notez que le terme "fonctions" est large — il englobe les propriétés des proxies et les propriétés
 [`get`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Functions/get) et
 [`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)...
 
