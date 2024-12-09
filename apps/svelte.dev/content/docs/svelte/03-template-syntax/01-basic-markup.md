@@ -82,7 +82,7 @@ Lorsque le nom de l'attribut correspond au nom de sa valeur (`name={name}`), l'�
 
 ## Props de composant [!VO]Component props
 
-Par convention, les valeurs passées aux composants sont appelées `_propriétés`, ou `_props`, plutôt
+Par convention, les valeurs passées aux composants sont appelées _propriétés_, ou _props_, plutôt
 qu'_attributs_, qui sont une fonctionnalité du DOM.
 
 Comme pour les éléments, `name={name}` peut être remplacé par le raccourci `{name}`.
