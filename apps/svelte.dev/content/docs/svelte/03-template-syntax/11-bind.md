@@ -24,9 +24,10 @@ La plupart des liaisons sont à _double sens_ (_two-way_), ce qui signifie que t
 la valeur va impacter l'élément est vice-versa. Quelques liaisons sont en _lecture seule_
 (_readonly_), ce qui signifie que les changements de valeur n'auront aucun effet sur l'élément.
 
-## Function bindings
+## Liaisons de fonction [!VO]Function bindings
 
-You can also use `bind:property={get, set}`, where `get` and `set` are functions, allowing you to perform validation and transformation:
+Vous pouvez aussi utiliser `bind:property={get, set}`, où `get` et `set` sont des fonctions, vous
+permettant d'effectuer des validations et des transformations :
 
 ```svelte
 <input bind:value={
@@ -35,7 +36,8 @@ You can also use `bind:property={get, set}`, where `get` and `set` are functions
 />
 ```
 
-In the case of readonly bindings like [dimension bindings](#Dimensions), the `get` value should be `null`:
+Dans le cas de liaisons en lecture seule comme [dimension bindings](#Dimensions), la valeur `get`
+doit être `null` :
 
 ```svelte
 <div
@@ -45,7 +47,7 @@ In the case of readonly bindings like [dimension bindings](#Dimensions), the `ge
 ```
 
 > [!NOTE]
-> Function bindings are available in Svelte 5.9.0 and newer.
+> Les liaisons de fonctions sont disponible à partir de Svelte version 5.9.0.
 
 ## `<input bind:value>`
 
