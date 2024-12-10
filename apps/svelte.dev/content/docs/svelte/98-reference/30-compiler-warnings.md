@@ -696,9 +696,13 @@ Empty block
 Unused CSS selector "%name%"
 ```
 
-Svelte traverses both the template and the `<style>` tag to find out which of the CSS selectors are not used within the template, so it can remove them.
+Svelte traverse à la fois le template et la balise `<style>` pour trouver les sélecteurs CSS non
+utilisés dans le template, afin de les supprimer.
 
-In some situations a selector may target an element that is not 'visible' to the compiler, for example because it is part of an `{@html ...}` tag or you're overriding styles in a child component. In these cases, use [`:global`](/docs/svelte/global-styles) to preserve the selector as-is:
+Dans certains cas, un sélecteur peut cibler un élément qui n'est pas "visible" par le compilateur,
+par exemple car il fait partie d'une balise `{@html ...}` ou parce que vous surcharger les styles
+dans un composant enfant. Dans ces cas-là, utilisez [`:global`](/docs/svelte/global-styles) pour
+laisser le sélecteur intact :
 
 ```svelte
 <div class="post">{@html content}</div>
@@ -722,7 +726,7 @@ Self-closing HTML tags for non-void elements are ambiguous — use `<%name% ...>
 Using `on:%name%` to listen to the %name% event is deprecated. Use the event attribute `on%name%` instead
 ```
 
-See [the migration guide](v5-migration-guide#Event-changes) for more info.
+Voir [le guide de migration](v5-migration-guide#Event-changes) pour plus d'infos.
 
 ### export_let_unused
 
@@ -742,7 +746,7 @@ Component has unused export property '%name%'. If it is for external reference o
 Svelte 5 components are no longer classes. Instantiate them using `mount` or `hydrate` (imported from 'svelte') instead.
 ```
 
-See the [migration guide](v5-migration-guide#Components-are-no-longer-classes) for more info.
+Voir [le guide de migration](v5-migration-guide#Components-are-no-longer-classes) pour plus d'infos.
 
 ### node_invalid_placement_ssr
 
@@ -772,29 +776,29 @@ l'hydration de se faire correctement.
 `%name%` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
 ```
 
-This warning is thrown when the compiler detects the following:
-- a variable was declared without `$state` or `$state.raw`
-- the variable is reassigned
-- the variable is read in a reactive context
+Ce warning est levé lorsque le compilateur détecte les choses suivantes :
+- une variable a été déclarée sans `$state` ou `$state.raw`
+- une variable a été réassignée
+- la variable est lue dans un contexte réactif
 
-In this case, changing the value will not correctly trigger updates. Example:
+Dans ces cas-là, changer la valeur ne va pas correctement déclencher de mise à jour. Exemple :
 
 ```svelte
 <script>
-	let reactive = $state('reactive');
-	let stale = 'stale';
+	let reactive = $state('réactif');
+	let stale = 'périmé';
 </script>
 
-<p>This value updates: {reactive}</p>
-<p>This value does not update: {stale}</p>
+<p>Cette valeur se met à jour : {reactive}</p>
+<p>Cette valeur ne se met pas à jour : {stale}</p>
 
 <button onclick={() => {
-	stale = 'updated';
-	reactive = 'updated';
-}}>update</button>
+	stale = 'mis à jour';
+	reactive = 'mis à jour';
+}}>mettre à jour</button>
 ```
 
-To fix this, wrap your variable declaration with `$state`.
+Pour corriger cela, entourez votre déclaration de variable avec `$state`.
 
 ### options_deprecated_accessors
 
@@ -886,7 +890,7 @@ Unrecognized attribute — should be one of `generics`, `lang` or `module`. If t
 Using `<slot>` to render parent content is deprecated. Use `{@render ...}` tags instead
 ```
 
-See [the migration guide](v5-migration-guide#Snippets-instead-of-slots) for more info.
+Voir [le guide de migration](v5-migration-guide#Snippets-instead-of-slots) pour plus d'infos.
 
 ### state_referenced_locally
 
@@ -894,12 +898,15 @@ See [the migration guide](v5-migration-guide#Snippets-instead-of-slots) for more
 State referenced in its own scope will never update. Did you mean to reference it inside a closure?
 ```
 
-This warning is thrown when the compiler detects the following:
-- A reactive variable is declared
-- the variable is reassigned
-- the variable is referenced inside the same scope it is declared and it is a non-reactive context
+Ce warning est levé lorsque le compilateur détecte les choses suivantes :
+- une variable réactive a été déclarée
+- la variable a été réassignée
+- la variable est référencée dans le même scope où elle a été déclarée et il s'agit d'un contexte
+non réactif
 
-In this case, the state reassignment will not be noticed by whatever you passed it to. For example, if you pass the state to a function, that function will not notice the updates:
+Dans ce cas, la réassignation de l'état ne sera pas détectée quel que soit ce que vous fournissez.
+Par exemple, si vous fournissez l'état à une fonction, cette fonction ne va pas détecter la mise à
+jour :
 
 ```svelte
 <!--- file: Parent.svelte --->
@@ -913,7 +920,7 @@ In this case, the state reassignment will not be noticed by whatever you passed 
 </script>
 
 <button onclick={() => count++}>
-	increment
+	incrémenter
 </button>
 ```
 
@@ -925,11 +932,12 @@ In this case, the state reassignment will not be noticed by whatever you passed 
 	const count = getContext('count');
 </script>
 
-<!-- This will never update -->
-<p>The count is {count}</p>
+<!-- Ceci ne sera jamais mis à jour -->
+<p>Le compteur vaut {count}</p>
 ```
 
-To fix this, reference the variable such that it is lazily evaluated. For the above example, this can be achieved by wrapping `count` in a function:
+Pour corriger cela, référencer la variable de sorte qu'elle soit évaluée au moment de la
+compilation. Pour l'exemple ci-dessus, vous pouvez faire cela en plaçant `count` dans une fonction :
 
 ```svelte
 <!--- file: Parent.svelte --->
@@ -941,7 +949,7 @@ To fix this, reference the variable such that it is lazily evaluated. For the ab
 </script>
 
 <button onclick={() => count++}>
-	increment
+	incrémenter
 </button>
 ```
 
@@ -953,11 +961,11 @@ To fix this, reference the variable such that it is lazily evaluated. For the ab
 	const count = getContext('count');
 </script>
 
-<!-- This will update -->
-<p>The count is {+++count()+++}</p>
+<!-- Ceci va se mettre à jour -->
+<p>Le compteur vaut {+++count()+++}</p>
 ```
 
-For more info, see [Passing state into functions]($state#Passing-state-into-functions).
+Pour plus d'infos, voir [Passer de l'état à des fonctions]($state#Passing-state-into-functions).
 
 ### store_rune_conflict
 
@@ -1020,7 +1028,7 @@ Une valeur dérivée peut être utilisée dans d'autres contextes :
 `<svelte:self>` is deprecated — use self-imports (e.g. `import %name% from './%basename%'`) instead
 ```
 
-See [the note in the docs](legacy-svelte-self) for more info.
+Voir [la note dans la doc](legacy-svelte-self) pour plus d'infos.
 
 ### unknown_code
 

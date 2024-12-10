@@ -82,23 +82,29 @@ instantané de la valeur courante.
 The `%attribute%` attribute on `%html%` changed its value between server and client renders. The client value, `%value%`, will be ignored in favour of the server value
 ```
 
-Certain attributes like `src` on an `<img>` element will not be repaired during hydration, i.e. the server value will be kept. That's because updating these attributes can cause the image to be refetched (or in the case of an `<iframe>`, for the frame to be reloaded), even if they resolve to the same resource.
+Certains attributs comme `src` sur un élément `<img>` ne seront pas réparés lors de l'hydration,
+c-à-d que la valeur du serveur sera conservée. Ceci s'explique par le fait que mettre à jour ces
+attributs peut déclencher le re-téléchargement de l'image (ou, dans le cas d'une `<iframe>`, le
+rechargement de l'iframe), même s'ils pointent vers la même ressource.
 
-To fix this, either silence the warning with a [`svelte-ignore`](basic-markup#Comments) comment, or ensure that the value stays the same between server and client. If you really need the value to change on hydration, you can force an update like this:
+Pour corriger ça, vous pouvez soit ignorer le warning avec un commentaire
+[`svelte-ignore`](basic-markup#Comments), soit vous assurez que la valeur soit la même entre le
+serveur et le client. Si vous avez vraiment besoin que la valeur soit changée pendant l'hydration,
+vous pouvez forcer sa mise à jour comme ceci :
 
 ```svelte
 <script>
 	let { src } = $props();
 
 	if (typeof window !== 'undefined') {
-		// stash the value...
+		// enregistrer la valeur...
 		const initial = src;
 
-		// unset it...
+		// mettre la variable à undefined...
 		src = undefined;
 
 		$effect(() => {
-			// ...and reset after we've mounted
+			// .. et la re définir après le montage
 			src = initial;
 		});
 	}
@@ -117,23 +123,28 @@ The value of an `{@html ...}` block changed between server and client renders. T
 The value of an `{@html ...}` block %location% changed between server and client renders. The client value will be ignored in favour of the server value
 ```
 
-If the `{@html ...}` value changes between the server and the client, it will not be repaired during hydration, i.e. the server value will be kept. That's because change detection during hydration is expensive and usually unnecessary.
+Si la valeur de `{@html ...}` change entre le serveur et le client, elle ne sera pas réparée lors de
+l'hydratation, c-à-d que la valeur du serveur sera conservée. Ceci s'explique par le fait que
+détecter des changements lors de l'hydratation coûte cher et est souvent inutile.
 
-To fix this, either silence the warning with a [`svelte-ignore`](basic-markup#Comments) comment, or ensure that the value stays the same between server and client. If you really need the value to change on hydration, you can force an update like this:
+Pour corriger ça, vous pouvez soit ignorer le warning avec un commentaire
+[`svelte-ignore`](basic-markup#Comments), soit vous assurez que la valeur soit la même entre le
+serveur et le client. Si vous avez vraiment besoin que la valeur soit changée pendant l'hydration,
+vous pouvez forcer sa mise à jour comme ceci :
 
 ```svelte
 <script>
 	let { markup } = $props();
 
 	if (typeof window !== 'undefined') {
-		// stash the value...
+		// enregistrer la valeur...
 		const initial = markup;
 
-		// unset it...
+		// mettre la variable à undefined...
 		markup = undefined;
 
 		$effect(() => {
-			// ...and reset after we've mounted
+			// .. et la re définir après le montage
 			markup = initial;
 		});
 	}
@@ -152,9 +163,14 @@ Hydration failed because the initial UI does not match what was rendered on the 
 Hydration failed because the initial UI does not match what was rendered on the server. The error occurred near %location%
 ```
 
-This warning is thrown when Svelte encounters an error while hydrating the HTML from the server. During hydration, Svelte walks the DOM, expecting a certain structure. If that structure is different (for example because the HTML was repaired by the DOM because of invalid HTML), then Svelte will run into issues, resulting in this warning.
+Ce warning est levé lorsque Svelte rencontre une erreur lors de l'hydratation du HTML provenant du
+serveur. Pendant l'hydratation, Svelte parcourt le DOM avec une certaine structure comme objectif.
+Si cette structure est différente de l'objectif (par exemple parce que le HTML a été réparé par le
+DOM à cause de HTML invalide), alors Svelte risque de rencontrer des problèmes, ce qui justifie ce
+warning.
 
-During development, this error is often preceeded by a `console.error` detailing the offending HTML, which needs fixing.
+Pendant le développement, cette erreur est souvent précédée d'un `console.error` détaillant le HTML
+problématique, et qui nécessite d'être réparé.
 
 ### invalid_raw_snippet_render
 
@@ -180,9 +196,12 @@ Tried to unmount a component that was not mounted
 %parent% passed a value to %child% with `bind:`, but the value is owned by %owner%. Consider creating a binding between %owner% and %parent%
 ```
 
-Consider three components `GrandParent`, `Parent` and `Child`. If you do `<GrandParent bind:value>`, inside `GrandParent` pass on the variable via `<Parent {value} />` (note the missing `bind:`) and then do `<Child bind:value>` inside `Parent`, this warning is thrown.
+Imagingez trois composants `GrandParent`, `Parent` et `Child`. Si vous écrivez `<GrandParent
+bind:value>`, passez la variable dans `GrandParent` via `<Parent {value} />` (notez l'absence de
+`bind:`), puis écrivez `<Child bind:value>` dans `Parent`, ce warning est levé.
 
-To fix it, `bind:` to the value instead of just passing a property (i.e. in this example do `<Parent bind:value />`).
+Pour corriger ça, utiliser `bind:` sur la valeur plutôt que simplement passer la propriété (c-à-d
+dans cet exemple, écrivez `<Parent bind:value />`).
 
 ### ownership_invalid_mutation
 
@@ -194,7 +213,7 @@ Mutating a value outside the component that created it is strongly discouraged. 
 %component% mutated a value owned by %owner%. This is strongly discouraged. Consider passing values to child components with `bind:`, or use a callback instead
 ```
 
-Consider the following code:
+Considérer le code suivant :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -216,9 +235,12 @@ Consider the following code:
 <input bind:value={person.surname}>
 ```
 
-`Child` is mutating `person` which is owned by `App` without being explicitly "allowed" to do so. This is strongly discouraged since it can create code that is hard to reason about at scale ("who mutated this value?"), hence the warning.
+`Child` mute la valeur de `person`, qui appartient à `App`, sans être explicitement "autorisé" à le
+faire. Ceci est fortement déconseillé car cela peut engendrer du code difficile à comprendre à
+grande échelle ("qui a muté cette valeur ?"), d'où le warning.
 
-To fix it, either create callback props to communicate changes, or mark `person` as [`$bindable`]($bindable).
+Pour corriger ça, vous pouvez soit créer une prop de callback pour communiquer les changements, ou
+alors définir `person` comme [`$bindable`]($bindable).
 
 ### reactive_declaration_non_reactive_property
 
@@ -304,7 +326,8 @@ _pas_ créer de proxy d'état.
 `<svelte:element this="%tag%">` is a void element — it cannot have content
 ```
 
-Elements such as `<input>` cannot have content, any children passed to these elements will be ignored.
+Les éléments tels que `<input>` ne peuvent pas avoir de contenu, tout enfant passé à ces éléments
+sera ignoré.
 
 ### state_snapshot_uncloneable
 
@@ -318,10 +341,13 @@ The following properties cannot be cloned with `$state.snapshot` — the return 
 %properties%
 ```
 
-`$state.snapshot` tries to clone the given value in order to return a reference that no longer changes. Certain objects may not be cloneable, in which case the original value is returned. In the following example, `property` is cloned, but `window` is not, because DOM elements are uncloneable:
+`$state.snapshot` essaye de clone la valeur fournie afin de renvoyer une référence qui ne changera
+plus. Certains objets peuvent ne pas être clonables, auquel cas la valeur originale est renvoyée.
+Dans l'exemple suivant, `property` est cloné, mais `window` ne l'est pas, car les éléments du DOM ne
+peuvent pas être clonés :
 
 ```js
-const object = $state({ property: 'this is cloneable', window })
+const object = $state({ property: 'ceci est clonable', window })
 const snapshot = $state.snapshot(object);
 ```
 

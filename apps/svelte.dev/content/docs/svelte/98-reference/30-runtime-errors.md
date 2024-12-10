@@ -147,7 +147,8 @@ Updating state inside a derived or a template expression is forbidden. If the va
 `%name%(...)` is not available on the server
 ```
 
-Certain methods such as `mount` cannot be invoked while running in a server context. Avoid calling them eagerly, i.e. not during render.
+Certaines méthodes comme  `mount` ne peuvent pas être invoquées lorsqu'exécutées dans un contexte
+serveur. Évitez de les appeler immédiatement, c'est-à-dire pas pendant le rendu.
 
 
 ## Erreurs client et serveur [!VO]Shared errors
@@ -160,7 +161,7 @@ Certain methods such as `mount` cannot be invoked while running in a server cont
 Cannot use `{@render children(...)}` if the parent component uses `let:` directives. Consider using a named snippet instead
 ```
 
-This error would be thrown in a setup like this:
+Cette erreur serait levée dans une situation comme celle-ci :
 
 ```svelte
 <!--- file: Parent.svelte --->
@@ -182,7 +183,9 @@ This error would be thrown in a setup like this:
 </ul>
 ```
 
-Here, `List.svelte` is using `{@render children(item)` which means it expects `Parent.svelte` to use snippets. Instead, `Parent.svelte` uses the deprecated `let:` directive. This combination of APIs is incompatible, hence the error.
+Ici, `List.svelte` utilise `{@render children(item)}`, ce qui signifie qu'elle attend
+`Parent.svelte` pour utiliser des snippets. Mais en réalité `Parent.svelte` utilise la directive
+`let:`, qui est dépréciée. Cette combinaison d'APIs est incompatible, d'où l'erreur.
 
 ### lifecycle_outside_component
 
@@ -190,22 +193,24 @@ Here, `List.svelte` is using `{@render children(item)` which means it expects `P
 `%name%(...)` can only be used during component initialisation
 ```
 
-Certain lifecycle methods can only be used during component initialisation. To fix this, make sure you're invoking the method inside the _top level of the instance script_ of your component.
+Certaines méthodes de cycle de vie ne peuvent être utilisées que lors de l'initialisation d'un
+composant. Pour corriger ça, assurez-vous d'invoquer la méthode à la _racine du script de
+l'instance_ de votre composant.
 
 ```svelte
 <script>
     import { onMount } from 'svelte';
 
     function handleClick() {
-        // This is wrong
+				// ceci est mauvais
         onMount(() => {})
     }
 
-    // This is correct
+		// ceci est bon
     onMount(() => {})
 </script>
 
-<button onclick={handleClick}>click me</button>
+<button onclick={handleClick}>cliquez moi</button>
 ```
 
 ### store_invalid_shape
