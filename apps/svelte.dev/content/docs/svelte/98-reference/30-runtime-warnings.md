@@ -243,56 +243,6 @@ grande échelle ("qui a muté cette valeur ?"), d'où le warning.
 Pour corriger ça, vous pouvez soit créer une prop de callback pour communiquer les changements, ou
 alors définir `person` comme [`$bindable`]($bindable).
 
-### reactive_declaration_non_reactive_property
-
-```
-A `$:` statement (%location%) read reactive state that was not visible to the compiler. Updates to this state will not cause the statement to re-run. The behaviour of this code will change if you migrate it to runes mode
-```
-
-En mode legacy, une [déclaration
-réactive](https://svelte.dev/docs/svelte/legacy-reactive-assignments) avec `$:` est rejouée lorsque
-l'état qu'elle _référence_ change. Ceci est déterminé au moment de la compilation, en analysant le
-code.
-
-En mode runes, les effects et les dérivations sont rejouées lorsqu'il y a des changements dans les
-valeurs qui sont lues pendant l'_exécution_ de la fonction.
-
-Souvent, le résultat est le même dans les deux cas — par exemple ces deux écritures peuvent être
-considérées comme équivalentes :
-
-```js
-let a = 1, b = 2, sum = 3;
-// ---cut---
-$: sum = a + b;
-```
-
-```js
-let a = 1, b = 2;
-// ---cut---
-const sum = $derived(a + b);
-```
-
-Dans certains cas — comme celui qui déclenche le warning ci-dessus — elles ne sont _pas_
-équivalentes :
-
-```js
-let a = 1, b = 2, sum = 3;
-// ---cut---
-const add = () => a + b;
-
-// le compilateur ne peut "voir" que `sum` dépend de `a` et `b`, mais
-// elles seront bien lues pendant l'exécution de la version `$derived`
-$: sum = add();
-```
-
-De même, les propriétés réactives d'un [état
-profond](https://svelte.dev/docs/svelte/$state#Deep-state) ne sont pas visibles par le compilateur.
-Ainsi, les changements affectant ces propriétés vont déclencher la ré-exécution des effets et les
-dérivations, mais _pas_ celle des déclarations `$:`.
-
-Lorsque vous [migrerez ce composant](https://svelte.dev/docs/svelte/v5-migration-guide) en mode runes,
-le comportement sera celui décrit ici.
-
 ### state_proxy_equality_mismatch
 
 ```

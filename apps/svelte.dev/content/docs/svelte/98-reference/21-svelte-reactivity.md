@@ -68,13 +68,13 @@ Si vous pouvez utiliser une media query en CSS pour obtenir le même résultat, 
 <div class="ts-block">
 
 ```dts
-class MediaQuery {/*…*/}
+class MediaQuery extends ReactiveValue<boolean> {/*…*/}
 ```
 
 <div class="ts-block-property">
 
 ```dts
-constructor(query: string, matches?: boolean | undefined);
+constructor(query: string, fallback?: boolean | undefined);
 ```
 
 <div class="ts-block-property-details">
@@ -82,29 +82,11 @@ constructor(query: string, matches?: boolean | undefined);
 <div class="ts-block-property-bullets">
 
 - `query` Une chaîne de caractères de media query
-- `matches` Valeur de secours pour le serveur
+- `fallback` Valeur de secours pour le serveur
 
 </div>
 
 </div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-get current(): boolean;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-#private;
-```
-
-<div class="ts-block-property-details"></div>
 </div></div>
 
 
