@@ -73,6 +73,7 @@
 		position: relative;
 		aspect-ratio: 457.4 / 138.8;
 		height: var(--sk-font-size-h1);
+		width: auto;
 		bottom: -0.3em;
 	}
 
