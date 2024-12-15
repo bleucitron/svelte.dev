@@ -42,18 +42,23 @@ contexte d'un test par exemple), vous pouvez le faire grâce à `flushSync()`.
 
 ## `unmount`
 
-Démonte un composant créé avec [`mount`(#mount)] ou [`hydrate`](#hydrate) :
+Démonte un composant précédemment créé avec [`mount`(#mount)] ou [`hydrate`](#hydrate) :
+
+Si `options.outro` vaut `true`, les [transitions](transition) seront jourée avant que le composant
+soit retiré du DOM :
 
 ```js
-// @errors: 1109
 import { mount, unmount } from 'svelte';
 import App from './App.svelte';
 
-const app = mount(App, {...});
+const app = mount(App, { target: document.body });
 
 // plus tard...
-unmount(app);
+unmount(app, { outro: true });
 ```
+
+Renvoie une `Promise` qui résout après que les transitions se soient terminées si `options.outro`
+vaut `true`, ou immédiatement sinon.
 
 ## `render`
 

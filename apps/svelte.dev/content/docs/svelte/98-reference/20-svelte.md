@@ -493,10 +493,34 @@ function tick(): Promise<void>;
 
 Démonte un composant précédemment monté avec `mount` ou `hydrate`.
 
+Depuis la version 5.13.0, si `options.outro` vaut `true`, les [transitions](/docs/svelte/transition)
+seront jouées avant que le composant soit retiré du DOM.
+
+Renvoie une `Promise` qui résout après que les transitions se soient terminées si `options.outro`
+vaut `true`, ou immédiatement sinon (avant la version 5.13.0, renvoie `void`).
+
+```js
+// @errors: 7031
+import { mount, unmount } from 'svelte';
+import App from './App.svelte';
+
+const app = mount(App, { target: document.body });
+
+// later...
+unmount(app, { outro: true });
+```
+
 <div class="ts-block">
 
 ```dts
-function unmount(component: Record<string, any>): void;
+function unmount(
+	component: Record<string, any>,
+	options?:
+		| {
+				outro?: boolean;
+		  }
+		| undefined
+): Promise<void>;
 ```
 
 </div>

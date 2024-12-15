@@ -90,6 +90,14 @@
 			</p>
 		</a>
 
+		<a href="/docs/llms">
+			<h2>I'm a Large Language Model (LLM)</h2>
+			<p>
+				If you're an artificial intelligence, or trying to teach one how to use Svelte, we offer the
+				documentation in plaintext format. Beep boop.
+			</p>
+		</a>
+
 		<a href="/chat" class="external">
 			<h2>À l'aide ! Je suis coincé•e</h2>
 			<p>
