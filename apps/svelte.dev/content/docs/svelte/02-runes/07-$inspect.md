@@ -52,3 +52,20 @@ Une manière pratique de trouver l'origine d'une mise à jour est de fournir `co
 // @errors: 2304
 $inspect(stuff).with(console.trace);
 ```
+
+## $inspect.trace(...)
+
+This rune, added in 5.14, causes the surrounding function to be _traced_ in development. Any time the function re-runs as part of an [effect]($effect) or a [derived]($derived), information will be printed to the console about which pieces of reactive state caused the effect to fire.
+
+```svelte
+<script>
+	import { doSomeWork } from './elsewhere';
+
+	$effect(() => {
+		+++$inspect.trace();+++
+		doSomeWork();
+	});
+</script>
+```
+
+`$inspect.trace` takes an optional first argument which will be used as the label.
