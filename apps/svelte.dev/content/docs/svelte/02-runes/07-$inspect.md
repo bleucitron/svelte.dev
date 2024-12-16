@@ -55,17 +55,20 @@ $inspect(stuff).with(console.trace);
 
 ## $inspect.trace(...)
 
-This rune, added in 5.14, causes the surrounding function to be _traced_ in development. Any time the function re-runs as part of an [effect]($effect) or a [derived]($derived), information will be printed to the console about which pieces of reactive state caused the effect to fire.
+Cette rune, ajoutée avec la version 5.14, déclenche le _suivi_ de la fonction passée en argument. À
+chaque fois que la fonction est rejouée dans le cadre d'un [effet]($effect) ou d'une
+[dérivation]($derived), des informations concernant les états réactifs ayant généré l'effet seront
+affichées dans la console.
 
 ```svelte
 <script>
-	import { doSomeWork } from './elsewhere';
+	import { faireQqch } from './ailleurs';
 
 	$effect(() => {
 		+++$inspect.trace();+++
-		doSomeWork();
+		faireQqch();
 	});
 </script>
 ```
 
-`$inspect.trace` takes an optional first argument which will be used as the label.
+`$inspect.trace` prend un argument optionnel qui peut être utilisé comme label.
