@@ -30,6 +30,7 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 
 - `drizzle`
 - `eslint`
+- `sveltekit-adapter`
 - `lucia`
 - `mdsvex`
 - `paraglide`

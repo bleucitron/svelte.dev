@@ -17,6 +17,10 @@ npx sv migrate [migration]
 
 ## Migrations
 
+### `app-state`
+
+Migrates `$app/store` usage to `$app/state` in `.svelte` files. See the [migration guide](/docs/kit/migrating-to-sveltekit-2#SvelteKit-2.12:-$app-stores-deprecated) for more details.
+
 ### `svelte-5`
 
 Met à jour une application Svelte 4 vers Svelte 5, et modifie les composants pour qu'ils utilisent
