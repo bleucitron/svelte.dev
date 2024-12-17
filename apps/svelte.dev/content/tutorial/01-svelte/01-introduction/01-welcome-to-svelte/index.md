@@ -1,30 +1,47 @@
 ---
-title: Welcome to Svelte
+title: Bienvenue dans le monde de Svelte
 ---
 
-Welcome to the Svelte tutorial! This will teach you everything you need to know to easily build web applications of all sizes, with high performance and a small footprint.
+Bienvenue dans le tutoriel de Svelte ! Celui-ci va vous apprendre tout ce qu'il faut savoir pour
+construire facilement des applications web performantes et optimisées de toutes envergures.
 
-You can also consult the [API docs](https://svelte.dev/docs) and visit the [playground](https://svelte.dev/playground), or — if you're impatient to start hacking on your machine locally — create a project with `npx sv create`.
+Vous pouvez également consulter la [documentation de l'API](/docs) et faire un tour dans le [bac à
+sable](/playground), ou — si vous êtes impatient•e de commencer sur votre machine — créer un projet
+avec `npx sv create`.
 
-## What is Svelte?
+## C'est quoi Svelte ? [!VO]What is Svelte?
 
-Svelte is a tool for building web applications. Like other user interface frameworks, it allows you to build your app _declaratively_ out of components that combine markup, styles and behaviours.
+Svelte est un outil permettant de construire des applications web. Comme toute autre framework
+d'interface, il vous permet de construire votre application _déclarativement_ à partir de composants
+combinant markup, styles, et logique.
 
-These components are _compiled_ into small, efficient JavaScript modules that eliminate overhead traditionally associated with UI frameworks.
+Ces composants sont _compilés_ en de petits modules JavaScript optimisés éliminant tout surcoût
+usuellement associé avec un framework d'interface quelconque.
 
-You can build your entire app with Svelte (for example, using an application framework like [SvelteKit](/docs/kit), which this tutorial will cover), or you can add it incrementally to an existing codebase. You can also ship components as standalone packages that work anywhere.
+Vous pouvez construire votre application entière avec Svelte (par exemple, en utilisant un framework
+d'application comme [SvelteKit](/docs/kit), que ce tutoriel va présenter), ou l'introduire
+progressivement dans une codebase existante. Vous pouvez aussi déployer des composants en tant que
+paquets indépendants utilisables partout.
 
-## How to use this tutorial
+## Comment utiliser ce tutoriel [!VO]How to use this tutorial
 
-> [!NOTE] You'll need to have basic familiarity with HTML, CSS and JavaScript to understand Svelte.
+> [!NOTE] Des connaissances de base en HTML, CSS et JavaScript sont nécessaires pour comprendre le
+> fonctionnement de Svelte.
 
-This tutorial is split into four main parts:
+Ce tutoriel est divisé en quatre sections principales :
 
-- [Basic Svelte](/tutorial/svelte/welcome-to-svelte) (you are here)
-- [Advanced Svelte](/tutorial/svelte/tweens)
-- [Basic SvelteKit](/tutorial/kit/introducing-sveltekit)
-- [Advanced SvelteKit](/tutorial/kit/optional-params)
+- [Bases de Svelte](/tutorial/svelte/welcome-to-svelte) (vous êtes ici)
+- [Svelte avancé](/tutorial/svelte/tweens)
+- [Bases de SvelteKit](/tutorial/kit/introducing-sveltekit)
+- [SvelteKit avancé](/tutorial/kit/optional-params)
 
-Each section will present an exercise designed to illustrate a feature. Later exercises build on the knowledge gained in earlier ones, so it's recommended that you go from start to finish. If necessary, you can navigate via the menu above.
+Chaque section vous présentera un exercice conçu pour illustrer une fonctionnalité. Les exercices se
+basent sur les connaissances acquises dans les exercices précédents, il est donc recommandé de
+suivre ce tutoriel de début à la fin. Si besoin, vous pouvez naviguer entre les exercices grâce au
+menu ci-dessus.
 
-If you get stuck, you can click the `solve` button in the top right of the screen. (The `solve` button is disabled on sections like this one that don't include an exercise.) Try not to rely on it too much; you will learn faster by figuring out where to put each suggested code block and manually typing it in to the editor.
+Si vous êtes bloqué•e, vous pouvez cliquer sur le bouton `résoudre` dans le coin supérieur droit de
+l'écran. (Le bouton `résoudre` est désactivé pour les sections comme celle-ci qui n'ont pas
+d'exercice.) Essayez de ne pas vous en servir trop souvent ; vous apprendrez plus vite en trouvant
+par vous-même où les blocs de code suggérés doivent se placer et en les tapant vous-même dans
+l'éditeur.

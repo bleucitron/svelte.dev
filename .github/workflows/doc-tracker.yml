@@ -21,7 +21,7 @@ jobs:
           dir: apps/svelte.dev/content/docs/svelte
   track-docs-cli:
     runs-on: ubuntu-latest
-    name: Checking Docs Svelte
+    name: Checking Docs CLI
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,3 +32,16 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/cli
+  track-docs-tuto1:
+    runs-on: ubuntu-latest
+    name: Checking Tutorial 01
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/tutorial/01-svelte

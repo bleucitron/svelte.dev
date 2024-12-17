@@ -47,13 +47,13 @@
 
 	<a
 		href={exercise.prev ? `/tutorial/${exercise.prev?.slug}` : undefined}
-		aria-label={exercise.prev && 'Previous exercise'}
+		aria-label={exercise.prev && 'Exercice précédent'}
 	>
 		<Icon name="arrow-left" size={18} />
 	</a>
 	<a
 		href={exercise.next ? `/tutorial/${exercise.next?.slug}` : undefined}
-		aria-label={exercise.next && 'Next exercise'}
+		aria-label={exercise.next && 'Exercice suivant'}
 	>
 		<Icon name="arrow-right" size={18} />
 	</a>
@@ -66,9 +66,9 @@
 
 	<button class="raised" class:completed disabled={!exercise.has_solution} onclick={toggle}>
 		{#if completed && exercise.has_solution}
-			reset
+			réinitialiser
 		{:else}
-			solve
+			résoudre
 		{/if}
 	</button>
 </SecondaryNav>
