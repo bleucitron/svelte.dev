@@ -1,38 +1,51 @@
 ---
-title: Dynamic attributes
+title: Attributs dynamiques
 ---
 
-Just like you can use curly braces to control text, you can use them to control element attributes.
+De la même manière que vous pouvez utiliser des accolades pour contrôler le texte, vous pouvez vous
+en servir pour contrôler les attributs des éléments.
 
-Our image is missing a `src` — let's add one:
+Notre image n'a pas de `src` — ajoutons-le lui :
 
 ```svelte
 /// file: App.svelte
 <img +++src={src}+++ />
 ```
 
-That's better. But if you hover over the `<img>` in the editor, Svelte is giving us a warning:
+C'est mieux. Mais si vous survolez l'`<img>` dans l'éditeur, Svelte vous avertit :
 
 ```
 `<img>` element should have an alt attribute
 ```
 
-When building web apps, it's important to make sure that they're _accessible_ to the broadest possible userbase, including people with (for example) impaired vision or motion, or people without powerful hardware or good internet connections. Accessibility (shortened to a11y) isn't always easy to get right, but Svelte will help by warning you if you write inaccessible markup.
+_L'élément `<img>` doit avoir un attribut alt_
 
-In this case, we're missing the `alt` attribute that describes the image for people using screenreaders, or people with slow or flaky internet connections that can't download the image. Let's add one:
+Lorsque l'on construit des applications web, il est important de s'assurer qu'elles sont
+_accessibles_ au plus grand nombre, en incluant les personnes avec (par exemple) des difficultés de
+vision ou de motricité, ou encore des personnes avec du matériel peu performant ou une mauvaise
+connexion internet. L'accessibilité (abrégée en a11y) n'est pas toujours facile à mettre en place
+correctement, mais Svelte vous aide à le faire en vous avertissant lorsque vous écrivez du markup
+non accessible.
+
+Dans ce cas, il manque l'attribut `alt` qui décrit l'image pour les personnes utilisant un lecteur
+d'écran, ou pour les personnes avec une connexion internet lente ou peu fiable qui n'arrivent pas à
+télécharger l'image.
+Rajoutons cet attribut :
 
 ```svelte
 /// file: App.svelte
-<img src={src} +++alt="A man dances."+++ />
+<img src={src} +++alt="Un homme danse."+++ />
 ```
 
-We can use curly braces _inside_ attributes. Try changing it to `"{name} dances."` — remember to declare a `name` variable in the `<script>` block.
+Nous pouvons utiliser les accolades _dans_ les attributs. Essayez plutôt d'écrire `"{name} danse"` —
+n'oubliez pas de déclarer une variable `name` dans le bloc `<script>`.
 
-## Shorthand attributes
+## Raccourcis d'attributs [!VO]Shorthand attributes
 
-It's not uncommon to have an attribute where the name and value are the same, like `src={src}`. Svelte gives us a convenient shorthand for these cases:
+Il est courant d'avoir un attribut dont le nom et la valeur sont égales, comme `src={src}`. Svelte
+nous offre un raccourci pratique pour ces cas-là :
 
 ```svelte
 /// file: App.svelte
-<img +++{src}+++ alt="{name} dances." />
+<img +++{src}+++ alt="{name} danse." />
 ```

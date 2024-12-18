@@ -1,14 +1,18 @@
 ---
-title: Your first component
+title: Votre premier composant
 ---
 
-In Svelte, an application is composed from one or more _components_. A component is a reusable self-contained block of code that encapsulates HTML, CSS and JavaScript that belong together, written into a `.svelte` file. The `App.svelte` file, open in the code editor to the right, is a simple component.
+Avec Svelte, une application est composée d'un ou plusieurs _composants_. Un composant est un bloc
+de code réutilisable encapsulant du HTML, du CSS et du JavaScript fonctionnant ensemble, le tout
+écrit dans un fichier `.svelte`. Le fichier `App.svelte`, ouvert dans l'éditeur de code sur la
+droite, est un composant simple.
 
-## Adding data
+## Ajouter des données [!VO]Adding data
 
-A component that just renders some static markup isn't very interesting. Let's add some data.
+Un composant qui ne fait qu'afficher du markup statique n'est pas très intéressant. Ajoutons-lui des
+données.
 
-First, add a script tag to your component and declare a `name` variable:
+D'abord, ajoutez une balise script à votre composant et déclarez une variable `name` :
 
 ```svelte
 /// file: App.svelte
@@ -16,19 +20,20 @@ First, add a script tag to your component and declare a `name` variable:
 	let name = 'Svelte';
 </script>+++
 
-<h1>Hello world!</h1>
+<h1>Bonjour tout le monde !</h1>
 ```
 
-Then, we can refer to `name` in the markup:
+Puis, nous pouvons utiliser `name` dans le markup :
 
 ```svelte
 /// file: App.svelte
-<h1>Hello +++{name}+++!</h1>
+<h1>Bonjour +++{name}+++ !</h1>
 ```
 
-Inside the curly braces, we can put any JavaScript we want. Try changing `name` to `name.toUpperCase()` for a shoutier greeting.
+Dans les accolades, il est possible de mettre autant de JavaScript que l'on souhaite. Essayez de
+remplacer `name` par `name.toUppercase()` pour accueillir plus bruyamment.
 
 ```svelte
 /// file: App.svelte
-<h1>Hello {name+++.toUpperCase()+++}!</h1>
+<h1>Bonjour {name+++.toUpperCase()+++} !</h1>
 ```
