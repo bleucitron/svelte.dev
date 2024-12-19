@@ -1,5 +1,5 @@
 import type { CompileError, CompileResult } from 'svelte/compiler';
-import { Compartment, EditorState } from '@codemirror/state';
+import { Compartment, EditorState, StateEffect, StateField } from '@codemirror/state';
 import { compile_file } from './compile-worker';
 import { BROWSER } from 'esm-env';
 import { basicSetup, EditorView } from 'codemirror';
@@ -7,7 +7,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { svelte } from '@replit/codemirror-lang-svelte';
 import { autocomplete_for_svelte } from '@sveltejs/site-kit/codemirror';
-import { keymap } from '@codemirror/view';
+import { Decoration, keymap, type DecorationSet } from '@codemirror/view';
 import { acceptCompletion } from '@codemirror/autocomplete';
 import { indentWithTab } from '@codemirror/commands';
 import { indentUnit } from '@codemirror/language';
@@ -51,6 +51,32 @@ function file_type(file: Item) {
 	return file.name.split('.').pop();
 }
 
+const set_highlight = StateEffect.define<{ start: number; end: number } | null>();
+
+const highlight_field = StateField.define<DecorationSet>({
+	create() {
+		return Decoration.none;
+	},
+	update(highlights, tr) {
+		// Apply the effect
+		for (let effect of tr.effects) {
+			if (effect.is(set_highlight)) {
+				if (effect.value) {
+					const { start, end } = effect.value;
+					const deco = Decoration.mark({ class: 'highlight' }).range(start, end);
+					return Decoration.set([deco]);
+				} else {
+					// Clear highlight
+					return Decoration.none;
+				}
+			}
+		}
+		// Map decorations for document changes
+		return highlights.map(tr.changes);
+	},
+	provide: (field) => EditorView.decorations.from(field)
+});
+
 const tab_behaviour = new Compartment();
 const vim_mode = new Compartment();
 
@@ -60,7 +86,8 @@ const default_extensions = [
 	tab_behaviour.of(keymap.of([{ key: 'Tab', run: acceptCompletion }])),
 	indentUnit.of('\t'),
 	theme,
-	vim_mode.of([])
+	vim_mode.of([]),
+	highlight_field
 ];
 
 export interface ExposedCompilerOptions {
@@ -85,6 +112,11 @@ export class Workspace {
 	#readonly = false; // TODO do we need workspaces for readonly stuff?
 	#files = $state.raw<Item[]>([]);
 	#current = $state.raw() as File;
+
+	#handlers = {
+		hover: new Set<(pos: number | null) => void>(),
+		select: new Set<(from: number, to: number) => void>()
+	};
 
 	#onupdate: (file: File) => void;
 	#onreset: (items: Item[]) => void;
@@ -225,6 +257,20 @@ export class Workspace {
 		});
 	}
 
+	highlight_range(node: { start: number; end: number } | null, scroll = false) {
+		if (!this.#view) return;
+
+		const effects: StateEffect<any>[] = [set_highlight.of(node)];
+
+		if (scroll && node) {
+			effects.push(EditorView.scrollIntoView(node.start, { y: 'center' }));
+		}
+
+		this.#view.dispatch({
+			effects
+		});
+	}
+
 	mark_saved() {
 		this.modified = {};
 	}
@@ -259,6 +305,26 @@ export class Workspace {
 		this.#files.splice(from_index, 1);
 
 		this.#files = this.#files.slice(0, to_index).concat(from).concat(this.#files.slice(to_index));
+	}
+
+	onhover(fn: (pos: number | null) => void) {
+		$effect(() => {
+			this.#handlers.hover.add(fn);
+
+			return () => {
+				this.#handlers.hover.delete(fn);
+			};
+		});
+	}
+
+	onselect(fn: (from: number, to: number) => void) {
+		$effect(() => {
+			this.#handlers.select.add(fn);
+
+			return () => {
+				this.#handlers.select.delete(fn);
+			};
+		});
 	}
 
 	remove(item: Item) {
@@ -439,9 +505,9 @@ export class Workspace {
 			EditorState.readOnly.of(this.#readonly),
 			EditorView.editable.of(!this.#readonly),
 			EditorView.updateListener.of((update) => {
-				if (update.docChanged) {
-					const state = this.#view!.state!;
+				const state = this.#view!.state!;
 
+				if (update.docChanged) {
 					this.#update_file({
 						...this.#current,
 						contents: state.doc.toString()
@@ -449,6 +515,31 @@ export class Workspace {
 
 					// preserve undo/redo across files
 					this.states.set(this.#current.name, state);
+				}
+
+				if (update.selectionSet) {
+					if (state.selection.ranges.length === 1) {
+						for (const handler of this.#handlers.select) {
+							const { from, to } = state.selection.ranges[0];
+							handler(from, to);
+						}
+					}
+				}
+			}),
+			EditorView.domEventObservers({
+				mousemove: (event, view) => {
+					const pos = view.posAtCoords({ x: event.clientX, y: event.clientY });
+
+					if (pos !== null) {
+						for (const handler of this.#handlers.hover) {
+							handler(pos);
+						}
+					}
+				},
+				mouseleave: (event, view) => {
+					for (const handler of this.#handlers.hover) {
+						handler(null);
+					}
 				}
 			})
 		];
