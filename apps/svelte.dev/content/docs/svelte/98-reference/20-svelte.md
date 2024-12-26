@@ -82,7 +82,7 @@ constructor(options: ComponentConstructorOptions<Properties<Props, Slots>>);
 
 - <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez
 l'utilitaire de compatibilité `asClassComponent`, qui est une solution bouche-trou. Voir le [guide de
-migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
 plus d'infos.
 
 </div>
@@ -102,7 +102,7 @@ $destroy(): void;
 
 - <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
 utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
-migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
 plus d'infos.
 
 </div>
@@ -125,7 +125,7 @@ $on<K extends Extract<keyof Events, string>>(
 
 - <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
 utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
-migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
 plus d'infos.
 
 </div>
@@ -145,7 +145,7 @@ $set(props: Partial<Props>): void;
 
 - <span class="tag deprecated">déprécié</span> Cette méthode n'existe que si vous utilisez un des
 utilitaires de compatibilité legacy, qui sont une solution bouche-trou. Voir le [guide de
-migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
+migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) pour
 plus d'infos.
 
 </div>
@@ -596,13 +596,13 @@ interface Component<
 ): {
 	/**
 	 * @deprecated Cette méthode n'existe que lorsque vous utilisez un des utilitaires de
-	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
+	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes)
 	 * pour plus d'infos.
 	 */
 	$on?(type: string, callback: (e: any) => void): () => void;
 	/**
 	 * @deprecated Cette méthode n'existe que lorsque vous utilisez un des utilitaires de
-	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](https://svelte.dev/docs/svelte/v5-migration-guide#Components-are-no-longer-classes).
+	 * compatibilité, qui sont des solutions bouche-trous. Voir le [guide de migration](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes).
 	 * pour plus d'infos.
 	 */
 	$set?(props: Partial<Props>): void;
