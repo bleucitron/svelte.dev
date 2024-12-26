@@ -66,9 +66,9 @@ représente. Dans le cas de Svelte, la "cible" d'un proxy de `$state` peut ne pa
 valeur courante, ce qui peut prêter à confusion.
 
 La manière la plus simple de logger une valeur lorsqu'elle évolue est d'utiliser la rune
-[`$inspect`](https://svelte.dev/docs/svelte/$inspect). Autrement, si vous souhaitez logger des
+[`$inspect`](/docs/svelte/$inspect). Autrement, si vous souhaitez logger des
 choses une seule fois (par exemple au sein d'un gestionnaire d'évènement), vous pouvez utiliser
-[`$state.snapshot`](https://svelte.dev/docs/svelte/$state#$state.snapshot) pour prendre un
+[`$state.snapshot`](/docs/svelte/$state#$state.snapshot) pour prendre un
 instantané de la valeur courante.
 
 ### event_handler_invalid

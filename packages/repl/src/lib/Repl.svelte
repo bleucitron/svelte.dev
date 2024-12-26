@@ -23,6 +23,7 @@
 		injectedCSS?: string;
 		previewTheme?: 'light' | 'dark';
 		onchange?: () => void;
+		download?: () => void;
 	}
 
 	let {
@@ -37,7 +38,8 @@
 		injectedJS = '',
 		injectedCSS = '',
 		previewTheme = 'light',
-		onchange = () => {}
+		onchange = () => {},
+		download
 	}: Props = $props();
 
 	// TODO pass in real data
@@ -85,9 +87,6 @@
 	set_repl_context({
 		bundle,
 		toggleable,
-
-		migrate,
-
 		workspace
 	});
 
@@ -177,7 +176,7 @@
 		>
 			{#snippet a()}
 				<section>
-					<ComponentSelector {runes} {onchange} {workspace} {can_migrate} />
+					<ComponentSelector {runes} {onchange} {workspace} {can_migrate} {migrate} {download} />
 
 					<Editor {workspace} />
 				</section>
