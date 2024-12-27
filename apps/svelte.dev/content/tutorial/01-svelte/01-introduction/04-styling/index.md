@@ -1,12 +1,13 @@
 ---
-title: Styling
+title: Styles
 ---
 
-Just like in HTML, you can add a `<style>` tag to your component. Let's add some styles to the `<p>` element:
+Comme en HTML, vous pouvez ajoutez une balise `<style>` à votre composant. Ajoutons du style à notre
+élément `<p>` :
 
 ```svelte
 /// file: App.svelte
-<p>This is a paragraph.</p>
+<p>Ceci est un paragraphe.</p>
 
 <style>
 +++	p {
@@ -17,4 +18,7 @@ Just like in HTML, you can add a `<style>` tag to your component. Let's add some
 </style>
 ```
 
-Importantly, these rules are _scoped to the component_. You won't accidentally change the style of `<p>` elements elsewhere in your app, as we'll see in the next step.
+Il est important de comprendre que ces règles sont _scopées au composant_, c'est-à-dire qu'elles ne
+s'appliquent que sur les éléments définis dans ce composant. Vous ne risquez pas de modifier
+accidentellement le style des éléments `<p>` ailleurs dans votre application, comme nous le verrons
+dans l'exercice suivant.

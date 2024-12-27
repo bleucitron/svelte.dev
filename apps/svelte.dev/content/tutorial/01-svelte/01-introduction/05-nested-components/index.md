@@ -1,10 +1,12 @@
 ---
-title: Nested components
+title: Composants imbriqués
 ---
 
-It would be impractical to put your entire app in a single component. Instead, we can import components from other files and include them in our markup.
+Écrire toute votre application au sein d'un seul et même composant ne serait pas très pratique. Au
+lieu de ça, nous pouvons importer des composants depuis d'autres fichiers et les inclure dans notre
+markup.
 
-Add a `<script>` tag to the top of `App.svelte` that imports `Nested.svelte`...
+Ajoutez une balise `<script>` en haut de `App.svelte` afin d'importer `Nested.svelte`...
 
 ```svelte
 /// file: App.svelte
@@ -13,14 +15,16 @@ Add a `<script>` tag to the top of `App.svelte` that imports `Nested.svelte`...
 </script>+++
 ```
 
-...and include a `<Nested />` component:
+... et ajoutez une instance du composant `<Nested />` :
 
 ```svelte
 /// file: App.svelte
-<p>This is a paragraph.</p>
+<p>Ceci est un paragraphe.</p>
 +++<Nested />+++
 ```
 
-Notice that even though `Nested.svelte` has a `<p>` element, the styles from `App.svelte` don't leak in.
+Notez que même si `Nested.svelte` possède un élément `<p>`, les styles de `App.svelte` ne s'y
+appliquent pas.
 
-> [!NOTE] Component names are capitalised, to distinguish them from HTML elements.
+> [!NOTE] Les noms de composant ont leur première lettre en majuscules, pour les distinguer des
+> éléments HTML.
