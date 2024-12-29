@@ -1,16 +1,25 @@
 ---
-title: HTML tags
+title: Balises HTML
 ---
 
-Ordinarily, strings are inserted as plain text, meaning that characters like `<` and `>` have no special meaning.
+Par défaut, les chaînes de caractères sont insérées comme du texte brut, ce qui signifie que `<` et
+`>` n'ont pas de sens particulier.
 
-But sometimes you need to render HTML directly into a component. For example, the words you're reading right now exist in a markdown file that gets included on this page as a blob of HTML.
+Mais vous avez parfois besoin d'afficher du HTML directement dans un composant. Par exemple, les
+mots que vous lisez en ce moment-même existent dans un fichier markdown qui est inclus dans cette
+page en tant que morceau de HTML.
 
-In Svelte, you do this with the special `{@html ...}` tag:
+En Svelte, vous pouvez faire cela avec la balise dédiée `{@html ...}` :
 
 ```svelte
 /// file: App.svelte
 <p>{+++@html+++ string}</p>
 ```
 
-> [!NOTE] Important: Svelte doesn't perform any sanitization of the expression inside `{@html ...}` before it gets inserted into the DOM. This isn't an issue if the content is something you trust like an article you wrote yourself. However if it's some untrusted user content, e.g. a comment on an article, then it's critical that you manually escape it, otherwise you risk exposing your users to <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">Cross-Site Scripting</a> (XSS) attacks.
+> [!NOTE] Important : Svelte n'effectue aucun nettoyage de l'expression dans `{@html ...}` avant de
+> l'insérer dans le DOM. Ceci n'est pas un problème si le contenu est quelque chose que vous
+> maîtrisez, comme un article que vous avez écrit. Mais s'il s'agit de contenu utilisateur que vous
+> ne maîtrisez pas, par ex. un commentaire sur un article, il est alors impératif de l'"échapper"
+> manuellement, sans quoi vous risquez d'exposer vos utilisateurs et utilisatrices à des attaques de
+> type <a href="https://owasp.org/www-community/attacks/xss/" target="_blank">Cross-Site
+> Scripting</a> (XSS).
