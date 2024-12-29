@@ -2,11 +2,11 @@
 	let count = 0;
 
 	function increment() {
-		// TODO implement
+		// TODO implémenter
 	}
 </script>
 
 <button onclick={increment}>
-	Clicked {count}
-	{count === 1 ? 'time' : 'times'}
+	Il y a eu {count}
+	{count === 1 ? 'clic' : 'clics'}
 </button>

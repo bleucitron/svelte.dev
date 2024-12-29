@@ -2,12 +2,12 @@
 	let numbers = [1, 2, 3, 4];
 
 	function addNumber() {
-		// TODO implement
+		// TODO implémenter
 	}
 </script>
 
 <p>{numbers.join(' + ')} = ...</p>
 
 <button onclick={addNumber}>
-	Add a number
+	Ajouter un nombre
 </button>

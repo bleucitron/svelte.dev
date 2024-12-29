@@ -9,5 +9,5 @@
 <p>{numbers.join(' + ')} = ...</p>
 
 <button onclick={addNumber}>
-	Add a number
+	Ajouter un nombre
 </button>

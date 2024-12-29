@@ -1,17 +1,18 @@
 ---
-title: Deep state
+title: L'état profond
 ---
 
-As we saw in the previous exercise, state reacts to _reassignments_. But it also reacts to _mutations_ — we call this _deep reactivity_.
+Comme nous l'avons vu dans l'exercice précédent, l'état réagit aux _ré-assignations_. Mais il réagit
+également aux _mutations_ — nous appeleons cela la _réactivité profonde_.
 
-Make `numbers` a reactive array:
+Faites de `numbers` un tableau réactif :
 
 ```js
 /// file: App.svelte
 let numbers = +++$state([1, 2, 3, 4])+++;
 ```
 
-Now, when we change the array...
+Désormais, lorsque nous modifions le tableau...
 
 ```js
 /// file: App.svelte
@@ -20,7 +21,7 @@ function addNumber() {
 }
 ```
 
-...the component updates. Or better still, we can `push` to the array instead:
+... le composant se met à jour. Ou mieux encore, nous pouvons `push` dans le tableau :
 
 ```js
 /// file: App.svelte
@@ -29,4 +30,6 @@ function addNumber() {
 }
 ```
 
-> [!NOTE] Deep reactivity is implemented using [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy), and mutations to the proxy do not affect the original object.
+> [!NOTE] La réactivité profonde est implémenté grâce aux
+> [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy),
+> et les mutations sur le proxy n'affectent pas l'objet original.
