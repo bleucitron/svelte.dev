@@ -13,7 +13,7 @@
 	});
 </script>
 
-<button onclick={() => interval /= 2}>speed up</button>
-<button onclick={() => interval *= 2}>slow down</button>
+<button onclick={() => interval /= 2}>accélérer</button>
+<button onclick={() => interval *= 2}>ralentir</button>
 
-<p>elapsed: {elapsed}</p>
+<p>écoulé: {elapsed}</p>

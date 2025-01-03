@@ -1,8 +1,9 @@
 ---
-title: Derived state
+title: État dérivé
 ---
 
-Often, you will need to _derive_ state from other state. For this, we have the `$derived` rune:
+Souvent, vous aurez besoin de _dérivez_ un état depuis un autre état. Pour cela, nous avons la rune
+`$derived` :
 
 ```js
 /// file: App.svelte
@@ -10,11 +11,13 @@ let numbers = $state([1, 2, 3, 4]);
 +++let total = $derived(numbers.reduce((t, n) => t + n, 0));+++
 ```
 
-We can now use this in our markup:
+Nous pouvons maintenant utiliser ceci dans notre markup :
 
 ```svelte
 /// file: App.svelte
 <p>{numbers.join(' + ')} = +++{total}+++</p>
 ```
 
-The expression inside the `$derived` declaration will be re-evaluated whenever its dependencies (in this case, just `numbers`) are updated. Unlike normal state, derived state is read-only.
+L'expression dans la déclaration `$derived` sera ré-évaluée dès qu'une de ses dépendances (dans ce
+cas, uniquement `numbers`) sera mise à jour. À la différence d'un état normal, l'état dérivé est en
+lecture seule.

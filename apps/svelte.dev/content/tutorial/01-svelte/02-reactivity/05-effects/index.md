@@ -1,14 +1,22 @@
 ---
-title: Effects
+title: Effets
 ---
 
-So far we've talked about reactivity in terms of state. But that's only half of the equation — state is only reactive if something is _reacting_ to it, otherwise it's just a sparkling variable.
+Jusqu'à maintenant, nous avons uniquement parlé de réactivité en termes d'état. Mais ce n'est qu'une
+partie de l'équation — l'état n'est réactif que si quelque chose _réagit_ à ses évolutions, sinon ça
+ne serait qu'une variable stylée.
 
-The thing that reacts is called an _effect_. You've already encountered effects — the ones that Svelte creates on your behalf to update the DOM in response to state changes — but you can also create your own with the `$effect` rune.
+La chose qui réagit est appelée un _effet_. Nous avons déjà rencontré des effets — ceux que Svelte
+crée pour vous pour mettre à jour le DOM en réponse aux changements d'états — mais vous pouvez aussi
+créer votre propres effets avec la rune `$effect`.
 
-> [!NOTE] Most of the time, you shouldn't. `$effect` is best thought of as an escape hatch, rather than something to use frequently. If you can put your side effects in an [event handler](dom-events), for example, that's almost always preferable.
+> [!NOTE] La plupart du temps, vous ne devriez pas. `$effect` est plus un outil de dernier recours
+> plutôt que quelque chose dont il faut se servir régulièrement. Il est presque toujours préférable
+> de mettre vos effets de bord dans un [gestionnaire d'évènement](dom-events), par exemple.
 
-Let's say we want to use `setInterval` to keep track of how long the component has been mounted. Create the effect:
+Supposons que l'on veuille utiliser `setInterval` pour suivre depuis combien de temps le composant a
+été monté.
+Créons l'effet :
 
 ```svelte
 /// file: App.svelte
@@ -24,9 +32,12 @@ Let's say we want to use `setInterval` to keep track of how long the component h
 </script>
 ```
 
-Click the 'speed up' button a few times and notice that `elapsed` ticks up faster, because we're calling `setInterval` each time `interval` gets smaller.
+Cliquez plusieurs fois sur le bouton 'accélérer' et notez que la valeur de `elapsed` augmente de
+plus en plus vite, car nous appelons `setInterval` à chaque fois que `interval` diminue.
 
-If we then click the 'slow down' button... well, it doesn't work. That's because we're not clearing out the old intervals when the effect updates. We can fix that by returning a cleanup function:
+Si nous cliquons ensuite sur le bouton 'ralentir'... eh bien, ça ne fonctionne pas. C'est parce que
+nous ne nettoyons pas les anciens intervalles lorsque l'effet est rejoué. Nous pouvons corriger ceci
+en renvoyant une fonction de nettoyage :
 
 ```js
 /// file: App.svelte
@@ -41,8 +52,10 @@ $effect(() => {
 });
 ```
 
-The cleanup function is called immediately before the effect function re-runs when `interval` changes, and also when the component is destroyed.
+La fonction de nettoyage est appelée immédiatement avant que le fonction d'effet soit rejouée
+lorsque `interval`, ainsi que lorsque le composant est détruit.
 
-If the effect function doesn't read any state when it runs, it will only run once, when the component mounts.
+Si la fonction d'effet ne lit aucun état lorsqu'elle est jouée, elle ne sera exécutée qu'une seule
+fois, lors du montage du composant.
 
-> [!NOTE] Effects do not run during server-side rendering.
+> [!NOTE] Les effets ne sont pas exécutés pendant le rendu côté serveur.
