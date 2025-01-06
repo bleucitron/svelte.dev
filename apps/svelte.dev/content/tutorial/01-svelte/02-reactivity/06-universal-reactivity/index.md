@@ -1,10 +1,14 @@
 ---
-title: Universal reactivity
+title: Réactivité universelle
 ---
 
-In the preceding exercises, we used runes to add reactivity inside components. But we can also use runes _outside_ components, for example to share some global state.
+Dans les exercices précédents, nous avons utilisé des runes pour ajouter de la réactivité dans nos
+composants. Mais nous pouvons également utiliser les runes _en dehors_ des composants, par exemple,
+pour partager un état global.
 
-The `<Counter>` components in this exercise are all importing the `counter` object from `shared.js`. But it's a normal object, and as such nothing happens when you click the buttons. Wrap the object in `$state(...)`:
+Les composants `<Counter>` de cet exercice importent tous un objet `counter` depuis `shared.js`.
+Mais il s'agit d'un objet normal, et rien ne se produit lorsque vous cliquez sur les boutons.
+Ajoutons `$state(...)` autour de l'objet :
 
 ```js
 /// file: shared.js
@@ -13,9 +17,11 @@ export const counter = +++$state({+++
 +++})+++;
 ```
 
-This causes an error, because you can't use runes in normal `.js` files, only `.svelte.js` files. Let's fix that — rename the file to `shared.svelte.js`.
+Ceci provoque une erreur, car vous ne pouvez pas utiliser de runes dans des fichiers `.js` normaux,
+uniquement dans des fichiers `.svelte.js`.
+Corrigeons cela — renommez le fichier en `shared.svelte.js`.
 
-Then, update the import declaration in `Counter.svelte`:
+Puis, mettons à jour la déclaration d'import dans `Counter.svelte` :
 
 ```svelte
 /// file: Counter.svelte
@@ -24,6 +30,9 @@ Then, update the import declaration in `Counter.svelte`:
 </script>
 ```
 
-Now, when you click any button, all three update simultaneously.
+Désormais, lorsque vous cliquez sur n'importe quel bouton, les trois se mettent à jour
+simultanément.
 
-> [!NOTE] You cannot export a `$state` declaration from a module if the declaration is reassigned (rather than just mutated), because the importers would have no way to know about it.
+> [!NOTE] Vous ne pouvez pas exporter une déclaration `$state` depuis un module si la déclaration
+> est réassignée (plutôt que juste mutée), car les importateurs n'aurait alors aucun moyen d'en
+> être mis au courant.
