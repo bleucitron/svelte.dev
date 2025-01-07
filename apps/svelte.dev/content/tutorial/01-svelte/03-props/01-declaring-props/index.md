@@ -1,10 +1,13 @@
 ---
-title: Declaring props
+title: Déclarer des props
 ---
 
-So far, we've dealt exclusively with internal state — that is to say, the values are only accessible within a given component.
+Jusqu'à maintenant, nous avons exclusivement eu affaire à des états internes — c'est-à-dire des
+valeurs qui ne sont accessibles uniquement au sein d'un composant donné.
 
-In any real application, you'll need to pass data from one component down to its children. To do that, we need to declare _properties_, generally shortened to 'props'. In Svelte, we do that with the `$props` rune. Edit the `Nested.svelte` component:
+Dans une vraie application, vous aurez besoin de passer des données d'un composant à ses enfants.
+Pour faire cela, nous devons déclarer des _propriétés_, généralement surnommées 'props'. En Svelte,
+nous faisons ça grâce à la rune `$props`. Modifiez le composant `Nested.svelte` :
 
 ```svelte
 /// file: Nested.svelte
