@@ -929,6 +929,8 @@ let { banner }: { banner: Snippet<[{ text: string }]> } = $props();
 ```
 Vous pouvez uniquement appeler un snippet via la [balise `{@render ...}`](/docs/svelte/snippet).
 
+Voir la documentation des [snippets](/docs/svelte/snippet) pour plus d'info.
+
 <div class="ts-block">
 
 ```dts

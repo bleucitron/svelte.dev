@@ -223,5 +223,10 @@ Vous pouvez, bien sûr, séparer la déclaration de type de l'annotation :
 </script>
 ```
 
+> [!NOTE] Les interfaces des éléments natifs du DOM sont fournies par le module `svelte/elements`
+> (voir [Typer des composants haut-niveau](typescript#Typing-wrapper-components)).
+
 L'ajout de types est recommandé, car il permet aux personnes utilisant votre composant de découvrir
 facilement les props à fournir.
+
+
