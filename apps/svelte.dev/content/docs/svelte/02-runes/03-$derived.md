@@ -59,3 +59,25 @@ sa valeur est lue.
 
 Pour exempter un morceau d'état d'être considéré comme une dépendance, utilisez
 [`untrack`](svelte#untrack).
+
+## Propagation de la mise à jour [!VO]Update propagation
+
+Svelte utilise un concept appelée _réactivité push-pull_ — lorsque l'état est mis à jour, tout ce
+qui dépend de l'état (directement ou non) est immédiatement notifié du changement (le 'push'), mais
+les valeurs dérivées ne sont pas ré-évaluées tant qu'elles ne sont lues (le 'pull').
+
+Si la nouvelle valeur d'un état dérivé est identique en termes de référence que la valeur
+précédente, les mises à jour en aval seront ignorées. Autrement dit, Svelte ne mettra à jour le
+texte au sein du bouton que lorsque `large` change, pas lorsque `count` change, même si `large`
+dépend de `count` :
+
+```svelte
+<script>
+	let count = $state(0);
+	let large = $derived(count > 10);
+</script>
+
+<button onclick={() => count++}>
+	{large}
+</button>
+```

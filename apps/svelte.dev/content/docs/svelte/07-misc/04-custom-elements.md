@@ -185,7 +185,11 @@ dans un bloc `{#each ...}` ne va pas conduire à ce que le contenu slotté soit 
 moyen de passer des données au composant parent remplissant le slot
 - Des polyfills sont nécessaires pour assurer le support de navigateurs plus anciens
 - Vous pouvez utiliser la fonctionnalité Svelte de contexte entre des composants Svelte standards au
-	sein d'un élément personnalisé, mais vous ne pouvez pas vous servir d'un même contexte pour
+sein d'un élément personnalisé, mais vous ne pouvez pas vous servir d'un même contexte pour
 différents éléments personnalisés. Autrement dit, vous ne pouvez pas utiliser `setContext` sur un
 élément personnalisé parent et lire ce contexte avec `getContext` dans un élément personnalisé
 enfant
+- Ne déclarez pas de propriétés ou d'attributs commençant pas `on`, puisque leur usage sera
+interprété comme un gestionnaire d'évènement. Autrement dit, Svelte traite `<custom-element
+oneworld={true}></custom-element>` comme `customElement.addEventListener('eworld', true)` (et non
+comme `customElement.oneworld = true`)

@@ -57,12 +57,7 @@ Si vous ajoutez un nouvel objet à ce tableau via `.push`, celui-ci sera égalem
 Proxy :
 
 ```js
-// @filename: ambient.d.ts
-declare global {
-	const todos: Array<{ done: boolean, text: string }>
-}
-
-// @filename: index.js
+let todos = [{ done: false, text: 'add more todos' }];
 // ---cut---
 todos.push({
 	done: false,

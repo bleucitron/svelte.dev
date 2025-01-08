@@ -52,7 +52,7 @@ Vous pouvez maintenant écrire vos tests unitaires dans des fichiers `.js/.ts` :
 /// file: multiplier.svelte.test.js
 import { flushSync } from 'svelte';
 import { expect, test } from 'vitest';
-import { multiplier } from './multiplier.js';
+import { multiplier } from './multiplier.svelte.js';
 
 test('Multiplier', () => {
 	let double = multiplier(0, 2);
@@ -65,12 +65,31 @@ test('Multiplier', () => {
 });
 ```
 
+```js
+/// file: multiplier.svelte.js
+/**
+ * @param {number} initial
+ * @param {number} k
+ */
+export function multiplier(initial, k) {
+	let count = $state(initial);
+
+	return {
+		get value() {
+			return count * k;
+		},
+		/** @param {number} c */
+		set: (c) => {
+			count = c;
+		}
+	};
+}
+```
+
 ### Utiliser les runes dans vos fichiers de test [!VO]Using runes inside your test files
 
-Il est possible d'utiliser les runes dans vos fichiers de test. Assurez-vous d'abord que votre
-bundler sache diriger le fichier à travers le compilateur Svelte avant que le test soit lancé, et ce
-en ajoutant `.svelte` au nom du fichier (par ex. `multiplier.svelte.test.js`). Vous pourrez ensuite
-utiliser les runes dans vos tests.
+Puisque Vitest traite vos fichiers de test de la même façon que vos fichiers source, vous pouvez
+utiliser des runes au sein de vos tests tant que leur nom de fichier inclut `.svelte` :
 
 ```js
 /// file: multiplier.svelte.test.js
@@ -88,6 +107,21 @@ test('Multiplier', () => {
 
 	expect(double.value).toEqual(10);
 });
+```
+
+```js
+/// file: multiplier.svelte.js
+/**
+ * @param {() => number} getCount
+ * @param {number} k
+ */
+export function multiplier(getCount, k) {
+	return {
+		get value() {
+			return getCount() * k;
+		}
+	};
+}
 ```
 
 Si le code testé utilise des effets, vous aurez besoin de placer le test dans un `$effect.root` :
@@ -118,6 +152,27 @@ test('Effet', () => {
 
 	cleanup();
 });
+```
+
+```js
+/// file: logger.svelte.js
+/**
+ * @param {() => any} getValue
+ */
+export function logger(getValue) {
+	/** @type {any[]} */
+	let log = $state([]);
+
+	$effect(() => {
+		log.push(getValue());
+	});
+
+	return {
+		get value() {
+			return log;
+		}
+	};
+}
 ```
 
 ### Tests de composants [!VO]Component testing

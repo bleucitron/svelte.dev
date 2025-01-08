@@ -58,17 +58,16 @@ gestionnaire d'évènement personnalisé créé par l'action :
 ```svelte
 <!--- file: App.svelte --->
 <script>
-	import { on } from 'svelte/events';
-
 	/**
 	 * @type {import('svelte/action').Action<
 	 * 	HTMLDivElement,
-	 * 	null,
+	 * 	undefined,
 	 * 	{
 	 * 		onswiperight: (e: CustomEvent) => void;
 	 * 		onswipeleft: (e: CustomEvent) => void;
 	 * 		// ...
-	 * }>}
+	 * 	}
+	 * >}
 	 */
 	function gestures(node) {
 		$effect(() => {
