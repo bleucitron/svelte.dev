@@ -151,9 +151,16 @@ développements, vous pouvez utiliser [`$inspect`]($inspect).)
 <p>Le double de {state.value} vaut {derived.value}</p>
 ```
 
-Un effet dépend uniquement des valeurs qu'il a lues la dernière fois qu'il a été joué. Si `a`
-est vrai, les changements affectant `b` [ne déclencheront pas la ré-exécution de cet
-effet](/playground/untitled#H4sIAAAAAAAAE3WQ0WrDMAxFf0U1hTow1vcsMfQ7lj3YjlxEXTvEymC4_vfFC6Ewtidxde8RkrJw5DGJ9j2LoO8oWnGZJvEi-GuqIn2iZ1x1istsa6dLdqaJ1RAG9sigoYdjYs0onfYJm7fdMX85q3dE59CylA30CnJtDWxjSNHjq49XeZqXEChcT9usLUAOpIbHA0yzM78oColGhDVofLS3neZSS6mqOz-XD51ZmGOAGKwne-vztk-956CL0kAJsi7decupf4l658EUZX4I8yTWt93jSI5wFC3PC5aP8g0Aje5DcQEAAA==).
+Un effet dépend uniquement des valeurs qu'il a lues la dernière fois qu'il a été joué. Ceci a des
+conséquences intéressantes pour les effets qui impliquent du code conditionnel.
+
+Par exemple, si `a` vaut `true` dans le code ci-dessous, le code dans le bloc `#if` sera joué et `b`
+sera ré-évalué. Dans ce cas, n'importe quel changement sur `a` ou `b` [va déclencher la ré-exécution
+de
+l'effet](/playground/untitled#H4sIAAAAAAAAE3VQzWrDMAx-FdUU4kBp71li6EPstOxge0ox8-QQK2PD-N1nLy2F0Z2Evj9_chKkP1B04pnYscc3cRCT8xhF95IEf8-Vq0DBr8rzPB_jJ3qumNERH-E2ECNxiRF9tIubWY00lgcYNAywj6wZJS8rtk83wjwgCrXHaULLUrYwKEgVGrnkx-Dx6MNFNstK5OjSbFGbwE0gdXuT_zGYrjmAuco515Hr1p_uXak3K3MgCGS9s-9D2grU-judlQYXIencnzad-tdR79qZrMyvw9wd5Z8Yv1h09dz8mn8AkM7Pfo0BAAA=).
+
+À l'inverse, si `a` vaut `false`, `b` ne sera pas ré-évalué, et l'effet ne sera rejoué _que si_ `a`
+change.
 
 ```ts
 let a = false;
@@ -162,8 +169,8 @@ let b = false;
 $effect(() => {
 	console.log('effet');
 
-	if (a || b) {
-		console.log('intérieur du bloc if');
+	if (a) {
+		console.log('b:', b);
 	}
 });
 ```
@@ -226,55 +233,10 @@ au sein d'un contexte de suivi (_tracking_), comme un effet ou bien dans le temp
 <p>dans le template: {$effect.tracking()}</p> <!-- true -->
 ```
 
-Cela vous permet (par exemple) de mettre en place des choses comme des abonnements sans causer de
-fuites de mémoire, en les mettant dans des effets enfant. Voici une fonction `readable` qui écoute
-les changements d'un callback tant qu'elle se trouve dans un contexte de suivi :
-
-```ts
-import { tick } from 'svelte';
-
-export default function readable<T>(
-	initial_value: T,
-	start: (callback: (update: (v: T) => T) => T) => () => void
-) {
-	let value = $state(initial_value);
-
-	let subscribers = 0;
-	let stop: null | (() => void) = null;
-
-	return {
-		get value() {
-			// si dans un contexte de suivi...
-			if ($effect.tracking()) {
-				$effect(() => {
-					// ... et qu'il n'y a pas encore d'abonné...
-					if (subscribers === 0) {
-						// ... invoquer la fonction et écouter les changements pour mettre à jour l'état
-						stop = start((fn) => (value = fn(value)));
-					}
-
-					subscribers++;
-
-					// le callback de retour est appelé lorsqu'un abonné se désabonne
-					return () => {
-						tick().then(() => {
-							subscribers--;
-							// si c'était le dernier abonné...
-							if (subscribers === 0) {
-								// ... arrêter d'écouter les changements
-								stop?.();
-								stop = null;
-							}
-						});
-					};
-				});
-			}
-
-			return value;
-		}
-	};
-}
-```
+C'est notamment utilisé pour implémenter des abstractions comme
+[`createSubscriber`](/docs/svelte/svelte-reactivity#createSubscriber), qui servent à créer des
+gestionnaires permettant de mettre à jour des valeurs réactives _seulement_ si ces valeurs sont
+trackées (plutôt que, par exemple, simplement lues dans un gestionnaire d'évènement).
 
 ## `$effect.root`
 

@@ -428,8 +428,33 @@ Avec Svelte 4, du contenu peut être passé aux composants en utilisant des slot
 remplace par les snippets, qui sont plus puissants et plus flexibles. En conséquence, les slots sont
 dépréciés par Svelte 5.
 
-Ils continuent toutefois de fonctionner, et vous pouvez mélanger les snippets et les slots dans vos
-composants.
+Ils continuent toutefois de fonctionner, et vous pouvez passer des snippets à un composant qui
+utilise des slots :
+
+```svelte
+<!--- file: Child.svelte --->
+<slot />
+<hr />
+<slot name="foo" message="hello" />
+```
+
+```svelte
+<!--- file: Parent.svelte --->
+<script>
+	import Child from './Child.svelte';
+</script>
+
+<Child>
+	default child content
+
+	{#snippet foo({ message })}
+		message from child: {message}
+	{/snippet}
+</Child>
+```
+
+(L'inverse n'est pas vrai — vous ne pouvez pas passer du contenu slotté à un composant qui utilise
+des balises [`{@render ...}`](/docs/svelte/@render).)
 
 Lorsque vous utilisez des éléments personnalisés, vous devez toujours utiliser `<slot />` comme
 avant. Dans une version future, lorsque Svelte supprimera sa version interne des slots, les slots
@@ -766,28 +791,22 @@ export declare const MyComponent: Component<{
 
 Pour déclarer qu'un composant d'un certain type est requis :
 
-```svelte
-<script lang="ts">
-	import type { ---SvelteComponent--- +++Component+++ } from 'svelte';
-	import {
-		ComponentA,
-		ComponentB
-	} from 'component-library';
+```js
+import { ComponentA, ComponentB } from 'component-library';
+---import type { SvelteComponent } from 'svelte';---
++++import type { Component } from 'svelte';+++
 
-	---let component: typeof SvelteComponent<{ foo: string }>---
-	+++let component: Component<{ foo: string }>+++ = $state(
-		Math.random() ? ComponentA : ComponentB
-	);
-</script>
-
-<svelte:component this={component} foo="bar" />
+---let C: typeof SvelteComponent<{ foo: string }> = $state(---
++++let C: Component<{ foo: string }> = $state(+++
+	Math.random() ? ComponentA : ComponentB
+);
 ```
 
 Les deux types utilitaires `ComponentEvents` et `ComponentType` sont aussi dépréciés.
 `ComponentEvents` est obsolète car les évènements sont désormais définis en tant que props de
 callback, et `ComponentType` est obsolète car le nouveau type `Component` est déjà le type du
-composant (c-à-d `ComponentType<SvelteComponent<{ prop: string }>>` == `Component<{ prop: string
-}>`).
+composant (c-à-d que `ComponentType<SvelteComponent<{ prop: string }>>` est équivalent à
+`Component<{prop: string }>`).
 
 ### Changements liés à `bind:this`
 
@@ -795,6 +814,47 @@ Puisque les composants ne sont plus des classes, utiliser `bind:this` ne renvoie
 de classe possédant les méthodes `$set`, `$on` et `$destroy`. Cela renvoie uniquement les exports de
 l'instance (`export function` / `export const`) et, si vous utilisez l'option `accessors`, une paire
 de getter/setter pour chaque propriété.
+
+## `<svelte:component>` n'est plus nécessaire [!VO]`<svelte:component>` is no longer necessary
+
+En Svelte 4, les composants sont _statiques_ — si vous rendez `<Thing>`, que la valeur de `Thing`
+change, [rien ne se produit](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). Pour le
+rendre dynamique vous devez utiliser `<svelte:component>`.
+
+Ce n'est plus le cas avec Svelte 5 :
+
+```svelte
+<script>
+	import A from './A.svelte';
+	import B from './B.svelte';
+
+	let Thing = $state();
+</script>
+
+<select bind:value={Thing}>
+	<option value={A}>A</option>
+	<option value={B}>B</option>
+</select>
+
+<!-- ces deux écritures sont équivalentes -->
+<Thing />
+<svelte:component this={Thing} />
+```
+
+Lorsque vous migrez, gardez à l'esprit que le nom de votre composant doit être en majuscules
+(`Thing`) pour le distinguer des éléments, à moins que vous n'utilisiez la notation "dot".
+
+### La notation "dot" indique un composant [!VO]Dot notation indicates a component
+
+Avec Svelte 4, `<foo.bar>` créait un élément avec un nom de balise `"foo.bar"`. Avec Svelte 5,
+`foo.bar` est à la place traité comme un composant. Cette syntaxe est particulièrement utile dans
+les blocs `#each` :
+
+```svelte
+{#each items as item}
+	<item.component {...item.props} />
+{/each}
+```
 
 ## Gestion des espaces [!VO]Whitespace handling changed
 
@@ -843,18 +903,6 @@ supprimées
 
 Le contenu dans une balise de composant devient une prop de snippet appelée `children`. Vous ne
 pouvez pas avoir une prop distincte qui porte ce nom.
-
-## La notation "point" indique un composant [!VO]Dot notation indicates a component
-
-Avec Svelte 4, `<foo.bar>` créait un élément avec un nom de balise `"foo.bar"`. Avec Svelte 5,
-`foo.bar` est à la place traité comme un composant. Cette syntaxe est particulièrement utile dans
-les blocs `#each` :
-
-```svelte
-{#each items as item}
-	<item.component {...item.props} />
-{/each}
-```
 
 ## Changements bloquants en mode runes [!VO]Breaking changes in runes mode
 
@@ -909,32 +957,6 @@ déterminée au moment de l'exécution plutôt qu'à la compilation, ce qui impl
 définir `value` comme un champ réactif `$state` sur la classe `Foo`. Entourer `new Foo()` avec
 `$state(...)` n'aura aucun effet — seuls les objets simples et les tableaux sont profondément
 réactifs.
-
-### `<svelte:component>` n'est plus nécessaire [!VO]`<svelte:component>` is no longer necessary
-
-En Svelte 4, les composants sont _statiques_ — si vous rendez `<Thing>`, que la valeur de `Thing`
-change, [rien ne se produit](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). Pour le
-rendre dynamique vous devez utiliser `<svelte:component>`.
-
-Ce n'est plus le cas avec Svelte 5 :
-
-```svelte
-<script>
-	import A from './A.svelte';
-	import B from './B.svelte';
-
-	let Thing = $state();
-</script>
-
-<select bind:value={Thing}>
-	<option value={A}>A</option>
-	<option value={B}>B</option>
-</select>
-
-<!-- ces deux écritures sont équivalentes -->
-<Thing />
-<svelte:component this={Thing} />
-```
 
 ### Les évènements `touch` et `wheel` sont passifs [!VO]Touch and wheel events are passive
 

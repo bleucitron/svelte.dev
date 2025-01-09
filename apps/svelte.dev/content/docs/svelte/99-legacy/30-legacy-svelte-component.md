@@ -5,7 +5,7 @@ title: <svelte:component>
 
 En mode runes, `<MyComponent>` va être re-rendu si la valeur de `MyComponent` change. Voir le [guide
 de migration vers Svelte
-5](/docs/svelte/v5-migration-guide#Breaking-changes-in-runes-mode-svelte:component-is-no-longer-necessary)
+5](/docs/svelte/v5-migration-guide#svelte:component-is-no-longer-necessary)
 pour voir un exemple.
 
 En mode legacy, ça ne sera pas le cas — il est necéssaire d'utiliser `<svelte:component>`, qui va
