@@ -1,10 +1,12 @@
 ---
-title: Spread props
+title: Étaler les props
 ---
 
-In this exercise, in `App.svelte` we've forgotten to pass the `name` prop expected by `PackageInfo.svelte`, meaning the `<code>` element is empty and the npm link is broken.
+Dans cet exercice, nous avons oublié de passer dans `App.svelte` la prop `name` attendue par
+`PackageInfo.svelte`, ce qui implique que l'élément `<code>` est vide et que le lien vers npm est
+cassé.
 
-We _could_ fix it by adding the prop...
+Nous _pourrions_ corriger cela en ajoutant la prop...
 
 ```svelte
 /// file: App.svelte
@@ -16,26 +18,30 @@ We _could_ fix it by adding the prop...
 />
 ```
 
-...but since the properties of `pkg` correspond to the component's expected props, we can 'spread' them onto the component instead:
+... mais puisque les propriétés de `pkg` correspondent aux props attendues par le composant, nous
+pouvons à la place les 'étaler' sur le composant :
 
 ```svelte
 /// file: App.svelte
 <PackageInfo +++{...pkg}+++ />
 ```
 
-> [!NOTE] Conversely, in `PackageInfo.svelte` you can get an object containing all the props that were passed into a component using a rest property...
+> [!NOTE] À l'inverse, dans `PackageInfo.svelte` nous pouvons obtenir un objet contenant toutes les
+> props qui lui sont passées en utilisant la propriété de reste...
 >
 > ```js
 > let { name, ...stuff } = $props();
 > ```
 >
-> ...or by skipping [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) altogether:
+> ...ou en ne
+> [déstructurant](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+> pas du tout :
 >
 > ```js
 > let stuff = $props();
 > ```
 >
-> ...in which case you can access the properties by their object paths:
+> ... et dans ce cas vous pouvez accéder aux propriétés via leur path :
 >
 > ```js
 > console.log(stuff.name, stuff.version, stuff.description, stuff.website);

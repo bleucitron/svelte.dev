@@ -1,17 +1,18 @@
 ---
-title: Default values
+title: Valeurs par défaut
 ---
 
-We can easily specify default values for props in `Nested.svelte`:
+Nous pouvons facilement définir des valeurs de props par défaut dans `Nested.svelte` :
 
 ```svelte
 /// file: Nested.svelte
 <script>
-	let { answer +++= 'a mystery'+++ } = $props();
+	let { answer +++= 'un mystère'+++ } = $props();
 </script>
 ```
 
-If we now add a second component _without_ an `answer` prop, it will fall back to the default:
+Si on ajoutons maintenant un deuxième composant _sans_ une prop `answer`, celui-ci va utiliser la
+valeur par défaut :
 
 ```svelte
 /// file: App.svelte

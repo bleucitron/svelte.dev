@@ -1,5 +1,5 @@
 <script>
-	let { answer = 'a mystery' } = $props();
+	let { answer = 'un mystère' } = $props();
 </script>
 
-<p>The answer is {answer}</p>
+<p>La réponse est {answer}</p>
