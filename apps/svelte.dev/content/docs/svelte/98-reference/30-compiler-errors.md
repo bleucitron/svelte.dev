@@ -339,7 +339,8 @@ The $ prefix is reserved, and cannot be used for variables and imports
 Cannot reassign or bind to each block argument in runes mode. Use the array and index variables instead (e.g. `array[i] = value` instead of `entry = value`, or `bind:value={array[i]}` instead of `bind:value={entry}`)
 ```
 
-In legacy mode, it was possible to reassign or bind to the each block argument itself:
+En mode legacy, il était possible de réassigner ou de lier directement les arguments d'un bloc
+`#each` :
 
 ```svelte
 <script>
@@ -347,15 +348,17 @@ In legacy mode, it was possible to reassign or bind to the each block argument i
 </script>
 
 {#each array as entry}
-	<!-- reassignment -->
-	<button on:click={() => entry = 4}>change</button>
+	<!-- réassignation -->
+	<button on:click={() => entry = 4}>changer</button>
 
-	<!-- binding -->
+	<!-- liaison -->
 	<input bind:value={entry}>
 {/each}
 ```
 
-This turned out to be buggy and unpredictable, particularly when working with derived values (such as `array.map(...)`), and as such is forbidden in runes mode. You can achieve the same outcome by using the index instead:
+Ceci amenait des bugs et un comportement imprévisible, particulièrement lorsque l'on utilisait des
+valeurs dérivées (comme `array.map(...)`), et est donc interdit en mode runes. Vous pouvez faire
+quelque chose de similaire en utilisant plutôt l'indice :
 
 ```svelte
 <script>
@@ -363,10 +366,10 @@ This turned out to be buggy and unpredictable, particularly when working with de
 </script>
 
 {#each array as entry, i}
-	<!-- reassignment -->
+	<!-- réassignation -->
 	<button onclick={() => array[i] = 4}>change</button>
 
-	<!-- binding -->
+	<!-- liaison -->
 	<input bind:value={array[i]}>
 {/each}
 ```
