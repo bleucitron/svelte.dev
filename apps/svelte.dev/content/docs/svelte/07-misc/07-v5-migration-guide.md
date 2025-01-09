@@ -815,7 +815,7 @@ de classe possédant les méthodes `$set`, `$on` et `$destroy`. Cela renvoie uni
 l'instance (`export function` / `export const`) et, si vous utilisez l'option `accessors`, une paire
 de getter/setter pour chaque propriété.
 
-## `<svelte:component>` n'est plus nécessaire [!VO]`<svelte:component>` is no longer necessary
+## `<svelte:component>` n'est plus nécessaire [!VO]svelte:component is no longer necessary
 
 En Svelte 4, les composants sont _statiques_ — si vous rendez `<Thing>`, que la valeur de `Thing`
 change, [rien ne se produit](/playground/7f1fa24f0ab44c1089dcbb03568f8dfa?version=4.2.18). Pour le
