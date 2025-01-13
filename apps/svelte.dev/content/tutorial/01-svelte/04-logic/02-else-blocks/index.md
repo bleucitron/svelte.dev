@@ -1,16 +1,17 @@
 ---
-title: Else blocks
+title: Blocs Else
 ---
 
-Just like in JavaScript, an `if` block can have an `else` block:
+De la même manière qu'en JavaScript, un bloc `if` peut avoir un bloc `else` :
 
 ```svelte
 /// file: App.svelte
 {#if count > 10}
-	<p>{count} is greater than 10</p>
+	<p>{count} est plus grand que 10</p>
 +++{:else}
-	<p>{count} is between 0 and 10</p>+++
+	<p>{count} est entre 0 et 10</p>+++
 {/if}
 ```
 
-`{#...}` opens a block. `{/...}` closes a block. `{:...}` _continues_ a block. Congratulations — you've already learned almost all the syntax Svelte adds to HTML.
+`{#...}` ouvre un bloc. `{/...}` ferme un bloc. `{:...}` _continue_ un bloc. Félicitations — vous
+avez déjà appris presque toute la syntaxe que Svelte rajoute au HTML.
