@@ -1,5 +1,5 @@
 ---
-title: Blocs Else
+title: Blocs else
 ---
 
 De la même manière qu'en JavaScript, un bloc `if` peut avoir un bloc `else` :

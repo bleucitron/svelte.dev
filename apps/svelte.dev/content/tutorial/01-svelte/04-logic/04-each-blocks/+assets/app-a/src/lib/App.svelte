@@ -3,7 +3,7 @@
 	let selected = $state(colors[0]);
 </script>
 
-<h1 style="color: {selected}">Pick a colour</h1>
+<h1 style="color: {selected}">Choisissez une couleur</h1>
 
 <div>
 	<button
@@ -27,7 +27,7 @@
 		onclick={() => selected = 'yellow'}
 	></button>
 
-	<!-- TODO add the rest of the colours -->
+	<!-- TODO ajouter le reste des couleurs -->
 	<button></button>
 	<button></button>
 	<button></button>
