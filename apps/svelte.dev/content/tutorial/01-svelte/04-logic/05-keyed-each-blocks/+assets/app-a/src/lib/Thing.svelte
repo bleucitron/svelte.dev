@@ -1,16 +1,16 @@
 <script>
 	const emojis = {
-		apple: '🍎',
-		banana: '🍌',
-		carrot: '🥕',
-		doughnut: '🍩',
-		egg: '🥚'
+		pomme: '🍎',
+		banane: '🍌',
+		carotte: '🥕',
+		donut: '🍩',
+		oeuf: '🥚'
 	};
 
-	// `name` is updated whenever the prop value changes...
+	// `name` est mis à jour lorsque les props changent
 	let { name } = $props();
 
-	// ...but `emoji` is fixed upon initialisation
+	// ... mais `emoji` est fixé lors de l'initialisation
 	const emoji = emojis[name];
 </script>
 

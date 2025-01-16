@@ -1,21 +1,29 @@
 ---
-title: Keyed each blocks
+title: Blocs each à clé
 ---
 
-By default, when you modify the value of an `each` block, it will add and remove DOM nodes at the _end_ of the block, and update any values that have changed. That might not be what you want.
+Par défaut, lorsque vous modifiez la value d'un bloc `#each`, Svelte va ajouter et supprimer les
+noeuds du DOM à la _fin_ du bloc, et mettre à jour toute valeur ayant changé. Ceci peut ne pas être
+ce que vous voulez.
 
-It's easier to show why than to explain. Inside `Thing.svelte`, `name` is a dynamic prop but `emoji` is a constant.
+Ce genre de problématique est plus facile à montrer qu'à expliquer. Dans `Thing.svelte`, `name` est
+une prop dynamique, but `emoji` est une constante.
 
-Click the 'Remove first thing' button a few times, and notice what happens:
+Cliquez sur le bouton `Supprimer le premier élément` plusieurs fois, et notez ce qu'il se passe :
 
-1. It removes the last component.
-2. It then updates the `name` value in the remaining DOM nodes, but not the emoji.
+1. Le dernier composant est supprimé.
+2. La valeur de `name` est ensuite mise à jour dans les noeuds restants du DOM, mais pas l'emoji.
 
-> [!NOTE] If you're coming from React, this might seem strange, because you're used to the entire component re-rendering when state changes. Svelte works differently: the component 'runs' once, and subsequent updates are 'fine-grained'. This makes things faster and gives you more control.
+> [!NOTE] Si vous venez de React, ceci peut vous paraître étrange, car vous êtes habitué•e au
+> re-rendu complet du composant lorsque l'état change. Svelte fonctionne différemment : le composant
+> est "joué" une seule fois, et les mises à jour suivantes sont "chirurgicales". Ceci permet
+> d'accélérer les rendus et vous donne plus de contrôle.
 
-One way to fix it would be to make `emoji` a [`$derived`](derived-state) value. But it makes more sense to remove the first `<Thing>` component altogether rather than remove the _last_ one and update all the others.
+Une façon de corriger ce problème pourrait être de transformer l'`emoji` en une valeur
+[`$derived`](derived-state). Mais il est plus logique de supprimer uniquement le premier composant
+`<Thing>` plutôt que de supprimer le _dernier_ et de mettre à jour tous les autres.
 
-To do that, we specify a unique _key_ for each iteration of the `each` block:
+Pour faire cela, nous devons préciser une _clé_ unique pour chaque itération du bloc `each` :
 
 ```svelte
 /// file: App.svelte
@@ -24,4 +32,8 @@ To do that, we specify a unique _key_ for each iteration of the `each` block:
 {/each}
 ```
 
-> [!NOTE] You can use any object as the key, as Svelte uses a `Map` internally — in other words you could do `(thing)` instead of `(thing.id)`. Using a string or number is generally safer, however, since it means identity persists without referential equality, for example when updating with fresh data from an API server.
+> [!NOTE] Vous pouvez utiliser n'importe quel objet comme clé, puisque Svelte utilise une `Map` en
+> interne — autrement dit vous pourriez écrire `(thing)` au lieu de `(thing.id)`. Néanmoins,
+> utiliser une chaîne de caractères ou un nombre est en général plus sécurisé, puisque cela permet
+> de faire persister l'identité des éléments même si les références des objets changent, par exemple
+> lorsque vous rafraîchissez les données depuis un serveur d'API.
