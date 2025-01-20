@@ -5,7 +5,7 @@
 </script>
 
 <button onclick={() => promise = roll()}>
-	roll the dice
+	lancer les dés
 </button>
 
-<p>...rolling</p>
+<p>...les dés roulent</p>

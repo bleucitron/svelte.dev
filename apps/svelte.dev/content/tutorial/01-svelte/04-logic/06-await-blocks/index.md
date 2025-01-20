@@ -1,26 +1,32 @@
 ---
-title: Await blocks
+title: Blocs await
 ---
 
-Most web applications have to deal with asynchronous data at some point. Svelte makes it easy to _await_ the value of [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) directly in your markup:
+La plupart des applications web doivent gérer des données asynchrones à un moment ou à un autre.
+Svelte permet de facilement attendre (_await_) la valeur des
+[promesses](https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Using_promises)
+directement dans votre markup :
 
 ```svelte
 /// file: App.svelte
 +++{#await promise}+++
-	<p>...rolling</p>
+	<p>...les dés roulent</p>
 +++{:then number}
-	<p>you rolled a {number}!</p>
+	<p>vous avez obtenu un {number} !</p>
 {:catch error}
 	<p style="color: red">{error.message}</p>
 {/await}+++
 ```
 
-> [!NOTE] Only the most recent `promise` is considered, meaning you don't need to worry about race conditions.
+> [!NOTE] Seule la `promise` la plus récente est traitée, ce qui signifie que vous n'avez pas besoin
+> de vous préoccuper d'éventuelles race conditions.
 
-If you know that your promise can't reject, you can omit the `catch` block. You can also omit the first block if you don't want to show anything until the promise resolves:
+Si vous savez que votre promesse ne peut pas être rejetée, vous pouvez omettre le bloc `catch`. Vous
+pouvez également omettre le premier bloc si vous ne souhaitez rien afficher tant que la promesse
+n'est pas résolue :
 
 ```svelte
 {#await promise then number}
-	<p>you rolled a {number}!</p>
+	<p>vous avez obtenu un {number} !</p>
 {/await}
 ```

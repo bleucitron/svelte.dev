@@ -5,13 +5,13 @@
 </script>
 
 <button onclick={() => promise = roll()}>
-	roll the dice
+	lancer les dés
 </button>
 
 {#await promise}
-	<p>...rolling</p>
+	<p>...les dés roulent</p>
 {:then number}
-	<p>you rolled a {number}!</p>
+	<p>vous avez obtenu un {number} !</p>
 {:catch error}
 	<p style="color: red">{error.message}</p>
 {/await}

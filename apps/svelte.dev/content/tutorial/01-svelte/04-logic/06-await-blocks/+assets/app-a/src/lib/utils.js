@@ -1,15 +1,15 @@
 export async function roll() {
-	// Fetch a random number from 1 to 6
-	// (with a delay, so that we can see it)
-	return new Promise((fulfil, reject) => {
-		setTimeout(() => {
-			// simulate a flaky network
-			if (Math.random() < 0.3) {
-				reject(new Error('Request failed'));
-				return;
-			}
+  // Récupère un nombre aléatoire entre 1 et 6
+  // (avec un retard, pour pouvoir s'en rendre compte)
+  return new Promise((fulfil, reject) => {
+    setTimeout(() => {
+      // simule un réseau instable
+      if (Math.random() < 0.3) {
+        reject(new Error('La requête a échoué'));
+        return;
+      }
 
-			fulfil(Math.ceil(Math.random() * 6));
-		}, 1000);
-	});
+      fulfil(Math.ceil(Math.random() * 6));
+    }, 1000);
+  });
 }
