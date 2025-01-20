@@ -1,8 +1,8 @@
 ---
-title: Inline handlers
+title: Gestionnaires inline
 ---
 
-You can also declare event handlers inline:
+Vous pouvez aussi déclarer des gestionnaires d'évènement de manière inline :
 
 ```svelte
 /// file: App.svelte
@@ -21,6 +21,6 @@ You can also declare event handlers inline:
 		m.y = event.clientY;
 	}+++}
 >
-	The pointer is at {m.x} x {m.y}
+	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 ```

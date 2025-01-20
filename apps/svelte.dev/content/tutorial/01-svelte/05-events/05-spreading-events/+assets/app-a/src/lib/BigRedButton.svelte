@@ -3,7 +3,7 @@
 </script>
 
 <button>
-	Push
+	Appuyer
 </button>
 
 <style>

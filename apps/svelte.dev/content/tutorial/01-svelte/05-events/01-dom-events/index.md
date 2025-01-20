@@ -1,21 +1,25 @@
 ---
-title: DOM events
+title: Évènements DOM
 ---
 
-As we've briefly seen already, you can listen to any DOM event on an element (such as click or [pointermove](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointermove_event)) with an `on<name>` function:
+Comme nous l'avons vu rapidement, vous pouvez écouter n'importe quel évènement sur un élément (comme
+un `click` ou un
+[`pointermove`](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointermove_event)) avec
+une fonction `on<nom>` :
 
 ```svelte
 /// file: App.svelte
 <div +++onpointermove={onpointermove}+++>
-	The pointer is at {Math.round(m.x)} x {Math.round(m.y)}
+	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 ```
 
-Like with any other property where the name matches the value, we can use the short form:
+Comme avec toute autre propriété dont le nom correspond à la valeur, nous pouvons utiliser la forme
+raccourcie :
 
 ```svelte
 /// file: App.svelte
 <div +++{onpointermove}+++>
-	The pointer is at {Math.round(m.x)} x {Math.round(m.y)}
+	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 ```

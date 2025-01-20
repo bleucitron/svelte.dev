@@ -1,10 +1,15 @@
 ---
-title: Capturing
+title: Capture
 ---
 
-Normally, event handlers run during the [_bubbling_](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Event_bubbling) phase. Notice what happens if you type something into the `<input>` in this example — the inner handler runs first, as the event 'bubbles' from the target up to the document, followed by the outer handler.
+En général, les gestionnaires d'évènement sont exécutés pendant la phase de
+[\_bubbling](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Event_bubbling).
+Remarquez ce qu'il se passe si vous tapez quelque chose dans l'`<input>` de cet exemple — le
+gestionnaire "intérieur" est joué en premier, puisque l'évènement "bubble" depuis la cible vers
+la racine du document, suivi par le gestionnaire "extérieur".
 
-Sometimes, you want handlers to run during the _capture_ phase instead. Add `capture` to the end of the event name:
+Parfois, vous voulez que les gestionnaires soient joués plutôt pendant la phase de _capture_.
+Ajoutez `capture` à la fin du nom de l'évènement :
 
 ```svelte
 /// file: App.svelte
@@ -13,4 +18,5 @@ Sometimes, you want handlers to run during the _capture_ phase instead. Add `cap
 </div>
 ```
 
-Now, the relative order is reversed. If both capturing and non-capturing handlers exist for a given event, the capturing handlers will run first.
+Désormais, l'ordre relatif est inversé. Si des gestionnaires de capture et de non-capture existent
+en même temps pour un même évènement, les gestionnaires de capture seront joués en premier.

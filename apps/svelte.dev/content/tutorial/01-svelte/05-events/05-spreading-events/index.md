@@ -1,8 +1,10 @@
 ---
-title: Spreading events
+title: Étaler les évènements
 ---
 
-We can also [spread](spread-props) event handlers directly onto elements. Here, we've defined an `onclick` handler in `App.svelte` — all we need to do is pass the props to the `<button>` in `BigRedButton.svelte`:
+Nous pouvons aussi ["étaler" (_spread_)](spread-props) les gestionnaires d'évènements sur les
+éléments. Ici, nous avons défini un gestionnaire `onclick` dans `App.svelte` — tout ce qu'il reste à
+faire est de passer les props au `<button>` dans `BigRedButton.svelte` :
 
 ```svelte
 /// file: BigRedButton.svelte

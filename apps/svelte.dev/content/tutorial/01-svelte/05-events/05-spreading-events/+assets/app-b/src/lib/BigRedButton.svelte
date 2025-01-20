@@ -3,7 +3,7 @@
 </script>
 
 <button {...props}>
-	Push
+	Appuyer
 </button>
 
 <style>

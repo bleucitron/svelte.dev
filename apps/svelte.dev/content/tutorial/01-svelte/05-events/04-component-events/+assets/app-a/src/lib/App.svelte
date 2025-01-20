@@ -4,6 +4,6 @@
 	let value = $state(0);
 </script>
 
-<p>The current value is {value}</p>
+<p>La valeur actuelle est {value}</p>
 
 <Stepper />

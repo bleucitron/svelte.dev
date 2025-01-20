@@ -1,8 +1,9 @@
 ---
-title: Component events
+title: Évènements de composant
 ---
 
-You can pass event handlers to components like any other prop. In `Stepper.svelte`, add `increment` and `decrement` props...
+Vous pouvez passer des gestionnaires d'évènement aux composants comme n'importe quelle autre prop.
+Dans `Stepper.svelte`, ajoutez les props `increment` et `decrement`...
 
 ```svelte
 /// file: Stepper.svelte
@@ -11,7 +12,7 @@ You can pass event handlers to components like any other prop. In `Stepper.svelt
 </script>
 ```
 
-...and wire them up:
+... et connectez les :
 
 ```svelte
 /// file: Stepper.svelte
@@ -19,7 +20,7 @@ You can pass event handlers to components like any other prop. In `Stepper.svelt
 <button +++onclick={increment}+++>+1</button>
 ```
 
-In `App.svelte`, define the handlers:
+Dans `App.svelte`, définissez les gestionnaires :
 
 ```svelte
 <Stepper

@@ -8,7 +8,7 @@
 </script>
 
 <div {onpointermove}>
-	The pointer is at {Math.round(m.x)} x {Math.round(m.y)}
+	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 
 <style>
