@@ -1,7 +1,7 @@
 <script>
-	let name = $state('world');
+	let name = $state('tout le monde');
 </script>
 
 <input value={name} />
 
-<h1>Hello {name}!</h1>
+<h1>Bonjour {name} !</h1>

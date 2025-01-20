@@ -2,15 +2,16 @@
 	let questions = $state([
 		{
 			id: 1,
-			text: `Where did you go to school?`
+			text: `Où êtes-vous allé à l'école ?`
 		},
 		{
 			id: 2,
-			text: `What is your mother's name?`
+			text: `Quel est le nom de jeune fille de votre mère ?`
 		},
 		{
 			id: 3,
-			text: `What is another personal fact that an attacker could easily find with Google?`
+			text: `Quelle information personnelle une personne mal intentionnée pourrait aisément trouver
+grâce à Google ?`
 		}
 	]);
 
@@ -22,12 +23,12 @@
 		e.preventDefault();
 
 		alert(
-			`answered question ${selected.id} (${selected.text}) with "${answer}"`
+			`vous avez répondu à la question ${selected.id} (${selected.text}) avec "${answer}"`
 		);
 	}
 </script>
 
-<h2>Insecurity questions</h2>
+<h2>Questions pas du tout sécurisées</h2>
 
 <form onsubmit={handleSubmit}>
 	<select
@@ -44,12 +45,12 @@
 	<input bind:value={answer} />
 
 	<button disabled={!answer} type="submit">
-		Submit
+		Envoyer
 	</button>
 </form>
 
 <p>
-	selected question {selected
+	question sélectionnée {selected
 		? selected.id
-		: '[waiting...]'}
+		: '[chargement...]'}
 </p>
