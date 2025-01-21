@@ -257,15 +257,6 @@ get target(): T;
 ```
 
 <div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-#private;
-```
-
-<div class="ts-block-property-details"></div>
 </div></div>
 
 

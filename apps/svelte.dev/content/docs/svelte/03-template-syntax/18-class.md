@@ -82,6 +82,20 @@ tableaux et de chaînes de caractères :
 </Button>
 ```
 
+Svelte expose également le type `ClassValue`, qui est le type de valeur que l'attribut `class` des
+éléments attend. Ceci est utile si vous renforcer le typage des noms de classe dans vos props de
+composant :
+
+```svelte
+<script lang="ts">
+	import type { ClassValue } from 'svelte/elements';
+
+	const props: { class: ClassValue } = $props();
+</script>
+
+<div class={['original', props.class]}>...</div>
+```
+
 ## La directive `class:` [!VO]The `class:` directive
 
 Avant Svelte 5.16, la directive `class:` était la manière la plus efficace de définir des classes de

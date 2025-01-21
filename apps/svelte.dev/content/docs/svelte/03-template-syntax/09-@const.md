@@ -13,4 +13,4 @@ La balise `{@const ...}` définit une constante locale.
 ```
 
 L'usage de `{@const}` est uniquement autorisé immédiatement en enfant d'un bloc — `{#if ...}`,
-`{#each ...}`, `{#snippet ...}`, etc. — ou d'un `<Composant />`.
+`{#each ...}`, `{#snippet ...}`, etc. — d'un `<Composant />`, ou d'une `<svelte:boundary>`.
