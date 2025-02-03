@@ -1,8 +1,9 @@
 ---
-title: The class attribute
+title: L'attribut de classe
 ---
 
-Like any other attribute, you can specify classes with a JavaScript attribute. Here, we could add a `flipped` class to the card:
+Comme tout autre attribut, vous pouvez préciser les classes avec un attribut JavaScript. Ici, nous
+pourrions ajouter une classe `flipped` à la carte :
 
 ```svelte
 /// file: App.svelte
@@ -12,9 +13,12 @@ Like any other attribute, you can specify classes with a JavaScript attribute. H
 >
 ```
 
-This works as expected — if you click on the card now, it'll flip.
+Ceci fonctionne comme attendu — si vous cliquez sur la carte, celle-ci va se retourner.
 
-We can make it nicer though. Adding or removing a class based on some condition is such a common pattern in UI development that Svelte allows you to pass an object or array that is converted to a string by [clsx](https://github.com/lukeed/clsx).
+Nous pouvons néanmoins faire mieux. Ajouter ou supprimer une classe en fonction d'une condition est
+un cas tellement courant dans le développement d'interfaces que Svelte vous permet de fournir un
+objet ou un tableau qui sera converti en chaîne de caractères par
+[clsx](https://github.com/lukeed/clsx).
 
 ```svelte
 /// file: App.svelte
@@ -24,6 +28,8 @@ We can make it nicer though. Adding or removing a class based on some condition 
 >
 ```
 
-This means 'always add the `card` class, and add the `flipped` class whenever `flipped` is truthy'.
+Ceci signifie 'ajoute toujours la classe `card`, et la classe `flipped` uniquement lorsque `flipped`
+est truthy'.
 
-For more examples of how to combine conditional classes, [consult the `class` documentation](/docs/svelte/class).
+Pour plus d'exemples sur comment combiner des classes conditionnelles, [consultez la documentation
+de `class`](/docs/svelte/class).

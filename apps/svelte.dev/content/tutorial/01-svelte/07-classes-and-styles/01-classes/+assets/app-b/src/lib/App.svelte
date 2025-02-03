@@ -4,6 +4,7 @@
 
 <div class="container">
 	Flip the card
+	Retourner la carte
 	<button
 		class={["card", { flipped }]}
 		onclick={() => flipped = !flipped}

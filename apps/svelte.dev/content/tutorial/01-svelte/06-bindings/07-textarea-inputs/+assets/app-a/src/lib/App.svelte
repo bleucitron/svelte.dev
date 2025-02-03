@@ -1,14 +1,15 @@
 <script>
 	import { marked } from 'marked';
 
-	let value = $state(`Some words are *italic*, some are **bold**\n\n- lists\n- are\n- cool`);
+	let value = $state(`Ceraines mots sont en *italique*, d'autres sont en **gras** \n\n- les
+listes\n- sont\n- cools`);
 </script>
 
 <div class="grid">
-	input
+	entrée
 	<textarea {value}></textarea>
 
-	output
+	sortie
 	<div>{@html marked(value)}</div>
 </div>
 
