@@ -268,7 +268,7 @@ function createEventDispatcher<
 
 ## createRawSnippet
 
-Crée un snippet programmtiquement.
+Crée un snippet programmatiquement.
 
 <div class="ts-block">
 
