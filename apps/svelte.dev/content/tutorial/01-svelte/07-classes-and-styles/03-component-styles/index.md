@@ -1,10 +1,12 @@
 ---
-title: Component styles
+title: Styles de composants
 ---
 
-Often, you need to influence the styles inside a child component. Perhaps we want to make these boxes red, green and blue.
+Il est parfois nécessaire d'influencer les styles au sein d'un composant enfant. Peut-être que nous
+voulons colorier ces boîtes en rouge, vert et bleu.
 
-One way to do this is with the `:global` CSS modifier, which allows you to indiscriminately target elements inside other components:
+Une façon de faire cela est d'utiliser le modificateur CSS `:global`, qui vous permet de cibler sans
+discrimination les éléments au sein d'autres composants :
 
 ```svelte
 /// file: App.svelte
@@ -23,11 +25,17 @@ One way to do this is with the `:global` CSS modifier, which allows you to indis
 </style>
 ```
 
-But there are lots of reasons _not_ to do that. For one thing, it's extremely verbose. For another, it's brittle — any changes to the implementation details of `Box.svelte` could break the selector.
+Mais il y a beaucoup de raison de ne _pas_ faire ça. D'abord, c'est extrêmement verbeux. Ensuite,
+c'est fragile — tout changement dans les détails d'implémentation de `Box.svelte` pourrait casser le
+sélecteur.
 
-Most of all though, it's rude. Components should be able to decide for themselves which styles can be controlled from 'outside', in the same way they decide which variables are exposed as props. `:global` should be used as an escape hatch — a last resort.
+Mais surtout, c'est malpoli. Les composants devraient être capables de décider eux-mêmes quels
+styles peuvent être contrôlés "de l'extérieur", de la même manière qu'ils décident quelles variables
+sont exposées en tant que props. `:global` ne devrait être utilisé qu'en dernier recours, pour
+contourner cette règle.
 
-Inside `Box.svelte`, change `background-color` so that it is determined by a [CSS custom property](https://developer.mozilla.org/en-US/docs/Web/CSS/--*):
+Dans `Box.svelte`, modifiez `background-color` pour qu'il soit déterminé par une [propriété CSS
+personnalisée](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) :
 
 ```svelte
 /// file: Box.svelte
@@ -42,7 +50,8 @@ Inside `Box.svelte`, change `background-color` so that it is determined by a [CS
 </style>
 ```
 
-Any parent element (such as `<div class="boxes">`) can set the value of `--color`, but we can also set it on individual components:
+Tout élément parent (comme `<div class="boxes">`) peut définir la valeur de `--color`, mais nous
+pouvons aussi la définir sur des composants individuels :
 
 ```svelte
 /// file: App.svelte
@@ -53,9 +62,11 @@ Any parent element (such as `<div class="boxes">`) can set the value of `--color
 </div>
 ```
 
-The values can be dynamic, like any other attribute.
+Les valeurs peuvent être dynamiques, comme tout autre attribut.
 
-> [!NOTE] This feature works by wrapping each component in an element with `display: contents`, where needed, and applying the custom properties to it. If you inspect the elements, you'll see markup like this:
+> [!NOTE] Cette fonctionnalité fonctionne en entourant chaque composant dans un élément avec
+> `display: contents`, lorsque nécessaire, et en y appliquant les propriétés personnalisées. Si vous
+> inspectez les éléments, vous verrez ce genre de markup :
 >
 > ```svelte
 > <svelte-css-wrapper style="display: contents; --color: red;">
@@ -63,4 +74,5 @@ The values can be dynamic, like any other attribute.
 > </svelte-css-wrapper>
 > ```
 >
-> Because of `display: contents` this won't affect your layout, but the extra element _can_ affect selectors like `.parent > .child`.
+> Grâce à `display: contents`, ceci n'affectera pas votre layout, mais l'élément supplémentaire
+> _peut_ impacter des sélecteurs comme `.parent > .child`.
