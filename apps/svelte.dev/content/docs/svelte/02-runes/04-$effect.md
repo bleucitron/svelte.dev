@@ -86,7 +86,8 @@ ré-exécution de l'effet, et lorsque celui-ci est détruit
 ### Comprendre les dépendances [!VO]Understanding dependencies
 
 `$effect` détecte automatiquement toute valeur réactive (`$state`, `$derived`, `$props`) qui est lue
-de manière _synchrone_ à l'intérieur de son corps de fonction et l'enregistre en tant que
+de manière _synchrone_ à l'intérieur de son corps de fonction (en les incluant indirectement, via
+l'appel de la fonction) et l'enregistre en tant que
 dépendance. Lorsque ces dépendances changent, l'`$effect` va planifier une ré-exécution.
 
 Les valeurs qui sont lues de manière _asynchrones_ — après un `await` ou à l'intérieur d'un

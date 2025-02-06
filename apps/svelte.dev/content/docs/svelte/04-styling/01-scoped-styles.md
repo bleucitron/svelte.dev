@@ -44,10 +44,7 @@ approche de hashing. Toute règle `animation` du composant sera ajustée de la m
 
 	/* ces keyframes ne sont accessibles que dans ce composant */
 	@keyframes bounce {
-		/* ... *.
+		/* ... */
 	}
 </style>
 ```
-
-
-

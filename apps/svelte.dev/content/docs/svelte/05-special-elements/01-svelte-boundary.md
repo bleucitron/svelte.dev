@@ -19,7 +19,8 @@ Si une erreur se produit lors du rendu ou de la mise à jour des enfants d'un é
 définie, son contenu sera alors supprimé.
 
 Les erreurs se produisant en dehors du processus de rendu (par exemple, dans des gestionnaires
-d'évènement) ne sont _pas_ traitées pas les frontières d'erreurs.
+d'évènement, après un `setTimeout`, ou après une tâche asynchrone) ne sont _pas_ traitées pas les
+frontières d'erreurs.
 
 ## Propriétés [!VO]Properties
 

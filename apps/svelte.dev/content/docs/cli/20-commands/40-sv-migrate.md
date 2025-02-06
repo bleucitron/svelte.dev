@@ -12,6 +12,11 @@ pouvez trouver en cherchant `@migration`.
 ## Usage
 
 ```bash
+npx sv migrate
+```
+
+Vous pouvez aussi préciser une migration directement via CLI :
+```bash
 npx sv migrate [migration]
 ```
 

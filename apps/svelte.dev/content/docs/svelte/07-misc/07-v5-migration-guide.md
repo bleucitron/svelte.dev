@@ -930,8 +930,41 @@ parent, ce qui entraînait des cycles de rendu additionnels).
 ### L'option `accessors` est ignorée [!VO]`accessors` option is ignored
 
 Définir l'option `accessors` à `true` rend les propriétés d'un composant directement accessibles sur
-l'instance du composant. En mode runes, les propriétés ne sont jamais accessibles sur l'instance du
-composant. Si vous avez besoin de les exposer, vous pouvez plutôt utiliser les exports de composant.
+l'instance du composant.
+
+```svelte
+<svelte:options accessors={true} />
+
+<script>
+	// available via componentInstance.name
+	export let name;
+</script>
+```
+En mode runes, les propriétés ne sont jamais accessibles sur l'instance du composant. Si vous avez
+besoin de les exposer, vous pouvez plutôt utiliser les exports de composant.
+
+```svelte
+<script>
+	let { name } = $props();
+	// available via componentInstance.getName()
+	export const getName = () => name;
+</script>
+```
+
+Autrement, si vous contrôlez l'endroit où le composant est instancié, vous pouvez également utiliser
+des runes dans des fichiers `.js/.ts` en ajustant leur nom de fichier pour y ajouter `.svelte`, par
+ex. `.svelte.js` ou `svelte.ts`, et y utiliser `$state` :
+
+```js
++++import { mount } from 'svelte';+++
+import App from './App.svelte'
+
+---const app = new App({ target: document.getElementById("app"), props: { foo: 'bar' } });
+app.foo = 'baz'---
++++const props = $state({ foo: 'bar' });
+const app = mount(App, { target: document.getElementById("app"), props });
+props.foo = 'baz';+++
+```
 
 ### L'option `immutable` est ignorée [!VO]`immutable` option is ignored
 

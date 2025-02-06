@@ -258,11 +258,10 @@ Les éléments `<audio>` ont leur propre jeu de liaisons — cinq à double sens
 - [`volume`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/volume)
 - [`muted`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/muted)
 
-... et sept en lecture seule :
+... et six en lecture seule :
 
 - [`duration`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/duration)
 - [`buffered`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/buffered)
-- [`paused`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/paused)
 - [`seekable`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/seekable)
 - [`seeking`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/seeking_event)
 - [`ended`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/ended)
@@ -274,7 +273,7 @@ Les éléments `<audio>` ont leur propre jeu de liaisons — cinq à double sens
 
 ## `<video>`
 
-Les éléments `<video>` ont les mêmes liaisons que les éléments [#audio], auxquels viennent s'ajouter
+Les éléments `<video>` ont les mêmes liaisons que les éléments [`<audio>`](#audio), auxquels viennent s'ajouter
 les liaisons en lecture seule
 [`videoWidth`](https://developer.mozilla.org/fr/docs/Web/API/HTMLVideoElement/videoWidth) et
 [`videoHeight`](https://developer.mozilla.org/fr/docs/Web/API/HTMLVideoElement/videoHeight).
