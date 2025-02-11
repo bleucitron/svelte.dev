@@ -15,7 +15,7 @@
 <input bind:value={content} />
 
 <button use:tooltip>
-	Hover me
+	Survolez-moi
 </button>
 
 <style>

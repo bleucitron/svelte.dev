@@ -42,9 +42,9 @@
 				</div>
 
 				<label>
-					small
+					petit
 					<input type="range" bind:value={size} min="1" max="50" />
-					large
+					grand
 				</label>
 			</div>
 		</div>
@@ -52,7 +52,7 @@
 
 	<div class="controls">
 		<button class="show-menu" onclick={() => showMenu = !showMenu}>
-			{showMenu ? 'close' : 'menu'}
+			{showMenu ? 'fermer' : 'menu'}
 		</button>
 	</div>
 </div>

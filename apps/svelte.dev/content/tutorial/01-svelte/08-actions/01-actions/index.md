@@ -1,17 +1,20 @@
 ---
-title: The use directive
+title: La directive use
 ---
 
-Actions are essentially element-level lifecycle functions. They're useful for things like:
+Les actions ne sont rien de plus que des fonctions de cycle de vie pour un élément. Elles sont
+utiles pour des choses comme :
 
-- interfacing with third-party libraries
-- lazy-loaded images
-- tooltips
-- adding custom event handlers
+- s'interfacer avec des librairies tierces
+- charger des images en différé
+- afficher des tooltips
+- ajouter des gestionnaires d'évènements personnalisés
 
-In this app, you can scribble on the `<canvas>`, and change colours and brush size via the menu. But if you open the menu and cycle through the options with the Tab key, you'll soon find that the focus isn't _trapped_ inside the modal.
+Dans cette application, vous pouvez gribouiller dans le `<canvas>`, et changer les couleurs et la
+taille du pinceau via le menu. Mais si vous ouvrez le menu et parcourez les options avec la touche
+Tab, vous vous rendrez vite compte que le focus reste _coincé_ dans la modale.
 
-We can fix that with an action. Import `trapFocus` from `actions.svelte.js`...
+Nous pouvons corriger ça avec une action. Importez `trapFocus` depuis `actions.svelte.js`...
 
 ```svelte
 /// file: App.svelte
@@ -27,16 +30,19 @@ We can fix that with an action. Import `trapFocus` from `actions.svelte.js`...
 </script>
 ```
 
-...then add it to the menu with the `use:` directive:
+...puis ajoutez-le au menu avec la directive `use:` :
 
 ```svelte
 /// file: App.svelte
 <div class="menu" +++use:trapFocus+++>
 ```
 
-Let's take a look at the `trapFocus` function in `actions.svelte.js`. An action function is called with a `node` — the `<div class="menu">` in our case — when the node is mounted to the DOM. Inside the action, we have an [effect](effects).
+Étudions la fonction `trapFocus` dans le fichier `actions.svelte.js`. Une fonction d'action est
+appelée avec un `node` — la `<div class="menu">` dans notre cas — lorsque le noeud est monté dans le
+DOM. Dans l'action, nous avons un [effet](effects).
 
-First, we need to add an event listener that intercepts Tab key presses:
+D'abord, nous avons besoin d'ajouter un gestionnaire d'évènement qui intercepte les pressions sur la
+touche Tab :
 
 ```js
 /// file: actions.svelte.js
@@ -46,7 +52,8 @@ $effect(() => {
 });
 ```
 
-Second, we need to do some cleanup when the node is unmounted — removing the event listener, and restoring focus to where it was before the element mounted:
+Ensuire, nous devons nettoyer l'effet lorsque le noeud est démonté — c'est-à-dire supprimer le
+gestionnaire, et remettre le focus à l'endroit où il était avant le montage de l'élément :
 
 ```js
 /// file: actions.svelte.js
@@ -61,4 +68,4 @@ $effect(() => {
 });
 ```
 
-Now, when you open the menu, you can cycle through the options with the Tab key.
+Désormais, lorsque vous ouvrez le menu, vous pouvez parcourir les options avec la touche Tab.
