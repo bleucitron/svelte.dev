@@ -11,6 +11,6 @@
 
 {#if visible}
 	<p transition:fade>
-		Fades in and out
+		Entre et sort en s'estompant
 	</p>
 {/if}
