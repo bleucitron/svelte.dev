@@ -16,7 +16,7 @@
 	});
 </script>
 
-<h1>loading...</h1>
+<h1>chargement...</h1>
 
 {#key i}
 	<p in:typewriter={{ speed: 10 }}>

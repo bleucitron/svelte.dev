@@ -1,7 +1,7 @@
 <script>
 	import { slide } from 'svelte/transition';
 
-	let items = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+	let items = ['un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix'];
 
 	let showItems = $state(true);
 	let i = $state(5);
@@ -9,7 +9,7 @@
 
 <label>
 	<input type="checkbox" bind:checked={showItems} />
-	show list
+	afficher la liste
 </label>
 
 <label>
