@@ -229,4 +229,24 @@ Vous pouvez, bien sûr, séparer la déclaration de type de l'annotation :
 L'ajout de types est recommandé, car il permet aux personnes utilisant votre composant de découvrir
 facilement les props à fournir.
 
+## `$props.id()`
 
+Cette rune, ajoutée dans la version 5.20.0, génère un ID qui est unique à l'instance de composant
+courante. Lorsqu'un composant est rendu côté serveur, la valeur de cet ID sera consitente entre le
+serveur et le client.
+
+Cela est pratique pour lier des éléments via des attributs comme `for` et `aria-labelledby`.
+
+```svelte
+<script>
+	const uid = $props.id();
+</script>
+
+<form>
+	<label for="{uid}-firstname">Prénom : </label>
+	<input id="{uid}-firstname" type="text" />
+
+	<label for="{uid}-lastname">Nom : </label>
+	<input id="{uid}-lastname" type="text" />
+</form>
+```

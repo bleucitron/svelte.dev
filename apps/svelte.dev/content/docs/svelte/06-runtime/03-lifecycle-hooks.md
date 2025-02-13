@@ -61,14 +61,6 @@ Définit un callback à exécuter juste avant que le composant ne soit détruit.
 Parmi `onMount`, `beforeUpdate`, `afterUpdate` et `onDestroy`, c'est la seule de ces méthodes à
 être exécutée lors du rendu côté serveur.
 
-<div class="ts-block">
-
-```dts
-function onDestroy(fn: () => any): void;
-```
-
-</div>
-
 ```svelte
 <script>
 	import { onDestroy } from 'svelte';
