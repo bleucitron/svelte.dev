@@ -30,7 +30,7 @@
 	{box.height}
 </label>
 
-<button onclick={() => box.embiggen(10)}>embiggen</button>
+<button onclick={() => box.embiggen(10)}>agrandir</button>
 
 <hr>
 

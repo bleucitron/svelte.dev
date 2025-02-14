@@ -7,8 +7,7 @@
 	<p><a href="/">Go to /</a></p>
 {:else}
 	<p>
-		Server-side rendering failed with HTTP status
-		code
+		Le rendu côté serveur a échoué avec un code HTTP
 		<a
 			target="_blank"
 			href="https://http.dog/{page.status}"

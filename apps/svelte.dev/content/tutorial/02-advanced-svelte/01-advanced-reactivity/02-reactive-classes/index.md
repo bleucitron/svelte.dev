@@ -1,10 +1,11 @@
 ---
-title: Reactive classes
+title: Classes réactives
 ---
 
-It's not just variables that can be made reactive — in Svelte, we can also make properties of classes reactive.
+Il n'y a pas que les variables qui peuvent être rendues réactives — en Svelte, nous pouvons
+également rendre réactives les propriétés des classes.
 
-Let's make the `width` and `height` properties of our `Box` class reactive:
+Rendons les propriétés `width` et `height` de notre classe `Box` réactives :
 
 ```js
 /// file: App.svelte
@@ -17,9 +18,11 @@ class Box {
 }
 ```
 
-Now, when we interact with the range inputs or click the 'embiggen' button, the box reacts.
+Désormais, lorsque nous interagissons avec les inputs ou cliquons sur le bouton 'agrandir', la boîte
+réagit.
 
-We can also use `$derived`, so that `box.area` updates reactively:
+Nous pouvons aussi utiliser `$derived`, de sorte que `box.area` se mette à jour de manière réactive
+:
 
 ```js
 /// file: App.svelte
@@ -32,4 +35,5 @@ class Box {
 }
 ```
 
-> [!NOTE] In addition to `$state` and `$derived`, you can use `$state.raw` and `$derived.by` to define reactive fields.
+> [!NOTE] En plus de `$state` et `$derived`, vous pouvez aussi utiliser `$state.raw` et
+> `$derived.by` pour définir des champs réactifs.

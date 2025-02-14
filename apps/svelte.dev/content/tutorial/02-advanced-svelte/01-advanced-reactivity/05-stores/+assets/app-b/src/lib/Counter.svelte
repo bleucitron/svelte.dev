@@ -3,5 +3,5 @@
 </script>
 
 <button onclick={() => $count += 1}>
-	clicks: {$count}
+	clics : {$count}
 </button>

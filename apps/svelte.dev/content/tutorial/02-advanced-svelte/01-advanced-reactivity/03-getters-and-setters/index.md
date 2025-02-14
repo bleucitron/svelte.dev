@@ -1,10 +1,15 @@
 ---
-title: Getters and setters
+title: Getters et setters
 ---
 
-Classes are particularly useful when you need to validate data. In the case of this `Box` class, it shouldn't be possible to keep embiggening past the maximum allowed by the sliders, but that's exactly what happens.
+Les classes sont particulièrement utiles lorsque vous avez besoin de valider des données. Dans le
+cas de cette classe `Box`, il ne devrait pas être possible de faire grandir la taille au-delà du
+maximum autorisé par les sliders, mais pourtant c'est bien ce qui se passe.
 
-We can fix that by replacing `width` and `height` with _getters_ and _setters_, otherwise known as _accessors_. First, convert them to [private properties](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties):
+Nous pouvons corriger cela en remplaçant `width` et `height` avec des _getters_ et _setters_, aussi
+appelés _accesseurs_. D'abord, convertissez-les en propriétés
+[privées](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Classes/Private_properties)
+:
 
 ```js
 /// file: App.svelte
@@ -22,7 +27,7 @@ class Box {
 }
 ```
 
-Then, create some getters and setters:
+Puis, créez des getters et setters :
 
 ```js
 /// file: App.svelte
@@ -52,7 +57,7 @@ class Box {
 }
 ```
 
-Finally, add the validation to the setters:
+Enfin, ajouter de la validation aux setters :
 
 ```js
 /// file: App.svelte
@@ -65,4 +70,6 @@ set height(value) {
 }
 ```
 
-It's now impossible to increase the box size past safe limits, whether through the `bind:value` on the range inputs, or the `embiggen` method, no matter how hard you press the button.
+Il est maintenant impossible d'augmenter la taille de la boîte au-delà des limites raisonnables, que
+ce soit via `bind:value` des inputs, ou via la méthode `embiggen`, peu importe l'insistance avec
+laquelle vous appuyez sur le bouton.

@@ -1,23 +1,33 @@
 ---
-title: Raw state
+title: État brut
 ---
 
-In previous exercises, we learned that state is [deeply reactive](deep-state) — if you (for example) change a property of an object, or push to an array, it will cause the UI to update. This works by creating a [proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) that intercepts reads and writes.
+Dans les exercices précédents, nous avons vu que l'état est [profondément réactif](deep-state) — si
+(par exemple) vous changez une propriété d'un objet, ou ajoutez un élément dans un tableau, cela
+provoquera la mise à jour de l'interface. Ceci fonctionne en créant un
+[proxy](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Proxy) qui
+intercepte les lectures et écritures.
 
-Occasionally, that's not what you want. If you're not changing individual properties, or if it's important to maintain referential equality, then you can use _raw state_ instead.
+Parfois, ce n'est pas ce que vous souhaitez. Si vous ne changez pas les propriétés individuelles, ou
+s'il est important de maintenir l'égalité de référence, vous pouvez alors utiliser un état brut
+(_raw state_) à la place.
 
-In this example, we have a chart of Svelte's steadily increasing stock price. We want the chart to update when new data comes in, which we could achieve by turning `data` into state...
+Dans cet exemple, nous avons un graphique montrant le cours de l'action Svelte augmentant doucement
+mais sûrement. Nous voulons que le graphique se mette à jour lorsque de nouvelles données arrivent,
+ce que nous pouvons faire en transformant `data` en état...
 
 ```js
 /// file: App.svelte
 let data = +++$state(poll())+++;
 ```
 
-...but there's no need to make it deeply reactive when it will be discarded a few milliseconds later. Instead, use `$state.raw`:
+... mais il n'y a pas besoin de le rendre profondément réactif alors qu'il sera entièrement réécrit
+quelques millisecondes plus tard. À la place, nous pouvons utiliser `$state.raw` :
 
 ```js
 /// file: App.svelte
 let data = +++$state.raw(poll())+++;
 ```
 
-> [!NOTE] Mutating raw state will have no direct effect. In general, mutating non-reactive state is strongly discouraged.
+> [!NOTE] Muter un état brut n'aura aucun effet direct. En général, muter un état non réactif est
+> fortement déconseillé

@@ -14,4 +14,4 @@
 	});
 </script>
 
-<p>The time is {date.getHours()}:{pad(date.getMinutes())}:{pad(date.getSeconds())}</p>
+<p>Il est {date.getHours()}:{pad(date.getMinutes())}:{pad(date.getSeconds())}</p>

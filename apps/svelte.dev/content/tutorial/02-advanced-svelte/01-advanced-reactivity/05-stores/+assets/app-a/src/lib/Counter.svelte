@@ -3,5 +3,5 @@
 </script>
 
 <button onclick={() => {}}>
-	clicks: {count}
+	clics : {count}
 </button>
