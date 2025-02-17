@@ -6,7 +6,7 @@
 <FilteredList data={colors} field="name">
 	<header>
 		<span class="color"></span>
-		<span class="name">name</span>
+		<span class="name">nom</span>
 		<span class="hex">hex</span>
 		<span class="rgb">rgb</span>
 		<span class="hsl">hsl</span>

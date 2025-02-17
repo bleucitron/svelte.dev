@@ -13,16 +13,16 @@
 
 <div class="list">
 	<label>
-		Filter: <input bind:value={search} />
+		Filtre : <input bind:value={search} />
 	</label>
 
 	<div class="header">
-		<p>TODO add header</p>
+		<p>TODO ajouter un en-tête</p>
 	</div>
 
 	<div class="content">
 		{#each filtered as d}
-			<p>TODO add row</p>
+			<p>TODO ajouter une ligne</p>
 		{/each}
 	</div>
 </div>

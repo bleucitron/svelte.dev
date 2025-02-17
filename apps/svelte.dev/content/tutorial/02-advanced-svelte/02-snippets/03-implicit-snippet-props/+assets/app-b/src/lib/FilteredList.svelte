@@ -13,7 +13,7 @@
 
 <div class="list">
 	<label>
-		Filter: <input bind:value={search} />
+		Filtrer : <input bind:value={search} />
 	</label>
 
 	<div class="header">

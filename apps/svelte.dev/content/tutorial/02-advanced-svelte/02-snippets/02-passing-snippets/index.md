@@ -1,12 +1,15 @@
 ---
-title: Passing snippets to components
+title: Passer des snippers aux composants
 ---
 
-Since snippets — like functions — are just values, they can be passed to components as props.
+Puisque les snippets — comme les fonctions — ne sont que des valeurs, ils peuvent être passés aux
+composants en tant que props.
 
-Take this `<FilteredList>` component. Its job is to filter the `data` that gets passed into it, but it has no opinions about how that data should be rendered — that's the responsibility of the parent component.
+Prenez ce composant `<FilteredList>`. Son travail est de filtrer les `data` qui lui sont fournies,
+mais il n'a pas d'avis sur la façon dont les données doivent être rendues — c'est la responsabilité
+du composant parent.
 
-We've already got some snippets defined. Begin by passing them into the `<FilteredList>`:
+Nous avons déjà des snippets de définis. Commencez par les passer à `<FilteredList>` :
 
 ```svelte
 /// file: App.svelte
@@ -18,7 +21,7 @@ We've already got some snippets defined. Begin by passing them into the `<Filter
 ></FilteredList>
 ```
 
-Then, on the other side, declare `header` and `row` as props:
+Puis, de l'autre côté, déclarez `header` et `row` en tant que props :
 
 ```svelte
 /// file: FilteredList.svelte
@@ -29,7 +32,7 @@ Then, on the other side, declare `header` and `row` as props:
 </script>
 ```
 
-Finally, replace the placeholder content with render tags:
+Enfin, remplacez le contenu par défaut par les balises de rendu :
 
 ```svelte
 /// file: FilteredList.svelte
@@ -44,4 +47,4 @@ Finally, replace the placeholder content with render tags:
 </div>
 ```
 
-Never again will you have to memorize the hex code for `MistyRose` or `PeachPuff`.
+Vous n'aurez plus jamais besoin de mémoriser le code hexa de `MistyRose` ou `PeachPuff`.

@@ -1,14 +1,19 @@
 ---
-title: Snippets and render tags
+title: Snippets et balises de rendu
 ---
 
-Snippets allow you to reuse content within a component, without extracting it out into a separate file.
+Les snippets vous permettent de réutiliser du contenu au sein d'un composant, sans avoir besoin de
+l'extraire dans un fichier séparé.
 
-In this exercise, we're creating a table of the [three wise monkeys](https://en.wikipedia.org/wiki/Three_wise_monkeys), along with their unicode escape sequences and HTML entities. So far, we have but a single monkey.
+Dans cet exercice, nous créons un tableau de [trois singes
+sages](https://fr.wikipedia.org/wiki/Singes_de_la_sagesse), avec leur séquence d'échappement unicode
+et leur entité HTML. Nous n'avons pour le moment qu'un seul singe.
 
-We could duplicate the markup, of course. Or we could create an array of `{ emoji, description }` objects and pass it into an `{#each ...}` block. But a neater solution is to encapsulate the markup in a reusable block.
+Bien sûr, nous pourrions dupliquer le markup. Ou bien nous pourrions créer un tableau d'objets `{
+emoji, description }` et le passer à un bloc `{#each ...}`. Mais une meilleure solution est
+d'encapsuler le markup dans un block réutilisable.
 
-Begin by _declaring a snippet_:
+Commencez par _déclarer un snippet_ :
 
 ```svelte
 /// file: App.svelte
@@ -22,7 +27,8 @@ Begin by _declaring a snippet_:
 +++{/snippet}+++
 ```
 
-The monkey is no longer visible until we _render_ it. Let's do that:
+Le singer n'est plus visible, car nous n'avons pas encore _rendu_ le snippet. Faisons-le maintenant
+:
 
 ```svelte
 /// file: App.svelte
@@ -33,33 +39,36 @@ The monkey is no longer visible until we _render_ it. Let's do that:
 </tbody>
 ```
 
-Before we can use the snippet for the rest of our monkeys, we need to pass data into the snippet. Snippets can have zero or more parameters:
+Avant de pouvoir réutiliser le snippet pour le reste de nos singes, nous devons passer des données
+au snippet. Les snippets peuvent ne pas avoir d'arguments, ou bien en avoir, sans limite de nombre :
 
 ```svelte
 /// file: App.svelte
 <tbody>
 	+++{#snippet monkey(emoji, description)}...{/snippet}+++
 
-	+++{@render monkey('🙈', 'see no evil')}+++
+	+++{@render monkey('🙈', 'ne pas voir')}+++
 </tbody>
 ```
 
-> [!NOTE] You can also use destructured parameters, if you like.
+> [!NOTE] Vous pouvez aussi déstructurer les arguments, si vous préfèrez.
 
-Add the rest of the monkeys:
+Ajoutez le reste des singes :
 
-- `'🙈', 'see no evil'`
-- `'🙉', 'hear no evil'`
-- `'🙊', 'speak no evil'`
+- `'🙈', 'ne pas voir'`
+- `'🙉', 'ne pas entendre'`
+- `'🙊', 'ne pas parler'`
 
-Finally, delete the `<script>` block we no longer need it:
+Enfin, supprimez le bloc `<script>`, car il ne sert plus à rien :
 
 ```svelte
 /// file: App.svelte
 ---<script>
 	let emoji = '🙈';
-	let description = 'see no evil';
+	let description = 'ne pas voir';
 </script>---
 ```
 
-> [!NOTE] Snippets can be declared anywhere in your component, but, like functions, are only visible to render tags in the same 'scope' or a child scope.
+> [!NOTE] Les snippets peuvent être déclarés n'importe où dans votre composant, mais, comme les
+> fonctions, ils ne sont accessibles par les balises de rendu que dans le même "scope" ou un scope
+> enfant.

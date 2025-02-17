@@ -1,8 +1,9 @@
 ---
-title: Implicit snippet props
+title: Props de snippets implicites
 ---
 
-As an authoring convenience, snippets declared directly inside components become props _on_ those components. Take the `header` and `row` snippets and move them inside `<FilteredList>`:
+Par commodité, les snippets déclarés directement au sein du composant deviennts des props _sur_ ce
+composant. Prenez les snippets `header` et `row` et déplacez les dans `<FilteredList>` :
 
 ```svelte
 /// file: App.svelte
@@ -22,7 +23,7 @@ As an authoring convenience, snippets declared directly inside components become
 ---{#snippet row(d)}...{/snippet}---
 ```
 
-We can now remove them from the explicit props:
+Nous pouvons alors les supprimer des props passées explicitement :
 
 ```svelte
 /// file: App.svelte
@@ -33,14 +34,16 @@ We can now remove them from the explicit props:
 </FilteredList>
 ```
 
-Any content inside a component that is _not_ part of a declared snippet becomes a special `children` snippet. Since `header` has no parameters, we can turn it into `children` by removing the block tags...
+Tout contenu au sein d'un composant qui ne fait _pas_ partie d'un snippet déclaré devient un snippet
+spécial appelé `children`. Puisque `header` n'a pas de paramètres, nous pouvons le transformer en
+`children` en supprimant les balises de snippet...
 
 ```svelte
 /// file: App.svelte
 ---{#snippet header()}---
 <header>
 	<span class="color"></span>
-	<span class="name">name</span>
+	<span class="name">nom</span>
 	<span class="hex">hex</span>
 	<span class="rgb">rgb</span>
 	<span class="hsl">hsl</span>
@@ -48,7 +51,7 @@ Any content inside a component that is _not_ part of a declared snippet becomes 
 ---{/snippet}---
 ```
 
-...and renaming the `header` prop to `children` on the other side:
+... et en renommant la prop `header` en `children` de l'autre côté :
 
 ```svelte
 /// file: FilteredList.svelte

@@ -3,8 +3,8 @@
 		<tr>
 			<th>emoji</th>
 			<th>description</th>
-			<th>unicode escape sequence</th>
-			<th>html entity</th>
+			<th>séquence d'échappement unicode escape</th>
+			<th>entité html</th>
 		</tr>
 	</thead>
 
@@ -18,9 +18,9 @@
 			</tr>
 		{/snippet}
 
-		{@render monkey('🙈', 'see no evil')}
-		{@render monkey('🙉', 'hear no evil')}
-		{@render monkey('🙊', 'speak no evil')}
+		{@render monkey('🙈', 'ne pas voir')}
+		{@render monkey('🙉', 'ne pas entendre')}
+		{@render monkey('🙊', 'ne pas parler')}
 	</tbody>
 </table>
 

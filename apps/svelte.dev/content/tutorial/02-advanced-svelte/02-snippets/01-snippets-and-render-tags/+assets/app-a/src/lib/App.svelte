@@ -1,6 +1,6 @@
 <script>
 	let emoji = '🙈';
-	let description = 'see no evil';
+	let description = 'ne pas voir';
 </script>
 
 <table>
@@ -8,8 +8,8 @@
 		<tr>
 			<th>emoji</th>
 			<th>description</th>
-			<th>unicode escape sequence</th>
-			<th>html entity</th>
+			<th>séquence d'échappement unicode</th>
+			<th>entité html</th>
 		</tr>
 	</thead>
 
