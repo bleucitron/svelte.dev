@@ -1,10 +1,12 @@
 ---
-title: Springs
+title: Ressorts (_springs_)
 ---
 
-The `Spring` class is an alternative to `Tween` that often works better for values that are frequently changing.
+La classe `Spring` est une alternative à `Tween` qui fonctionne souvent mieux pour des valeurs qui
+changent souvent.
 
-In this example we have a circle that follows the mouse, and two values — the circle's coordinates, and its size. Let's convert them to springs:
+Dans cet exemple, nous avons un cercle suivant la souris, ainsi que deux valeurs — les coordonnées
+du cercle et sa taille. Convertissons-les en ressorts :
 
 ```svelte
 /// file: App.svelte
@@ -16,7 +18,8 @@ In this example we have a circle that follows the mouse, and two values — the 
 </script>
 ```
 
-As with `Tween`, springs have a writable `target` property and a readonly `current` property. Update the event handlers...
+Comme avec `Tween`, les ressorts ont une propriété d'écriture `target` et une propriété `current` en
+lecture seule. Mettez à jour les gestionnaires d'évènements...
 
 ```svelte
 <svg
@@ -29,7 +32,7 @@ As with `Tween`, springs have a writable `target` property and a readonly `curre
 >
 ```
 
-...and the `<circle>` attributes:
+... et les attributs du `<circle>` :
 
 ```svelte
 <circle
@@ -39,7 +42,8 @@ As with `Tween`, springs have a writable `target` property and a readonly `curre
 ></circle>
 ```
 
-Both springs have default `stiffness` and `damping` values, which control the spring's, well... springiness. We can specify our own initial values:
+Les deux ressorts ont des valeurs de raideur (`stiffness`) et d'amortissement (`damping`), qui
+contrôlent... la ressort-itude. Nous pouvons spécifier nos propres valeurs initiales :
 
 ```js
 /// file: App.svelte
@@ -49,4 +53,6 @@ let coords = new Spring({ x: 50, y: 50 }, +++{
 }+++);
 ```
 
-Waggle your mouse around, and try dragging the sliders to get a feel for how they affect the spring's behaviour. Notice that you can adjust the values while the spring is still in motion.
+Faites bouger votre souris, et essayer de jouer avec les sliders pour ressentir comment les
+changements sur la raideur et l'amortissement affectent le comportement du ressort. Notez que vous
+pouvez changer les valeurs pendant que le ressort est encore en mouvement.

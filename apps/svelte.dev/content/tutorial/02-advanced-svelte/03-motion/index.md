@@ -1,5 +1,5 @@
 ---
-title: Motion
+title: Mouvements
 scope: { 'prefix': '/src/lib/', 'name': 'src' }
 focus: /src/lib/App.svelte
 ---

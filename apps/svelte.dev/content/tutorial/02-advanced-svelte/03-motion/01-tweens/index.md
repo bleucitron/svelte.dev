@@ -1,10 +1,12 @@
 ---
-title: Tweened values
+title: Valeurs interpolées (_tween_)
 ---
 
-Often, a good way to communicate that a value is changing is to use _motion_. Svelte ships classes for adding motion to your user interfaces.
+Souvent, une bonne manière de communiquer qu'une valeur est en train de changer est d'utiliser du
+mouvement (_motion_). Svelte fournit des classes permettant d'ajouter du mouvement à vos interfaces
+utilisateur.
 
-Import the `Tween` class from `svelte/motion`:
+Importez la classe `Tween` depuis `svelte/motion` :
 
 ```svelte
 /// file: App.svelte
@@ -15,7 +17,7 @@ Import the `Tween` class from `svelte/motion`:
 </script>
 ```
 
-Turn `progress` into an instance of `Tween`:
+Transformez `progress` en instance de `Tween` :
 
 ```svelte
 /// file: App.svelte
@@ -26,13 +28,14 @@ Turn `progress` into an instance of `Tween`:
 </script>
 ```
 
-The `Tween` class has a writable `target` property and a readonly `current` property — update the `<progress>` element...
+La classe `Tween` possède une propriété d'écriture `target` ainsi qu'une propriété `current` en
+lecture seule — modifiez l'élément `<progress>`...
 
 ```svelte
 <progress value={progress.+++current+++}></progress>
 ```
 
-...and each of the event handlers:
+... et chacun des gestionnaires d'évènement :
 
 ```svelte
 <button onclick={() => (progress.+++target+++ = 0)}>
@@ -40,7 +43,8 @@ The `Tween` class has a writable `target` property and a readonly `current` prop
 </button>
 ```
 
-Clicking the buttons causes the progress bar to animate to its new value. It's a bit robotic and unsatisfying though. We need to add an easing function:
+Un clic sur les boutons va déclencher l'animation de la barre de progression vers sa nouvelle
+valeur. C'est un peu saccadé et pas très satisfaisant. Ajoutons-lui une fonction de lissage :
 
 ```svelte
 /// file: App.svelte
@@ -55,13 +59,26 @@ Clicking the buttons causes the progress bar to animate to its new value. It's a
 </script>
 ```
 
-> [!NOTE] The `svelte/easing` module contains the [Penner easing equations](https://web.archive.org/web/20190805215728/http://robertpenner.com/easing/), or you can supply your own `p => t` function where `p` and `t` are both values between 0 and 1.
+> [!NOTE] Le module `svelte/easing` contient les [équations de lissage de
+> Penner](https://web.archive.org/web/20190805215728/http://robertpenner.com/easing/), mais vous
+> pouvez également fournir votre propre fonction `p => t` où `p` et `t` sont des valeurs entre 0 et
+>
+> 1.
 
-The full set of options available to `Tween`:
+Voici la liste complète d'options disponibles sur `Tween` :
 
-- `delay` — milliseconds before the tween starts
-- `duration` — either the duration of the tween in milliseconds, or a `(from, to) => milliseconds` function allowing you to (e.g.) specify longer tweens for larger changes in value
-- `easing` — a `p => t` function
-- `interpolate` — a custom `(from, to) => t => value` function for interpolating between arbitrary values. By default, Svelte will interpolate between numbers, dates, and identically-shaped arrays and objects (as long as they only contain numbers and dates or other valid arrays and objects). If you want to interpolate (for example) colour strings or transformation matrices, supply a custom interpolator
+- `delay` — délai en millisecondes avant le début de l'interpolation
+- `duration` — soit la durée de l'interpolation en millisecondes, ou bien une fonction `(from, to)
+	=> millisecondes` vous permettant de (par ex.) préciser des interpolations plus longues pour des
+  changements de valeur plus importants
+- `easing` — une fonction `p => t`
+- `interpolate` — une fonction personnalisée `(from, to) => t => value` servant à interpoler entre
+  des valeurs de type arbitraire. Par défaut, Svelte n'est capable d'interpoler qu'entre des nombres,
+  des dates, et des objets et tableaux de même forme (tant qu'ils contiennent uniquement des nombres,
+  dates et autres objets et tableaux valides). Si vous souhaitez interpoler (par exemple) entre des
+  chaînes de caractères représentant des couleurs ou des matrices de transformation, vous pouvez
+  fournir un interpolateur personnalisé
 
-You can also call `progress.set(value, options)` instead of assigning directly to `progress.target`, in which case `options` will override the defaults. The `set` method returns a promise that resolves when the tween completes.
+Vous pouvez aussi appeler `progress.set(value, options)` plutôt que d'assigner directement à
+`progress.target`, et dans ce cas `options` va écraser les options par défaut. La méthode `set`
+renvoie une promesse qui est résolue lorsque l'interpolation se termine.
