@@ -1,9 +1,9 @@
 ---
-title: Ressorts (_springs_)
+title: Ressorts
 ---
 
-La classe `Spring` est une alternative à `Tween` qui fonctionne souvent mieux pour des valeurs qui
-changent souvent.
+La classe `Spring`, permettant de simuler le comportement d'un ressort, est une alternative à
+`Tween` qui fonctionne souvent mieux pour des valeurs qui changent souvent.
 
 Dans cet exemple, nous avons un cercle suivant la souris, ainsi que deux valeurs — les coordonnées
 du cercle et sa taille. Convertissons-les en ressorts :

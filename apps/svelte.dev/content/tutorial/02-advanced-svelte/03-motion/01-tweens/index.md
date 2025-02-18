@@ -1,5 +1,5 @@
 ---
-title: Valeurs interpolées (_tween_)
+title: Valeurs interpolées
 ---
 
 Souvent, une bonne manière de communiquer qu'une valeur est en train de changer est d'utiliser du
@@ -16,6 +16,8 @@ Importez la classe `Tween` depuis `svelte/motion` :
 	let progress = $state(0);
 </script>
 ```
+
+Cette classe permet d'interpoler des valeurs sur une certaine durée.
 
 Transformez `progress` en instance de `Tween` :
 
@@ -61,15 +63,13 @@ valeur. C'est un peu saccadé et pas très satisfaisant. Ajoutons-lui une foncti
 
 > [!NOTE] Le module `svelte/easing` contient les [équations de lissage de
 > Penner](https://web.archive.org/web/20190805215728/http://robertpenner.com/easing/), mais vous
-> pouvez également fournir votre propre fonction `p => t` où `p` et `t` sont des valeurs entre 0 et
->
-> 1.
+> pouvez également fournir votre propre fonction `p => t` où `p` et `t` sont des valeurs entre 0 et 1.
 
 Voici la liste complète d'options disponibles sur `Tween` :
 
 - `delay` — délai en millisecondes avant le début de l'interpolation
 - `duration` — soit la durée de l'interpolation en millisecondes, ou bien une fonction `(from, to)
-	=> millisecondes` vous permettant de (par ex.) préciser des interpolations plus longues pour des
+=> millisecondes` vous permettant de (par ex.) préciser des interpolations plus longues pour des
   changements de valeur plus importants
 - `easing` — une fonction `p => t`
 - `interpolate` — une fonction personnalisée `(from, to) => t => value` servant à interpoler entre
