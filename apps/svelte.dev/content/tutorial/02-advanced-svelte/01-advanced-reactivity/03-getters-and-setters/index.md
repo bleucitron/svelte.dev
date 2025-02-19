@@ -57,7 +57,7 @@ class Box {
 }
 ```
 
-Enfin, ajouter de la validation aux setters :
+Enfin, ajoutez de la validation aux setters :
 
 ```js
 /// file: App.svelte

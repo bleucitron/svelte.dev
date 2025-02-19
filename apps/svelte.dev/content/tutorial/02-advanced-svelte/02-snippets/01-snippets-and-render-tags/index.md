@@ -27,8 +27,7 @@ Commencez par _déclarer un snippet_ :
 +++{/snippet}+++
 ```
 
-Le singer n'est plus visible, car nous n'avons pas encore _rendu_ le snippet. Faisons-le maintenant
-:
+Le singe n'est plus visible, car nous n'avons pas encore _rendu_ le snippet. Faisons-le maintenant :
 
 ```svelte
 /// file: App.svelte
