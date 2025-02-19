@@ -310,7 +310,7 @@ Les élément ayant l'attribut `contenteditable` acceptent les liaisons suivante
 <!-- for some reason puts the comment and html on same line -->
 <!-- prettier-ignore -->
 ```svelte
-<div contenteditable="true" bind:innerHTML={html} />
+<div contenteditable="true" bind:innerHTML={html}></div>
 ```
 
 ## Dimensions
@@ -357,7 +357,7 @@ composant.
 	});
 </script>
 
-<canvas bind:this={canvas} />
+<canvas bind:this={canvas}></canvas>
 ```
 
 Les composants acceptent aussi des liaisons `bind:this`, vous permettant d'interagir

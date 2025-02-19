@@ -15,7 +15,7 @@
 			src="./summit.png?w=800;1200;2000;2800;4400"
 			alt="Photos du Svelte Summit de 2022 à Stockholm par Marcel Cutts"
 		/>
-		<figcaption>Photos par <a href="https://x.com/marcelcutts">Marcel Cutts</a></figcaption>
+		<figcaption>Photos par <a href="https://marcel.gg/">Marcel Cutts</a></figcaption>
 	</figure>
 </Section>
 

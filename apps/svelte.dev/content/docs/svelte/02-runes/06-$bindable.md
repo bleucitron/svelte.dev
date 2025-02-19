@@ -41,7 +41,7 @@ Désormais, un composant qui utilise `<FancyInput>` peut ajouter la directive [`
 
 <!-- prettier-ignore -->
 ```svelte
-/// App.svelte
+/// file: App.svelte
 <script>
 	import FancyInput from './FancyInput.svelte';
 
