@@ -57,4 +57,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           owner: sveltejs
           repo: svelte.dev
-				dir: apps/svelte.dev/content/tutorial/02-advanced-svelte
+          dir: apps/svelte.dev/content/tutorial/02-advanced-svelte
