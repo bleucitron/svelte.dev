@@ -6,12 +6,12 @@
 
 <label>
 	<input type="range" bind:value={size} min="10" max="100" />
-	font size ({size}px)
+	taille de police ({size}px)
 </label>
 
 <div bind:clientWidth={w} bind:clientHeight={h}>
 	<span style="font-size: {size}px" contenteditable>
-		edit this text
+		éditez ce texte
 	</span>
 
 	<span class="size">{w} x {h}px</span>

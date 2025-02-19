@@ -1,5 +1,5 @@
 <script>
-	let html = $state('<p>Write some text!</p>');
+	let html = $state('<p>Écrivez du texte !</p>');
 </script>
 
 <div bind:innerHTML={html} contenteditable></div>

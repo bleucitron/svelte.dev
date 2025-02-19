@@ -5,10 +5,10 @@
 
 	let view = $derived(pin
 		? pin.replace(/\d(?!$)/g, '•')
-		: 'enter your pin');
+		: 'entrer votre code pin');
 
 	function onsubmit() {
-		alert(`submitted ${pin}`);
+		alert(`vous avez entré ${pin}`);
 	}
 </script>
 

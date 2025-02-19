@@ -2,9 +2,11 @@
 title: This
 ---
 
-You can use the special `bind:this` directive to get a readonly binding to an element in your component.
+Vous pouvez utiliser la directive spéciale `bind:this` pour obtenir une liaison en lecture seule
+avec un élément de votre composant.
 
-The `$effect` in this exercise attempts to create a canvas context, but `canvas` is `undefined`. Begin by declaring it at the top level of the component...
+La rune `$effect` de cet exercice essaye de créer un contexte de canvas, mais `canvas` vaut
+`undefined`. Commencez par déclarer le `canvas` à la racine du composant...
 
 ```svelte
 /// file: App.svelte
@@ -19,11 +21,12 @@ The `$effect` in this exercise attempts to create a canvas context, but `canvas`
 </script>
 ```
 
-...then add the directive to the `<canvas>` element:
+... puis ajoutez la directive à l'élément `<canvas>` :
 
 ```svelte
 /// file: App.svelte
 <canvas +++bind:this={canvas}+++ width={32} height={32}></canvas>
 ```
 
-Note that the value of `canvas` will remain `undefined` until the component has mounted — in other words you can't access it until the `$effect` runs.
+Notez que la valeur de `canvas` restera `undefined` tant que le composant n'a pas été monté — en
+d'autres termes, vous ne pouvez pas y accéder avant l'exécution de `$effect`.

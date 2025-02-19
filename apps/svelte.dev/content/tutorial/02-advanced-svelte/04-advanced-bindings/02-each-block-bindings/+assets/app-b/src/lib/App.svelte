@@ -1,8 +1,8 @@
 <script>
 	let todos = $state([
-		{ done: false, text: 'finish Svelte tutorial' },
-		{ done: false, text: 'build an app' },
-		{ done: false, text: 'world domination' }
+		{ done: false, text: 'finir le tutoriel de Svelte' },
+		{ done: false, text: 'construire une appli' },
+		{ done: false, text: 'dominer le monde' }
 	]);
 
 	function add() {
@@ -32,21 +32,21 @@
 
 				<input
 					type="text"
-					placeholder="What needs to be done?"
+					placeholder="Qu'avez-vous besoin de faire ?"
 					bind:value={todo.text}
 				/>
 			</li>
 		{/each}
 	</ul>
 
-	<p>{remaining} remaining</p>
+	<p>{remaining} restants</p>
 
 	<button onclick={add}>
-		Add new
+		Ajouter
 	</button>
 
 	<button onclick={clear}>
-		Clear completed
+		Supprimer les terminés
 	</button>
 </div>
 

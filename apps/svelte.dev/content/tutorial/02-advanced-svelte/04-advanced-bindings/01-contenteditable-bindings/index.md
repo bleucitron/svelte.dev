@@ -1,8 +1,9 @@
 ---
-title: Contenteditable bindings
+title: Liaisons contenteditable
 ---
 
-Elements with a `contenteditable` attribute support `textContent` and `innerHTML` bindings:
+Les éléments avec un attribut `contenteditable` supportent les liaisons sur `textContent` et
+`innerHTML` :
 
 ```svelte
 /// file: App.svelte

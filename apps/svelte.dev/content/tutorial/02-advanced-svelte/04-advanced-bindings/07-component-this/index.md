@@ -1,12 +1,16 @@
 ---
-title: Binding to component instances
+title: Lier des instances de composant
 ---
 
-Just as you can bind to DOM elements, you can bind to component instances themselves with `bind:this`.
+De la même manière que vous pouvez lier des éléments DOM, vous pouvez lier des instances de
+composant avec `bind:this`.
 
-This is useful in the rare cases that you need to interact with a component programmatically (rather than by providing it with updated props). Revisiting our canvas app from [a few exercises ago](actions), it would be nice to add a button to clear the screen.
+Ceci est utile dans les rares situations où vous avez besoin d'interagir avec un composant
+programmatiquement (plutôt que de lui fournir des props mises à jour). Si on repense à notre
+application de canvas [rencontrée il y a quelques exercices](actions), cela pourrait être sympa d'y
+ajouter un bouton pour effacer l'écran.
 
-First, let's export a function from `Canvas.svelte`:
+D'abord, exportons une fonction depuis `Canvas.svelte` :
 
 ```svelte
 /// file: Canvas.svelte
@@ -19,7 +23,7 @@ let coords = $state();
 }+++
 ```
 
-Then, create a reference to the component instance:
+Puis, créez une référence à l'instance de composant :
 
 ```js
 /// file: App.svelte
@@ -35,17 +39,17 @@ let showMenu = $state(true);
 <Canvas +++bind:this={canvas}+++ color={selected} size={size} />
 ```
 
-Finally, add a button that calls the `clear` function:
+Enfin, ajoutez un bouton qui appelle la fonction `clear` :
 
 ```svelte
 /// file: App.svelte
 <div class="controls">
 	<button class="show-menu" onclick={() => showMenu = !showMenu}>
-		{showMenu ? 'close' : 'menu'}
+		{showMenu ? 'fermer' : 'menu'}
 	</button>
 
 +++	<button onclick={() => canvas.clear()}>
-		clear
+		effacer
 	</button>+++
 </div>
 ```

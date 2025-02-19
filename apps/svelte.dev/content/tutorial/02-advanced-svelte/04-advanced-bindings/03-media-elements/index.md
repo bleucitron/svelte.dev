@@ -1,10 +1,12 @@
 ---
-title: Media elements
+title: Éléments media
 ---
 
-You can bind to properties of `<audio>` and `<video>` elements, making it easy to (for example) build custom player UI, like `AudioPlayer.svelte`.
+Vous pouvez lier les propriétés des éléments `<audio>` et `<video>`, facilitant la construction
+d'une interface personnalisée de player audio (par exemple), comme `AudioPlayer.svelte`.
 
-First, add the `<audio>` element along with its bindings (we'll use the shorthand form for `src`, `duration` and `paused`):
+D'abord, ajoutez l'élément `<audio>` avec ses liaisons (nous utiliserons la forme raccourcie pour
+`src`, `duration` et `paused`) :
 
 ```svelte
 /// file: AudioPlayer.svelte
@@ -22,7 +24,7 @@ First, add the `<audio>` element along with its bindings (we'll use the shorthan
 	></button>
 ```
 
-Next, add an event handler to the `<button>` that toggles `paused`:
+Ensuite, ajoutez un gestionnaire d'évènement au `<button>` qui modifie `paused` :
 
 ```svelte
 /// file: AudioPlayer.svelte
@@ -33,7 +35,9 @@ Next, add an event handler to the `<button>` that toggles `paused`:
 ></button>
 ```
 
-Our audio player now has basic functionality. Let's add the ability to seek to a specific part of a track by dragging the slider. Inside the slider's `pointerdown` handler there's a `seek` function, where we can update `time`:
+Notre player audio a désormais des fonctionnalités de base. Ajoutons-lui la possibilité de chercher
+un point précis sur une piste en déplaçant le slider. Dans le gestionnaire `pointerdown` du slider,
+il y a une fonction `seek` dans laquelle nous pouvons mettre à jour `time` :
 
 ```js
 /// file: AudioPlayer.svelte
@@ -48,7 +52,7 @@ function seek(e) {
 }
 ```
 
-When the track ends, be kind — rewind:
+Lorsque la piste se termine, soyez sympa — rembobinez :
 
 ```svelte
 /// file: AudioPlayer.svelte
@@ -63,22 +67,23 @@ When the track ends, be kind — rewind:
 ></audio>
 ```
 
-The complete set of bindings for `<audio>` and `<video>` is as follows — seven _readonly_ bindings...
+La liste complète des liaisons possibles pour `<audio>` et `<video>` est la suivante — sept liaisons
+en _lecture seule_...
 
-- `duration` — the total duration, in seconds
-- `buffered` — an array of `{start, end}` objects
-- `seekable` — ditto
-- `played` — ditto
-- `seeking` — boolean
-- `ended` — boolean
-- `readyState` — number between (and including) 0 and 4
+- `duration` — la durée totale, en secondes
+- `buffered` — un tableau d'objets `{start, end}`
+- `seekable` — idem
+- `played` — idem
+- `seeking` — booléen
+- `ended` — booléen
+- `readyState` — nombre entre 0 et 4 (inclus)
 
-...and five _two-way_ bindings:
+... et cinw liaisons _bilatérales_ :
 
-- `currentTime` — the current position of the playhead, in seconds
-- `playbackRate` — speed up or slow down (`1` is 'normal')
-- `paused` — this one should be self-explanatory
-- `volume` — a value between 0 and 1
-- `muted` — a boolean value where true is muted
+- `currentTime` — la position courante de la tête de lecture, en secondes
+- `playbackRate` — la vitesse de lecture (`1` est 'normal')
+- `paused` — celle-ci parle pour elle-même
+- `volume` — une valeur entre 0 et 1
+- `muted` — un booléen où `true` signifie "en sourdine"
 
-Videos additionally have readonly `videoWidth` and `videoHeight` bindings.
+Les vidéos ont en plus les liaisons de lecture seule `videoWidth` et `videoHeight`.

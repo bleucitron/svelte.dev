@@ -17,13 +17,13 @@
 	<button onclick={select(9)}>9</button>
 
 	<button disabled={!value} onclick={clear}>
-		clear
+		effacer
 	</button>
 
 	<button onclick={select(0)}>0</button>
 
 	<button disabled={!value} onclick={onsubmit}>
-		submit
+		envoyer
 	</button>
 </div>
 

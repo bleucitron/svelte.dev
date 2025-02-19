@@ -1,8 +1,8 @@
 ---
-title: Each block bindings
+title: Liaisons de bloc each
 ---
 
-You can bind to properties inside an `each` block.
+Vous pouvez lier les propriétés au sein d'un bloc `each`.
 
 ```svelte
 /// file: App.svelte
@@ -15,7 +15,7 @@ You can bind to properties inside an `each` block.
 
 		<input
 			type="text"
-			placeholder="What needs to be done?"
+			placeholder="Qu'avez-vous besoin de faire ?"
 			+++bind:+++value={todo.text}
 		/>
 	</li>
