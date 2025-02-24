@@ -2,11 +2,16 @@
 title: Animations
 ---
 
-In the [previous chapter](/tutorial/svelte/deferred-transitions), we used deferred transitions to create the illusion of motion as elements move from one todo list to the other.
+Dans le [chapitre précédent](/tutorial/svelte/deferred-transitions), nous avons utilisé des
+transitions retardées pour créer l'illusion du mouvement lorsque les éléments se déplacement d'une
+liste à l'autre.
 
-To complete the illusion, we also need to apply motion to the elements that _aren't_ transitioning. For this, we use the `animate` directive.
+Pour compléter l'illusion, nous avons aussi besoin d'appliquer du mouvement sur les éléments qui ne
+transitionnent _pas_. La directive `animate` sert à cela.
 
-First, import the `flip` function — flip stands for ['First, Last, Invert, Play'](https://aerotwist.com/blog/flip-your-animations/) — from `svelte/animate` into `TodoList.svelte`:
+D'abord, importez la fonction `flip` — "flip" veut dire ['First, Last, Invert,
+Play'](https://aerotwist.com/blog/flip-your-animations/) — depuis `svelte/animate` dans le fichier
+`TodoList.svelte` :
 
 ```svelte
 /// file: TodoList.svelte
@@ -18,7 +23,7 @@ First, import the `flip` function — flip stands for ['First, Last, Invert, Pla
 </script>
 ```
 
-Then add it to the `<li>` elements:
+Puis ajoutez-le aux éléments `<li>` :
 
 ```svelte
 /// file: TodoList.svelte
@@ -30,7 +35,7 @@ Then add it to the `<li>` elements:
 >
 ```
 
-The movement is a little slow in this case, so we can add a `duration` parameter:
+Le mouvement est un peu lent dans notre cas, nous pouvons donc y ajouter un paramètre `duration` :
 
 ```svelte
 /// file: TodoList.svelte
@@ -42,6 +47,8 @@ The movement is a little slow in this case, so we can add a `duration` parameter
 >
 ```
 
-> [!NOTE] `duration` can also be a `d => milliseconds` function, where `d` is the number of pixels the element has to travel
+> [!NOTE] `duration` peut aussi être une fonction `d => milliseconds`, où `d` est le nombre de
+> pixels que l'élément doit parcourir.
 
-Note that all the transitions and animations are being applied with CSS, rather than JavaScript, meaning they won't block (or be blocked by) the main thread.
+Notez que toutes les transitions et animations sont appliquées en CSS, plutôt qu'en JavaScript, ce
+qui veut dire qu'elles ne bloqueront pas (ou ne seront pas bloquées par) le thread principal.

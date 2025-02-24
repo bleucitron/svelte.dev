@@ -2,12 +2,12 @@
 	import TodoList from './TodoList.svelte';
 
 	const todos = $state([
-		{ id: 1, done: false, description: 'write some docs' },
-		{ id: 2, done: false, description: 'start writing blog post' },
-		{ id: 3, done: true, description: 'buy some milk' },
-		{ id: 4, done: false, description: 'mow the lawn' },
-		{ id: 5, done: false, description: 'feed the turtle' },
-		{ id: 6, done: false, description: 'fix some bugs' }
+		{ id: 1, done: false, description: 'écrire de la doc' },
+		{ id: 2, done: false, description: 'commencer à écrire un article de blog' },
+		{ id: 3, done: true, description: 'acheter du lait' },
+		{ id: 4, done: false, description: 'tondre la pelouse' },
+		{ id: 5, done: false, description: 'nourrir la tortue' },
+		{ id: 6, done: false, description: 'corriger des bugs' }
 	]);
 
 	let uid = todos.length + 1;
@@ -20,7 +20,7 @@
 
 <div class="board">
 	<input
-		placeholder="what needs to be done?"
+		placeholder="qu'avez-besoin de faire ?"
 		onkeydown={(e) => {
 			if (e.key !== 'Enter') return;
 
@@ -35,12 +35,12 @@
 	/>
 
 	<div class="todo">
-		<h2>todo</h2>
+		<h2>à faire</h2>
 		<TodoList todos={todos.filter((t) => !t.done)} {remove} />
 	</div>
 
 	<div class="done">
-		<h2>done</h2>
+		<h2>fait</h2>
 		<TodoList todos={todos.filter((t) => t.done)} {remove} />
 	</div>
 </div>

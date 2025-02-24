@@ -1,14 +1,25 @@
 ---
-title: Deferred transitions
+title: Transitions retardées
 ---
 
-A particularly powerful feature of Svelte's transition engine is the ability to _defer_ transitions, so that they can be coordinated between multiple elements.
+Une fonctionnalité particulièrement puissante du moteur de transitions de Svelte est la capacité à
+_retarder_ les transitions, afin qu'elles puissent être coordonnées entre plusieurs éléments.
 
-Take this pair of todo lists, in which toggling a todo sends it to the opposite list. In the real world, objects don't behave like that — instead of disappearing and reappearing in another place, they move through a series of intermediate positions. Using motion can go a long way towards helping users understand what's happening in your app.
+Prenez cette paire de listes de choses à faire, dans lesquelles l'activation d'un todo l'envoie dans
+la liste opposée. Dans la vraie vie, les objets ne se comportent pas comme ça — au lieu de
+disparaître et de réapparaître ailleurs, ils se déplacent au fur et à mesure sur des positions
+intermédiaires. Utiliser le déplacement peut grandement aider les utilisateurs et utilisatrices à
+comprendre ce qu'il se passe dans votre application.
 
-We can achieve this effect using the `crossfade` function, as seen in `transition.js`, which creates a pair of transitions called `send` and `receive`. When an element is 'sent', it looks for a corresponding element being 'received', and generates a transition that transforms the element to its counterpart's position and fades it out. When an element is 'received', the reverse happens. If there is no counterpart, the `fallback` transition is used.
+Nous pouvons créer cet effet en utilisant la fonction `crossfade`, comme utilisée dans le fichier
+`transition.js`, qui crée un couple de transitions appelées `send` et `receive`. Lorsqu'un élément
+est "envoyé", Svelte cherche un élément correspondant étant "reçu", et génère une transition qui
+transforme l'élément vers la position de sa contreparie et le fait disparaître en fondu. Lorsqu'un
+élément est "reçu", le contraire se produit. S'il n'y a pas de contrepartie, la transition
+`fallback` est utilisée.
 
-Open `TodoList.svelte`. First, import the `send` and `receive` transitions from transition.js:
+Ouvrez `TodoList.svelte`. D'abord, importez les transitions `send` et `receive` depuis
+`transition.js` :
 
 ```svelte
 /// file: TodoList.svelte
@@ -19,7 +30,8 @@ Open `TodoList.svelte`. First, import the `send` and `receive` transitions from 
 </script>
 ```
 
-Then, add them to the `<li>` element, using the `todo.id` property as a key to match the elements:
+Puis, ajoutez-les à l'élément `<li>`, en utilisant la propriété `todo.id` comme clé de
+correspondance des éléments :
 
 ```svelte
 /// file: TodoList.svelte
@@ -30,4 +42,6 @@ Then, add them to the `<li>` element, using the `todo.id` property as a key to m
 >
 ```
 
-Now, when you toggle items, they move smoothly to their new location. The non-transitioning items still jump around awkwardly — we can fix that in the next exercise.
+Désormais, lorsque vous interagissez avec les éléments, ils se déplacent de manière fluide vers leur
+nouvelle position. Les éléments qui ne se déplacent pas subissent toujours un "saut" bizarre — nous
+règlerons ce problème dans le prochain exercice.

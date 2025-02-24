@@ -16,7 +16,7 @@
 			<label>
 				<input type="checkbox" bind:checked={todo.done}/>
 				<span>{todo.description}</span>
-				<button onclick={() => remove(todo)} aria-label="Remove"></button>
+				<button onclick={() => remove(todo)} aria-label="Supprimer"></button>
 			</label>
 		</li>
 	{/each}

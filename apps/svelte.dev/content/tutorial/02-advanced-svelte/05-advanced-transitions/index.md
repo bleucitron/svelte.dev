@@ -1,5 +1,5 @@
 ---
-title: Advanced transitions
+title: Transitions avancées
 scope: { 'prefix': '/src/lib/', 'name': 'src' }
 focus: /src/lib/App.svelte
 ---
