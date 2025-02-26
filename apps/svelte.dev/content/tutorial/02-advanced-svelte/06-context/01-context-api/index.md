@@ -1,10 +1,15 @@
 ---
-title: setContext and getContext
+title: setContext et getContext
 ---
 
-The context API provides a mechanism for components to 'talk' to each other without passing around data and functions as props, or dispatching lots of events. It's an advanced feature, but a useful one. In this exercise, we're going to recreate [Schotter](https://collections.vam.ac.uk/item/O221321/schotter-print-nees-georg/) by George Nees — one of the pioneers of generative art — using the context API.
+L'API de contexte fournit un mécanisme permettant aux composants de "parler" entre eux sans avoir
+besoin de faire circuler des données en tant que props, ou de déclencher des évènements à tout va.
+C'est une fonctionnalité avancée, mais pratique. Dans cet exercice, nous allons recréer
+[Schotter](https://collections.vam.ac.uk/item/O221321/schotter-print-nees-georg/) de George Nees —
+un des pionniers de l'art génératif — en utilisant l'API de contexte.
 
-Inside `Canvas.svelte`, there's an `addItem` function that adds an item to the canvas. We can make it available to components inside `<Canvas>`, like `<Square>`, with `setContext`:
+Dans `Canvas.svelte`, il y a une fonction `addItem` qui ajoute un élément au canvas. Nous pouvons la
+rendre disponible dans les composants au sein de `<Canvas>`, comme `<Square>` avec `setContext` :
 
 ```js
 /// file: Canvas.svelte
@@ -26,7 +31,8 @@ function addItem(fn) {
 }
 ```
 
-Inside child components, we can now get the context with, well, `getContext`:
+Dans les composants enfants, nous pouvons maintenant récupérer le contexte avec, eh bien,
+`getContext` :
 
 ```js
 /// file: Square.svelte
@@ -37,7 +43,7 @@ let { x, y, size, rotate } = $props();
 +++getContext('canvas').addItem(draw);+++
 ```
 
-So far, so... boring. Let's add some randomness to the grid:
+Jusque là... on s'ennuie un peu. Ajoutons un peu d'aléatoire à la grille :
 
 ```svelte
 /// file: App.svelte
@@ -57,12 +63,16 @@ So far, so... boring. Let's add some randomness to the grid:
 </div>
 ```
 
-`setContext` and `getContext` must be called during component initialisation, so that the context can be correctly bound. The key — `'canvas'` in this case — can be anything you like, including non-strings, which is useful for controlling who can access the context.
+`setContext` et `getContext` doivent être appelées pendant l'initialisation du composant, de sorte
+que le contexte soit correctement lié. La clé — `'canvas'` dans notre cas — peut être n'importe
+quelle valeur, même autre chose que des chaînes de caractères, ce qui peut être utile pour contrôler
+qui peut accéder au contexte.
 
-> [!NOTE] Your context object can include anything, including reactive state. This allows you to pass values that change over time to child components:
+> [!NOTE] Votre objet de contexte peut contenir n'importe quoi, même des états réactifs. Ceci vous
+> permet de passer aux composants enfants des valeurs qui changent au cours du temps :
 >
 > ```js
-> // in a parent component
+> // dans un composant parent
 > import { setContext } from 'svelte';
 >
 > let context = $state({...});
@@ -70,7 +80,7 @@ So far, so... boring. Let's add some randomness to the grid:
 > ```
 >
 > ```js
-> // in a child component
+> // dans un composant enfant
 > import { getContext } from 'svelte';
 >
 > const context = getContext('my-context');

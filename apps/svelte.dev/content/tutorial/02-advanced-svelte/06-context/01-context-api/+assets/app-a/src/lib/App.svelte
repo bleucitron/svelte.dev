@@ -2,7 +2,8 @@
 	import Canvas from './Canvas.svelte';
 	import Square from './Square.svelte';
 
-	// we use a seeded random number generator to get consistent jitter
+	// nous utilisons un générateur de nombre aléatoire avec graine pour obtenir une variabilité
+	// consistente
 	let seed = 1;
 
 	function random() {
