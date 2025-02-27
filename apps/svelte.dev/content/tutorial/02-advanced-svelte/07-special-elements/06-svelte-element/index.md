@@ -2,24 +2,26 @@
 title: <svelte:element>
 ---
 
-Sometimes you don't know in advance which element needs to be rendered. Rather than having a long list of `{#if ...}` blocks...
+Parfois vous ne savez pas à l'avance quel élément doit être affiché. Plutôt que d'écrire une
+interminable liste de blocs `{#if ...}`...
 
 ```svelte
 /// file: App.svelte
 {#if selected === 'h1'}
-	<h1>I'm a <code>&lt;h1&gt;</code> element</h1>
+	<h1>Je suis un élément <code>&lt;h1&gt;</code></h1>
 {:else}
-	<p>TODO others</p>
+	<p>TODO autres</p>
 {/if}
 ```
 
-...we can use `<svelte:element>`:
+...nous pouvons utiliser `<svelte:element>` :
 
 ```svelte
 /// file: App.svelte
 +++<svelte:element this={selected}>
-	I'm a <code>&lt;{selected}&gt;</code> element
+	Je suis un élément <code>&lt;{selected}&gt;</code>
 </svelte:element>+++
 ```
 
-The `this` value can be any string, or a falsy value — if it's falsy, no element is rendered.
+La valeur `this` peut être n'importe quelle chaîne de caractères — si cette valeur est falsy, aucun
+élément n'est rendu.

@@ -7,7 +7,7 @@
 	<FlakyComponent />
 
 	{#snippet failed(error, reset)}
-		<p>Oops! {error.message}</p>
-		<button onclick={reset}>Reset</button>
+		<p>Oups ! {error.message}</p>
+		<button onclick={reset}>Réinitialiser</button>
 	{/snippet}
 </svelte:boundary>

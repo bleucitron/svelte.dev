@@ -12,5 +12,5 @@
 <p>{mouse.x}x{mouse.y}</p>
 
 <button onclick={() => mouse = null}>
-	whatever you do, don't click this button
+	quoi que vous fassiez, ne cliquez pas sur ce bouton
 </button>

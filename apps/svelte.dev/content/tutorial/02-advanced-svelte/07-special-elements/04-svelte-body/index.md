@@ -2,9 +2,11 @@
 title: <svelte:body>
 ---
 
-Similar to `<svelte:window>` and `<svelte:document>`, the `<svelte:body>` element allows you to listen for events that fire on `document.body`. This is useful with the `mouseenter` and `mouseleave` events, which don't fire on `window`.
+Comme pour `<svelte:window>` et `<svelte:document>`, l'élément `<svelte:body>` vous permet d'écouter
+des évènements qui se déclenchent sur `document.body`. Cela sert notamment pour les évènements
+`mouseenter` et `mouseleave`, qui ne se déclenchent pas sur `window`.
 
-Add `onmouseenter` and `onmouseleave` handlers to the `<svelte:body>` tag...
+Ajoutez les gestionnaires `onmouseenter` et `onmouseleave` à la balise `<svelte:body>`...
 
 ```svelte
 /// file: App.svelte
@@ -14,4 +16,4 @@ Add `onmouseenter` and `onmouseleave` handlers to the `<svelte:body>` tag...
 />
 ```
 
-...and hover over the `<body>`.
+... et survolez le `<body>`.

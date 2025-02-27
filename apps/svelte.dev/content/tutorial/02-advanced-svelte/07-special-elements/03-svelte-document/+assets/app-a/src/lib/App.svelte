@@ -8,5 +8,5 @@
 
 <svelte:document />
 
-<h1>Select this text to fire events</h1>
-<p>Selection: {selection}</p>
+<h1>Sélectionner ce texte pour déclencher des évènements</h1>
+<p>Sélection : {selection}</p>

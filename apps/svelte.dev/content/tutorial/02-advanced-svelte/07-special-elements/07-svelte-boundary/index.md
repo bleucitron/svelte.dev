@@ -2,11 +2,16 @@
 title: <svelte:boundary>
 ---
 
-To prevent errors from leaving your app in a broken state, you can contain them inside an _error boundary_ using the `<svelte:boundary>` element.
+Pour éviter que des erreurs laissent votre application cassée, vous pouvez contenir ces erreurs au
+sein d'une _frontière d'erreur_ en utilisant l'élément `<svelte:boundary>`.
 
-In this example, `<FlakyComponent>` contains a bug — clicking the button will set `mouse` to `null`, meaning that the `{mouse.x}` and `{mouse.y}` expressions in the template will fail to render.
+Dans cet exemple, `<FlakyComponent>` contient un bug — cliquer sur le bouton va définir `mouse` à
+`null`, ce qui implique que les expressions `{mouse.x}` et `{mouse.y}` du template ne pourront pas
+être calculées, et vont provoquer une erreur.
 
-In an ideal world we'd simply fix the bug. But that's not always an option — sometimes the component belongs to someone else, and sometimes you just need to guard against the unexpected. Begin by wrapping `<FlakyComponent />` with `<svelte:boundary>`:
+Dans un monde idéal nous nous contenterions de corriger le bug. Mais ce n'est pas toujours possible
+— parfois nous n'avons pas accès au code du composant, et parfois il suffit de se protéger contre
+l'inattendu. Commencez par entourer `<FlakyComponent />` par `<svelte:boundary>` :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -15,7 +20,9 @@ In an ideal world we'd simply fix the bug. But that's not always an option — s
 +++</svelte:boundary>+++
 ```
 
-So far, nothing has changed, because the boundary doesn't specify a handler. Add a `failed` [snippet](snippets-and-render-tags) to provide some UI to show when an error occurs:
+Jusque là, rien n'a changé, car la frontière ne précise pas de gestionnaire. Ajoutez un
+[snippet](snippets-and-render-tags) `failed` pour fournir quelque chose à afficher lorsqu'une erreur
+se produit :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -23,12 +30,14 @@ So far, nothing has changed, because the boundary doesn't specify a handler. Add
 	<FlakyComponent />
 
 +++	{#snippet failed(error)}
-		<p>Oops! {error.message}</p>
+		<p>Oups ! {error.message}</p>
 	{/snippet}+++
 </svelte:boundary>
 ```
 
-Now, when we click the button, the contents of the boundary are replaced with the snippet. We can attempt to reset things by making use of the second argument passed to `failed`:
+Désormais, lorsque nous cliquons sur le bouton, le contenu de la frontière est remplacé par le
+snippet. Nous pouvons essayer de réinitialiser les choses en utilisant le deuxième argument que l'on
+peut fournir à `failed` :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -36,13 +45,14 @@ Now, when we click the button, the contents of the boundary are replaced with th
 	<FlakyComponent />
 
 	{#snippet failed(error+++, reset+++)}
-		<p>Oops! {error.message}</p>
-		+++<button onclick={reset}>Reset</button>+++
+		<p>Oups ! {error.message}</p>
+		+++<button onclick={reset}>Réinitialiser</button>+++
 	{/snippet}
 </svelte:boundary>
 ```
 
-We can also specify an `onerror` handler, which is called with the same arguments passed to the `failed` snippet:
+Nous pouvons aussi préciser un gestionnaire `onerror`, qui sera appelé avec les mêmes arguments que
+ceux fournis au snippet `failed` :
 
 ```svelte
 <!--- file: App.svelte --->
@@ -50,10 +60,11 @@ We can also specify an `onerror` handler, which is called with the same argument
 	<FlakyComponent />
 
 	{#snippet failed(error, reset)}
-		<p>Oops! {error.message}</p>
-		<button onclick={reset}>Reset</button>
+		<p>Oups ! {error.message}</p>
+		<button onclick={reset}>Réinitialiser</button>
 	{/snippet}
 </svelte:boundary>
 ```
 
-This is useful for sending information about the error to a reporting service, or adding UI outside the error boundary itself.
+Ceci est utile pour envoyer des informations à propos de l'erreur à un service de suivi, ou pour
+ajouter une interface visuelle en dehors de la frontière.

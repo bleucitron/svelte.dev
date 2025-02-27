@@ -2,9 +2,12 @@
 title: <svelte:head>
 ---
 
-The `<svelte:head>` element allows you to insert elements inside the `<head>` of your document. This is useful for things like `<title>` and `<meta>` tags, which are critical for good SEO.
+L'élément `<svelte:head>` vous permet d'insérer des éléments dans le `<head>` de votre document.
+C'est pratique pour manipuler les balises `<title>` et `<meta>`, qui sont importantes pour un bon
+référencement.
 
-Since those are quite hard to show in the context of this tutorial, we'll use it for a different purpose — loading stylesheets.
+Puisque ces éléments sont difficiles à démontrer dans le cadre de ce tutoriel, nous allons plutôt
+nous en servir pour faire autre chose — charger des feuilles de style.
 
 ```svelte
 /// file: App.svelte
@@ -17,7 +20,8 @@ Since those are quite hard to show in the context of this tutorial, we'll use it
 	<link rel="stylesheet" href="/tutorial/stylesheets/{selected}.css" />
 </svelte:head>+++
 
-<h1>Welcome to my site!</h1>
+<h1>Bienvenue sur mon site !</h1>
 ```
 
-> [!NOTE] In server-side rendering (SSR) mode, contents of `<svelte:head>` are returned separately from the rest of your HTML.
+> [!NOTE] En mode rendu côté serveur (SSR), le contenu de `<svelte:head>` est renvoyé séparément du
+> reste de votre HTML.

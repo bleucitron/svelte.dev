@@ -7,10 +7,10 @@
 	<link rel="stylesheet" href="/tutorial/stylesheets/{selected}.css" />
 </svelte:head>
 
-<h1>Welcome to my site!</h1>
+<h1>Bienvenue sur mon site !</h1>
 
 <select bind:value={selected}>
-	<option disabled>choose a theme</option>
+	<option disabled>choisissez un thème</option>
 
 	{#each themes as theme}
 		<option>{theme}</option>
