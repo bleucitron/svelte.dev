@@ -1,15 +1,21 @@
 ---
-title: Congratulations!
+title: Félicitations !
 ---
 
-You've now finished the Svelte tutorial and are ready to start building.
+Vous êtes arrivé•e à la fin du tutoriel de Svelte, et êtes paré•e pour commencer à construire votre
+application.
 
-The next two parts of the tutorial will focus on SvelteKit, a full-fledged framework for creating apps of all shapes and sizes.
+Les deux prochaines parties de ce tutoriel se concentrent sur SvelteKit, un framework permettant de
+créer des applications de toutes sortes et de toutes tailles.
 
-If you're suffering from information overload and aren't ready to go through the SvelteKit tutorial yet, don't worry! You can use your existing Svelte knowledge without learning all of SvelteKit. Just run this in your terminal and follow the prompts...
+Si vous vous sentez submergé•e par trop d'informations et ne vous sentez pas d'attaque pour vous
+lancer dans le tutoriel de SvelteKit, ne vous en faites pas ! Vous pouvez utiliser vos connaissances
+actuelles sur Svelte sans apprendre tout le fonctionnement de SvelteKit. Contentez-vous de lancer
+cette commande dans votre terminal, suivez le guide...
 
 ```bash
 npx sv create
 ```
 
-...and start editing `src/routes/+page.svelte`. When you're ready, click the link below to continue your journey.
+... et commencez par modifier le fichier `src/routes/+page.svelte`. Lorsque vous vous sentirez
+prêt•e, cliquez sur le lien ci-dessous pour continuer votre voyage.

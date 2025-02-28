@@ -1,12 +1,20 @@
 ---
-title: Sharing code
+title: Partager du code
 ---
 
-In all the examples we've seen so far, the `<script>` block contains code that runs when each component instance is initialised. For the vast majority of components, that's all you'll ever need.
+Dans tous les exemples que nous avons vu jusqu'ici, le bloc `<script>` contenait du code qui était
+exécuté lorsque chaque instance de composant est initialisée. Pour la grande majorité des
+composants, vous n'avez pas besoin de plus.
 
-Very occasionally, you'll need to run some code outside of an individual component instance. For example: returning to our custom audio player from a [previous exercise](media-elements), you can play all four tracks simultaneously. It would be better if playing one stopped all the others.
+Très occasionnellement, vous aurez besoin d'exécuter du code en dehors d'une instance individuelle
+d'un composant. Par exemple, si on revient sur notre player audio personnalisé qu'on a vu dans un
+[exercice précédent](media-elements), il est possible de jouer les quatres pistes en même temps. Il
+serait plus pratique que la lecture d'une piste arrête toutes les autres.
 
-We can do that by declaring a `<script module>` block. Code contained inside it will run once, when the module first evaluates, rather than when a component is instantiated. Place this at the top of `AudioPlayer.svelte` (note that this is a _separate_ script tag):
+Nous pouvons faire ça en déclarant un bloc `<script module>`. Le code contenu à l'intérieur ne sera
+joué qu'une seule fois, la première fois que le module est évalué, plutôt que lorsqu'un composant
+est instantié. Mettez le code suivant tout en haut de `AudioPlayer.svelte` (notez qu'il s'agit d'une
+balise script _distincte_) :
 
 ```svelte
 /// file: AudioPlayer.svelte
@@ -15,7 +23,8 @@ We can do that by declaring a `<script module>` block. Code contained inside it 
 </script>+++
 ```
 
-It's now possible for the components to 'talk' to each other without any state management:
+Il est maintenant possible pour les instances de composant de "discuter" entre elles sans aucune
+gestion d'état particulière :
 
 ```svelte
 /// file: AudioPlayer.svelte

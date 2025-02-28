@@ -2,7 +2,8 @@
 title: Exports
 ---
 
-Anything exported from a `module` script block becomes an export from the module itself. Let's export a `stopAll` function:
+Tout ce qui exporté depuis un bloc de script `module` devient un export du module lui-même.
+Exportons une fonction `stopAll` :
 
 ```svelte
 /// file: AudioPlayer.svelte
@@ -15,7 +16,7 @@ Anything exported from a `module` script block becomes an export from the module
 </script>
 ```
 
-We can now import `stopAll` in `App.svelte`...
+Nous pouvons maintenant importer `stopAll` dans `App.svelte`...
 
 ```svelte
 /// file: App.svelte
@@ -25,7 +26,7 @@ We can now import `stopAll` in `App.svelte`...
 </script>
 ```
 
-...and use it in an event handler:
+... et l'utiliser dans un gestionnaire d'évènement :
 
 ```svelte
 /// file: App.svelte
@@ -35,9 +36,10 @@ We can now import `stopAll` in `App.svelte`...
 	{/each}
 
 +++	<button onclick={stopAll}>
-		stop all
+		arrêter tout
 	</button>+++
 </div>
 ```
 
-> [!NOTE] You can't have a default export, because the component _is_ the default export.
+> [!NOTE] Vous ne pouvez pas avoir d'export par défaut, car le composant lui-même _est_ l'export par
+> défaut
