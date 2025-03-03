@@ -1,37 +1,62 @@
 ---
-title: What is SvelteKit?
+title: C'est quoi SvelteKit?
 ---
 
-Whereas Svelte is a _component framework_, SvelteKit is an _app framework_ (or 'metaframework', depending on who you ask) that solves the tricky problems of building something production-ready:
+Alors que Svelte est un _framework de composants_, SvelteKit est un _framework d'application_ (ou
+"metaframework", selon à qui vous demandez), dont l'objectif est de résoudre les problématiques
+complexes liées à la construction d'une application taillée pour la production :
 
 - Routing
-- Server-side rendering
-- Data fetching
+- Rendu côté serveur
+- Chargement des données
 - Service workers
-- TypeScript integration
-- Prerendering
+- Intégration de TypeScript
+- Pré-rendu
 - Single-page apps
-- Library packaging
-- Optimised production builds
-- Deploying to different hosting providers
-- ...and so on
+- Empaquetage de librairie
+- Optimisation des builds de production
+- Déploiements sur différentes solutions d'hébergements
+- ... et bien d'autres
 
-SvelteKit apps are server-rendered by default (like traditional 'multi-page apps' or MPAs) for excellent first load performance and SEO characteristics, but can then transition to client-side navigation (like modern 'single-page apps' or SPAs) to avoid jankily reloading everything (including things like third-party analytics code) when the user navigates. They can run anywhere JavaScript runs, though — as we'll see — your users may not need to run any JavaScript at all.
+Les applications SvelteKit sont par défaut rendues sur le serveur (comme les applications
+"multi-pages" traditionnelles, ou MPAs) afin de bénéficier d'excellentes performances au premier
+chargement ainsi que de bonnes caractéristiques de référencement, mais transitionnent ensuite sur de
+la navigation côté client (comme le font les SPAs modernes) pour éviter de recharger brutalement
+tous les morceaux de l'application (comme par exemple d'éventuels script tiers activant des
+analytics) lors que l'on navigue. Les applications SvelteKit peuvent être exécutées partout où
+JavaScript existe, même si — comme nous le verrons — vos utilisateurs et utilisatrices n'ont pas
+forcément de JavaScript pour en profiter.
 
-If that sounds complicated, worry not: SvelteKit is the framework that grows with you! Start simple and add new features as you need them.
+Si tout cela semble compliqué, ne vous en faites pas : SvelteKit est un framework qui vous aide à
+progresser ! Commencez par des choses simples, et ajoutez de nouvelles fonctionnalités au fur et à
+mesure de vos besoins.
 
-## Project structure
+## Structure d'un projet
 
-On the right, in the file tree viewer, you'll see a handful of files that SvelteKit expects to find in a project.
+Sur la droite, dans le visualisateur de fichiers, vous verrez un certain nombre de fichiers que
+SvelteKit s'attend à trouver dans un projet.
 
-`package.json` will be familiar if you've worked with Node.js before. It lists the project's dependencies — including `svelte` and `@sveltejs/kit` — and a variety of `scripts` for interacting with the SvelteKit CLI. (We're currently running `npm run dev` in the bottom window.)
+`package.json` doit vous être familier si vous êtes habitué•e à travailler avec Node.js. Ce fichier
+liste les dépendances du projet — incluant `svelte` et `@sveltejs/kit` — ainsi que des `scripts`
+permettant d'interagir avec certaines commandes du CLI de SvelteKit. (Il y a actuellement la
+commande `npm run dev` qui tourne dans la fenêtre du bas.)
 
-> [!NOTE] Note that it also specifies `"type": "module"`, which means that `.js` files are treated as native JavaScript modules by default, rather than the legacy CommonJS format.
+> [!NOTE] Notez que ce fichier précise aussi `"type": "module"`, ce qui signifie que les fichiers
+> `.js` sont traités comme des modules JavaScript par défaut, plutôt que comme des fichiers
+> CommonJS, format aujourd'hui déprécié.
 
-`svelte.config.js` contains your project configuration. We don't need to worry about this file for now, but if you're curious, [visit the documentation](/docs/kit/configuration).
+`svelte.config.js` contient votre configuration de projet. Nous n'avons pas besoin de nous soucier
+de ce fichier pour le moment, mais si vous êtez curieux ou curieuse, [jetez un oeil à la
+documentation](/docs/kit/configuration).
 
-`vite.config.js` contains the [Vite](https://vitejs.dev/) configuration. Because SvelteKit uses Vite, you can use [Vite features](https://vitejs.dev/guide/features.html) like hot module replacement, TypeScript support, static asset handling and so on.
+`vite.config.js` contient la configuration de [Vite](https://vitejs.dev/). Puisque SvelteKit utilise
+Vite, vous pouvez utiliser les [fonctionnalités de Vite](https://vitejs.dev/guide/features.html)
+comme le remplacement de modules à la volée (HMR), l'intégration de TypeScript, la gestion des
+fichiers statiques, et d'autres.
 
-`src` is where your app's source code goes. `src/app.html` is your page template (SvelteKit replaces the `%sveltekit.head%` and `%sveltekit.body%` as appropriate), and `src/routes` defines the [routes](/tutorial/kit/pages) of your app.
+`src` est l'endroit où se trouve le code de votre application. `src/app.html` est votre gabarit de
+page (SvelteKit remplace les `%sveltekit.head%` et `%sveltekit.body%` par ce qui est approprié), et
+le dossier `src/routes` définit les [routes](/tutorial/kit/pages) de votre application.
 
-Finally, `static` contains any assets (like a `favicon.png` or a `robots.txt`) that should be included when your app is deployed.
+Enfin, le dossier `static` contient tout asset (comme les fichiers `favicon.png` ou `robots.txt`)
+qui devraient être inclus lors du déploiement de votre application.
