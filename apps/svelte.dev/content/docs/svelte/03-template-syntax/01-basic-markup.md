@@ -229,7 +229,7 @@ suivant. Ces sont généralement des warnings d'accessibilité ; ne les désacti
 raison.
 
 ```svelte
-<!-- svelte-ignore a11y-autofocus -->
+<!-- svelte-ignore a11y_autofocus -->
 <input bind:value={name} autofocus />
 ```
 

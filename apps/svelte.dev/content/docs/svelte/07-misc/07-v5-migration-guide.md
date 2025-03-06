@@ -76,6 +76,9 @@ nous pouvons le faire en utilisant la rune `$effect` :
 </script>
 ```
 
+Notez que [les timings d'exécution d'`$effect` ne sont pas les
+mêmes]($effect#Understanding-dependencies) que ceux que de `$:`.
+
 > [!DETAILS] Pourquoi ce changement
 > `$:` était un raccourci simple et efficace pour débuter : vous pouviez placer un `$:` devant la
 > plupart de votre code, et cela fonctionnait. L'intuitivité était également un inconvénient lorsque

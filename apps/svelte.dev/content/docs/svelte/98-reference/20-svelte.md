@@ -287,13 +287,13 @@ function createRawSnippet<Params extends unknown[]>(
 
 ## flushSync
 
-Force le traitement de manière synchrone de tout changement d'état en attente (et de tous ceux qui
-en résultent).
+Force le traitement de manière synchrone de tout changement d'état en attente.
+Ne renvoie rien si aucun callback n'est fourni, renvoie le résultat de l'appel du callback sinon.
 
 <div class="ts-block">
 
 ```dts
-function flushSync(fn?: (() => void) | undefined): void;
+function flushSync<T = void>(fn?: (() => T) | undefined): T;
 ```
 
 </div>
@@ -430,15 +430,16 @@ function onDestroy(fn: () => any): void;
 
 ## onMount
 
-La fonction `onMount` programme l'exécution d'un callback immédiatement avant le montage du
-composant dans le DOM. Cette fonction doit être exécutée pendant l'initialisation du composant (mais
-n'a pas besoin de vivre *dans* le composant ; elle peut être exécutée depuis un module extérieur).
+`onMount`, comme [`$effect`](/docs/svelte/$effect), prévoit d'exécuter une fonction dès que le
+composant a été monté dans le DOM. À la différence de `$effect`, la fonction fournie ne sera
+exécutée qu'une seule fois.
 
-Si une fonction est renvoyée de manière _synchrone_ depuis `onMount`, celle-ci sera appelée lorsque
-le composant sera démonté.
+`onMount` doit être exécutée pendant l'initialisation du composant (mais n'a pas besoin de vivre _au
+sein_ du composant ; elle peut être appelée depuis un module externe). Si une fonction est renvoyée
+de manière _synchrone_ depuis `onMount`, celle-ci sera exécutée lorsque le composant sera démonté.
 
-`onMount` n'est pas exécutée lors du [rendu côté serveur des
-composants](/docs/svelte/svelte-server#render).
+Les callbacks fournis à `onMount` ne sont pas exécutés pendant le [rendu côté
+serveur](/docs/svelte/svelte-server#render).
 
 <div class="ts-block">
 
@@ -723,6 +724,15 @@ recover?: boolean;
 
 ```dts
 sync?: boolean;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+idPrefix?: string;
 ```
 
 <div class="ts-block-property-details"></div>
