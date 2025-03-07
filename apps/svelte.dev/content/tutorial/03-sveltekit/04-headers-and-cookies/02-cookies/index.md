@@ -1,10 +1,11 @@
 ---
-title: Reading and writing cookies
+title: Lire et écrire des cookies
 ---
 
-The [`setHeaders`](headers) function can't be used with the `Set-Cookie` header. Instead, you should use the `cookies` API.
+La fonction [`setHeaders`](headers) ne peut pas être utilisée pour définir l'en-tête `Set-Cookie`. À
+la place, vous devez utiliser l'API `cookies`.
 
-In your `load` functions, you can read a cookie with `cookies.get(name, options)`:
+Dans vos fonctions `load`, vous pouvez lire un cookie avec `cookies.get(name, options)` :
 
 ```js
 /// file: src/routes/+page.server.js
@@ -17,7 +18,10 @@ export function load(+++{ cookies }+++) {
 }
 ```
 
-To set a cookie, use `cookies.set(name, value, options)`. It's strongly recommended that you explicitly configure the `path` when setting a cookie, since browsers' default behaviour — somewhat uselessly — is to set the cookie on the parent of the current path.
+Pour définir un cookie, utilisez `cookies.set(name, value, options)`. Il est fortement recommandé de
+définir explicitement le `path` lorsque vous définissez un cookie, puisque le comportement par
+défaut des navigateurs est de définir le cookie sur le chemin parent du chemin courant — ce qui est
+plutôt inutile.
 
 ```js
 /// file: src/routes/+page.server.js
@@ -32,9 +36,15 @@ export function load({ cookies }) {
 }
 ```
 
-Now, if you reload the iframe, `Hello stranger!` becomes `Hello friend!`.
+Désormais, si vous rechargez l'iframe, `Bonjour étranger !` devient `Bonjour cher ami !`.
 
-Calling `cookies.set(name, ...)` causes a `Set-Cookie` header to be written, but it _also_ updates the internal map of cookies, meaning any subsequent calls to `cookies.get(name)` during the same request will return the updated value. Under the hood, the `cookies` API uses the popular `cookie` package — the options passed to `cookies.get` and `cookies.set` correspond to the `parse` and `serialize` options from the `cookie` [documentation](https://github.com/jshttp/cookie#api). SvelteKit sets the following defaults to make your cookies more secure:
+Appeler `cookies.set(name, ...)` déclenche l'écriture de l'en-tête `Set-Cookie`, mais va _aussi_
+mettre à jour la map de cookies interne, impliquant que les appels suivants à `cookies.get(name)`
+pendant la même requête renverrons la valeur à jour. Sous le capot, l'API `cookies` utilise le
+paquet populaire `cookie` — les options passées à `cookies.get` et `cookies.set` correspondent aux
+options de `parse` et `serialize` dans la [documentation](https://github.com/jshttp/cookie#api) de
+`cookie`. SvelteKit définit les options suivantes par défaut pour sécuriser un peu plus vos cookies
+:
 
 ```js
 {

@@ -1,3 +1,3 @@
 ---
-title: Headers and cookies
+title: En-têtes et cookies
 ---

@@ -1,10 +1,16 @@
 ---
-title: Setting headers
+title: Définir les en-têtes
 ---
 
-Inside a `load` function (as well as in [form actions](the-form-element), [hooks](handle) and [API routes](get-handlers), which we'll learn about later) you have access to a `setHeaders` function, which — unsurprisingly — can be used to set headers on the response.
+Dans une fonction `load` (ainsi que dans les [actions de formulaire](the-form-element), les
+[hooks](handle) et les [routes d'API](get-handlers), que nous verrons plus tard), vous avez accès à
+une fonction `setHeaders`, qui — sans suprise — peut être utilisée pour définir les en-têtes
+(_headers_) sur la réponse.
 
-Most commonly, you'd use it to customise caching behaviour with the [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) response header, but for the sake of this tutorial we'll do something less advisable and more dramatic:
+Le plus souvent, cela sert à personnaliser le comportement de cache grâce à l'en-tête de réponse
+[`Cache-Control`](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Cache-Control), mais dans
+le contexte de ce tutoriel nous allons plutôt faire quelque chose de moins recommandé et de plus
+dramatique :
 
 ```js
 /// file: src/routes/+page.server.js
@@ -15,4 +21,4 @@ export function load(+++{ setHeaders }+++) {
 }
 ```
 
-(You may need to reload the iframe to see the effect.)
+(Il est possible que vous deviez recharger l'iframe pour en voir les effets.)

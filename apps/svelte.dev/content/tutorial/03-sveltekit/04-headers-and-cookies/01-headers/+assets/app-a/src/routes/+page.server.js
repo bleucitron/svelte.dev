@@ -1,3 +1,3 @@
 export function load() {
-	// set headers
+	// définir les en-têtes
 }
