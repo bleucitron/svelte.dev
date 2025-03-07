@@ -1,15 +1,21 @@
 ---
-title: Layout data
+title: Données de layout
 path: /blog
 ---
 
-Just as `+layout.svelte` files create UI for every child route, `+layout.server.js` files load data for every child route.
+Tout comme les fichiers `+layout.svelte` créent de l'interface pour chaque route enfant, les
+fichiers `+layout.server.js` chargent des données pour chaque route enfant.
 
-Suppose we'd like to add a 'more posts' sidebar to our blog post page. We _could_ return `summaries` from the `load` function in `src/routes/blog/[slug]/+page.server.js`, like we do in `src/routes/blog/+page.server.js`, but that would be repetitive.
+Supposons que nous aimerions ajouter une barre "plus d'articles" à notre page d'article. Nous
+_pourrions_ renvoyer `summaries` depuis notre fonction `load` du fichier
+`src/routes/blog/[slug]/+page.server.js`, comme nous le faisons dans
+`src/routes/blog/+page.server.js`, mais cela serait répétitif.
 
-Instead, let's rename `src/routes/blog/+page.server.js` to `src/routes/blog/+layout.server.js`. Notice that the `/blog` route continues to work — `data.summaries` is still available to the page.
+Nous allons plutôt renommer `src/routes/blog/+page.server.js` en
+`src/routes/blog/+layout.server.js`. Notez que la route `/blog` continue de fonctionner —
+`data.summaries` est toujours disponible dans la page.
 
-Now, add a sidebar in the layout for the post page:
+Maintenant, ajoutons une barre latérale dans le layout de notre page d'articles :
 
 ```svelte
 /// file: src/routes/blog/[slug]/+layout.svelte
@@ -23,7 +29,7 @@ Now, add a sidebar in the layout for the post page:
 	</main>
 
 +++	<aside>
-		<h2>More posts</h2>
+		<h2>Plus d'articles</h2>
 		<ul>
 			{#each data.summaries as { slug, title }}
 				<li>
@@ -45,6 +51,9 @@ Now, add a sidebar in the layout for the post page:
 </style>
 ```
 
-The layout (and any page below it) inherits `data.summaries` from the parent `+layout.server.js`.
+Le layout (et toute page sous ce layout) hérite de `data.summaries` venant du `+layout.server.js`
+parent.
 
-When we navigate from one post to another, we only need to load the data for the post itself — the layout data is still valid. See the documentation on [invalidation](/docs/kit/load#Rerunning-load-functions) to learn more.
+Lorsque nous naviguons d'un article à l'autre, nous avons uniquement besoin de charger les données
+de l'article lui-même — les données de layout sont toujours valides. Voir la documentation sur
+l'[invalidation](/docs/kit/load#Rerunning-load-functions) pour en apprendre plus.
