@@ -2,9 +2,13 @@
 title: Layouts
 ---
 
-Different routes of your app will often share common UI. Instead of repeating it in each `+page.svelte` component, we can use a `+layout.svelte` component that applies to all routes in the same directory.
+Différentes routes de votre application partagent en général des bouts d'interface. Plutôt que de
+répéter le code de ces interfaces dans chaque composant `+page.svelte`, nous pouvons utiliser un
+composant `+layout.svelte` qui s'applique à toutes les routes du même dossier.
 
-In this app we have two routes, `src/routes/+page.svelte` and `src/routes/about/+page.svelte`, that contain the same navigation UI. Let's create a new file, `src/routes/+layout.svelte`...
+Dans cet exemple, nous avons deux routes, `src/routes/+page.svelte` et
+`src/routes/about/+page.svelte`, qui contiennent la même interface de navigation. Créeons un nouveau
+fichier, `src/routes/+layout.svelte`...
 
 ```
 src/routes/
@@ -14,7 +18,9 @@ src/routes/
 └ +page.svelte
 ```
 
-...and move the duplicated content from the `+page.svelte` files into the new `+layout.svelte` file. The `{@render children()}` tag is where the page content will be rendered:
+... et déplaçons le contenu dupliqué des fichiers `+page.svelte` dans le nouveau fichier
+`+layout.svelte`. La balise `{@render children()}` est l'endroit où le contenu de la page sera
+affiché :
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -23,11 +29,13 @@ src/routes/
 </script>
 
 <nav>
-	<a href="/">home</a>
-	<a href="/about">about</a>
+	<a href="/">accueil</a>
+	<a href="/about">à propos</a>
 </nav>
 
 {@render children()}
 ```
 
-A `+layout.svelte` file applies to every child route, including the sibling `+page.svelte` (if it exists). You can nest layouts to arbitrary depth.
+Un fichier `+layout.svelte` s'applique à toutes les routes enfant, incluant la route `+page.svelte`
+se trouvant au même niveau (si elle existe). Vous pouvez imbriquer des layouts sur un nombre
+indéfini de niveaux.

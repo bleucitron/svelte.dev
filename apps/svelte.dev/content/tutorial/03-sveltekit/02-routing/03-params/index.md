@@ -1,17 +1,22 @@
 ---
-title: Route parameters
+title: Paramètre de route
 path: /blog
 ---
 
-To create routes with dynamic parameters, use square brackets around a valid variable name. For example, a file like `src/routes/blog/[slug]/+page.svelte` will create a route that matches `/blog/one`, `/blog/two`, `/blog/three` and so on.
+Pour créer des routes ayant des paramètres dynamiques, utilisez des crochets autour d'un nom valide
+de variable. Par exemple, un fichier comme `src/routes/blog/[slug]/+page.svelte` va créer une route
+qui va correspondre à `/blog/one`, `blog/deux`, `/blog/trois` et ainsi de suite.
 
-Let's create that file:
+Créons ce fichier :
 
 ```svelte
 /// file: src/routes/blog/[slug]/+page.svelte
-<h1>blog post</h1>
+<h1>article de blog</h1>
 ```
 
-We can now navigate from the `/blog` page to individual blog posts. In the next chapter, we'll see how to load their content.
+Nous pouvons maintenant naviguer depuis la page `/blog` vers des articles de blog individuels. Dans
+le prochain chapitre, nous verrons comment charger leur contenu.
 
-> [!NOTE] Multiple route parameters can appear _within_ one URL segment, as long as they are separated by at least one static character: `foo/[bar]x[baz]` is a valid route where `[bar]` and `[baz]` are dynamic parameters.
+> [!NOTE] Plusieurs paramètres de routes peuvent apparaître _au sein_ d'un segment d'URL, tant
+> qu'ils sont séparés par au moins un caractère statique : `foo/[bar]x[baz]` est une route valide où
+> `[bar]` et `[baz]` sont des paramètres dynamiques.

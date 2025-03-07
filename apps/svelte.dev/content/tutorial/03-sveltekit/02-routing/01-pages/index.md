@@ -2,23 +2,32 @@
 title: Pages
 ---
 
-SvelteKit uses filesystem-based routing, which means that the _routes_ of your app — in other words, what the app should do when a user navigates to a particular URL — are defined by the directories in your codebase.
+SvelteKit utilise un routeur basé sur votre système de fichiers, ce qui signifie que les _routes_ de
+votre application — en d'autres termes, ce que l'application doit afficher lorsque quelqu'un navigue
+vers une URL particulière — sont définies par les dossiers de votre projet.
 
-Every `+page.svelte` file inside `src/routes` creates a page in your app. In this app we currently have one page — `src/routes/+page.svelte`, which maps to `/`. If we navigate to `/about`, we'll see a 404 Not Found error.
+Chaque fichier `+page.svelte` dans le dossier `src/routes` crée une page dans votre application.
+Dans cet exemple, nous avons actuellement une seule page — `src/routes/+page.svelte`, qui est liée à
+`/`. Si on navigue vers `/about`, une page d'erreur 404 Not Found s'affiche.
 
-Let's fix that. Add a second page, `src/routes/about/+page.svelte`, copy the contents of `src/routes/+page.svelte`, and update it:
+Corrigeons cela. Ajoutons une deuxième page, `src/routes/about/+page.svelte`, copions-y le contenu
+de `src/routes/+page.svelte`, et modifions la :
 
 ```svelte
 /// file: src/routes/about/+page.svelte
 <nav>
-	<a href="/">home</a>
-	<a href="/about">about</a>
+	<a href="/">accueil</a>
+	<a href="/about">à propos</a>
 </nav>
 
-<h1>+++about+++</h1>
-<p>this is the +++about+++ page.</p>
+<h1>+++à propos+++</h1>
+<p>ceci est la page +++à propos+++.</p>
 ```
 
-We can now navigate between `/` and `/about`.
+Nous pouvons maintenant naviguer entre les pages `/` et `/about`.
 
-> [!NOTE] Unlike traditional multi-page apps, navigating to `/about` and back updates the contents of the current page, like a single-page app. This gives us the best of both worlds — fast server-rendered startup, then instant navigation. (This behaviour can be [configured](/docs/kit/page-options).)
+> [!NOTE] À la différence des applications multi-pages traditionnelles, faire des aller-retours
+> entre la page `/about` et la page d'accueil (par exemple) met à jour le contenu de la page
+> courante, comme pour une SPA. Ceci nous offre le meilleur des deux mondes — un premier rendu
+> rapide grâce au rendu côté serveur, puis une navigation instantanée. (Ce comportement peut être
+> [configuré](/docs/kit/page-options).)
