@@ -14,7 +14,7 @@
 
 	<form method="POST" action="?/create" use:enhance>
 		<label>
-			add a todo:
+			ajouter une tâche :
 			<input
 				name="description"
 				value={form?.description ?? ''}
@@ -30,7 +30,7 @@
 				<form method="POST" action="?/delete" use:enhance>
 					<input type="hidden" name="id" value={todo.id} />
 					<span>{todo.description}</span>
-					<button aria-label="Mark as complete"></button>
+					<button aria-label="Marquer comme fait"></button>
 				</form>
 			</li>
 		{/each}
