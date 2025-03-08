@@ -1,10 +1,13 @@
 ---
-title: GET handlers
+title: Gestionnaires GET
 ---
 
-SvelteKit allows you to create more than just pages. We can also create _API routes_ by adding a `+server.js` file that exports functions corresponding to HTTP methods: `GET`, `PUT`, `POST`, `PATCH` and `DELETE`.
+SvelteKit vous permet de créer plus que de simples pages. Nous pouvons aussi créer des _routes
+d'API_ en ajoutant un fichier `+server.js` qui exporte des fonctions correspondant aux méthodes HTTP
+: `GET`, `PUT`, `POST`, `PATCH` et `DELETE`.
 
-This app fetches data from a `/roll` API route when you click the button. Create that route by adding a `src/routes/roll/+server.js` file:
+Cette application récupère des données depuis une route d'API `/roll` lorsque vous cliquez sur le
+bouton. Créez cette route en ajoutant un fichier `src/routes/roll/+server.js` :
 
 ```js
 /// file: src/routes/roll/+server.js
@@ -19,9 +22,12 @@ export function GET() {
 }
 ```
 
-Clicking the button now works.
+Le clic sur le bouton fonctionne désormais.
 
-Request handlers must return a [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response/Response) object. Since it's common to return JSON from an API route, SvelteKit provides a convenience function for generating these responses:
+Les gestionnaires de requête doivent renvoyer un objet
+[Response](https://developer.mozilla.org/fr/docs/Web/API/Response/Response). Puisqu'il est courant
+de renvoyer du JSON depuis une route d'API, SvelteKit fournit une fonction utilitaire pour générer
+facilement ces réponses :
 
 ```js
 /// file: src/routes/roll/+server.js

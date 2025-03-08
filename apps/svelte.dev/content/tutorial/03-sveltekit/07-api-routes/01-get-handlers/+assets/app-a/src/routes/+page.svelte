@@ -8,8 +8,8 @@
 	}
 </script>
 
-<button onclick={roll}>Roll the dice</button>
+<button onclick={roll}>Lancer les dés</button>
 
 {#if number !== undefined}
-	<p>You rolled a {number}</p>
+	<p>Vous avez obtenu un {number}</p>
 {/if}

@@ -1,10 +1,14 @@
 ---
-title: POST handlers
+title: Gestionnaires POST
 ---
 
-You can also add handlers that mutate data, such as `POST`. In most cases, you should use [form actions](the-form-element) instead — you'll end up writing less code, and it'll work without JavaScript, making it more resilient.
+Vous pouvez également ajouter des gestionnaires qui mutent les données, comme `POST`. Dans la
+plupart des cas, vous devriez plutôt utiliser les [actions de formulaire](the-form-element) — vous
+écrirez moins de code, et cela fonctionnera sans JavaScript, rendant votre application plus
+résiliente.
 
-Inside the `keydown` event handler of the 'add a todo' `<input>`, let's post some data to the server:
+Dans le gestionnaire d'évènement `keydown` de l'`<input>` "ajouter une tâche", envoyons des données
+au serveur :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -30,9 +34,11 @@ Inside the `keydown` event handler of the 'add a todo' `<input>`, let's post som
 />
 ```
 
-Here, we're posting some JSON to the `/todo` API route — using a `userid` from the user's cookies — and receiving the `id` of the newly created todo in response.
+Ici, nous envoyons du JSON à la route d'API `/todo` — en utilisant le `userid` venant des cookies de
+l'utilisateur — et nous recevons en réponse l'`id` de la nouvelle tâche créée.
 
-Create the `/todo` route by adding a `src/routes/todo/+server.js` file with a `POST` handler that calls `createTodo` in `src/lib/server/database.js`:
+Créez la route `/todo` en ajoutant un fichier `src/routes/todo/+server.js` avec un gestionnaire
+`POST` qui appelle `createTodo` importé depuis `src/lib/server/database.js` :
 
 ```js
 /// file: src/routes/todo/+server.js
@@ -49,9 +55,13 @@ export async function POST({ request, cookies }) {
 }
 ```
 
-As with `load` functions and form actions, the `request` is a standard [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) object; `await request.json()` returns the data that we posted from the event handler.
+Comme avec les fonctions `load` et les actions de formulaire, la `request` est un objet
+[Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) standard ; `await
+request.json()` fournit les données que nous avons envoyées depuis le gestionnaire d'évènement.
 
-We're returning a response with a [201 Created](https://http.dog/201) status and the `id` of the newly generated todo in our database. Back in the event handler, we can use this to update the page:
+Nous renvoyons une réponse avec un statut [201 Created](https://http.dog/201) ainsi que l'`id` de la
+nouvelle tâche créée dans notre base. En revenant au niveau du gestionnaire d'évènement, nous
+pouvons utiliser cette valeur pour mettre à jour la page :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -86,4 +96,7 @@ We're returning a response with a [201 Created](https://http.dog/201) status and
 />
 ```
 
-> [!NOTE] You should only update `data` in such a way that you'd get the same result by reloading the page. The `data` prop is not _deeply_ reactive, so you need to replace it — mutations like `data.todos = todos` will not cause a re-render.
+> [!NOTE] Vous devriez toujours uniquement mettre à jour `data` de sorte à récupérer le même
+> résultat que si vous aviez rechargé la page. La prop `data` n'est pas _profondément_ réactive, ce
+> qui implique que vous devez la remplacer par une nouvelle valeur — les mutations comme `data.todos
+= todos` ne vont pas provoquer de re-rendu.

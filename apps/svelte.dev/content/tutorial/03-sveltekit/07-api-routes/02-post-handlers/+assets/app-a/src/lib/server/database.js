@@ -2,7 +2,7 @@ const database = new Map();
 
 export function getTodos(userid) {
 	if (!database.has(userid)) {
-		createTodo({ userid, description: 'Learn about API routes' });
+		createTodo({ userid, description: "Apprendre au sujet des routes d'API" });
 	}
 
 	return Array.from(database.get(userid).values());

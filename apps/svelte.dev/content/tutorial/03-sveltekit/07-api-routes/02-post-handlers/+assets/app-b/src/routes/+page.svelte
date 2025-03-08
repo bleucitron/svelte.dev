@@ -3,10 +3,10 @@
 </script>
 
 <div class="centered">
-	<h1>todos</h1>
+	<h1>à faire</h1>
 
 	<label>
-		add a todo:
+		ajouter une tâche :
 		<input
 			type="text"
 			autocomplete="off"
@@ -15,7 +15,7 @@
 
 				const input = e.currentTarget;
 				const description = input.value;
-				
+
 				const response = await fetch('/todo', {
 					method: 'POST',
 					body: JSON.stringify({ description }),
@@ -48,14 +48,14 @@
 						onchange={async (e) => {
 							const done = e.currentTarget.checked;
 
-							// TODO handle change
+							// TODO gérer l'édition
 						}}
 					/>
 					<span>{todo.description}</span>
 					<button
 						aria-label="Mark as complete"
 						onclick={async (e) => {
-							// TODO handle delete
+							// TODO gérer la suppression
 						}}
 					></button>
 				</label>
@@ -98,4 +98,4 @@
 		opacity: 1;
 	}
 </style>
-	
+
