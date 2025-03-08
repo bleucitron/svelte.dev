@@ -28,7 +28,7 @@
 		}}
 	>
 		<label>
-			add a todo:
+			ajouter une tâche :
 			<input
 				disabled={creating}
 				name="description"
@@ -55,14 +55,14 @@
 				>
 					<input type="hidden" name="id" value={todo.id} />
 					<span>{todo.description}</span>
-					<button aria-label="Mark as complete"></button>
+					<button aria-label="Marquer comme fait"></button>
 				</form>
 			</li>
 		{/each}
 	</ul>
 
 	{#if creating}
-		<span class="saving">saving...</span>
+		<span class="saving">sauvegarde en cours...</span>
 	{/if}
 </div>
 

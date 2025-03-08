@@ -1,8 +1,11 @@
 ---
-title: Customizing use:enhance
+title: Personnaliser use:enhance
 ---
 
-With `use:enhance`, we can go further than just emulating the browser's native behaviour. By providing a callback, we can add things like **pending states** and **optimistic UI**. Let's simulate a slow network by adding an artificial delay to our two actions:
+Avec `use:enhance`, nous pouvons aller plus loin que simplement nous contenter d'émuler le
+comportement natif du navigateur. En fournissant un callback, nous pouvons ajouter des choses comme
+des **états d'attente** et des **interfaces optimistes**. Simulons un réseau dégradé en ajoutant un
+retard artificiel sur nos deux actions :
 
 ```js
 /// file: src/routes/+page.server.js
@@ -19,7 +22,9 @@ export const actions = {
 };
 ```
 
-When we create or delete items, it now takes a full second before the UI updates, leaving the user wondering if they messed up somehow. To solve that, add some local state...
+Lorsque nous créons ou supprimons des tâches, cela prend maintenant une seconde complète avant que
+l'interface ne se mette à jour, laissant l'utilisateur ou l'utilisatrice le temps de se demander si
+quelque chose ne va pas. Pour résoudre cela, ajoutons un état local...
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -34,7 +39,7 @@ When we create or delete items, it now takes a full second before the UI updates
 </script>
 ```
 
-...and toggle `creating` inside the first `use:enhance`:
+... et activons `creating` dans le premier `use:enhance` :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -51,7 +56,7 @@ When we create or delete items, it now takes a full second before the UI updates
 	}}+++
 >
 	<label>
-		add a todo:
+		ajouter une tâche :
 		<input
 			+++disabled={creating}+++
 			name="description"
@@ -63,7 +68,7 @@ When we create or delete items, it now takes a full second before the UI updates
 </form>
 ```
 
-We can then show a message while we're saving data:
+Nous pouvons alors afficher un message pendant que les données sont enregistrées :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -72,11 +77,12 @@ We can then show a message while we're saving data:
 </ul>
 
 +++{#if creating}
-	<span class="saving">saving...</span>
+	<span class="saving">sauvegarde en cours...</span>
 {/if}+++
 ```
 
-In the case of deletions, we don't really need to wait for the server to validate anything — we can just update the UI immediately:
+Pour ce qui est des suppressions, nous n'avons pas vraiment besoin d'attendre que le serveur valide
+quelque chose — nous pouvons juste mettre à jour l'interface immédiatement :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -95,7 +101,7 @@ In the case of deletions, we don't really need to wait for the server to validat
 				}}+++
 			>
 				<input type="hidden" name="id" value={todo.id} />
-				<button aria-label="Mark as complete">✔</button>
+				<button aria-label="Marquer comme fait">✔</button>
 
 				{todo.description}
 			</form>
@@ -104,4 +110,6 @@ In the case of deletions, we don't really need to wait for the server to validat
 </ul>
 ```
 
-> [!NOTE] `use:enhance` is very customizable — you can `cancel()` submissions, handle redirects, control whether the form is reset, and so on. [See the docs](/docs/kit/$app-forms#enhance) for full details.
+> [!NOTE] `use:enhance` est très personnalisable — vous pouvez annuler des soumissions avec
+> `cancel()`, gérer les redirections, contrôler la réinitialisation du formulaire, parmi d'autres.
+> [Voir la documentation](/docs/kit/$app-forms#enhance) pour plus de détails.
