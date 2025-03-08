@@ -7,7 +7,7 @@
 
 	<form method="POST" action="?/create">
 		<label>
-			add a todo:
+			ajouter une tâche :
 			<input
 				name="description"
 				autocomplete="off"
@@ -21,7 +21,7 @@
 				<form method="POST" action="?/delete">
 					<input type="hidden" name="id" value={todo.id} />
 					<span>{todo.description}</span>
-					<button aria-label="Mark as complete"></button>
+					<button aria-label="Marquer comme fait"></button>
 				</form>
 			</li>
 		{/each}

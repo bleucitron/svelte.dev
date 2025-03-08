@@ -1,10 +1,12 @@
 ---
-title: Named form actions
+title: Actions de formulaire nommées
 ---
 
-A page that only has a single action is, in practice, quite rare. Most of the time you'll need to have multiple actions on a page. In this app, creating a todo isn't enough — we'd like to delete them once they're complete.
+Une page qui possède une seule action est, en pratique, plutôt rare. La plupart du temps vous aurez
+besoin d'avoir plusieurs actions sur la même page. Dans cette application, ajouter une tâche ne
+suffit pas — nous aimerions pouvoir les supprimer une fois qu'elles sont terminées.
 
-Begin by replacing our `default` action with named `create` and `delete` actions:
+Commencez par remplacer notre action `default` avec les actions `create` et `delete` :
 
 ```js
 /// file: src/routes/+page.server.js
@@ -21,15 +23,17 @@ export const actions = {
 };
 ```
 
-> [!NOTE] Default actions cannot coexist with named actions.
+> [!NOTE] Les actions par défault (`default`) ne peuvent pas coexister avec les actions nommées.
 
-The `<form>` element has an optional `action` attribute, which is similar to an `<a>` element's `href` attribute. Update the existing form so that it points to the new `create` action:
+L'élément `<form>` a un attribut optionnel `action`, qui est similaire à l'attribut `href` d'un
+élément `<a>`. Mettez à jour le formulaire existant pour le faire pointer vers la nouvelle action
+`create` :
 
 ```svelte
 /// file: src/routes/+page.svelte
 <form method="POST" +++action="?/create"+++>
 	<label>
-		add a todo:
+		ajouter une tâche :
 		<input
 			name="description"
 			autocomplete="off"
@@ -38,9 +42,13 @@ The `<form>` element has an optional `action` attribute, which is similar to an 
 </form>
 ```
 
-> [!NOTE] The `action` attribute can be any URL — if the action was defined on another page, you might have something like `/todos?/create`. Since the action is on _this_ page, we can omit the pathname altogether, hence the leading `?` character.
+> [!NOTE] L'attribut `action` peut être n'importe quelle URL — si l'action était définie sur une
+> autre page, vous pourriez avoir quelque chose comme `/todos?/create`. Puisque l'action est sur
+> _cette_ page, nous pouvons omettre complètement le chemin, ce qui explique que l'attribut `action`
+> a une valeur commençant par `?`.
 
-Next, we want to create a form for each todo, complete with a hidden `<input>` that uniquely identifies it:
+Ensuite, nous souhaitons créer un formulaire pour chaque tâche, ainsi qu'un `<input>` caché qui
+l'identifie de manière unique :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -50,7 +58,7 @@ Next, we want to create a form for each todo, complete with a hidden `<input>` t
 +++			<form method="POST" action="?/delete">
 				<input type="hidden" name="id" value={todo.id} />
 				<span>{todo.description}</span>
-				<button aria-label="Mark as complete"></button>
+				<button aria-label="Marquer comme fait"></button>
 			</form>+++
 		</li>
 	{/each}

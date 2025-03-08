@@ -1,12 +1,12 @@
-// In a real app, this data would live in a database,
-// rather than in memory. But for now, we cheat.
+// dans une vraie application, ces données seraient dans une
+// base de données, plutôt qu'en mémoire. Mais pour le moment, on triche un peu.
 const db = new Map();
 
 export function getTodos(userid) {
 	if (!db.get(userid)) {
 		db.set(userid, [{
 			id: crypto.randomUUID(),
-			description: 'Learn SvelteKit',
+			description: 'Apprendre SvelteKit',
 			done: false
 		}]);
 	}
