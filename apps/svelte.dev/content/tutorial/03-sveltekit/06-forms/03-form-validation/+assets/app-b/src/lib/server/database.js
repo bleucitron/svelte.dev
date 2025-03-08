@@ -6,7 +6,7 @@ export function getTodos(userid) {
 	if (!db.get(userid)) {
 		db.set(userid, [{
 			id: crypto.randomUUID(),
-			description: 'Learn SvelteKit',
+			description: 'Apprendre SvelteKit',
 			done: false
 		}]);
 	}
@@ -16,13 +16,13 @@ export function getTodos(userid) {
 
 export function createTodo(userid, description) {
 	if (description === '') {
-		throw new Error('todo must have a description');
+		throw new Error('une tâche doit avoir une description');
 	}
 
 	const todos = db.get(userid);
 
 	if (todos.find((todo) => todo.description === description)) {
-		throw new Error('todos must be unique');
+		throw new Error('chaque tâche doit être unique');
 	}
 
 	todos.push({
