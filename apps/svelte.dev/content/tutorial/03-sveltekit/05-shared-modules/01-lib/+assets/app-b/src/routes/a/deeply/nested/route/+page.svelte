@@ -2,5 +2,5 @@
 	import { message } from '$lib/message.js';
 </script>
 
-<h1>a deeply nested route</h1>
+<h1>une route profondément enfouie</h1>
 <p>{message}</p>

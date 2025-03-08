@@ -1,12 +1,20 @@
 ---
-title: The $lib alias
+title: L'alias $lib
 ---
 
-Because SvelteKit uses directory-based routing, it's easy to place modules and components alongside the routes that use them. A good rule of thumb is 'put code close to where it's used'.
+Puisque SvelteKit utilise un routeur basé sur le système de fichiers, il est naturel de placer les
+modules et les composants au niveau des routes qui les utilisent. Une bonne habitude est de "mettre
+le code là où il est utilisé".
 
-Sometimes, code is used in multiple places. When this happens, it's useful to have a place to put them that can be accessed by all routes without needing to prefix imports with `../../../../`. In SvelteKit, that place is the `src/lib` directory. Anything inside this directory can be accessed by any module in `src` via the `$lib` alias.
+Parfois, un même code peut être utilisé en plusieurs endroits. Lorsque cela arrive, il est pratique
+de pouvoir mettre ce code dans un endroit accessible par toutes les routes sans avoir besoin de
+préfixer les imports avec `../../../../`. Avec SvelteKit, cet endroit est le dossier `src/lib`. Tout
+ce qui est dans ce dossier est accessible par n'importe quel module du dossier `src` via l'alias
+`$lib`.
 
-Both `+page.svelte` files in this exercise import `src/lib/message.js`. But if you navigate to `/a/deeply/nested/route`, the app breaks, because we got the prefix wrong. Update it to use `$lib/message.js` instead:
+Les deux fichiers `+page.svelte` de cet exercice importent `src/lib/message.js`. Mais si vous
+naviguez vers `/a/deeply/nested/route`, l'application plante car le prefix n'est plus valide. Mettez
+l'import à jour pour utiliser plutôt `$lib/message.js` :
 
 ```svelte
 /// file: src/routes/a/deeply/nested/route/+page.svelte
@@ -14,11 +22,11 @@ Both `+page.svelte` files in this exercise import `src/lib/message.js`. But if y
 	import { message } from +++'$lib/message.js'+++;
 </script>
 
-<h1>a deeply nested route</h1>
+<h1>une route profondément enfouie</h1>
 <p>{message}</p>
 ```
 
-Do the same for `src/routes/+page.svelte`:
+Faites la même chose pour `src/routes/+page.svelte` :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -26,6 +34,6 @@ Do the same for `src/routes/+page.svelte`:
 	import { message } from +++'$lib/message.js'+++;
 </script>
 
-<h1>home</h1>
+<h1>accueil</h1>
 <p>{message}</p>
 ```

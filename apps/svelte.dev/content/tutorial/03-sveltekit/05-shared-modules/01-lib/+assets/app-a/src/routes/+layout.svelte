@@ -3,8 +3,8 @@
 </script>
 
 <nav>
-	<a href="/">home</a>
-	<a href="/a/deeply/nested/route">a deeply nested route</a>
+	<a href="/">accueil</a>
+	<a href="/a/deeply/nested/route">une route profondément enfouie</a>
 </nav>
 
 {@render children()}
