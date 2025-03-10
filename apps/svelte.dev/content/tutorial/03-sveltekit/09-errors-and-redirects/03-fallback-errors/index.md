@@ -1,19 +1,21 @@
 ---
-title: Fallback errors
+title: Erreurs de secours
 ---
 
-If things go _really_ wrong — an error occurs while loading the root layout data, or while rendering the error page — SvelteKit will fall back to a static error page.
+Si les choses ne passent _vraiment_ mal — une erreur qui se produit pendant le chargement des
+données du layout racine, ou pendant l'affichage de la page d'erreur — SvelteKit va utiliser une
+page d'erreur de secours statique.
 
-Add a new `src/routes/+layout.server.js` file to see this in action:
+Ajoutez un nouveau fichier `src/routes/+layout.server.js` pour voir ça en action :
 
 ```js
 /// file: src/routes/+layout.server.js
 export function load() {
-	throw new Error('yikes');
+	throw new Error('beurk');
 }
 ```
 
-You can customise the fallback error page. Create a `src/error.html` file:
+Vous pouvez personnaliser la page d'erreur de secours. Créez un fichier `src/error.html` :
 
 ```html
 /// file: src/error.html
@@ -22,7 +24,7 @@ You can customise the fallback error page. Create a `src/error.html` file:
 <p>%sveltekit.error.message%</p>
 ```
 
-This file can include the following:
+Ce fichier peut inclure les choses suivantes :
 
-- `%sveltekit.status%` — the HTTP status code
-- `%sveltekit.error.message%` — the error message
+- `%sveltekit.status%` — le code de statut HTTP
+- `%sveltekit.error.message%` — le message d'erreur

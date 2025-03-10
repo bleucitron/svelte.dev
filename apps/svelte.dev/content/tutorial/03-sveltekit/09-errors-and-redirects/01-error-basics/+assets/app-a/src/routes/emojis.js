@@ -1,5 +1,5 @@
 export const emojis = {
-	// TODO add the rest!
+	// TODO ajouter le reste !
 	420: '🫠',
 	500: '💥'
 };

@@ -1,10 +1,10 @@
 ---
-title: Redirects
+title: Redirections
 ---
 
-We can use the `redirect` mechanism to redirect from one page to another.
+Nous pouvons utiliser la mécanique `redirect` pour rediriger d'une page à l'autre.
 
-Create a new `load` function in `src/routes/a/+page.server.js`:
+Créez une nouvelle fonction `load` dans `src/routes/a/+page.server.js` :
 
 ```js
 /// file: src/routes/a/+page.server.js
@@ -15,12 +15,13 @@ export function load() {
 }
 ```
 
-Navigating to `/a` will now take us straight to `/b`.
+Une navigation vers `/a` va maintenant nous amener directement vers `/b`.
 
-You can `redirect(...)` inside `load` functions, form actions, API routes and the `handle` hook, which we'll discuss in a later chapter.
+Vous pouvez `redirect(...)` dans les fonctions `load`, les actions de formulaire, les routes d'API
+et le hook `handle`, dont nous parlerons dans un futur chapitre.
 
-The most common status codes you'll use:
+Les codes de statut les plus courants sont :
 
-- `303` — for form actions, following a successful submission
-- `307` — for temporary redirects
-- `308` — for permanent redirects
+- `303` — pour les actions de formulaire, suite à une soumission réussie
+- `307` — pour les redirections temporaires
+- `308` — pour les redirections permanentes
