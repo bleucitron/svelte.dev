@@ -2,17 +2,22 @@
 title: page
 ---
 
-SvelteKit makes three readonly state objects available via the `$app/state` module — `page`, `navigating` and `updated`. The one you'll use most often is [`page`](/docs/kit/@sveltejs-kit#Page), which provides information about the current page:
+SvelteKit rend disponibles en lecture seule trois objets d'état via le module `$app/state` — `page`,
+`navigating`, et `updated`. Celui que vous utiliserez le plus souvent est
+[`page`](/docs/kit/@sveltejs-kit#Page), qui fournit des informations sur la page courante :
 
-- `url` — the [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) of the current page
-- `params` — the current page's [parameters](params)
-- `route` — an object with an `id` property representing the current route
-- `status` — the HTTP status code of the current page
-- `error` — the error object of the current page, if any (you'll learn more about error handling in [later](error-basics) [exercises](handleerror))
-- `data` — the data for the current page, combining the return values of all `load` functions
-- `form` — the data returned from a [form action](the-form-element)
+- `url` — l'[URL](https://developer.mozilla.org/fr/docs/Web/API/URL) de la page courante
+- `params` — les [paramètres](params) de la page courante
+- `route` — un objet avec une propriété `id` représentant la route courante
+- `status` — le code de statut HTTP de la page courante
+- `error` — l'objet d'erreur de la page courant, s'il y en a (vous pouvez en savoir plus sur la
+  gestion des erreurs dans des [exercices](error-basics) [à venir](handleerror))
+- `data` — les données de la page courante, combinant les valeurs de retour de toutes les fonctions
+  `load`
+- `form` — les données renvoyées par une [action de formulaire](the-form-element)
 
-Each of these properties is reactive, using `$state.raw` under the hood. Here's an example using `page.url.pathname`:
+Chacune de ces propriétés est réactive, utilisant `$state.raw` sous le capot. Voici un exemple qui
+utilise `page.url.pathname` :
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -24,15 +29,17 @@ Each of these properties is reactive, using `$state.raw` under the hood. Here's 
 
 <nav>
 	<a href="/" +++aria-current={page.url.pathname === '/'}+++>
-		home
+		accueil
 	</a>
 
 	<a href="/about" +++aria-current={page.url.pathname === '/about'}+++>
-		about
+		à propos
 	</a>
 </nav>
 
 {@render children()}
 ```
 
-> [!NOTE] Prior to SvelteKit 2.12, you had to use `$app/stores` for this, which provides a `$page` store with the same information. If you're currently using `$app/stores`, we advise you to migrate towards `$app/state` (requires Svelte 5).
+> [!NOTE] Avant SvelteKit 2.12, vous deviez utiliser `$app/stores` pour cela, qui fournit un store
+> `$page` contenant les mêmes informations. Si vous utilisez actuellement `$app/stores`, nous vous
+> conseillons de migrer vers `$app/state` (ce qui requiert Svelte 5).

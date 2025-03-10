@@ -2,7 +2,9 @@
 title: updated
 ---
 
-The `updated` state contains `true` or `false` depending on whether a new version of the app has been deployed since the page was first opened. For this to work, your `svelte.config.js` must specify `kit.version.pollInterval`.
+L'état `updated` contient `true` ou `false` selon qu'une nouvelle version de l'application soit
+déployée ou non depuis la première ouverture de la page. Pour que cela fonctionne, votre fichier
+`svelte.config.js` doit préciser `kit.version.pollInterval`.
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -11,9 +13,11 @@ The `updated` state contains `true` or `false` depending on whether a new versio
 </script>
 ```
 
-Version changes only happen in production, not during development. For that reason, `updated.current` will always be `false` in this tutorial.
+La détection de changements de version ne se produit qu'en production, pas en développement. Pour
+cette raison `updated.current` sera toujours à `false` dans ce tutoriel.
 
-You can manually check for new versions, regardless of `pollInterval`, by calling `updated.check()`.
+Vous pouvez manuellement vérifier si de nouvelles versions existent, indépendamment de
+`pollInterval`, en exécutant `updated.check()`.
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -21,14 +25,16 @@ You can manually check for new versions, regardless of `pollInterval`, by callin
 +++{#if updated.current}+++
 	<div class="toast">
 		<p>
-			A new version of the app is available
+			Une nouvelle version de l'application est disponible
 
 			<button onclick={() => location.reload()}>
-				reload the page
+				recharger la page
 			</button>
 		</p>
 	</div>
 +++{/if}+++
 ```
 
-> [!NOTE] Prior to SvelteKit 2.12, you had to use `$app/stores` for this, which provides an `$updated` store with the same information. If you're currently using `$app/stores`, we advise you to migrate towards `$app/state` (requires Svelte 5).
+> [!NOTE] Avant SvelteKit 2.12, vous deviez utiliser `$app/stores` pour cela, qui fournit un store
+> `$page` contenant les mêmes informations. Si vous utilisez actuellement `$app/stores`, nous vous
+> conseillons de migrer vers `$app/state` (ce qui requiert Svelte 5).

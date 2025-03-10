@@ -5,15 +5,15 @@
 
 <nav>
 	<a href="/" aria-current={page.url.pathname === '/'}>
-		home
+		accueil
 	</a>
 
 	<a href="/about" aria-current={page.url.pathname === '/about'}>
-		about
+		à propos
 	</a>
 
 	{#if navigating.to}
-		navigating to {navigating.to.url.pathname}
+		en cours de navigation vers {navigating.to.url.pathname}
 	{/if}
 </nav>
 
@@ -21,10 +21,10 @@
 
 <div class="toast">
 	<p>
-		A new version of the app is available
+		Une nouvelle version de l'application est disponible
 
 		<button onclick={() => location.reload()}>
-			reload the page
+			recharger la page
 		</button>
 	</p>
 </div>

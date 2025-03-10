@@ -5,15 +5,15 @@
 
 <nav>
 	<a href="/" aria-current={page.url.pathname === '/'}>
-		home
+		accueil
 	</a>
 
 	<a href="/about" aria-current={page.url.pathname === '/about'}>
-		about
+		à propos
 	</a>
 
 	{#if navigating.to}
-		navigating to {navigating.to.url.pathname}
+		en cours de navigation vers {navigating.to.url.pathname}
 	{/if}
 </nav>
 

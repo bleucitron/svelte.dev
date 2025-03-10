@@ -5,11 +5,11 @@
 
 <nav>
 	<a href="/" aria-current={page.url.pathname === '/'}>
-		home
+		accueil
 	</a>
 
 	<a href="/about" aria-current={page.url.pathname === '/about'}>
-		about
+		à propos
 	</a>
 </nav>
 

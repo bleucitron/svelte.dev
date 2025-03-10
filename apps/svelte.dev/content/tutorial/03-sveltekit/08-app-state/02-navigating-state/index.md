@@ -2,14 +2,20 @@
 title: navigating
 ---
 
-The `navigating` object represents the current navigation. When a navigation starts — because of a link click, or a back/forward navigation, or a programmatic `goto` — the value of `navigating` will become an object with the following properties:
+L'objet `navigating` représente la navigation courante. Lorsqu'une navigation commence — suite à un
+clic sur un lien, l'utilisation des boutons précédent/suivant, ou l'utilisation programmatique de
+`goto` — la valeur de `navigating` devient un objet avec les propriétés suivantes :
 
-- `from` and `to` — objects with `params`, `route` and `url` properties
-- `type` — the type of navigation, e.g. `link`, `popstate` or `goto`
+- `from` et `to` — des objets avec les propriétés `params`, `route`, et `url`
+- `type` — le type de navigation, par ex. `link`, `popstate` ou `goto`
 
-> [!NOTE] For complete type information visit the [`Navigation`](/docs/kit/@sveltejs-kit#Navigation) documentation.
+> [!NOTE] Pour des informations plus complètes sur le type, voir la documentation de
+> [`Navigation`](/docs/kit/@sveltejs-kit#Navigation).
 
-It can be used to show a loading indicator for long-running navigations. In this exercise, `src/routes/+page.server.js` and `src/routes/about/+page.server.js` both have an artificial delay. Inside `src/routes/+layout.svelte`, import the `navigating` object and add a message to the nav bar:
+Il peut être utilisé pour afficher un indicateur de chargement lors des navigations longues. Dans
+cet exercice, `src/routes/+page.server.js` et `src/routes/about/+page.server.js` ont toutes les deux
+un délai artificiel. Dans `src/routes/+layout.svelte`, importez l'objet `navigating` et ajoutez un
+message dans la barre de navigation :
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -21,19 +27,21 @@ It can be used to show a loading indicator for long-running navigations. In this
 
 <nav>
 	<a href="/" aria-current={page.url.pathname === '/'}>
-		home
+		accueil
 	</a>
 
 	<a href="/about" aria-current={page.url.pathname === '/about'}>
-		about
+		à propos
 	</a>
 
 +++	{#if navigating.to}
-		navigating to {navigating.to.url.pathname}
+		en cours de navigation vers {navigating.to.url.pathname}
 	{/if}+++
 </nav>
 
 {@render children()}
 ```
 
-> [!NOTE] Prior to SvelteKit 2.12, you had to use `$app/stores` for this, which provides a `$navigating` store with the same information. If you're currently using `$app/stores`, we advise you to migrate towards `$app/state` (requires Svelte 5).
+> [!NOTE] Avant SvelteKit 2.12, vous deviez utiliser `$app/stores` pour cela, qui fournit un store
+> `$page` contenant les mêmes informations. Si vous utilisez actuellement `$app/stores`, nous vous
+> conseillons de migrer vers `$app/state` (ce qui requiert Svelte 5).
