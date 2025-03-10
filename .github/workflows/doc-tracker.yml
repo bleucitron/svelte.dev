@@ -58,3 +58,29 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/tutorial/02-advanced-svelte
+  track-docs-tuto3:
+    runs-on: ubuntu-latest
+    name: Checking Tutorial 03
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/tutorial/03-sveltekit
+  track-docs-tuto4:
+    runs-on: ubuntu-latest
+    name: Checking Tutorial 04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Svelte docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/tutorial/04-advanced-sveltekit
