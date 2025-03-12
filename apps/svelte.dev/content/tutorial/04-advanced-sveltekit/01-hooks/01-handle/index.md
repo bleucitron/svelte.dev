@@ -2,13 +2,18 @@
 title: handle
 ---
 
-SvelteKit provides several _hooks_ — ways to intercept and override the framework's default behaviour.
+SvelteKit fournit différents _hooks_, qui sont des manières d'intercepter et surcharger le
+comportement par défaut du framework.
 
-The most elementary hook is `handle`, which lives in `src/hooks.server.js`. It receives an `event` object along with a `resolve` function, and returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
+Le hook le plus important est `handle`, qui se trouve dans `src/hooks.server.js`. Il reçoit un
+objet `event` ainsi qu'une fonction `resolve`, et renvoie un objet
+[`Response`](https://developer.mozilla.org/fr/docs/Web/API/Response).
 
-`resolve` is where the magic happens: SvelteKit matches the incoming request URL to a route of your app, imports the relevant code (`+page.server.js` and `+page.svelte` files and so on), loads the data needed by the route, and generates the response.
+`resolve` en est la pierre angulaire : SvelteKit fait correspondre l'URL de la requête entrante à
+une route de votre application, importe le code correspondant (les fichiers `+page.server.js` et
+`+page.svelte`, et ainsi de suite), charge les données requises par la route, et génère la réponse.
 
-The default `handle` hook looks like this:
+Le hook `handle` par défaut a cette tête là :
 
 ```js
 /// file: src/hooks.server.js
@@ -17,7 +22,8 @@ export async function handle({ event, resolve }) {
 }
 ```
 
-For pages (as opposed to [API routes](get-handlers)), you can modify the generated HTML with `transformPageChunk`:
+Pour les pages (et donc pas pour les [routes d'API](get-handlers)), vous pouvez modifier le HTML
+généré avec `transformPageChunk` :
 
 ```js
 /// file: src/hooks.server.js
@@ -31,7 +37,7 @@ export async function handle({ event, resolve }) {
 }
 ```
 
-You can also create entirely new routes:
+Vous pouvez aussi entièrement créer de nouvelles routes :
 
 ```js
 /// file: src/hooks.server.js

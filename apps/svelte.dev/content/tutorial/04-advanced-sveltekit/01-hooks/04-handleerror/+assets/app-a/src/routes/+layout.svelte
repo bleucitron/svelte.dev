@@ -3,9 +3,9 @@
 </script>
 
 <nav>
-	<a href="/">home</a>
-	<a href="/the-good-place">the good place</a>
-	<a href="/the-bad-place">the bad place</a>
+	<a href="/">accueil</a>
+	<a href="/the-good-place">endroit super</a>
+	<a href="/the-bad-place">endroit nul</a>
 </nav>
 
 {@render children()}

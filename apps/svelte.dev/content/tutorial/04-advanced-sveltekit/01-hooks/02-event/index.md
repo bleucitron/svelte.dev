@@ -1,23 +1,31 @@
 ---
-title: The RequestEvent object
+title: L'objet RequestEvent
 ---
 
-The `event` object passed into `handle` is the same object — an instance of a [`RequestEvent`](/docs/kit/@sveltejs-kit#RequestEvent) — that is passed into [API routes](get-handlers) in `+server.js` files, [form actions](the-form-element) in `+page.server.js` files, and `load` functions in `+page.server.js` and `+layout.server.js`.
+L'objet `event` passé à `handle` est le même objet — une instance de
+[`RequestEvent`](/docs/kit/@sveltejs-kit#RequestEvent) — que celui passé aux [routes
+d'API](get-handlers) dans les fichiers `+server.js`, aux [actions de formulaires](the-form-element)
+dans les fichiers `+page.server.js`, et aux fonctions `load` dans les fichiers `+page.server.js` et
+`+layout.server.js`.
 
-It contains a number of useful properties and methods, some of which we've already encountered:
+Il contient des propriétés et méthodes utiles, dont certaines que nous avons déjà rencontré :
 
-- `cookies` — the [cookies API](cookies)
-- `fetch` — the standard [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), with additional powers
-- `getClientAddress()` — a function to get the client's IP address
-- `isDataRequest` — `true` if the browser is requesting data for a page during client-side navigation, `false` if a page/route is being requested directly
-- `locals` — a place to put arbitrary data
-- `params` — the route parameters
-- `request` — the [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) object
-- `route` — an object with an `id` property representing the route that was matched
-- `setHeaders(...)` — a function for [setting HTTP headers](headers) on the response
-- `url` — a [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) object representing the current request
+- `cookies` — l'[API cookies](cookies)
+- `fetch` — l'[API Fetch](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API) standard, avec
+  des supers pouvoirs
+- `getClientAddress()` — une fonction pour récupérer l'adresse IP du client
+- `isDataRequest` — `true` si le navigateur demande des données pour une page pendant une navigation
+  côté client, `false` si une page/route est requêtée directement
+- `locals` — un endroit pour mettre des données arbitraires
+- `params` — les paramètres de route
+- `request` — l'objet [Request](https://developer.mozilla.org/fr/docs/Web/API/Request)
+- `route` — un objet avec une propriété `id` représentant la route correspondante
+- `setHeaders(...)` — une fonction pour [définir les en-têtes HTTP](headers) de la réponse
+- `url` — un objet [URL](https://developer.mozilla.org/fr/docs/Web/API/URL) représentant la requête
+  courante
 
-A useful pattern is to add some data to `event.locals` in `handle` so that it can be read in subsequent `load` functions:
+Un cas d'usage classique est l'ajout de données dans `event.locals` via `handle` afin que ces
+données soient lues dans les fonctions `load` à venir :
 
 ```js
 /// file: src/hooks.server.js
@@ -31,7 +39,7 @@ export async function handle({ event, resolve }) {
 /// file: src/routes/+page.server.js
 export function load(+++event+++) {
 	return {
-		message: `the answer is ${+++event.locals.answer+++}`
+		message: `la réponse est ${+++event.locals.answer+++}`
 	};
 }
 ```

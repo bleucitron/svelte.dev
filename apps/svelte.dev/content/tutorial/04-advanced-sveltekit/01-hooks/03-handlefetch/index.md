@@ -2,13 +2,17 @@
 title: handleFetch
 ---
 
-The `event` object has a `fetch` method that behaves like the standard [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), but with superpowers:
+L'objet `event` a une méthode `fetch` qui se comporte comme l'[API Fetch
+standard](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), avec des supers pouvoirs :
 
-- it can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers from the incoming request
-- it can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context)
-- internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call
+- elle peut servir à faire des requêtes authentifiées sur le serveur, puisqu'elle hérite des
+en-têtes `cookie` et `authorization` de la requête entrante
+- elle peut générer des requêtes relatives sur le serveur (normalement, `fetch` nécessite une URL
+possédant une origine lorsqu'utilisée dans un contexte serveur)
+- les requêtes internes (par ex. pour les routes `+server.js`) vont directement exécuter la fonction
+	de gestion concernée lorsqu'exécutées sur le serveur, sans le surcoût d'un appel HTTP
 
-Its behaviour can be modified with the `handleFetch` hook, which by default looks like this:
+Son comportement peut être modifié avec le hook `handleFetch`, qui par défaut ressemble à ça :
 
 ```js
 /// file: src/hooks.server.js
@@ -17,7 +21,8 @@ export async function handleFetch({ event, request, fetch }) {
 }
 ```
 
-For example, we could respond to requests for `src/routes/a/+server.js` with responses from `src/routes/b/+server.js` instead:
+Par exemple, nous pourrions répondre aux requêtes demandant `src/routes/a/+server.js` avec des
+réponses venant de `src/routes/b/+server.js` :
 
 ```js
 /// file: src/hooks.server.js
@@ -31,4 +36,9 @@ export async function handleFetch({ event, request, fetch }) {
 }
 ```
 
-Later, when we cover [universal `load` functions](universal-load-functions), we'll see that `event.fetch` can also be called from the browser. In that scenario, `handleFetch` is useful if you have requests to a public URL like `https://api.yourapp.com` from the browser, that should be redirected to an internal URL (bypassing whatever proxies and load balancers sit between the API server and the public internet) when running on the server.
+Plus tard, lorsque nous traiterons des [fonctions `load` universelles](universal-load-functions),
+nous verrons que `event.fetch` peut aussi être appelée depuis le navigateur. Dans ce cas-là,
+`handleFetch` est utile si vous avez des requêtes vers une URL publique comme
+`https://api.yourapp.com` qui devraient être redirigées vers une URL interne (en évitant les
+éventuels proxies et gestionnaires de charge qui pourraient se trouver entre le serveur d'API et
+l'internet public) lorsqu'exécutées sur le serveur.
