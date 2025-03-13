@@ -8,8 +8,8 @@
 	}
 </script>
 
-<h1>Rendered {browser ? 'in the browser' : 'on the server'}</h1>
+<h1>Rendu {browser ? 'par le navigateur' : 'par le serveur'}</h1>
 
 <button onclick={increment}>
-	Clicks: {count}
+	Clics : {count}
 </button>

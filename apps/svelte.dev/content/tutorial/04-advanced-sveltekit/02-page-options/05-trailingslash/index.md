@@ -2,24 +2,32 @@
 title: trailingSlash
 ---
 
-Two URLs like `/foo` and `/foo/` might look the same, but they're actually different. A relative URL like `./bar` will resolve to `/bar` in the first case and `/foo/bar` in the second, and search engines will treat them as separate entries, harming your SEO.
+Deux URLs comme `/foo` et `/foo/` ont beau se ressembler, elles sont en réalité différentes. Une URL
+relative comme `./bar` va être résolue comme `/bar` dans le premier cas et comme `/foo/bar` dans le
+second ; de plus les moteurs de recherche vont les traiter comme des entrées différentes, impactant
+négativement votre référencement.
 
-In short, being loosey-goosey about trailing slashes is a bad idea. By default, SvelteKit strips trailing slashes, meaning that a request for `/foo/` will result in a redirect to `/foo`.
+Pour faire court, gérer au petit bonheur la chance les "trailing slashes" (slashs de fin d'URL) est
+une mauvaise idée. Par défaut, SvelteKit supprime les trailing slashes, ce qui veut dire qu'une
+requête vers `/foo/` va en réalité être redirigée vers `/foo`.
 
-If you instead want to ensure that a trailing slash is always present, you can specify the `trailingSlash` option accordingly:
+Si vous préférez vous assurez qu'un trailing slash est toujours présent, vous pouvez préciser
+l'option `trailingSlash` de cette manière :
 
 ```js
 /// file: src/routes/always/+page.server.js
 export const trailingSlash = 'always';
 ```
 
-To accommodate both cases (this is not recommended!), use `'ignore'`:
+Pour gérer les deux situations (nous ne recommendons pas de faire ça), utiliser `'ignore'` :
 
 ```js
 /// file: src/routes/ignore/+page.server.js
 export const trailingSlash = 'ignore';
 ```
 
-The default value is `'never'`.
+La valeur par défaut est `'never'`.
 
-Whether or not trailing slashes are applied affects prerendering. A URL like `/always/` will be saved to disk as `always/index.html` whereas a URL like `/never` will be saved as `never.html`.
+La présence ou non des trailing slashes affecte le pré-rendu. Une URL comme `/always/` sera
+enregistrée sur le disque comme `always/index.html` alors qu'une URL comme `/never` sera enregistrée
+comme `never.html`.

@@ -2,13 +2,21 @@
 title: ssr
 ---
 
-Server-side rendering (SSR) is the process of generating HTML on the server, and is what SvelteKit does by default. It's important for performance and [resilience](https://kryogenix.org/code/browser/everyonehasjs.html), and is very beneficial for search engine optimization (SEO) — while some search engines can index content that is rendered in the browser with JavaScript, it happens less frequently and reliably.
+Le rendu côté serveur (SSR) est le processus de génération du HTML sur le serveur, et est ce que
+SvelteKit fait par défaut. Le SSR permet de meilleures performances et une [meilleure
+résilience](https://kryogenix.org/code/browser/everyonehasjs.html), ainsi qu'un meilleur
+référencement (SEO) — bien que certains moteurs de recherche peuvent indexer des contenus générés
+sur le navigateur avec JavaScript, cela est peu fréquent et moins fiable.
 
-That said, some components _can't_ be rendered on the server, perhaps because they expect to be able to access browser globals like `window` immediately. If you can, you should change those components so that they _can_ render on the server, but if you can't then you can disable SSR:
+Ceci étant dit, certains composants _ne peuvent pas_ être rendus sur le serveur, peut-être
+parcequ'ils ont besoin d'accéder immédiatement aux variables globales du navigateur, comme `window`.
+Si possible, vous devriez modifier ces composants pour qu'ils _puissent_ être rendus sur le serveur,
+mais sinon, vous pouvez alors désactiver le SSR :
 
 ```js
 /// file: src/routes/+page.server.js
 export const ssr = false;
 ```
 
-> [!NOTE] Setting `ssr` to `false` inside your root `+layout.server.js` effectively turns your entire app into a single-page app (SPA).
+> [!NOTE] Définir `ssr` à `false` dans votre fichier `+layout.server.js` racine fait de votre
+> application une SPA de facto.
