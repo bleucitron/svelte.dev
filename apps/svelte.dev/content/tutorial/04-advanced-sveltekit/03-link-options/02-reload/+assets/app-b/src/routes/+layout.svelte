@@ -17,10 +17,10 @@
 </script>
 
 <nav data-sveltekit-reload>
-	<a href="/">home</a>
-	<a href="/about">about</a>
+	<a href="/">accueil</a>
+	<a href="/about">à propos</a>
 </nav>
 
 {@render children()}
 
-<p>the page has been open for {seconds} seconds</p>
+<p>la page est ouverte depuis {seconds} secondes</p>

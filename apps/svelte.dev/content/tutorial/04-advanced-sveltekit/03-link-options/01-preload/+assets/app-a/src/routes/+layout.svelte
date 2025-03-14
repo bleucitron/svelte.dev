@@ -19,13 +19,14 @@
 </script>
 
 <nav>
-	<a href="/">home</a>
-	<a href="/slow-a">slow-a</a>
-	<a href="/slow-b">slow-b</a>
+	<a href="/">accueil</a>
+	<a href="/slow-a">lent-a</a>
+	<a href="/slow-b">lent-b</a>
 </nav>
 
 {@render children()}
 
 {#if previous && end}
-	<p>navigated from {previous.from.url.pathname} to {previous.to.url.pathname} in <strong>{end - start}ms</strong></p>
+	<p>la navigation de {previous.from.url.pathname} à {previous.to.url.pathname} a mis <strong>{end -
+		start} ms</strong></p>
 {/if}

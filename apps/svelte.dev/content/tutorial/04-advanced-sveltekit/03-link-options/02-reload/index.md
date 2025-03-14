@@ -1,17 +1,21 @@
 ---
-title: Reloading the page
+title: Recharger la page
 ---
 
-Ordinarily, SvelteKit will navigate between pages without refreshing the page. In this exercise, if we navigate between `/` and `/about`, the timer keeps on ticking.
+Généralement, SvelteKit va naviguer entre les pages sans rafraîchir la page. Dans cet exercice, si
+l'on navigue entre `/` et `/about`, le timer continue de tourner.
 
-In rare cases, you might want to disable this behaviour. You can do so by adding the `data-sveltekit-reload` attribute on an individual link, or any element that contains links:
+Dans de rares situations, vous pourriez vouloir désactiver ce comportement. Vous pouvez le faire en
+ajoutant l'attribut `data-sveltekit-reload` sur un lien individuel, ou sur tout élément qui contient
+des liens :
 
 ```svelte
 /// file: src/routes/+layout.svelte
 <nav +++data-sveltekit-reload+++>
-	<a href="/">home</a>
-	<a href="/about">about</a>
+	<a href="/">accueil</a>
+	<a href="/about">à propos</a>
 </nav>
 ```
 
-For more information on available link options and their values, consult the [link options documentation](/docs/kit/link-options).
+Pour plus d'informations sur les options de lien disponibles et leurs valeurs, consultez la
+[documentation sur les options de lien](/docs/kit/link-options).
