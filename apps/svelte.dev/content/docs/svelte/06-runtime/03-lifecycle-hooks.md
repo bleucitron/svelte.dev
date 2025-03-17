@@ -176,7 +176,7 @@ Svelte 5.
 	}
 
 	function toggle() {
-		toggleValue = !toggleValue;
+		theme = theme === 'dark' ? 'light' : 'dark';
 	}
 </script>
 

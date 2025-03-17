@@ -62,7 +62,7 @@ Elle s'affichera au survol.
 - vous pouvez écrire du Markdown ici
 - vous pouvez aussi écrire des blocs de code ici
 - Usage :
-  ```tsx
+  ```svelte
   <main name="Arethra">
   ```
 -->
