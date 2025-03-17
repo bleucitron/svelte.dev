@@ -1,3 +1,3 @@
 ---
-title: Advanced routing
+title: Routing avancé
 ---

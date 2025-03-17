@@ -6,6 +6,6 @@ const greetings = {
 
 export function load({ params }) {
 	return {
-		greeting: greetings[params.lang ?? 'en']
+		greeting: greetings[params.lang ?? 'fr']
 	};
 }

@@ -3,10 +3,10 @@
 </script>
 
 <nav>
-	<a href="/">default</a>
-	<a href="/en">english</a>
-	<a href="/de">german</a>
-	<a href="/fr">french</a>
+	<a href="/">par défaut</a>
+	<a href="/en">anglais</a>
+	<a href="/de">allemand</a>
+	<a href="/fr">français</a>
 </nav>
 
 {@render children()}
