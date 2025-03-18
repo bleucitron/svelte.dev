@@ -1,11 +1,14 @@
 ---
-title: Param matchers
+title: Matchers de paramètres
 path: /colors/ff3e00
 ---
 
-To prevent the router from matching on invalid input, you can specify a _matcher_. For example, you might want a route like `/colors/[value]` to match hex values like `/colors/ff3e00` but not named colors like `/colors/octarine` or any other arbitrary input.
+Pour empêcher le routeur de matcher des entrées non valides, vous pouvez spécifier un _matcher_. Par
+exemple, vous pourriez vouloir une route comme `/colors/[value]` pour matcher les valeurs
+hexadécimales comme `/colors/ff3e00` mais pas les couleurs nommées comme `/colors/octarine` ou toute
+autre entrée arbitraire.
 
-First, create a new file called `src/params/hex.js` and export a `match` function from it:
+D'abord, créez un nouveau fichier appelé `src/params/hex.js` et exportez-y une fonction `match` :
 
 ```js
 /// file: src/params/hex.js
@@ -14,8 +17,11 @@ export function match(value) {
 }
 ```
 
-Then, to use the new matcher, rename `src/routes/colors/[color]` to `src/routes/colors/[color=hex]`.
+Puis, pour utiliser le nouveau matcher, renommez `src/routes/colors/[color]` en
+`src/routes/colors/[color=hex]`.
 
-Now, whenever someone navigates to that route, SvelteKit will verify that `color` is a valid `hex` value. If not, SvelteKit will try to match other routes, before eventually returning a 404.
+Désormais, dès que quelqu'un navigue vers cette route, SvelteKit va vérifier que `color` est une
+value `hex` valide. Si ce n'est pas le cas, SvelteKit va essayer de matcher d'autres routes, avant
+de finir par renvoyer une 404.
 
-> [!NOTE] Matchers run both on the server and in the browser.
+> [!NOTE] Les matchers sont exécutées à la fois sur le serveur et dans le navigateur.
