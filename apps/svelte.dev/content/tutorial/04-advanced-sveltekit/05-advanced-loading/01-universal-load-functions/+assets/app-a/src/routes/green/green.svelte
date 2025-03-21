@@ -1,1 +1,1 @@
-<marquee>hello from green.svelte</marquee>
+<marquee>bonjour depuis green.svelte</marquee>

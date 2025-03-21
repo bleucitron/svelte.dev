@@ -8,10 +8,10 @@
 	class={[page.data.color && 'has-color']}
 	style:background={page.data.color ?? 'var(--bg-2)'}
 >
-	<a href="/">home</a>
-	<a href="/red">red</a>
-	<a href="/green">green</a>
-	<a href="/blue">blue</a>
+	<a href="/">accueil</a>
+	<a href="/red">rouge</a>
+	<a href="/green">vert</a>
+	<a href="/blue">bleu</a>
 </nav>
 
 {@render children()}

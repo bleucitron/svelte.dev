@@ -3,13 +3,21 @@ title: Invalidation
 path: /Europe/London
 ---
 
-When the user navigates from one page to another, SvelteKit calls your `load` functions, but only if it thinks something has changed.
+Lorsqu'un utilisateur ou une utilisatrice navigue d'une page à l'autre, SvelteKit exécute vos
+fonctions `load`, mais uniquement si quelque chose a changé.
 
-In this example, navigating between timezones causes the `load` function in `src/routes/[...timezone]/+page.js` to re-run because `params.timezone` is invalid. But the `load` function in `src/routes/+layout.js` does _not_ re-run, because as far as SvelteKit is concerned it wasn't invalidated by the navigation.
+Dans cet exemple, naviguer entre les fuseaux horaires provoque la ré-exécution de la fonction `load`
+de `src/routes/[...timezone]/+page.js` car `params.timezone` est invalidé. Mais la fonction `load`
+de `src/routes/+layout.js` n'est _pas_ ré-exécutée car du point de vue de SvelteKit, la navigation
+n'a pas invalidé sa valeur.
 
-We can fix that by manually invalidating it using the [`invalidate(...)`](/docs/kit/$app-navigation#invalidate) function, which takes a URL and re-runs any `load` functions that depend on it. Because the `load` function in `src/routes/+layout.js` calls `fetch('/api/now')`, it depends on `/api/now`.
+Nous pouvons corriger cela en invalidant cette valeur manuellement en utilisant la fonction
+[`invalidate(...)`](/docs/kit/$app-navigation#invalidate), qui prend une URL et ré-exécute toute
+fonction `load` qui en dépend. Puisque la fonction `load` de `src/routes/+layout.js` appelle
+`fetch('/api/now')`, elle dépend de `/api/now`.
 
-In `src/routes/[...timezone]/+page.svelte`, add an `onMount` callback that calls `invalidate('/api/now')` once a second:
+Dans `src/routes/[...timezone]/+page.svelte`, ajoutez un callback `onMount` qui exécute
+`invalidate('/api/now')` une fois toutes les secondes :
 
 ```svelte
 /// file: src/routes/[...timezone]/+page.svelte
@@ -38,4 +46,5 @@ In `src/routes/[...timezone]/+page.svelte`, add an `onMount` callback that calls
 </h1>
 ```
 
-> [!NOTE] You can also pass a function to `invalidate`, in case you want to invalidate based on a pattern and not specific URLs
+> [!NOTE] Vous pouvez aussi passer une fonction à `invalidate`, dans le cas où vous souhaiteriez
+> invalider en fonction d'un motif particulier et non d'URLs spécifiques.

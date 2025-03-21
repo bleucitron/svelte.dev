@@ -1,12 +1,15 @@
 ---
-title: Using both load functions
+title: Utilisez les deux fonction load
 ---
 
-Occasionally, you might need to use a server load function and a universal load function together. For example, you might need to return data from the server, but also return a value that can't be serialized as server data.
+Occasionnellement, vous pourriez avoir besoin d'une fonction `load` de serveur ET d'une fonction
+`load` universelle. Par exemple, vous pourriez avoir besoin de renvoyer des données depuis le
+serveur, mais aussi renvoyer une valeur qui ne peut pas être sérialisée comme donnée de serveur.
 
-In this example we want to return a different component from `load` depending on whether the data we got from `src/routes/+page.server.js` is `cool` or not.
+Dans cet exemple, nous voulons renvoyer un composant différent depuis `load` selon que les données
+reçues de `src/routes/+page.server.js` sont `cool` ou non.
 
-We can access server data in `src/routes/+page.js` via the `data` property:
+Nous pouvons accéder aux données de serveur dans `src/routes/+page.js` via la propriété `data` :
 
 ```js
 /// file: src/routes/+page.js
@@ -22,4 +25,5 @@ export async function load(+++{ data }+++) {
 }
 ```
 
-> [!NOTE] Note that the data isn't merged — we must explicitly return `message` from the universal `load` function.
+> [!NOTE] Notez que les données ne sont pas fusionnées — nous devons renvoyer `message`
+> explicitement depuis la fonction `load`.

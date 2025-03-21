@@ -1,3 +1,3 @@
 ---
-title: Advanced loading
+title: Chargement avancé
 ---

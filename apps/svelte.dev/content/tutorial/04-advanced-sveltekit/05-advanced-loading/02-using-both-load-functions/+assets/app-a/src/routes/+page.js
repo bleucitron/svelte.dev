@@ -5,6 +5,6 @@ export async function load() {
 
 	return {
 		component: module.default,
-		message: 'TODO add a message'
+		message: 'TODO ajouter un message'
 	};
 }

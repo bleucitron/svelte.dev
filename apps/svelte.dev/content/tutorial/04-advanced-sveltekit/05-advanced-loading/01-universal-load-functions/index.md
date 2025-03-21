@@ -1,21 +1,37 @@
 ---
-title: Universal load functions
+title: Fonctions de chargement universelles
 ---
 
-In the [previous section on loading](page-data) we loaded data from the server using `+page.server.js` and `+layout.server.js` files. This is very convenient if you need to do things like getting data directly from a database, or reading cookies.
+Dans une [section précédente sur le chargement](page-data), nous avons chargé des données sur le
+serveur en utilisant les fichiers `+page.server.js` et `+layout.server.js`. C'est très pratique si
+vous avez besoin de récupérez des données directement depuis une base de données, ou si vous
+souhaitez lire les cookies.
 
-Sometimes it doesn't make sense to load data from the server when doing a client-side navigation. For example:
+Parfois cela n'a pas de sens de charger des données depuis le serveur lorsque vous naviguez via la
+navigation côté client :
+Par exemple :
 
-- You're loading data from an external API
-- You want to use in-memory data if it's available
-- You want to delay navigation until an image has been preloaded, to avoid pop-in
-- You need to return something from `load` that can't be serialized (SvelteKit uses [devalue](https://github.com/Rich-Harris/devalue) to turn server data into JSON), such as a component or a store
+- Vous chargez de données depuis une API externe
+- Vous souhaitez utiliser des données stockées en mémoire si disponibles
+- Vous souhaitez retarder la navigation tant qu'une image n'a pas été préchargée, pour éviter les
+  apparitions soudaines
+- Vous avez besoin de renvoyer depuis `load` quelque chose qui ne peut pas être sérialisé (SvelteKit
+  utilise [devalue](https://github.com/Rich-Harris/devalue) pour transformer les données de serveur en
+  JSON), comme un composant ou un store
 
-In this exercise, we're dealing with the latter case. The server `load` functions in `src/routes/red/+page.server.js`, `src/routes/green/+page.server.js` and `src/routes/blue/+page.server.js` return a `component` constructor, which can't be serialized like data. If you navigate to `/red`, `/green` or `/blue`, you'll see a 'Data returned from `load` ... is not serializable' error in the terminal.
+Dans cet exercice, nous avons affaire à ce dernier cas. Les fonctions de serveur `load` dans les
+fichiers `src/routes/red/+page.server.js`, `src/routes/green/+page.server.js` et
+`src/routes/blue/+page.server.js` renvoient un constructeur de `component`, qui ne peut pas être
+sérialisé en tant que données. Si vous naviguez vers `/red`, `/green` ou `/blue`, vous verrez une
+erreur "Data returned from `load` ... is not serializable" s'afficher dans le terminal.
 
-To turn the server `load` functions into universal `load` functions, rename each `+page.server.js` file to `+page.js`. Now, the functions will run on the server during server-side rendering, but will also run in the browser when the app hydrates or the user performs a client-side navigation.
+Pour transformer les fonctions `load` de serveur en fonctions `load` universelles, renommez chaque
+fichier `+page.server.js` en `+page.js`. Désormais, les fonctions seront exécutées sur le serveur
+pendant le rendu côté serveur, mais seront également exécutées dans le navigateur lorsque
+l'application sera hydratée ou lorsque l'utilisateur navigue côté client.
 
-We can now use the `component` returned from these `load` functions like any other value, including in `src/routes/+layout.svelte`:
+Nous pouvons utiliser le `component` renvoyé depuis ces fonctions `load` comme tout autre valeur,
+notamment dans `src/routes/+layout.svelte` :
 
 ```svelte
 /// file: src/routes/+layout.svelte
@@ -23,10 +39,10 @@ We can now use the `component` returned from these `load` functions like any oth
 	class={[page.data.color && 'has-color']}
 	style:background={page.data.color ?? 'var(--bg-2)'}
 >
-	<a href="/">home</a>
-	<a href="/red">red</a>
-	<a href="/green">green</a>
-	<a href="/blue">blue</a>
+	<a href="/">acuueil</a>
+	<a href="/red">rouge</a>
+	<a href="/green">vert</a>
+	<a href="/blue">bleu</a>
 
 +++	{#if page.data.component}
 		<page.data.component />
@@ -34,4 +50,5 @@ We can now use the `component` returned from these `load` functions like any oth
 </nav>
 ```
 
-Read the [documentation](/docs/kit/load#Universal-vs-server) to learn more about the distinction between server `load` functions and universal `load` functions, and when to use which.
+Voir la [documentation](/docs/kit/load#Universal-vs-server) pour en savoir plus sur la différence
+entre les fonctions `load` de serveur et universelles, et quand utiliser l'une ou l'autre.
