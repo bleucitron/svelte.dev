@@ -1,3 +1,3 @@
-<h1>home</h1>
+<h1>accueil</h1>
 
-<p>this is the home page.</p>
+<p>ceci est la page d'accueil</p>

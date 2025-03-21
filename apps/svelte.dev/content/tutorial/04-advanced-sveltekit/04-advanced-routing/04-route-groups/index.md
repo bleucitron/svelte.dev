@@ -1,14 +1,19 @@
 ---
-title: Route groups
+title: Groupes de routes
 ---
 
-As we saw in the [routing introduction](/tutorial/kit/layouts), layouts are a way to share UI and data loading logic between different routes.
+Comme nous l'avons vu dans l'[introduction sur le routing](/tutorial/kit/layouts), les layouts sont
+un moyen de partager de l'interface et de la logique de données entre différentes routes.
 
-Sometimes it's useful to use layouts without affecting the route — for example, you might need your `/app` and `/account` routes to be behind authentication, while your `/about` page is open to the world. We can do this with a _route group_, which is a directory in parentheses.
+Parfois, il est utile d'utiliser des layouts sans impacter la route — par exemple, vous pourriez
+avoir besoin que les routes `/app` et `/account` soient derrière une authentification, tandis que
+votre page `/about` soit ouverte à tout le monde. On peut faire ça avec un _groupe de routes_, qui
+est un simple dossier entre parenthèses.
 
-Create an `(authed)` group by renaming `account` to `(authed)/account` then renaming `app` to `(authed)/app`.
+Créez un groupe `(authed)` en renommant `account` en `(authed)/account` et `app` en `(authed)/app`.
 
-Now we can control access to these routes by creating `src/routes/(authed)/+layout.server.js`:
+Désormais, nous pouvons contrôler l'accès à ces routes en créant
+`src/routes/(authed)/+layout.server.js` :
 
 ```js
 /// file: src/routes/(authed)/+layout.server.js
@@ -21,9 +26,11 @@ export function load({ cookies, url }) {
 }
 ```
 
-If you try to visit these pages, you'll be redirected to the `/login` route, which has a form action in `src/routes/login/+page.server.js` that sets the `logged_in` cookie.
+Si vous essayez de visiter ces pages, vous serez dirigé•e vers la route `/login` qui a une action de
+formulaire dans `src/routes/login/+page.server.js` qui définit le cookie `logged_in`.
 
-We can also add some UI to these two routes by adding a `src/routes/(authed)/+layout.svelte` file:
+Nous pouvons également ajouter de l'interface à ces deux routes en ajoutant un fichier
+`src/routes/(authed)/+layout.svelte` :
 
 ```svelte
 /// file: src/routes/(authed)/+layout.svelte
@@ -34,6 +41,6 @@ We can also add some UI to these two routes by adding a `src/routes/(authed)/+la
 {@render children()}
 
 <form method="POST" action="/logout">
-	<button>log out</button>
+	<button>se déconnecter</button>
 </form>
 ```

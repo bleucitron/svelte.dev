@@ -1,5 +1,5 @@
-<h1>log in</h1>
+<h1>connexion</h1>
 
 <form method="POST">
-	<button>log in</button>
+	<button>se connecter</button>
 </form>

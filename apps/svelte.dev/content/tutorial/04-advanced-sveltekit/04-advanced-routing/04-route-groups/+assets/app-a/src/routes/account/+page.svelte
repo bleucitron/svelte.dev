@@ -1,3 +1,3 @@
-<h1>account</h1>
+<h1>compte</h1>
 
-<p>this is the account page</p>
+<p>ceci est la page compte.</p>
