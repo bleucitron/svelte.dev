@@ -335,7 +335,8 @@ pas d'effets pour faire ça
 </label>
 ```
 
-Utilisez plutôt des callbacks lorsque c'est possible
+Utilisez plutôt des callbacks `oninput` ou — encore mieux — des [liaisons de
+fonctions](bind#Function-bindings) lorsque c'est possible
 ([démo](/playground/untitled#H4sIAAAAAAAACo1SMW6EMBD8imWluFMSIEUaDiKlvy5lSOHjlhOSMRZeTiDkv8deMEEJRcqdmZ1ZjzzxqpZgePo5cRw18JQA_sSVaPz0rnVk7iDRYxdhYA8vW4Wg0NnwzJRdrfGtUAVKQIYtCsly9pIkp4AZ7cQOezAoEA7JcWUkVBuCdol0dNWrEutWsV5fHfnhPQ5wZJMnCwyejxCh6G6A0V3IHk4zu_jOxzzPBxBld83PTr7xXrb3rUNw8PbiYJ3FP22oTIoLSComq5XuXTeu8LzgnVA3KDgj13wiQ8taRaJ82rzXskYM-URRlsXktejjgNLoo9e4fyf70_8EnwncySX1GuunX6kGRwnzR_BgaPNaGy3FmLJKwrCUeBM6ZUn0Cs2mOlp3vwthQJ5i14P9st9vZqQlsQIAAA==)).
 
 ```svelte
@@ -344,56 +345,25 @@ Utilisez plutôt des callbacks lorsque c'est possible
 	let spent = $state(0);
 	let left = $state(total);
 
-	function updateSpent(e) {
-		spent = +e.target.value;
+	function updateSpent(value) {
+		spent = value;
 		left = total - spent;
 	}
 
-	function updateLeft(e) {
-		left = +e.target.value;
+	function updateLeft(value) {
+		left = value;
 		spent = total - left;
 	}
 </script>
 
 <label>
-	<input type="range" value={spent} oninput={updateSpent} max={total} />
+	<input type="range" bind:value={() => spent, updateSpent} max={total} />
 	{spent}/{total} dépensé
 </label>
 
 <label>
-	<input type="range" value={left} oninput={updateLeft} max={total} />
+	<input type="range" bind:value={() => left, updateLeft} max={total} />
 	{left}/{total} restant
-</label>
-```
-
-Si vous avez besoin d'utiliser des liaisons, peu importe la raison (par exemple lorsque vous voulez
-quelque chose comme un `$derived` que l'on peut modifier manuellement), envisagez l'utilisation de
-getters et setters pour synchroniser l'état
-([démo](/playground/untitled#H4sIAAAAAAAACpWRwW6DMBBEf8WyekikFOihFwcq9TvqHkyyQUjGsfCCQMj_XnvBNKpy6Qn2DTOD1wu_tRocF18Lx9kCFwT4iRvVxenT2syNoDGyWjl4xi93g2AwxPDSXfrW4oc0EjUgwzsqzSr2VhTnxJwNHwf24lAhHIpjVDZNwy1KS5wlNoGMSg9wOCYksQccerMlv65p51X0p_Xpdt_4YEy9yTkmV3z4MJT579-bUqsaNB2kbI0dwlnCgirJe2UakJzVrbkKaqkWivasU1O1ULxnOVk3JU-Uxti0p_-vKO4no_enbQ_yXhnZn0aHs4b1jiJMK7q2zmo1C3bTMG3LaZQVrMjeoSPgaUtkDxePMCEX2Ie6b_8D4WyJJEwCAAA=)).
-
-```svelte
-<script>
-	let total = 100;
-	let spent = $state(0);
-
-	let left = {
-		get value() {
-			return total - spent;
-		},
-		set value(v) {
-			spent = total - v;
-		}
-	};
-</script>
-
-<label>
-	<input type="range" bind:value={spent} max={total} />
-	{spent}/{total} dépensé
-</label>
-
-<label>
-	<input type="range" bind:value={left.value} max={total} />
-	{left.value}/{total} restant
 </label>
 ```
 

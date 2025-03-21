@@ -21,7 +21,7 @@ La nouvelle API de runes est au coeur de Svelte 5. Les runes sont simplement des
 le compilateur qui informent Svelte à propos de la réactivité attendue. Syntactiquement, les runes
 sont des fonctions dont le nom commence par un `$`.
 
-### let -> $state
+### let → $state
 
 En Svelte 4, une déclaration `let` à la racine d'un composant était implicitement réactive. En
 Svelte 5 les choses sont plus explicites : une variable est réactive lorsqu'elle a créée avec la
@@ -29,7 +29,7 @@ rune `$state`. Migrons le compteur ci-dessous en rune en l'entourant d'un `$stat
 
 ```svelte
 <script>
-	let count = +++$state(+++0+++)+++;
+	let count = +++$state(0)+++;
 </script>
 ```
 
@@ -46,7 +46,7 @@ modifier directement, sans aucun intermédiaire comme `.value` ou `getCount()`.
 > vous pouvez continuer d'utiliser la même API en dehors de la racine des composants. Allez sur le
 > [tutoriel](/tutorial) pour en apprendre plus.
 
-### $: -> $derived/$effect
+### $: → $derived/$effect
 
 Avec Svelte 4, une déclaration `$:` à la racine d'un composant pouvait être utilisée pour déclarer
 une dérivation, c-à-d un état entièrement défini par un calcul utilisant un autre état. Avec Svelte
@@ -54,8 +54,8 @@ une dérivation, c-à-d un état entièrement défini par un calcul utilisant un
 
 ```svelte
 <script>
-	let count = +++$state(+++0+++)+++;
-	---$:--- +++const+++ double = +++$derived(+++count * 2+++)+++;
+	let count = $state(0);
+	---$:--- +++const+++ double = +++$derived(count * 2)+++;
 </script>
 ```
 
@@ -67,7 +67,8 @@ nous pouvons le faire en utilisant la rune `$effect` :
 
 ```svelte
 <script>
-	let count = +++$state(+++0+++)+++;
+	let count = $state(0);
+
 	---$:---+++$effect(() =>+++ {
 		if (count > 5) {
 			alert('Le compteur est trop élevé');
@@ -114,7 +115,7 @@ mêmes]($effect#Understanding-dependencies) que ceux que de `$:`.
 > - ils exécutent leurs dépendences correctement et sont donc insensibles aux problèmes d'ordre
 > - ils sont adaptés à l'utilisation de TypeScript
 
-### export let -> $props
+### export let → $props
 
 Avec Svelte 4, les propriétés d'un composant étaient déclarées en utilisant `export let`. Chaque
 propriété nécessitait une déclaration. Avec Svelte 5, toutes les propriétés sont déclarées avec la
@@ -122,8 +123,8 @@ rune `$props`, via déstructuration :
 
 ```svelte
 <script>
-	---export let optional = 'unset';
-	export let required;---
+	---export let optional = 'unset';---
+	---export let required;---
 	+++let { optional = 'unset', required } = $props();+++
 </script>
 ```
@@ -151,8 +152,8 @@ Avec Svelte 5, la rune `$props` rend ces situations plus simples sans ajouter de
 
 ```svelte
 <script>
-	---let klass = '';
-	export { klass as class};---
+	---let klass = '';---
+	---export { klass as class};---
 	+++let { class: klass, ...rest } = $props();+++
 </script>
 <button class={klass} {...---$$restProps---+++rest+++}>cliquez moi</button>
@@ -248,9 +249,9 @@ de callback_ — ce qui signifie que vous passez des fonctions comme propriété
 ```svelte
 <!--- file: Pump.svelte --->
 <script>
-    ---import { createEventDispatcher } from 'svelte';
-    const dispatch = createEventDispatcher();
-    ---
+	---import { createEventDispatcher } from 'svelte';---
+	---const dispatch = createEventDispatcher();---
+
 	+++let { inflate, deflate } = $props();+++
 	let power = $state(5);
 </script>
@@ -580,12 +581,12 @@ de ces migrations automatiquement. Vous pouvez migrer votre projet en utilisant 
 svelte-5`. Ceci va faire les choses suivantes :
 
 - mettre à jour les versions des dépendences principales dans votre `package.json`
-- migrer votre code pour utiliser les runes (`let` -> `$state` etc.)
-- migrer les éléments DOM pour qu'ils utilisent les attributs d'évènements (`on:click` -> `onclick`)
-- migrer les créations de slots pour utiliser les balises de rendu (`<slot />` -> `{@render children()}`)
-- migrer l'utilisation des slots pour utiliser des snippets (`<div slot="x">...</div>` -> `{#snippet
+- migrer votre code pour utiliser les runes (`let` → `$state` etc.)
+- migrer les éléments DOM pour qu'ils utilisent les attributs d'évènements (`on:click` → `onclick`)
+- migrer les créations de slots pour utiliser les balises de rendu (`<slot />` → `{@render children()}`)
+- migrer l'utilisation des slots pour utiliser des snippets (`<div slot="x">...</div>` → `{#snippet
 x()}<div>...</div>{/snippet}`)
-- migrer les créations évidentes de composant (`new Component(...)` -> `mount(Component, ...)`)
+- migrer les créations évidentes de composant (`new Component(...)` → `mount(Component, ...)`)
 
 Vous pouvez aussi migrer un seul composant à la fois dans VS Code via la commande `Migrate Component
 to Svelte 5 Syntax`, ou dans notre bac à sable via le bouton `Migrer`.
