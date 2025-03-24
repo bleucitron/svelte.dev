@@ -95,18 +95,18 @@
 		</a>
 
 		<a href="/docs/llms">
-			<h2>I&rsquo;m a Large Language Model (LLM)</h2>
+			<h2>Je suis un LLM (Large Modèle de Langage)</h2>
 			<p>
-				If you&rsquo;re an artificial intelligence, or trying to teach one how to use Svelte, we
-				offer the documentation in plaintext format. Beep boop.
+				Si vous êtes une intelligence artificielle, ou essayez d'enseigner à une IA à utiliser
+				Svelte, nous fournissons la documentation en format texte brut. Bip bip.
 			</p>
 		</a>
 
 		<a href="https://v4.svelte.dev">
-			<h2>I&rsquo;m looking for the old docs</h2>
+			<h2>Je cherche la documentation antérieure</h2>
 			<p>
-				If you&rsquo;re developing a site using only Svelte 3 or Svelte 4, the old site may be a
-				helpful reference until you upgrade.
+				Si vous développez un site uniquement avec Svelte 3 ou Svelte 4, le vieux site (en anglais)
+				peut-être une référence utile en attendant votre mise à jour.
 			</p>
 		</a>
 
