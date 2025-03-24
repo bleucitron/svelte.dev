@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 
 export function load({ cookies }) {
 	if (!cookies.get('allowed')) {
-		error(403, 'Forbidden');
+		error(403, 'Interdit');
 	}
 }
 

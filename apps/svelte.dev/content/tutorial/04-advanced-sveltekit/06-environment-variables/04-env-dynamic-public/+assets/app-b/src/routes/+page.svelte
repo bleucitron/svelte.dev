@@ -6,7 +6,7 @@
 	style:background={env.PUBLIC_THEME_BACKGROUND}
 	style:color={env.PUBLIC_THEME_FOREGROUND}
 >
-	{env.PUBLIC_THEME_FOREGROUND} on {env.PUBLIC_THEME_BACKGROUND}
+	{env.PUBLIC_THEME_FOREGROUND} sur {env.PUBLIC_THEME_BACKGROUND}
 </main>
 
 <style>

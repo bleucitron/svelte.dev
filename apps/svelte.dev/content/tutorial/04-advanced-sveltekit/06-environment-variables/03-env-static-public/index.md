@@ -2,9 +2,10 @@
 title: $env/static/public
 ---
 
-Some environment variables _can_ be safely exposed to the browser. These are distinguished from private environment variables with a `PUBLIC_` prefix.
+Certaines variables d'environnement _peuvent_ être exposées sans risque dans le navigateur.
+Celles-ci sont différenciées des variables d'environnement privées grâce à un préfixe `PUBLIC_`.
 
-Add values to the two public environment variables in `.env`:
+Ajoutez des valeurs aux deux variables d'environnement publiques dans le fichier `.env` :
 
 ```env
 /// file: .env
@@ -12,7 +13,7 @@ PUBLIC_THEME_BACKGROUND=+++"steelblue"+++
 PUBLIC_THEME_FOREGROUND=+++"bisque"+++
 ```
 
-Then, import them into `src/routes/+page.svelte`:
+Puis, importez les dans `src/routes/+page.svelte` :
 
 ```svelte
 /// file: src/routes/+page.svelte

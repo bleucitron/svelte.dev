@@ -1,3 +1,3 @@
 ---
-title: Environment variables
+title: Variables d'environnement
 ---

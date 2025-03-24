@@ -2,7 +2,9 @@
 title: $env/dynamic/public
 ---
 
-As with [private environment variables](/tutorial/kit/env-static-private), it's preferable to use static values if possible, but if necessary we can use dynamic values instead:
+Comme avec les [variables d'environnement privées](/tutorial/kit/env-static-private), il est
+préférable d'utiliser des valeurs statiques si possible, mais si nécessaire nous pouvons plutôt
+utiliser des valeurs dynamiques :
 
 ```svelte
 /// file: src/routes/+page.svelte
@@ -14,6 +16,6 @@ As with [private environment variables](/tutorial/kit/env-static-private), it's 
 	style:background={+++env.+++PUBLIC_THEME_BACKGROUND}
 	style:color={+++env.+++PUBLIC_THEME_FOREGROUND}
 >
-	{+++env.+++PUBLIC_THEME_FOREGROUND} on {+++env.+++PUBLIC_THEME_BACKGROUND}
+	{+++env.+++PUBLIC_THEME_FOREGROUND} sur {+++env.+++PUBLIC_THEME_BACKGROUND}
 </main>
 ```

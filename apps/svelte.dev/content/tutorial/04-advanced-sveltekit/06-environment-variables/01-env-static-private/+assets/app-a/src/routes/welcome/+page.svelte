@@ -1,5 +1,5 @@
-<h1>welcome!</h1>
+<h1>bienvenue !</h1>
 
 <form method="POST">
-	<button>log out</button>
+	<button>se déconnecter</button>
 </form>
