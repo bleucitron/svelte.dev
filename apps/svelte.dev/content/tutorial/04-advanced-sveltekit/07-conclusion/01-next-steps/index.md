@@ -16,6 +16,7 @@ Svelte et SvelteKit vont continuer d'évoluer, et ce tutoriel également. Revene
 pour vous tenir au courant.
 
 Pour vous tenir au courant des développements dans le monde de Svelte, rejoignez notre serveur
-Discord sur [sveltefr.dev/chat](/chat) ou sur le [serveur Discord officiel](svelte.dev/chat), et
-suivez [Svelte Society](https://bsky.app/profile/sveltesociety.dev) sur BlueSky. Nous sommes ravis
-de vous accueillir dans la communauté Svelte !
+Discord sur [sveltefr.dev/chat](/chat) ou sur le [serveur Discord
+officiel](https://svelte.dev/chat), et suivez [Svelte
+Society](https://bsky.app/profile/sveltesociety.dev) sur BlueSky. Nous sommes ravis de vous
+accueillir dans la communauté Svelte !
