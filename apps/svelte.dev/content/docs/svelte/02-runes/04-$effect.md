@@ -100,6 +100,10 @@ de manière _synchrone_ à l'intérieur de son corps de fonction (en les incluan
 l'appel de la fonction) et l'enregistre en tant que
 dépendance. Lorsque ces dépendances changent, l'`$effect` va planifier une ré-exécution.
 
+Si `$state` et `$derived` sont utilisées directement dans un `$effect` (par exemple, durant la
+création d'une [classe réactive](https://svelte.dev/docs/svelte/$state#Classes)), ces valeurs ne
+seront _pas_ traitées comme dépendances.
+
 Les valeurs qui sont lues de manière _asynchrones_ — après un `await` ou à l'intérieur d'un
 `setTimeout`, par exemple — ne seront pas considérées comme dépendances. Ici, le canvas sera repeint
 lorsque `color` change, mais pas lorsque `size` change
@@ -302,6 +306,10 @@ ceci...
 
 > [!NOTE] Pour des choses plus compliquées qu'une simple expression comme `count * 2`, vous pouvez
 > aussi utiliser `$derived.by`.
+
+Si vous utilisez un effet parce que vous souhaitez réassigner une valeur dérivée (pour construire
+une interface optimiste par exemple), notez que [les valeurs dérivées peuvent être réassignées
+directement]($derived#Overriding-derived-values) depuis Svelte 5.25.
 
 Vous pourriez être tenté•e de faire des choses tordues avec les effets pour lier une valeur à une
 autre. L'exemple suivant montre deux inputs pour "argent dépensé" et "argent restant" qui sont

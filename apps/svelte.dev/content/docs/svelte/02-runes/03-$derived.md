@@ -60,6 +60,58 @@ sa valeur est lue.
 Pour exempter un morceau d'état d'être considéré comme une dépendance, utilisez
 [`untrack`](svelte#untrack).
 
+## Écraser des valeurs dérivées [!VO]Overriding derived values
+
+Les expressions dérivées sont recalculées lorsque leurs dépendances changent, mais vous pouvez
+temporairement écraser leurs valeurs en les réassignant (à moins qu'elles ne soient déclarées avec
+`const`). Ceci peut être utile pour des choses comme des _interfaces optimistes_, où une valeur est
+dérivée de la "source de vérité" (comme des données venant de votre serveur), mais vous souhaitez
+montrer un feedback immédiat à l'utilisateur ou utilisatrice :
+
+```svelte
+<script>
+	let { post, like } = $props();
+
+	let likes = $derived(post.likes);
+
+	async function onclick() {
+		// increment the `likes` count immediately...
+		// incrémente le compte de "likes" immédiatement...
+		likes += 1;
+
+		// et prévient le serveur, qui va faire sa mise à jour et redescendre la nouvelle valeur de `post`
+		try {
+			await like();
+		} catch {
+			// échec ! annule le changement
+			likes -= 1;
+		}
+	}
+</script>
+
+<button {onclick}>🧡 {likes}</button>
+```
+
+> [!NOTE] Avant Svelte 5.25, les valeurs dérivées étaient uniquement en lecture seule.
+
+## Dérivées et réactivité [!VO]Deriveds and reactivity
+
+À la différence de `$state`, qui convertit les objets et les tableaux en [proxies profondément
+réactifs]($state#Deep-state), les valeurs `$derived` sont laissées telles quelles. Par exemple,
+[dans un cas comme
+celui-ci](/playground/untitled#H4sIAAAAAAAAE4VU22rjMBD9lUHd3aaQi9PdstS1A3t5XvpQ2Ic4D7I1iUUV2UjjNMX431eS7TRdSosxgjMzZ45mjt0yzffIYibvy0ojFJWqDKCQVBk2ZVup0LJ43TJ6rn2aBxw-FP2o67k9oCKP5dziW3hRaUJNjoYltjCyplWmM1JIIAn3FlL4ZIkTTtYez6jtj4w8WwyXv9GiIXiQxLVs9pfTMR7EuoSLIuLFbX7Z4930bZo_nBrD1bs834tlfvsBz9_SyX6PZXu9XaL4gOWn4sXjeyzftv4ZWfyxubpzxzg6LfD4MrooxELEosKCUPigQCMPKCZh0OtQE1iSxcsmdHuBvCiHZXALLXiN08EL3RRkaJ_kDVGle0HcSD5TPEeVtj67O4Nrg9aiSNtBY5oODJkrL5QsHtN2cgXp6nSJMWzpWWGasdlsGEMbzi5jPr5KFr0Ep7pdeM2-TCelCddIhDxAobi1jqF3cMaC1RKp64bAW9iFAmXGIHfd4wNXDabtOLN53w8W53VvJoZLh7xk4Rr3CoL-UNoLhWHrT1JQGcM17u96oES5K-kc2XOzkzqGCKL5De79OUTyyrg1zgwXsrEx3ESfx4Bz0M5UjVMHB24mw9SuXtXFoN13fYKOM1tyUT3FbvbWmSWCZX2Er-41u5xPoml45svRahl9Wb9aasbINJixDZwcPTbyTLZSUsAvrg_cPuCR7s782_WU8343Y72Qtlb8OYatwuOQvuN13M_hJKNfxann1v1U_B1KZ_D_mzhzhz24fw85CSz2irtN9w9HshBK7AQAAA==) ...
+
+```svelte
+let items = $state([...]);
+
+let index = $state(0);
+let selected = $derived(items[index]);
+```
+
+... vous pouvez changer (ou `bind:`) les propriétés de `selected` et cela affectera le tableau
+d'`items` sous-jacent. Si `items` n'était _pas_ profondément réactif, muter `selected` n'aurait
+aucun effet.
+
 ## Propagation de la mise à jour [!VO]Update propagation
 
 Svelte utilise un concept appelée _réactivité push-pull_ — lorsque l'état est mis à jour, tout ce

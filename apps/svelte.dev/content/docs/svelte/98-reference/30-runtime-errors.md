@@ -129,51 +129,45 @@ Property descriptors defined on `$state` objects must contain `value` and always
 Cannot set prototype of `$state` object
 ```
 
-### state_unsafe_local_read
-
-```
-Reading state that was created inside the same derived is forbidden. Consider using `untrack` to read locally created state
-```
-
 ### state_unsafe_mutation
 
 ```
 Updating state inside a derived or a template expression is forbidden. If the value should not be reactive, declare it without `$state`
 ```
 
-Cette erreur est levée dans une situation comme celle-ci :
+Cette erreur se produit lorsqu'un état est mis à jour pendant l'évaluation d'un `$derived`. Vous
+pourriez la rencontrer alors que vous essayez de "dériver" deux morceaux d'état en une seule fois :
 
 ```svelte
 <script>
-    let count = $state(0);
-    let multiple = $derived.by(() => {
-        const result = count * 2;
-        if (result > 10) {
-            count = 0;
-        }
-        return result;
-    });
+	let count = $state(0);
+
+	let even = $state(true);
+
+	let odd = $derived.by(() => {
+		even = count % 2 === 0;
+		return !even;
+	});
 </script>
 
-<button onclick={() => count++}>{count} / {multiple}</button>
+<button onclick={() => count++}>{count}</button>
+
+<p>{count} est pair : {even}</p>
+<p>{count} est impair : {odd}</p>
 ```
 
-Ici, le `$derived` met à jour `count`, qui est un `$state`, ce qui est interdit. C'est interdit car
-le graph de réactivité pourrait devenir instable, apportant des bugs subtiles, comme des valeurs
-devenant périmées ou des effets se déclenchant dans le mauvais ordre. Pour éviter cela, Svelte
-génère une erreur lorsqu'il détecte une mise à jour d'une variable `$state`.
+Ceci est interdit car cela introduit de l'instabilité : si `<p>{count} est pair : {even}</p>` est
+mis à jour avant que `odd` ne soit recalculé, `even` sera périmé. Dans la plupart des cas, la
+solution est de tout dériver :
 
-Pour corriger cela :
-- Vérifiez s'il est possible de réécrire votre `$derived` afin que la mise à jour ne soit plus
-nécessaire
-- Réfléchissez à votre besoin de mise à jour de `$state` au sein de `$derived`. C'est peut-être
-parce que vous utilisez `bind:`, ce qui vous met sur une mauvaise pente en termes de code, et si
-c'est le cas séparer les inputs des outputs (en les affectant séparément à un attribut et à un
-évènement, ou en utilisant les [liaisons de fonction](bind#Function-bindings)) permet alors de ne
-plus avoir besoin de mise à jour
-- Si c'est inévitable, vous pourriez avoir plutôt besoin d'un [`$effect`]($effect). Ceci pourrait
-impliquer de découper des morceaux du `$derived` pour les mettre dans un [`$effect`]($effect) qui
-s'occuperait de la mise à jour.
+```js
+let count = 0;
+// ---cut---
+let even = $derived(count % 2 === 0);
+let odd = $derived(!even);
+```
+
+Si les effets de bord sont inévitable, utilisez plutôt [`$effect`]($effect).
 
 
 ## Erreurs serveur [!VO]Server errors

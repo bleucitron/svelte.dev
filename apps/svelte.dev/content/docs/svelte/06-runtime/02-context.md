@@ -46,7 +46,7 @@ quelle valeur JavaScript.
 En plus de [`setContext`](svelte#setContext) et [`getContext`](svelte#getContext), Svelte expose les
 fonctions [`hasContext`](svelte#hasContext) et [`getAllContexts`](svelte#getAllContexts).
 
-## Utiliser le contexte avec l'état [VO]Using context with state
+## Utiliser le contexte avec l'état [!VO]Using context with state
 
 Vous pouvez stocker des états réactifs dans le contexte
 ([demo](/playground/untitled#H4sIAAAAAAAAE41R0W6DMAz8FSuaBNUQdK8MkKZ-wh7HHihzu6hgosRMm1D-fUpSVNq12x4iEvvOx_kmQU2PIhfP3DCCJGgHYvxkkYid7NCI_GUS_KUcxhVEMjOelErNB3bsatvG4LW6n0ZsRC4K02qpuKqpZtmrQTNMYJA3QRAs7PTQQxS40eMCt3mX3duxnWb-lS5h7nTI0A4jMWoo4c44P_Hku-zrOazdy64chWo-ScfRkRgl8wgHKrLTH1OxHZkHgoHaTraHcopXUFYzPPVfuC_hwQaD1GrskdiNCdQwJljJqlvXfyqVsA5CGg0uRUQifHw56xFtciO75QrP07vo_JXf_tf8yK2ezDKY_ZWt_1y2qqYzv7bI1IW1V_sN19m-07wCAAA=))...
@@ -91,7 +91,7 @@ vous "casserez le lien" — en d'autres termes, plutôt que ceci...
 
 Svelte vous avertira si vous vous trompez.
 
-## Contexte typé [VO]Type-safe context
+## Contexte typé [!VO]Type-safe context
 
 Une astuce utile est d'englober les appels à `setContext` et `getContext` dans des fonctions
 utilitaires qui vous permettent de préserver votre typage :
@@ -117,7 +117,7 @@ export function getUserContext() {
 }
 ```
 
-## Remplacer l'état global [VO]Replacing global state
+## Remplacer l'état global [!VO]Replacing global state
 
 Lorsque vous avez un état partagé par plusieurs composants différents, vous pourriez être tenté•e•s
 de le mettre dans son propre module et de simplement l'importer là où il est nécessaire :
