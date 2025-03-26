@@ -19,6 +19,19 @@ jobs:
           owner: sveltejs
           repo: svelte.dev
           dir: apps/svelte.dev/content/docs/svelte
+  track-docs-kit:
+    runs-on: ubuntu-latest
+    name: Checking Docs Kit
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Kit docs new commits
+        uses: AlexxNB/track-commits-to-issue@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: sveltejs
+          repo: svelte.dev
+          dir: apps/svelte.dev/content/docs/kit
   track-docs-cli:
     runs-on: ubuntu-latest
     name: Checking Docs CLI
