@@ -35,7 +35,7 @@ Vous trouverez également des fichiers classiques comme `.gitignore` et `.npmrc`
 eslint.config.js` et ainsi de suite, si vous choisissez ces options après avoir lancé `npx sv
 create`).
 
-## Fichiers d'un projet
+## Fichiers d'un projet [!VO]Project files
 
 ### src
 
