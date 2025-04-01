@@ -152,7 +152,8 @@ Si vous préférez une approche HTML déclarative, vous pouvez utiliser la libra
 [svelte-navigator](https://github.com/mefechoel/svelte-navigator) qui inclut des fonctionnalités
 supplémentaires.
 
-Si vous avez besoin de routing basé sur des hashs côté client, renseignez-vous sur
+Si vous avez besoin de routing basé sur des hashs côté client, renseignez-vous sur l'[option
+hash](/docs/kit/configuration#router),
 [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router) ou
 [abstract-state-router](https://github.com/TehShrike/abstract-state-router/).
 
@@ -166,7 +167,7 @@ sveltesociety.dev](https://sveltesociety.dev/packages?category=routers).
 
 Même si la plupart des applications mobiles sont construites sans JavaScript, si vous souhaitez
 capitaliser sur vos composants et votre connaissance de Svelte pour construire une application
-mobile, vous pouvez transformer une [SPA SvelteKit](https://kit.svelte.dev/docs/single-page-apps) en
+mobile, vous pouvez transformer une [SPA SvelteKit](/docs/kit/single-page-apps) en
 une application mobile en utilisant [Tauri](https://v2.tauri.app/start/frontend/sveltekit/) ou
 [Capacitor](https://capacitorjs.com/solution/svelte). Les fonctionnalités mobile comme la caméra, la
 géolocalisation ou les notifications push sont disponibles via des plugins pour chacune des
