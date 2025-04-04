@@ -12,6 +12,7 @@
 
 	<figure>
 		<enhanced:img
+			class="collage"
 			src="./summit.png?w=800;1200;2000;2800;4400"
 			alt="Photos du Svelte Summit de 2022 à Stockholm par Marcel Cutts"
 		/>
@@ -40,7 +41,7 @@
 		}
 	}
 
-	img {
+	.collage {
 		width: 100%;
 		height: auto;
 	}
