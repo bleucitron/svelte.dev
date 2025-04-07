@@ -20,7 +20,7 @@ import type { Node } from 'estree';
 import { max } from './semver';
 import { NPM, VIRTUAL } from '../constants';
 import {
-	add_suffix,
+	normalize_path,
 	fetch_package,
 	load_svelte,
 	parse_npm_url,
@@ -204,7 +204,7 @@ async function get_bundle(
 					const pkg = await fetch_package(name, name === 'svelte' ? svelte_version : version);
 					const path = new URL(importee, importer).pathname.replace(`/${name}@${version}/`, '');
 
-					return add_suffix(pkg, path);
+					return normalize_path(pkg, path);
 				}
 
 				return new URL(importee, importer).href;
@@ -248,7 +248,7 @@ async function get_bundle(
 			const pkg = await fetch_package(pkg_name, pkg_name === 'svelte' ? svelte_version : v);
 			const subpath = resolve_subpath(pkg, '.' + (match[3] ?? ''));
 
-			return add_suffix(pkg, subpath.slice(2));
+			return normalize_path(pkg, subpath.slice(2));
 		},
 		async load(resolved) {
 			if (uid !== current_id) throw ABORT;
@@ -443,7 +443,6 @@ async function bundle(
 	can_use_experimental_async: boolean
 ): Promise<BundleResult> {
 	if (!DEV) {
-		console.clear();
 		console.log(`running Svelte compiler version %c${svelte.VERSION}`, 'font-weight: bold');
 	}
 

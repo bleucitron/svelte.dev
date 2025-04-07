@@ -25,3 +25,6 @@ Les codes de statut les plus courants sont :
 - `303` — pour les actions de formulaire, suite à une soumission réussie
 - `307` — pour les redirections temporaires
 - `308` — pour les redirections permanentes
+
+> [!NOTE] `redirect(...)` jette une exception, comme `error(...)`, ce qui veut dire qu'aucune code
+> ne sera exécuté _après_ l'exécution de la redirection.

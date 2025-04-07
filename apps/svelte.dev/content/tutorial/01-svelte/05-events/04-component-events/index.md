@@ -8,7 +8,7 @@ Dans `Stepper.svelte`, ajoutez les props `increment` et `decrement`...
 ```svelte
 /// file: Stepper.svelte
 <script>
-	let { +++increment, decrement+++ } = $props();
+	let +++{ increment, decrement }+++ = $props();
 </script>
 ```
 
@@ -23,6 +23,7 @@ Dans `Stepper.svelte`, ajoutez les props `increment` et `decrement`...
 Dans `App.svelte`, définissez les gestionnaires :
 
 ```svelte
+/// file: App.svelte
 <Stepper
 	+++increment={() => value += 1}+++
 	+++decrement={() => value -= 1}+++
