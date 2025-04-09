@@ -194,10 +194,10 @@ Tried to unmount a component that was not mounted
 ### ownership_invalid_binding
 
 ```
-%parent% passed a value to %child% with `bind:`, but the value is owned by %owner%. Consider creating a binding between %owner% and %parent%
+%parent% passed property `%prop%` to %child% with `bind:`, but its parent component %owner% did not declare `%prop%` as a binding. Consider creating a binding between %owner% and %parent% (e.g. `bind:%prop%={...}` instead of `%prop%={...}`)
 ```
 
-Imagingez trois composants `GrandParent`, `Parent` et `Child`. Si vous écrivez `<GrandParent
+Imaginez trois composants `GrandParent`, `Parent` et `Child`. Si vous écrivez `<GrandParent
 bind:value>`, passez la variable dans `GrandParent` via `<Parent {value} />` (notez l'absence de
 `bind:`), puis écrivez `<Child bind:value>` dans `Parent`, ce warning est levé.
 
@@ -207,14 +207,10 @@ dans cet exemple, écrivez `<Parent bind:value />`).
 ### ownership_invalid_mutation
 
 ```
-Mutating a value outside the component that created it is strongly discouraged. Consider passing values to child components with `bind:`, or use a callback instead
+Mutating unbound props (`%name%`, at %location%) is strongly discouraged. Consider using `bind:%prop%={...}` in %parent% (or using a callback) instead
 ```
 
-```
-%component% mutated a value owned by %owner%. This is strongly discouraged. Consider passing values to child components with `bind:`, or use a callback instead
-```
-
-Considérer le code suivant :
+Considérez le code suivant :
 
 ```svelte
 <!--- file: App.svelte --->

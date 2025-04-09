@@ -2,9 +2,9 @@
 title: Blocs each à clé
 ---
 
-Par défaut, lorsque vous modifiez la value d'un bloc `#each`, Svelte va ajouter et supprimer les
-noeuds du DOM à la _fin_ du bloc, et mettre à jour toute valeur ayant changé. Ceci peut ne pas être
-ce que vous voulez.
+Par défaut, mettre à jour la value d'un bloc `#each` va déclencher l'ajout ou la suppression de
+noeuds du DOM à la _fin_ du bloc si sa taille change, et mettre à jour le DOM restant. Ceci peut ne
+pas être ce que vous souhaitez.
 
 Ce genre de problématique est plus facile à montrer qu'à expliquer. Dans `Thing.svelte`, `name` est
 une prop dynamique, but `emoji` est une constante.
@@ -12,7 +12,8 @@ une prop dynamique, but `emoji` est une constante.
 Cliquez sur le bouton `Supprimer le premier élément` plusieurs fois, et notez ce qu'il se passe :
 
 1. Le dernier composant est supprimé.
-2. La valeur de `name` est ensuite mise à jour dans les noeuds restants du DOM, mais pas l'emoji.
+2. La valeur de `name` est ensuite mise à jour dans les noeuds restants du DOM (le noeud de texte
+   contenant 'donut' contient maintenant 'oeuf', etc.), mais pas l'emoji.
 
 > [!NOTE] Si vous venez de React, ceci peut vous paraître étrange, car vous êtes habitué•e au
 > re-rendu complet du composant lorsque l'état change. Svelte fonctionne différemment : le composant
