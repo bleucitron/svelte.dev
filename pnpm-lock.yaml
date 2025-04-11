@@ -288,6 +288,9 @@ importers:
       tarparser:
         specifier: ^0.0.4
         version: 0.0.4
+      ts-blank-space:
+        specifier: ^0.6.1
+        version: 0.6.1
       zimmerframe:
         specifier: ^1.1.2
         version: 1.1.2
@@ -3064,6 +3067,10 @@ packages:
   trim-lines@3.0.1:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
 
+  ts-blank-space@0.6.1:
+    resolution: {integrity: sha512-LcM3W5HEyzTaXUeQITV8ploUOGe+zuuoFYsCfPscFLhx3bZn2sSfHMKxsULVG/zA7an9UhReiHv4Kk/6QzlpXQ==}
+    engines: {node: '>=18.0.0'}
+
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
@@ -3082,6 +3089,11 @@ packages:
 
   typescript@5.5.4:
     resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -5935,6 +5947,10 @@ snapshots:
 
   trim-lines@3.0.1: {}
 
+  ts-blank-space@0.6.1:
+    dependencies:
+      typescript: 5.8.2
+
   tslib@2.6.3: {}
 
   tsx@4.19.0:
@@ -5955,6 +5971,8 @@ snapshots:
       - supports-color
 
   typescript@5.5.4: {}
+
+  typescript@5.8.2: {}
 
   ultrahtml@1.5.3: {}
 

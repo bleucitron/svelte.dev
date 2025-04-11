@@ -282,3 +282,88 @@ console.log(total.value); // 7
 
 ... toutefois si vous vous retrouvez à écrire du code similaire, envisagez plutôt l'utilisation de
 [classes](#Classes).
+
+## Passer de l'état entre les modules [!VO]Passing state across modules
+
+Vous pouvez déclarer un état dans des fichiers `.svelte.js` et `.svelte.ts`, mais vous pouvez
+uniquement _exporter_ cet état s'il n'est pas directement réassigné. En d'autres mots, vous ne pouvez
+pas faire ceci :
+
+```js
+/// file: state.svelte.js
+export let count = $state(0);
+
+export function increment() {
+	count += 1;
+}
+```
+
+La raison est que chaque référence à `count` est transformée par le compilateur Svelte — le code
+ci-dessus est grosso modo équivalent à ceci :
+
+```js
+/// file: state.svelte.js (compiler output)
+// @filename: index.ts
+interface Signal<T> {
+	value: T;
+}
+
+interface Svelte {
+	state<T>(value?: T): Signal<T>;
+	get<T>(source: Signal<T>): T;
+	set<T>(source: Signal<T>, value: T): void;
+}
+declare const $: Svelte;
+// ---cut---
+export let count = $.state(0);
+
+export function increment() {
+	$.set(count, $.get(count) + 1);
+}
+```
+
+> [!NOTE] Vous pouvez voir le code que Svelte génère en cliquant sur l'onglet 'JS Output' dans le
+> [bac à sable](/playground).
+
+Puisque le compilateur ne traite qu'un seule fichier à la fois, si un autre fichier importe `count`,
+Svelte ne saura pas qu'il doit entourer chaque référence de `$.get` `$.set` :
+
+```js
+// @filename: state.svelte.js
+export let count = 0;
+
+// @filename: index.js
+// ---cut---
+import { count } from './state.svelte.js';
+
+console.log(typeof count); // 'object', pas 'number'
+```
+
+Ceci vous laisse deux options pour partager un état entre vos modules — soit ne pas le réassigner...
+
+```js
+// Ceci est autorisé — puisque nous mettons
+// à jour `counter.count` et pas `counter`,
+// Svelte ne l'entoure pas de `$.state`
+export const counter = $state({
+	count: 0
+});
+
+export function increment() {
+	counter.count += 1;
+}
+```
+
+... ou ne pas l'exporter directement :
+
+```js
+let count = $state(0);
+
+export function getCount() {
+	return count;
+}
+
+export function increment() {
+	count += 1;
+}
+```

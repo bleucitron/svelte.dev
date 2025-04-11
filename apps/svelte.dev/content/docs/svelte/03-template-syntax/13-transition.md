@@ -27,11 +27,6 @@ La directive `transition:` indique une transition _bidirectionnelle_, ce qui sig
 {/if}
 ```
 
-## Transitions intégrées [!VO]Built-in transitions
-
-Une sélection de transitions intégrées peut être importée depuis le module
-[`svelte/transition`](svelte-transition).
-
 ## Local vs global
 
 Les transitions sont locales par défaut. Les transitions locales sont jouées uniquement lorsque le
@@ -47,6 +42,11 @@ ou détruits.
 	{/if}
 {/if}
 ```
+
+## Transitions intégrées [!VO]Built-in transitions
+
+Une sélection de transitions intégrées peut être importée depuis le module
+[`svelte/transition`](svelte-transition).
 
 ## Paramètres de transition [!VO]Transition parameters
 

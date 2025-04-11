@@ -8,7 +8,8 @@ En plus des fichiers `.svelte`, Svelte opère également sur les fichiers `.svel
 
 Ils se comportent comme tout autre module `.js` ou `.ts`, sauf qu'ils permettent l'utilisation des
 runes. Ceci est pratique pour créer de la logique réactive réutilisable, ou pour partager un état
-réactif dans toute votre application.
+réactif dans toute votre application (notez toutefois que vous ne [pouvez pas exporter un état
+réassigné]($state#Passing-state-across-modules)).
 
 > [!LEGACY]
 > Ceci est un concept qui n'existait pas avant Svelte 5.

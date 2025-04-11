@@ -33,7 +33,7 @@ Vous pouvez créer un effet avec la rune `$effect`
 	});
 </script>
 
-<canvas bind:this={canvas} width="100" height="100" />
+<canvas bind:this={canvas} width="100" height="100"></canvas>
 ```
 
 Lorsque Svelte exécute une fonction d'effet, il suit les morceaux d'état (ou d'état dérivé) qui sont
@@ -169,23 +169,37 @@ développements, vous pouvez utiliser [`$inspect`]($inspect).)
 Un effet dépend uniquement des valeurs qu'il a lues la dernière fois qu'il a été joué. Ceci a des
 conséquences intéressantes pour les effets qui impliquent du code conditionnel.
 
-Par exemple, si `a` vaut `true` dans le code ci-dessous, le code dans le bloc `#if` sera joué et `b`
-sera ré-évalué. Dans ce cas, n'importe quel changement sur `a` ou `b` [va déclencher la ré-exécution
-de
-l'effet](/playground/untitled#H4sIAAAAAAAAE3VQzWrDMAx-FdUU4kBp71li6EPstOxge0ox8-QQK2PD-N1nLy2F0Z2Evj9_chKkP1B04pnYscc3cRCT8xhF95IEf8-Vq0DBr8rzPB_jJ3qumNERH-E2ECNxiRF9tIubWY00lgcYNAywj6wZJS8rtk83wjwgCrXHaULLUrYwKEgVGrnkx-Dx6MNFNstK5OjSbFGbwE0gdXuT_zGYrjmAuco515Hr1p_uXak3K3MgCGS9s-9D2grU-judlQYXIencnzad-tdR79qZrMyvw9wd5Z8Yv1h09dz8mn8AkM7Pfo0BAAA=).
+Par exemple, si `condition` vaut `true` dans le code ci-dessous, le code dans le bloc `#if` sera
+joué et `color` sera ré-évalué. Dans ce cas, n'importe quel changement sur `condition` ou `color`
+[va déclencher la ré-exécution de
+l'effet](/playground/untitled#H4sIAAAAAAAAE21RQW6DMBD8ytaNBJHaJFLViwNIVZ8RcnBgXVk1xsILTYT4e20TQg89IOPZ2fHM7siMaJBx9tmaWpFqjQNlAKXEihx7YVJpdIyfRkY3G4gB8Pi97cPanRtQU8AuwuF_eNUaQuPlOMtc1SlLRWlKUo1tOwJflUikQHZtA0klzCDc64Imx0ANn8bInV1CDhtHgjClrsftcSXotluLybOUb3g4JJHhOZs5WZpuIS9gjNqkJKQP5e2ClrR4SMdZ13E4xZ8zTPOTJU2A2uE_PQ9COCI926_hTVarIU4hu_REPlBrKq2q73ycrf1N-vS4TMUsulaVg3EtR8H9rFgsg8uUsT1B2F9eshigZHBRpuaD0D3mY8Qm2BfB5N2YyRzdNEYVDy0Ja-WsFjcOUuP1HvFLWA6H3XuHTUSmmDV2--0TXonxsKbp7G9C6R__NONS-MFNvxj_d6mBAgAA).
 
-À l'inverse, si `a` vaut `false`, `b` ne sera pas ré-évalué, et l'effet ne sera rejoué _que si_ `a`
-change.
+À l'inverse, si `condition` vaut `false`, `color` ne sera pas ré-évalué, et l'effet ne sera rejoué
+une nouvelle fois _que si_ `condition` change.
 
 ```ts
-let a = false;
-let b = false;
-// ---cut---
-$effect(() => {
-	console.log('effet');
+// @filename: ambient.d.ts
+declare module 'canvas-confetti' {
+	interface ConfettiOptions {
+		colors: string[];
+	}
 
-	if (a) {
-		console.log('b:', b);
+	function confetti(opts?: ConfettiOptions): void;
+	export default confetti;
+}
+
+// @filename: index.js
+// ---cut---
+import confetti from 'canvas-confetti';
+
+let condition = $state(true);
+let color = $state('#ff3e00');
+
+$effect(() => {
+	if (condition) {
+		confetti({ colors: [color] });
+	} else {
+		confetti();
 	}
 });
 ```
@@ -260,20 +274,19 @@ s'auto-nettoie pas. Cela est utile pour les effets imbriqués que vous souhaitez
 manuellement. Cette rune permet également la création d'effets en dehors de la phase
 d'initialisation du composant.
 
-```svelte
-<script>
-	let count = $state(0);
-
-	const cleanup = $effect.root(() => {
-		$effect(() => {
-			console.log(count);
-		});
-
-		return () => {
-			console.log('nettoyage de l\'effet racine');
-		};
+```js
+const destroy = $effect.root(() => {
+	$effect(() => {
+		// mise en place
 	});
-</script>
+
+	return () => {
+		// nettoyage
+	};
+});
+
+// plus tard...
+destroy();
 ```
 
 ## Quand ne pas utiliser `$effect` [!VO]When not to use `$effect`

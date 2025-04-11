@@ -3,6 +3,7 @@ import { walk } from 'zimmerframe';
 import '../patch_window';
 import { rollup } from '@rollup/browser';
 import { DEV } from 'esm-env';
+import typescript_strip_types from './plugins/typescript-strip-types';
 import commonjs from './plugins/commonjs';
 import glsl from './plugins/glsl';
 import json from './plugins/json';
@@ -184,7 +185,7 @@ async function get_bundle(
 				if (importer.startsWith(VIRTUAL)) {
 					const url = new URL(importee, importer);
 
-					for (const suffix of ['', '.js', '.json']) {
+					for (const suffix of ['', '.js', '.json', '.ts']) {
 						const with_suffix = `${url.href.slice(VIRTUAL.length + 1)}${suffix}`;
 						const file = virtual.get(with_suffix);
 
@@ -280,7 +281,7 @@ async function get_bundle(
 			const message = `bundling ${id.replace(VIRTUAL + '/', '').replace(NPM + '/', '')}`;
 			self.postMessage({ type: 'status', message });
 
-			if (!/\.(svelte|js)$/.test(id)) return null;
+			if (!/\.(svelte|js|ts)$/.test(id)) return null;
 
 			const name = id.split('/').pop()?.split('.')[0];
 
@@ -343,7 +344,7 @@ async function get_bundle(
 					$$_styles.push($$__style);
 				`.replace(/\t/g, '');
 				}
-			} else if (id.endsWith('.svelte.js')) {
+			} else if (/\.svelte\.(js|ts)$/.test(id)) {
 				const compilerOptions: any = {
 					filename: name + '.js',
 					generate: 'client',
@@ -388,6 +389,7 @@ async function get_bundle(
 		input: './__entry.js',
 		cache: previous?.key === key && previous.cache,
 		plugins: [
+			typescript_strip_types,
 			repl_plugin,
 			commonjs,
 			json,

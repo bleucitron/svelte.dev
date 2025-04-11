@@ -28,7 +28,7 @@ A component is attempting to bind to a non-bindable property `%key%` belonging t
 ### component_api_changed
 
 ```
-%parent% called `%method%` on an instance of %component%, which is no longer valid in Svelte 5
+Calling `%method%` on a component instance (of %component%) is no longer valid in Svelte 5
 ```
 
 See the [migration guide](/docs/svelte/v5-migration-guide#Components-are-no-longer-classes) for more information.
@@ -219,6 +219,12 @@ Cette erreur serait levée dans une situation comme celle-ci :
 Ici, `List.svelte` utilise `{@render children(item)}`, ce qui signifie qu'elle attend
 `Parent.svelte` pour utiliser des snippets. Mais en réalité `Parent.svelte` utilise la directive
 `let:`, qui est dépréciée. Cette combinaison d'APIs est incompatible, d'où l'erreur.
+
+### invalid_snippet_arguments
+
+```
+A snippet function was passed invalid arguments. Snippets should only be instantiated via `{@render ...}`
+```
 
 ### lifecycle_outside_component
 
