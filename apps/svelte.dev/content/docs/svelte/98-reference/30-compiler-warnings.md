@@ -930,18 +930,16 @@ Voir [le guide de migration](v5-migration-guide#Snippets-instead-of-slots) pour 
 ### state_referenced_locally
 
 ```
-State referenced in its own scope will never update. Did you mean to reference it inside a closure?
+This reference only captures the initial value of `%name%`. Did you mean to reference it inside a %type% instead?
 ```
 
 Ce warning est levé lorsque le compilateur détecte les choses suivantes :
 - une variable réactive a été déclarée
-- la variable a été réassignée
-- la variable est référencée dans le même scope où elle a été déclarée et il s'agit d'un contexte
-non réactif
+- ... puis réassignée plus tard...
+- ... et utilisée dans le même scope
 
-Dans ce cas, la réassignation de l'état ne sera pas détectée quel que soit ce que vous fournissez.
-Par exemple, si vous fournissez l'état à une fonction, cette fonction ne va pas détecter la mise à
-jour :
+Ceci "casse le lien" de la déclaration de l'état original. Par exemple, si vous fournissez l'état à
+une fonction, celle-ci va perdre l'accès à l'état une fois que celui-ci sera réassigné :
 
 ```svelte
 <!--- file: Parent.svelte --->

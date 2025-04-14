@@ -1060,6 +1060,8 @@ css: null | {
 	code: string;
 	/** Une sourcemap */
 	map: SourceMap;
+	/** Si oui ou non le CSS inclut des règles globales */
+	hasGlobal: boolean;
 };
 ```
 
