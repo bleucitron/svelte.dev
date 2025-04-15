@@ -189,6 +189,10 @@ Une expression JavaScript peut être incluse en tant que texte en l'entourant d'
 {expression}
 ```
 
+Les expressions qui sont `null` ou `undefined` seront omises ; toutes les autres seront
+[transformées en chaînes de
+caractères](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#string_coercion).
+
 Les accolades peuvent être incluses dans un template Svelte en utilisant leur chaîne de caractères
 d'[entité HTML](https://developer.mozilla.org/fr/docs/Glossary/Entity) : `&lbrace;`, `&lcub;`, or
 `&#123;` pour `{` et `&rbrace;`, `&rcub;`, ou `&#125;` pour `}`.

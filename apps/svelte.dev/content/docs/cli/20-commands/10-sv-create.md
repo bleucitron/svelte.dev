@@ -40,9 +40,19 @@ Empêche l'utilisation de la vérification de types. Non recommandé !
 
 Lance la commande sans l'utilitaire de choix d'options.
 
+### `--install <package-manager>`
+
+Installe les dépendances avec le gestionnaire de paquet spécifié :
+
+- `npm`
+- `pnpm`
+- `yarn`
+- `bun`
+- `deno`
+
 ### `--no-install`
 
-Ne lance pas l'installation des dépendances.
+Empêche l'installation des dépendances.
 
 <!-- ## Programmatic interface
 

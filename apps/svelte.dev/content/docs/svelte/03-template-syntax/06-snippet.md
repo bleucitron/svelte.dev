@@ -124,6 +124,8 @@ Les snippets peuvent se référencer eux-mêmes et les uns les autres
 
 ## Passer des snippets aux composants [!VO]Passing snippets to components
 
+### Propriétés explicites [!VO]Explicit props
+
 Au sein du template, les snippets sont des valeurs comme les autres. Ainsi, ils peuvent être passés
 aux composants en tant que props
 ([demo](/playground/untitled#H4sIAAAAAAAAE3VS247aMBD9lZGpBGwDASRegonaPvQL2qdlH5zYEKvBNvbQLbL875VzAcKyj3PmzJnLGU8UOwqSkd8KJdaCk4TsZS0cyV49wYuJuQiQpGd-N2bu_ooaI1YwJ57hpVYoFDqSEepKKw3mO7VDeTTaIvxiRS1gb_URxvO0ibrS8WanIrHUyiHs7Vmigy28RmyHHmKvDMbMmFq4cQInvGSwTsBYWYoMVhCSB2rBFFPsyl0uruTlR3JZCWvlTXl1Yy_mawiR_rbZKZrellJ-5JQ0RiBUgnFhJ9OGR7HKmwVoilXeIye8DOJGfYCgRlZ3iE876TBsZPX7hPdteO75PC4QaIo8vwNPePmANQ2fMeEFHrLD7rR1jTNkW986E8C3KwfwVr8HSHOSEBT_kGRozyIkn_zQveXDL3rIfPJHtUDwzShJd_Qk3gQCbOGLsdq4yfTRJopRuin3I7nv6kL7ARRjmLdBDG3uv1mhuLA3V2mKtqNEf_oCn8p9aN-WYqH5peP4kWBl1UwJzAEPT9U7K--0fRrrWnPTXpCm1_EVdXjpNmlA8G1hPPyM1fKgMqjFHjctXGjLhZ05w0qpDhksGrybuNEHtJnCalZWsuaTlfq6nPaaBSv_HKw-K57BjzOiVj9ZKQYKzQjZodYFqydYTRN4gPhVzTDO2xnma3HsVWjaLjT8nbfwHy7Q5f2dBAAA))
@@ -160,6 +162,8 @@ aux composants en tant que props
 On peut voir cette technique comme une façon de passer du contenu à un composant, plutôt que des
 données. Le concept est similaire à celui des slots pour les composants web.
 
+### Propriétés implicites [!VO]Implicit props
+
 Pour simplifier l'écriture, les snippets déclarés directement _à l'intérieur_ d'un composant
 deviennent implicitement des props _sur_ le composant
 ([demo](/playground/untitled#H4sIAAAAAAAAE3VSTa_aMBD8Kyu_SkAbCA-JSzBR20N_QXt6vIMTO8SqsY29tI2s_PcqTiB8vaPHs7MzuxuIZgdBMvJLo0QlOElIJZXwJHsLBBvb_XUASc7Mb9Yu_B-hsMMK5sUzvDQahUZPMkJ96aTFfKd3KA_WOISfrFACKmcOMFmk8TWUTjY73RFLoz1C5U4SPWzhrcN2GKDrlcGEWauEnyRwxCaDdQLWyVJksII2uaMWTDPNLtzX5YX8-kgua-GcHJVXI3u5WEPb0d83O03TMZSmfRzOkG1Db7mNacOL19JagVALxoWbztq-H8U6j0SaYp2P2BGbOyQ2v8PQIFMXLKRDk177pq0zf6d8bMrzwBdd0pamyPMb-IjNEzS2f86Gz_Dwf-2F9nvNSUJQ_EOSoTuJNvngqK5v4Pas7n4-OCwlEEJcQTIMO-nSQwtb-GSdsX46e9gbRoP9yGQ11I0rEuycunu6PHx1QnPhxm3SFN15MOlYEFJZtf0dUywMbwZOeBGsrKNLYB54-1R9WNqVdki7usim6VmQphf7mnpshiQRhNAXdoOfMyX3OgMlKtz0cGEcF27uLSul3mewjPjgOOoDukxjPS9rqfh0pb-8zs6aBSt_7505aZ7B9xOi0T9YKW4UooVsr0zB1BTrWQJ3EL-oWcZ572GxFoezCk37QLe3897-B2i2U62uBAAA))
@@ -184,6 +188,8 @@ deviennent implicitement des props _sur_ le composant
 </Table>
 ```
 
+### Snippet `children` implicite [!VO]Implicit `children` snippet
+
 Tout contenu à l'intérieur d'une balise de composant qui n'est pas une déclaration de snippet
 fait implicitement partie du snippet `children`
 ([demo](/playground/untitled#H4sIAAAAAAAAE3WOQQrCMBBFrzIMggql3ddY1Du4si5sOmIwnYRkFKX07lKqglqX8_7_w2uRDw1hjlsWI5ZqTPBoLEXMdy3K3fdZDzB5Ndfep_FKVnpWHSKNce1YiCVijirqYLwUJQOYxrsgsLmIOIZjcA1M02w4n-PpomSVvTclqyEutDX6DA2pZ7_ABIVugrmEC3XJH92P55_G39GodCmWBFrQJ2PrQAwdLGHig_NxNv9xrQa1dhWIawrv1Wzeqawa8953D-8QOmaEAQAA))
@@ -207,6 +213,8 @@ fait implicitement partie du snippet `children`
 > [!NOTE] Notez que vous ne pouvez pas avoir une prop appelée `children` si vous avez également du
 > contenu au sein du composant — pour cette raison, vous devriez éviter de définir des props avec ce
 > nom.
+
+### Propriétés de snippet optionnelles [!VO]Optional snippet props
 
 Vous pouvez déclarer des props de snippet comme étant optionnelles. Vous pouvez soit utiliser le
 chaînage optionnel pour ne rien afficher du tout si le snippet n'est pas défini...

@@ -22,7 +22,8 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 
 - `-C`, `--cwd` — path vers la racine de votre projet Svelte(Kit)
 - `--no-preconditions` — passe l'étape de vérification des préconditions <!-- TODO what does this mean? -->
-- `--no-install` — passe l'installation des dépendances
+- `--install` — installe les dépendances avec le gestionnaire de paquet spécifié
+- `--no-install` — empêche l'installation des dépendances
 
 ## Add-ons officiels [!VO]Official add-ons
 

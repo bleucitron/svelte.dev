@@ -43,7 +43,7 @@ vos props :
 ## Valeurs par défaut [!VO]Fallback values
 
 Déstructurer permet de déclarer des valeurs par défaut, qui sont utilisées si le composant parent ne
-définit pas une prop donnée :
+définit pas une prop donnée (ou si la valeur vaut `undefined`) :
 
 ```js
 let { adjective = 'content' } = $props();
