@@ -75,8 +75,7 @@ composants qui ne seraient utilisés que pour une route spécifique
 - `service-worker.js` contient votre [service worker](service-workers)
 
 (Le fait que votre projet contienne des fichiers `.js` ou `.ts` dépend de si vous avez choisi
-d'utiliser TypeScript lorsque vous avez créé votre projet. Vous pouvez passer de JavaScript à
-TypeScript et inversement dans cette documentation en utilisant le bouton en bas de cette page.)
+d'utiliser TypeScript lorsque vous avez créé votre projet.)
 
 Si vous avez ajouté [Vitest](https://vitest.dev) lors de l'initialisation de votre projet, vos tests
 unitaires pourront être placés dans le dossier `src` avec l'extension `.test.js`.
