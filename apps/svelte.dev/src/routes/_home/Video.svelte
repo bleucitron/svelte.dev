@@ -201,6 +201,7 @@
 	label {
 		opacity: 0.2;
 		transition: opacity 0.2s;
+		border-radius: var(--sk-border-radius);
 	}
 
 	.top-controls {
@@ -241,12 +242,14 @@
 		border-radius: 0 var(--sk-border-radius) var(--sk-border-radius) var(--sk-border-radius);
 	} */
 
-	.video-player:hover label {
+	.video-player:hover label,
+	.video-player:focus-within label {
 		opacity: 1;
 	}
 
 	.video-player input:focus-visible ~ img {
 		outline: 2px solid var(--sk-fg-accent);
 		outline-offset: 2px;
+		border-radius: var(--sk-border-radius);
 	}
 </style>

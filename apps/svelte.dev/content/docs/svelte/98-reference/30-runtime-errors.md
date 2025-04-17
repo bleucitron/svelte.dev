@@ -252,6 +252,43 @@ l'instance_ de votre composant.
 <button onclick={handleClick}>cliquez moi</button>
 ```
 
+### snippet_without_render_tag
+
+```
+Attempted to render a snippet without a `{@render}` block. This would cause the snippet code to be stringified instead of its content being rendered to the DOM. To fix this, change `{snippet}` to `{@render snippet()}`.
+```
+
+Un composant qui jette cette erreur va ressembler à ça (`children` n'est pas rendu)...
+
+```svelte
+<script>
+    let { children } = $props();
+</script>
+
+{children}
+```
+
+... ou à ça (un composant parent fournit un snippet là où une valeur non-snippet est attendue) :
+
+```svelte
+<!--- file: Parent.svelte --->
+<ChildComponent>
+  {#snippet label()}
+    <span>Salut !</span>
+  {/snippet}
+</ChildComponent>
+```
+
+```svelte
+<!--- file: Child.svelte --->
+<script>
+  let { label } = $props();
+</script>
+
+<!-- Ce composant n'attend pas un snippet, mais le parent en fournit un -->
+<p>{label}</p>
+```
+
 ### store_invalid_shape
 
 ```

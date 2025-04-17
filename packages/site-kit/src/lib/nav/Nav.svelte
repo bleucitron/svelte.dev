@@ -125,14 +125,20 @@ Top navigation bar for the application. It provides a slot for the left side, th
 			<Search />
 
 			<div class="external-links">
-				<a href="/chat" data-icon="discord" aria-label="Serveur Discord"></a>
+				<a href="/chat" aria-label="Serveur Discord">
+					<span data-icon="discord"></span>
+				</a>
+
 				<a
 					href="https://bsky.app/profile/sveltesociety.dev"
-					data-icon="bluesky"
-					aria-label="Svelte Society sur BlueSky"
-				></a>
-				<a href="https://github.com/sveltejs/svelte" data-icon="github" aria-label="Repo GitHub"
-				></a>
+					aria-label="Svelte Society sur Bluesky"
+				>
+					<span data-icon="bluesky"></span>
+				</a>
+
+				<a href="https://github.com/sveltejs/svelte" aria-label="Repo GitHub">
+					<span data-icon="github"></span>
+				</a>
 			</div>
 
 			<FontToggle />
@@ -281,6 +287,10 @@ Top navigation bar for the application. It provides a slot for the left side, th
 			display: flex;
 			height: 100%;
 			margin: 0 0.5rem;
+
+			a {
+				outline-offset: -2px;
+			}
 		}
 	}
 
@@ -377,9 +387,11 @@ Top navigation bar for the application. It provides a slot for the left side, th
 			display: contents;
 
 			[data-icon] {
+				display: flex;
 				background: var(--sk-fg-3);
 				padding: 0 0.5rem;
 				height: 100%;
+				aspect-ratio: 1;
 				mask: no-repeat 50% 50%;
 				mask-size: calc(100% - 1rem) auto;
 			}
