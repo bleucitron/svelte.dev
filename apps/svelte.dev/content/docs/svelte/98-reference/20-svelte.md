@@ -248,7 +248,7 @@ l'argument `detail` :
 
 ```ts
 const dispatch = createEventDispatcher<{
- loaded: never; // ne prend pas d'argument detail
+ loaded: null; // ne prend pas d'argument detail
  change: string; // prend un argument detail obligatoire de type string
  optional: number | null; // prend un argument detail optionnel de type number
 }>();
