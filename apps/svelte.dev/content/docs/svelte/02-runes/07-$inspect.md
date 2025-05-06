@@ -65,7 +65,7 @@ affichées dans la console.
 	import { faireQqch } from './ailleurs';
 
 	$effect(() => {
-		+++// $inspect.trace must be the first statement of a function body+++
+		+++// $inspect.trace doit être la première déclaration du corps d'une fonction+++
 		+++$inspect.trace();+++
 		faireQqch();
 	});
