@@ -37,7 +37,7 @@ export default {
 };
 ```
 
-... et ajoutez l'option [`prerender`](page-optoins#prerender) à votre layout racine :
+... et ajoutez l'option [`prerender`](page-options#prerender) à votre layout racine :
 
 ```js
 /// file: src/routes/+layout.js
