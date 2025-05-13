@@ -141,7 +141,7 @@ peut que vous subissiez cette erreur lors de l'utilisation d'[actions de formula
 
 ### `ADDRESS_HEADER` et `XFF_DEPTH`
 
-L'objet [RequestEvent(@sveltejs-kit#RequestEvent)] passé aux hooks et aux endpoints inclut une
+L'objet [`RequestEvent`](@sveltejs-kit#RequestEvent) passé aux hooks et aux endpoints inclut une
 fonction `event.getClientAddress()` qui renvoie l'adresse IP du client. Par défaut il s'agit de
 l'adresse de connexion `remoteAddress`. Si votre serveur est derrière un ou plusieurs proxies (comme
 un load balancer), cette valeur contiendra l'adresse IP du proxy le plus profond et non celle du

@@ -341,7 +341,8 @@ Comme `+layout.js`, `+layout.server.js` peut exporter des [options de page](page
 Comme pour les pages, vous pouvez définir des routes avec un fichier `+server.js` (parfois appelé
 "route d'API" ou "endpoint"), ce qui vous donne un contrôle total sur la réponse. Votre fichier
 `+server.js` exporte des fonctions correspondant aux verbes HTTP comme `GET`, `POST`, `PATCH`,
-`PUT`, `DELETE`, `OPTIONS`, et `HEAD` qui prennent en argument un `RequestEvent` et renvoient un
+`PUT`, `DELETE`, `OPTIONS`, et `HEAD` qui prennent en argument un
+[`RequestEvent`](@sveltejs-kit#RequestEvent) et renvoient un
 objet [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 Par exemple, nous pourrions créer une route `/api/random-number` avec un gestionnaire `GET` :

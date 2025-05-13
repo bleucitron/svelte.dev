@@ -210,18 +210,20 @@ Si vous ajoutez `export const ssr = false` à votre fichier `+layout.js` racine,
 toute entière sera uniquement rendue sur le client — ce qui signifie que votre application devient
 une SPA.
 
-> [!NOTE] Même avec `ssr` à `false`, le code qui dépend d'APIs navigateur devrait être importé
-> plutôt dans des fichiers `+page.svelte` ou `+layout.svelte`. En effet, les options de pages
-> peuvent être surchargées et doivent être évaluées en important votre fichier `+page.js` ou
-> `+layout.js`  sur le serveur (si vous avez un environnement d'exécution) ou au moment de la
-> compilation (si vous faites du pré-rendu).
+> [!NOTE] Si toutes vos options de page sont des valeurs booléenes ou des chaînes de caractères
+> litérales, SvelteKit va les évaluer de manière statique. Sinon, il va importer votre fichier
+> `+page.js` ou `+layout.js` sur le serveur (à la fois lors de compilation et à l'exécution si votre
+> application n'est pas complètement statique) afin d'en évaluer les options. Dans le deuxième cas,
+> du code exclusif au navigateur ne doit pas être exécuté lorsque le module se charge. En pratique,
+> ceci signifie que vous devriez plutôt importer votre code exclusif au navigateur dans votre
+> fichier `+page.svelte` ou `+layout.svelte`.
 
 ## csr
 
-D'ordanire, SvelteKit [hydrate](glossary#Hydration) votre HTML rendu-sur-le-serveur en une page
-interactive rendue-sur-le-client (CSR). Certaines pages ne nécessitent pas du tout JavaScript — la
-plupart des articles de blog et des pages "à propos" tombent dans cette catégorie. Dans ces cas-là
-vous pouvez désactiver le CSR.
+D'ordinaire, SvelteKit [hydrate](glossary#Hydration) votre HTML rendu sur le serveur (SSR) en une
+page interactive rendue sur le client (CSR). Certaines pages ne nécessitent pas du tout JavaScript —
+la plupart des articles de blog et des pages "à propos" tombent dans cette catégorie. Dans ces
+cas-là vous pouvez désactiver le CSR.
 
 ```js
 /// file: +page.js
