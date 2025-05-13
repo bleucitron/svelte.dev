@@ -139,6 +139,29 @@ est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 </form>
 ```
 
+## `<input bind:indeterminate>`
+
+Checkboxes can be in an [indeterminate](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/indeterminate) state, independently of whether they are checked or unchecked:
+
+```svelte
+<script>
+	let checked = $state(false);
+	let indeterminate = $state(true);
+</script>
+
+<form>
+	<input type="checkbox" bind:checked bind:indeterminate>
+
+	{#if indeterminate}
+		waiting...
+	{:else if checked}
+		checked
+	{:else}
+		unchecked
+	{/if}
+</form>
+```
+
 ## `<input bind:group>`
 
 Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`.
@@ -266,6 +289,7 @@ Les éléments `<audio>` ont leur propre jeu de liaisons — cinq à double sens
 - [`seeking`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/seeking_event)
 - [`ended`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/ended)
 - [`readyState`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/readyState)
+- [`played`](https://developer.mozilla.org/fr/docs/Web/API/HTMLMediaElement/played)
 
 ```svelte
 <audio src={clip} bind:duration bind:currentTime bind:paused></audio>
@@ -296,6 +320,11 @@ Les éléments `<details>` acceptent une liaison sur la propriété `open`.
 </details>
 ```
 
+## `window` and `document`
+
+Pour lier des propriétés de `window` et `document`, voir les sections
+[`<svelte:window>`](svelte-window) et [`<svelte:document>`](svelte-document).
+
 ## Liaison Contenteditable [!VO]Contenteditable bindings
 
 Les élément ayant l'attribut `contenteditable` acceptent les liaisons suivantes :
@@ -322,6 +351,10 @@ mesurées avec `ResizeObserver` :
 - [`clientHeight`](https://developer.mozilla.org/fr/docs/Web/API/Element/clientHeight)
 - [`offsetWidth`](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/offsetWidth)
 - [`offsetHeight`](https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/offsetHeight)
+- [`contentRect`](https://developer.mozilla.org/fr/docs/Web/API/ResizeObserverEntry/contentRect)
+- [`contentBoxSize`](https://developer.mozilla.org/fr/docs/Web/API/ResizeObserverEntry/contentBoxSize)
+- [`borderBoxSize`](https://developer.mozilla.org/fr/docs/Web/API/ResizeObserverEntry/borderBoxSize)
+- [`devicePixelContentBoxSize`](https://developer.mozilla.org/fr/docs/Web/API/ResizeObserverEntry/devicePixelContentBoxSize)
 
 ```svelte
 <div bind:offsetWidth={width} bind:offsetHeight={height}>
@@ -332,7 +365,8 @@ mesurées avec `ResizeObserver` :
 > [!NOTE] Les éléments `display: inline` n'ont pas de largeur ou de hauteur (sauf pour les éléments
 > avec des dimensions "intrinsèques", comme `<img>` et `<canvas>`), et ne peuvent pas être observés
 > avec `ResizeObserver`. Vous aurez besoin de changer le style `display` de ces éléments à une autre
-> valeur, comme `inline-block`.
+> valeur, comme `inline-block`. Notez que les transformations CSS ne déclenchent pas les callbacks
+> `ResizeObserver`.
 
 ## bind:this
 

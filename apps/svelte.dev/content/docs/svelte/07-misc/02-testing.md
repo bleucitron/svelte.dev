@@ -15,9 +15,10 @@ solutions comme [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.
 Les tests unitaires vous permettent de tester des petites parties isolées de votre code. Les tests
 d'intégration vous permettent de vérifier comment des morceaux de votre application fonctionnent
 ensemble. Si vous utilisez Vite (notamment via SvelteKit), nous vous recommandons d'utiliser
-[Vitest](https://vitest.dev/).
+[Vitest](https://vitest.dev/). Vous pouvez utiliser le CLI de Svelte pour [mettre en place
+Vitest](/docs/cli/vitest) soit lors de la création du projet, soit plus tard.
 
-Pour commencer, installer Vitest :
+Pour mettre en place Vitest manuellement, commencez par installer Vitest :
 
 ```bash
 npm install -D vitest
@@ -286,15 +287,15 @@ tester votre application toute entière depuis le point de vue de vos utilisateu
 prend [Playwright](https://playwright.dev/) comme exemple, mais vous pouvez aussi utiliser d'autres
 solutions comme [Cypress](https://www.cypress.io/) ou [NightwatchJS](https://nightwatchjs.org/).
 
-Pour commencer à utiliser Playwright, vous pouvez soit l'installer via l'[extension VS
-Code](https://playwright.dev/docs/getting-started-vscode), soit l'installer depuis votre ligne de
-commande en utilisant `npm init playwright`. Vous pouvez aussi l'installer via le CLI d'installation
-de Svelte, qui se lance avec `npx sv create`.
+Vous pouvez utiliser le CLI de Svelte pour [mettre en place Playwright](/docs/cli/playwright) soit
+pendant la création du projet, soit plus tard. Vous pouvez aussi le [mettre en place avec `npm init
+playwright`](https://playwright.dev/docs/intro). De plus, vous pourriez également vouloir installer
+un plugin d'IDE tel que l'[extension VSCode](https://playwright.dev/docs/getting-started-vscode)
+pour être capable d'exécuter des tests depuis votre IDE.
 
-Une fois l'installation terminée, vous devriez voir apparaître un dossier `tests` ainsi qu'un
-fichier de configuration de Playwright. Il se peut que vous ayez besoin d'ajuster cette
-configuration pour dire à Playwright ce qu'il doit faire avant de lancer les tests — principalement
-lancer votre application sur un port particulier :
+Si vous avez lancé `npm init playwright` ou n'utilisez pas Vite, vous pourriez avoir besoin
+d'ajuster la configuration de Playwright pour lui dire quoi faire avant de lancer les tests —
+principalement lancer votre application sur un certain port. Par exemple :
 
 ```js
 /// file: playwright.config.js
