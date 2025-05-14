@@ -141,7 +141,9 @@ est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 
 ## `<input bind:indeterminate>`
 
-Checkboxes can be in an [indeterminate](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/indeterminate) state, independently of whether they are checked or unchecked:
+Les checkbox peuvent être dans un état
+[indéterminé](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/indeterminate),
+indépendamment de si elles sont cochées ou non :
 
 ```svelte
 <script>
@@ -153,11 +155,11 @@ Checkboxes can be in an [indeterminate](https://developer.mozilla.org/en-US/docs
 	<input type="checkbox" bind:checked bind:indeterminate>
 
 	{#if indeterminate}
-		waiting...
+		en attente...
 	{:else if checked}
-		checked
+		coché
 	{:else}
-		unchecked
+		non coché
 	{/if}
 </form>
 ```

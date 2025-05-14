@@ -127,13 +127,13 @@ autres librairies de tests E2E si vous le souhaitez.
 
 Voici quelques ressources pour vous lancer dans les tests :
 
-- [Svelte docs on testing](/docs/svelte/testing)
-- [Setup Vitest using the Svelte CLI](/docs/cli/vitest)
+- [Documentation de Svelte sur les tests](/docs/svelte/testing)
+- [Installation de Vitest avec le Svelte CLI](/docs/cli/vitest)
 - [Svelte Testing Library](https://testing-library.com/docs/svelte-testing-library/example/)
-- [Svelte Component Testing in Cypress](https://docs.cypress.io/guides/component-testing/svelte/overview)
-- [Example using uvu test runner with JSDOM](https://github.com/lukeed/uvu/tree/master/examples/svelte)
-- [Test Svelte components using Vitest & Playwright](https://davipon.hashnode.dev/test-svelte-component-using-vitest-playwright)
-- [Component testing with WebdriverIO](https://webdriver.io/docs/component-testing/svelte)
+- [Tests de composants Svelte avec Cypress](https://docs.cypress.io/guides/component-testing/svelte/overview)
+- [Exemple d'utilisation du test runner uvu avec JSDOM](https://github.com/lukeed/uvu/tree/master/examples/svelte)
+- [Tester les composants Svelte avec Vitest & Playwright](https://davipon.hashnode.dev/test-svelte-component-using-vitest-playwright)
+- [Tester les composants avec WebdriverIO](https://webdriver.io/docs/component-testing/svelte)
 
 ## Y a t'il un routeur ? [!VO]Is there a router?
 

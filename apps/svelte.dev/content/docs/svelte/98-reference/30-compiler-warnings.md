@@ -679,7 +679,12 @@ Quoted attributes on components and custom elements will be stringified in a fut
 A bidirectional control character was detected in your code. These characters can be used to alter the visual direction of your code and could have unintended consequences
 ```
 
-Bidirectional control characters can alter the direction in which text appears to be in. For example, via control characters, you can make `defabc` look like `abcdef`. As a result, if you were to unknowingly copy and paste some code that has these control characters, they may alter the behavior of your code in ways you did not intend. See [trojansource.codes](https://trojansource.codes/) for more information.
+Les caractères de contrôle bidirectionnels peuvent modifier la direction dans laquelle le texte
+s'affiche. Par exemple, via les contrôles de caractères, vous pouvez faire en sorte que `defabc`
+s'affiche comme `abcdef`. En conséquence, si vous deviez copier-coller sans le savoir du code
+contenant des caractères de contrôle, ils pourraient altérer le comportement de votre code de
+manière inappropriée. Voir [trojansource.codes](https://trojansource.codes/) pour plus
+d'information.
 
 ### bind_invalid_each_rest
 
