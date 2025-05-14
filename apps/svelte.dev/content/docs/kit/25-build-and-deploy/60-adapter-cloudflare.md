@@ -256,7 +256,7 @@ l'option de compatibilité `nodejs_compat` à votre fichier de configuration :
 }
 ```
 
-### Limites de taille des wrokers [!VO]Worker size limits
+### Limites de taille des workers [!VO]Worker size limits
 
 Lorsque vous déployez votre application, le serveur généré par SvelteKit est compilé en un seul
 fichier. Wrangler va échouer à publier votre worker s'il excède les [limites de
