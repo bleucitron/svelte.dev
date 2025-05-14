@@ -311,7 +311,13 @@ namespace AST {
 			  });
 	}
 
-	/** Une directive `animate:` */
+	/** Une balise `{@attach foo(...)} */
+	export interface AttachTag extends BaseNode {
+		type: 'AttachTag';
+		expression: Expression;
+	}
+
+	/** Une directive `animate:` animate */
 	export interface AnimateDirective extends BaseNode {
 		type: 'AnimateDirective';
 		/** Le 'x' de `animate:x` */
@@ -404,7 +410,7 @@ namespace AST {
 	interface BaseElement extends BaseNode {
 		name: string;
 		attributes: Array<
-			Attribute | SpreadAttribute | Directive
+			Attribute | SpreadAttribute | Directive | AttachTag
 		>;
 		fragment: Fragment;
 	}
@@ -606,6 +612,7 @@ namespace AST {
 		| AST.Attribute
 		| AST.SpreadAttribute
 		| Directive
+		| AST.AttachTag
 		| AST.Comment
 		| Block;
 

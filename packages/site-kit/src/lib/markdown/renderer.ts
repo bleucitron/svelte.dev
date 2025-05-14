@@ -571,7 +571,10 @@ async function convert_to_ts(js_code: string, indent = '', offset = '') {
 				while (start > 0 && code.original[start - 1] === '\t') start -= 1;
 				while (start > 0 && code.original[start - 1] === '\n') start -= 1;
 
-				code.overwrite(start, end, '');
+				const slice = code.original.slice(node.getStart(), node.getEnd());
+				const is_multiline = slice.includes('\n');
+
+				code.overwrite(start, end, is_multiline ? '\n' : '');
 			}
 		}
 
@@ -594,11 +597,7 @@ async function convert_to_ts(js_code: string, indent = '', offset = '') {
 		);
 
 		if (last_import) {
-			let i = last_import.getEnd();
-			while (js_code[i] !== '\n') i += 1;
-			i += 1;
-
-			code.appendLeft(i, '\n' + import_statements + '\n');
+			code.appendLeft(last_import.getEnd(), '\n' + import_statements);
 		} else {
 			code.prependLeft(0, offset + import_statements + '\n');
 		}
