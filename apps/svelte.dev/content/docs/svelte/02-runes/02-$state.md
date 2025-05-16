@@ -28,9 +28,10 @@ profondément réactif. Les
 permettent à Svelte d'exécuter du code lors de la lecture ou de l'écriture de propriétés, en
 particulier via des méthodes comme `array.push(...)`, déclenchant des mises à jour granulaires.
 
-> [!NOTE] Les classes comme `Set` et `Map` ne seront pas transformées en Proxy, mais Svelte fournit
-> des implémentations réactives pour plusieurs built-ins similaires que vous pouvez importer depuis
-> [`svelte/reactivity`](./svelte-reactivity).
+> [!NOTE] Les instances de classe ne sont pas transformées en proxys. Vous pouvez créer des [champs
+> d'état réactifs](#Classes) sur des classes que vous définissez. Svelte fournit des implémentations
+> réactives de classes natives comme `Set` et `Map` pouvant être importées depuis
+> [`svelte/reactivity`](svelte-reactivity).
 
 L'état est transformé en Proxy de manière récursive jusqu'à ce que Svelte trouve autre chose qu'un
 tableau ou un objet simple. Dans un cas comme celui-là...
