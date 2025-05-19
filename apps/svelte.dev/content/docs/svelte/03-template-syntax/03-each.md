@@ -49,10 +49,12 @@ Un bloc `#each` peut également préciser un _index_, correspondant au deuxième
 ```
 
 Si une expression _key_ est fournie — qui se doit d'identifier de manière unique chaque élément de
-la liste — Svelte va s'en servir pour remplacer finement les éléments de la liste lorsque celle-ci
-change, plutôt que d'ajouter ou supprimer les éléments à la fin. La clé (_key_) peut être n'importe
-quel objet, mais les chaînes de caractères et les nombres sont recommandés car il permettent à
-l'identité de persister lorsque les objets eux-mêmes changent.
+la liste — Svelte va s'en servir intelligemment pour mettre à jour les éléments de la liste en
+insérant, déplaçant et supprimant des éléments, plutôt qu'en ajoutant ou supprimant des éléments à
+la fin de la liste et ensuite modifiant l'état des éléments au milieu.
+
+La clé (_key_) peut être n'importe quel objet, mais les chaînes de caractères et les nombres sont
+recommandés car il permettent à l'identité de persister lorsque les objets eux-mêmes changent.
 
 ```svelte
 {#each items as item (item.id)}

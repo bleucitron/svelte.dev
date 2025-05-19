@@ -25,12 +25,12 @@ npx sv add paraglide
 
 ## Options
 
-### availableLanguageTags
+### languageTags
 
 Les langues que vous voudriez supporter fournies sous le format IETF BCP 47.
 
 ```bash
-npx sv add --paraglide=en,es
+npx sv add paraglide="languageTags:en,es"
 ```
 
 ### demo
@@ -38,5 +38,5 @@ npx sv add --paraglide=en,es
 Si oui ou non générer une page de démo optionnelle montrant comment se servir de paraglide.
 
 ```bash
-npx sv add --paraglide=demo
+npx sv add paraglide="demo:yes"
 ```

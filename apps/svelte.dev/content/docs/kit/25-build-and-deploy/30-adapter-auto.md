@@ -12,7 +12,7 @@ lorsque vous déployez :
 - [`@sveltejs/adapter-netlify`](adapter-netlify) pour [Netlify](https://netlify.com/)
 - [`@sveltejs/adapter-vercel`](adapter-vercel) pour [Vercel](https://vercel.com/)
 - [`svelte-adapter-azure-swa`](https://github.com/geoffrich/svelte-adapter-azure-swa) pour [Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/)
-- [`svelte-kit-sst`](https://github.com/sst/sst/tree/master/packages/svelte-kit-sst) pour [AWS via SST](https://sst.dev/docs/start/aws/svelte)
+- [`svelte-kit-sst`](https://github.com/sst/v2/tree/master/packages/svelte-kit-sst) pour [AWS via SST](https://sst.dev/docs/start/aws/svelte)
 - [`@sveltejs/adapter-node`](adapter-node) pour [Google Cloud Run](https://cloud.google.com/run)
 
 Il est recommandé d'installer l'adaptateur approprié dans vos `devDependencies` une fois que vous

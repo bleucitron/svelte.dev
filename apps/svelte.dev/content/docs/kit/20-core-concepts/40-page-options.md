@@ -6,9 +6,9 @@ title: Options de page
 Par défaut, SvelteKit va rendre (ou [pré-rendre](glossary#Prerendering)) tout composant d'abord sur
 le serveur puis l'envoyer au client en tant que HTML. Le composant sera ensuite rendu de nouveau
 dans le navigateur pour le rendre interactif dans un processus appelée
-[**hydratation**](glossary#Hydration). Pour cette raison, vous devez vous assurer que les composants
+[_hydratation_](glossary#Hydration). Pour cette raison, vous devez vous assurer que les composants
 puissent être exécutés à la fois sur le serveur et dans le navigateur. Puis Sveltekit initialisera
-un [**routeur**](routing) côté client qui va prendre le relais pour toutes les navigations à venir.
+un [_routeur_](routing) côté client qui va prendre le relais pour toutes les navigations à venir.
 
 Vous pouvez contrôler chacune de ces étapes page par page en exportant des options depuis les
 fichiers [`+page.js`](routing#page-page.js) ou [`+page.server.js`](routing#page-page.server.js), ou

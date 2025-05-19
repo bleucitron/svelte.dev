@@ -152,9 +152,9 @@ Si vous utilisez l'[intégration
 Git](https://developers.cloudflare.com/pages/get-started/git-integration/) vos paramètres de
 compilation devraient ressembler à ça :
 
-- **Framework preset** – SvelteKit
-- **Build command** – `npm run build` ou `vite build`
-- **Build output directory** – `.svelte-kit/cloudflare`
+- Framework preset – SvelteKit
+- Build command – `npm run build` ou `vite build`
+- Build output directory – `.svelte-kit/cloudflare`
 
 ### Plus de lecture [!VO]Further reading
 
@@ -225,7 +225,7 @@ Wrangler](https://developers.cloudflare.com/workers/wrangler/) et sont utilisée
 [`platformProxy`](#Options-platformProxy) de
 l'adaptateur pour changer vos préférences de liaison.
 
-Pour tester le projet compilé, vous devriez utiliser la **version 4** de
+Pour tester le projet compilé, vous devriez utiliser la version 4 de
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Une fois que vous avez compilé
 votre site, lancez `wrangler dev .svelte-kit/cloudflare` si vous testez pour les Cloudflare Workers
 ou `wrangler pages dev .svelte-kit/cloudflare` si vous testez pour les Cloudflare Pages.

@@ -138,7 +138,7 @@ l'état lors d'un rendu côté serveur (ce qui est découragé, mais tout à fai
 ```svelte
 <!--- file: App.svelte ---->
 <script>
-	import { myGlobalState } from 'svelte';
+	import { myGlobalState } from './state.svelte.js';
 
 	let { data } = $props();
 

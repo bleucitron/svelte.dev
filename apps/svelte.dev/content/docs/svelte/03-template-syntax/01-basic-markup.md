@@ -92,13 +92,17 @@ Comme pour les éléments, `name={name}` peut être remplacé par le raccourci `
 <Widget foo={bar} answer={42} text="coucou" />
 ```
 
+## Attributs spread [!VO]Spread attributes
+
 Les _attributs décomposés_ permettre de fournir d'un coup plusieurs attributs ou propriétés à un
 élément ou composant.
 
 Un élément ou composant peut avoir plusieurs attributs décomposés, ponctués d'attributs normaux.
+L'ordre est important — si `things.a` existe, il sera prioritaire sur `a="b"`, tandis que `c="d"`
+sera prioritaire sur `things.c` :
 
 ```svelte
-<Widget {...things} />
+<Widget a="b" {...things} c="d" />
 ```
 
 ## Évènements [!VO]Events

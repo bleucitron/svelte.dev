@@ -38,5 +38,5 @@ déployer sur Cloudflare
 Netlify
 
 ```bash
-npx sv add --sveltekit-adapter=node
+npx sv add sveltekit-adapter=adapter:node
 ```

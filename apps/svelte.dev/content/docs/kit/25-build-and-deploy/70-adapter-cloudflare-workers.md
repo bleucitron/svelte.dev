@@ -150,7 +150,7 @@ Wrangler](https://developers.cloudflare.com/workers/wrangler/) et sont utilisée
 [`platformProxy`](#Options-platformProxy) de
 l'adaptateur pour changer vos préférences de liaison.
 
-Pour tester le projet compilé, vous devriez utiliser la **version 4** de
+Pour tester le projet compilé, vous devriez utiliser la version 4 de
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Une fois que vous avez compilé
 votre site, lancez `wrangler dev`.
 
