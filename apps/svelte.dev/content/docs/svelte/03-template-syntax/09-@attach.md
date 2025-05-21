@@ -7,6 +7,12 @@ Les attachements sont des fonctions qui sont exécutées lorsqu'un élément est
 peuvent optionnellement renvoyer une fonction qui sera appelée lorsque cet élément sera supprimé du
 DOM.
 
+Les attachements sont des fonctions qui sont exécutées au sein d'un [effet]($effect) lorsqu'un
+élément est monté dans le DOM ou lorsqu'un [état]($state) lu dans la fonction est mis à jour.
+
+De manière optionnelle, ils peuvent renvoyer une fonction qui sera exécutée juste avant que
+l'attachement soit ré-exécuté, ou juste après que l'élément soit supprimé du DOM.
+
 > [!NOTE]
 > Les attachements sont disponibles à partir de la version 5.29 de Svelte.
 
@@ -61,7 +67,10 @@ attachement
 ```
 
 Puisque l'expression `tooltip(content)` est exécutée au sein d'un [effet]($effect), l'attachement
-sera détruit et recréé à chaque fois que `content` sera mis à jour.
+sera détruit et recréé à chaque fois que `content` sera mis à jour. La même chose se produit pour
+tout état lu _à l'intérieur_ de la fonction de l'attachement lors de sa première exécution. (Si ce
+n'est pas ce que vous souhaitez, voir la section [Contrôler la ré-exécution des
+attachements](#Controlling-when-attachments-re-run).)
 
 ## Attachements inliné [!VO]Inline attachments
 
@@ -137,6 +146,39 @@ Cela vous permet de créer des _composants englobants_ qui augmentent les élém
 <Button {@attach tooltip(content)}>
 	Survolez-moi
 </Button>
+```
+
+## Contrôler la ré-exécution des attachements [!VO]Controlling when attachments re-run
+
+Les attachements, à la différence des [actions](use), sont pleinement réactifs : `{@attach
+foo(bar)}` sera ré-exécuté lorsque `foo` _ou_ `bar` (ou tout état lu au sein de
+`foo`) sont mises à jour :
+
+```js
+// @errors: 7006 2304 2552
+function foo(bar) {
+	return (node) => {
+		veryExpensiveSetupWork(node);
+		update(node, bar);
+	};
+}
+```
+
+Dans les rares situations où cela pourrait être un problème (par exemple, si `foo` coûte cher à
+exécuter tout étant indispensable), envisagez de fournir les données via une fonction, et de les
+lire dans un effect imbriqué :
+
+```js
+// @errors: 7006 2304 2552
+function foo(+++getBar+++) {
+	return (node) => {
+		veryExpensiveSetupWork(node);
+
++++		$effect(() => {
+			update(node, getBar());
+		});+++
+	}
+}
 ```
 
 ## Créer des attachements programmatiquement [!VO]Creating attachments programmatically
