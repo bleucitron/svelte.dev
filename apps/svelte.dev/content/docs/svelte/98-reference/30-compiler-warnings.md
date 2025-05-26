@@ -728,6 +728,29 @@ laisser le sélecteur intact :
 </style>
 ```
 
+### element_implicitly_closed
+
+```
+This element is implicitly closed by the following `%tag%`, which can cause an unexpected DOM structure. Add an explicit `%closing%` to avoid surprises.
+```
+
+En HTML, certains éléments sont implicitement fermés par un autre élément. Par exemple, vous ne
+pouvez pas imbriquer un `<p>` dans un autre `<p>` :
+
+```html
+<!-- ce HTML... -->
+<p><p>bonjour</p>
+
+<!-- va générer cette structure du DOM -->
+<p></p>
+<p>bonjour</p>
+```
+
+De manière similairement, la balise fermante d'un élément parent va implicitement fermer tous les
+éléments enfant, même si le `</` était une erreur de typographie et vous vouliez uniquement créer un
+_nouvel_ élément. Pour éviter les ambiguïtés, il est toujours préférable d'avoir une balise fermante
+explicite.
+
 ### element_invalid_self_closing_tag
 
 ```

@@ -830,6 +830,33 @@ supprimés ou fusionnés en un seul espace lorsque c'est possible.
 <div class="ts-block-property">
 
 ```dts
+fragments?: 'html' | 'tree';
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `'html'`
+- <span class="tag since">disponible depuis la version</span> v5.33
+
+</div>
+
+La stratégie à utiliser lorsque vous cloner des fragments de DOM :
+
+- `html` remplit un élément `<template>` avec `innerHTML` et le clone. Ceci est plus rapide, mais ne
+peut pas être utilisé si les [CSP](https://developer.mozilla.org/fr/docs/Web/HTTP/Guides/CSP) de
+votre application incluent [`require-trusted-types-for
+'script'`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/require-trusted-types-for)
+- `tree` crée le fragment un élément à la fois _puis_ le clone. Ceci est plus lent, mais fonctionne
+partout
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
 runes?: boolean | undefined;
 ```
 

@@ -28,13 +28,9 @@ profondément réactif. Les
 permettent à Svelte d'exécuter du code lors de la lecture ou de l'écriture de propriétés, en
 particulier via des méthodes comme `array.push(...)`, déclenchant des mises à jour granulaires.
 
-> [!NOTE] Les instances de classe ne sont pas transformées en proxys. Vous pouvez créer des [champs
-> d'état réactifs](#Classes) sur des classes que vous définissez. Svelte fournit des implémentations
-> réactives de classes natives comme `Set` et `Map` pouvant être importées depuis
-> [`svelte/reactivity`](svelte-reactivity).
 
 L'état est transformé en Proxy de manière récursive jusqu'à ce que Svelte trouve autre chose qu'un
-tableau ou un objet simple. Dans un cas comme celui-là...
+tableau ou un objet simple (comme une classe par exemple). Dans un cas comme celui-là...
 
 ```js
 let todos = $state([
@@ -82,8 +78,9 @@ todos[0].done = !todos[0].done;
 
 ### Classes
 
-Vous pouvez aussi utiliser `$state` avec les champs d'une classe (qu'ils soient publics ou privés),
-ou comme première assignation à une propriété à la racine du `constructor` :
+Les classes ne sont pas transformées en proxy. À la place, vous pouvez utiliser `$state` avec les
+champs d'une classe (qu'ils soient publics ou privés), ou comme première assignation à une propriété
+à la racine du `constructor` :
 
 ```js
 // @errors: 7006 2554
@@ -141,6 +138,9 @@ class Todo {
 > classe qui référencent des champs privés. Cela signifie que les propriétés ne sont pas
 > énumérables.
 
+> Svelte fournit des implémentations réactives de classes intégrées comme `Set` et `Map` que vous
+> pouvez importer depuis [`svelte/reactivity`](svelte-reactivity).
+
 ## `$state.raw`
 
 Si vous ne souhaitez pas que les objets et tableaux soient profondément réactifs, vous pouvez
@@ -170,6 +170,9 @@ Ceci peut améliorer la performance dans le cas de grands tableaux et objets que
 toutes façons pas de muter, puisqu'il n'y a pas le surcoût de les rendre profondément réactifs.
 Notez qu'un état `raw` peut _contenir_ des états réactifs (par exemple, un tableau `raw` d'objets
 réactifs).
+
+Vous pouvez déclarer des champs de classe avec `$state.raw`, comme vous le
+feriez avec `$state`.
 
 ## `$state.snapshot`
 

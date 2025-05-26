@@ -234,15 +234,14 @@ application lorsque cela se produit, des erreurs peuvent émerger lors des navig
 s'appelle _version skew_. SvelteKit tente de résoudre ce problème en détectant les erreurs provenant
 du version skew et en provoquant un rechargement complet de la page pour récupérer la dernière
 version de l'application, mais ceci va provoquer la perte de tout état du client. (Vous pouvez aussi
-gérer cette situation pro-activement en observant la valeur du store
-[`updated`]($app-stores#updated), qui prévient les clients lorsqu'une nouvelle version de
-l'application a été déployée.)
+gérer cette situation pro-activement en observant la valeur [`updated.current`]($app-state#updated),
+qui prévient les clients lorsqu'une nouvelle version de l'application a été déployée.)
 
 [La protection Skew](https://vercel.com/docs/deployments/skew-protection) est une fonctionnalité de
 Vercel qui dirige les requêtes client vers leur déploiement d'origine. Lorsque quelqu'un visite
 votre application, un cookie est défini avec l'ID du déploiement, et toute requête future sera
 redirigée vers ce déploiement aussi longtemps que la protection skew est active. Lorsque la personne
-va recharger la page, elle récupèrera le déploiement le plus récent. (Le store `updated` est exempté
+va recharger la page, elle récupèrera le déploiement le plus récent. (`updated.current` est exempté
 de ce comportement, et va continuer à prévenir des nouveaux déploiements.) Pour activer cette
 protection, rendez vous dans la section Advanced des paramètres de votre projet sur l'interface
 Vercel.

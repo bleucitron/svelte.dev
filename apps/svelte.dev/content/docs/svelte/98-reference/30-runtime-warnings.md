@@ -239,6 +239,21 @@ grande échelle ("qui a muté cette valeur ?"), d'où le warning.
 Pour corriger ça, vous pouvez soit créer une prop de callback pour communiquer les changements, ou
 alors définir `person` comme [`$bindable`]($bindable).
 
+### select_multiple_invalid_value
+
+```
+The `value` property of a `<select multiple>` element should be an array, but it received a non-array value. The selection will be kept as is.
+```
+
+Lorsque vous utilisez `<select multiple value={...}>`, Svelte va marquer tous éléments `<option>`
+sélectionnés en itérant sur le tableau fourni à `value`. Si `value` n'est pas un tableau, Svelte va
+générer cet avertissement et garder les options sélectionnées telles qu'elles sont.
+
+Pour résoudre cet avertissement, assurez-vous que `value` :
+
+- est un tableau représentant une sélection explicite
+- est `null` ou `undefined` pour laisser la sélection inchangée
+
 ### state_proxy_equality_mismatch
 
 ```

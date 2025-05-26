@@ -166,26 +166,28 @@ indépendamment de si elles sont cochées ou non :
 
 ## `<input bind:group>`
 
-Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`.
+Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`
+([demo](/playground/untitled#H4sIAAAAAAAAE62T32_TMBDH_5XDQkpbrct7SCMGEvCEECDxsO7BSW6L2c227EvbKOv_jp0f6jYhQKJv5_P3PvdL1wstH1Bk4hMSGdgbRzUssFaM9VJciFtF6EV23QvubNRFR_BPUVfWXvodEkdfKT3-zl8Zzag5YETuK6csF1u9ZUIGNo4VkYQNvPYsGRfJF5JKJ8s3QRJE6WoFb2Nq6K-ck13u2Sl9Vxxhlc6QUBIFnz9Brm9ifJ6esun81XoNd860FmtwslYGlLYte5AO4aHlVhJ1gIeKWq92COt1iMtJlkhFPkgh1rHZiiF6K6BUus4G5KafGznCTlIbVUMfQZUWMJh5OrL-C_qjMYSwb1DyiH7iOEuCb1ZpWTUjfHqcwC_GWDVY3ZfmME_SGttSmD9IHaYatvWHIc6xLyqad3mq6KuqcCwnWn9p8p-p71BqP2IH81zc9w2in-od7XORP7ayCpd5YCeXI_-p59mObPF9WmwGpx3nqS2Gzw8TO3zOaS5_GqUXyQUkS3h8hOSz0ZhMESHGc0c4Hm3MAn00t1wrb0l2GZRkqvt4sXwczm6Qh8vnUJzI2LV4vAkvqWgfehTZrSSPx19WiVfFfAQAAA==)).
 
 ```svelte
+<!--- file: BurritoChooser.svelte --->
 <script>
 	let tortilla = $state('Nature');
 
-	/** @type {Array<string>} */
+	/** @type {string[]} */
 	let fillings = $state([]);
 </script>
 
 <!-- les inputs radio groupés sont mutuellement exclusifs -->
-<input type="radio" bind:group={tortilla} value="Nature" />
-<input type="radio" bind:group={tortilla} value="Blé complet" />
-<input type="radio" bind:group={tortilla} value="Épinards" />
+<label><input type="radio" bind:group={tortilla} value="Nature" />Nature</label>
+<label><input type="radio" bind:group={tortilla} value="Blé complet" />Blé complet</label>
+<label><input type="radio" bind:group={tortilla} value="Épinards" /> Épinards</label>
 
 <!-- les inputs checkbox groupés remplissent un tableau -->
-<input type="checkbox" bind:group={fillings} value="Riz" />
-<input type="checkbox" bind:group={fillings} value="Haricots" />
-<input type="checkbox" bind:group={fillings} value="Fromage" />
-<input type="checkbox" bind:group={fillings} value="Guacamole (extra)" />
+<label><input type="checkbox" bind:group={fillings} value="Riz" />Riz</label>
+<label><input type="checkbox" bind:group={fillings} value="Haricots" />Haricots</label>
+<label><input type="checkbox" bind:group={fillings} value="Fromage" />Fromage</label>
+<label><input type="checkbox" bind:group={fillings} value="Guacamole (extra)" />Guacamole (extra)</label>
 ```
 
 > [!NOTE] `bind:group` ne fonctionne que si les inputs sont dans le même composant Svelte.

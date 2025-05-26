@@ -7,7 +7,7 @@ title: svelte/attachments
 
 ```js
 // @noErrors
-import { createAttachmentKey } from 'svelte/attachments';
+import { createAttachmentKey, fromAction } from 'svelte/attachments';
 ```
 
 ## createAttachmentKey
@@ -44,6 +44,53 @@ nécessaire si vous développez une application.
 
 ```dts
 function createAttachmentKey(): symbol;
+```
+
+</div>
+
+
+
+## fromAction
+
+Convertit une [action](/docs/svelte/use) en un [attachement](/docs/svelte/@attach) conservant le
+même comportement. C'est utile si vous souhaitez commencer à utiliser les attachements sur des
+composants mais vos actions sont fournies par une librairie.
+
+Notez que le deuxième argument, si fourni, doit être une fonction qui _renvoie_ l'argument à la
+fonction action, et non l'argument lui-même.
+
+```svelte
+<!-- with an action -->
+<div use:foo={bar}>...</div>
+
+<!-- with an attachment -->
+<div {@attach fromAction(foo, () => bar)}>...</div>
+```
+
+<div class="ts-block">
+
+```dts
+function fromAction<
+	E extends EventTarget,
+	T extends unknown
+>(
+	action:
+		| Action<E, T>
+		| ((element: E, arg: T) => void | ActionReturn<T>),
+	fn: () => T
+): Attachment<E>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function fromAction<E extends EventTarget>(
+	action:
+		| Action<E, void>
+		| ((element: E) => void | ActionReturn<void>)
+): Attachment<E>;
 ```
 
 </div>

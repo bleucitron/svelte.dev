@@ -185,3 +185,9 @@ function foo(+++getBar+++) {
 
 Pour ajouter des attachements à un objet qui seront ensuite étalés sur un composant ou un élément,
 utilisez [`createAttachmentKey`](svelte-attachments#createAttachmentKey).
+
+## Convertir des actions en attachements [!VO]Converting actions to attachments
+
+Si vous utilisez une librairies qui fournit uniquement des actions, vous pouvez les convertir en
+attachements avec [`fromAction`](svelte-attachments#fromAction), vous permettant ainsi de (par
+exemple) les utiliser sur des composants.
