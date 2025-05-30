@@ -6,8 +6,9 @@ title: bind:
 D"ordinaire, les données circulent vers le bas, du parent vers ses enfants. La directive `bind:`
 permet de faire circuler les données dans l'autre sens, de l'enfant vers le parent.
 
-La syntaxe générale est `bind:property={expression}`, où `expression` est une _lvalue_ (c-à-d une
-variable ou une propriété d'objet). Lorsque l'expression est un identifiant du même nom que la
+La syntaxe générale est `bind:property={expression}`, où `expression` est une
+[_lvalue_](https://press.rebus.community/programmingfundamentals/chapter/lvalue-and-rvalue/) (c-à-d
+une variable ou une propriété d'objet). Lorsque l'expression est un identifiant du même nom que la
 propriété, il est possible d'omettre l'expression — autrement dit ces deux écritures sont
 équivalentes :
 

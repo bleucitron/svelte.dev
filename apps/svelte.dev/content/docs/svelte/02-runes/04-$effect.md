@@ -328,11 +328,11 @@ Vous pourriez être tenté•e de faire des choses tordues avec les effets pour 
 autre. L'exemple suivant montre deux inputs pour "argent dépensé" et "argent restant" qui sont
 connectés l'un à l'autre. Si vous en mettez un à jour, l'autre s'ajuste automatiquement. N'utilisez
 pas d'effets pour faire ça
-([démo](/playground/untitled#H4sIAAAAAAAACpVRy26DMBD8FcvKgUhtoIdeHBwp31F6MGSJkBbHwksEQvx77aWQqooq9bgzOzP7mGTdIHipPiZJowOpGJAv0po2VmfnDv4OSBErjYdneHWzBJaCjcx91TWOToUtCIEE3cig0OIty44r5l1oDtjOkyFIsv3GINQ_CNYyGegd1DVUlCR7oU9iilDUcP8S8roYs9n8p2wdYNVFm4csTx872BxNCcjr5I11fdgonEkXsjP2CoUUZWMv6m6wBz2x7yxaM-iJvWeRsvSbSVeUy5i0uf8vKA78NIeJLSZWv1I8jQjLdyK4XuTSeIdmVKJGGI4LdjVOiezwDu1yG74My8PLCQaSiroe5s_5C2PHrkVGAgAA).
+([démo](/playground/untitled#H4sIAAAAAAAAE5WRTWrDMBCFryKGLBJoY3fRjWIHeoiu6i6UZBwEY0VE49TB-O6VxrFTSih0qe_Ne_OjHpxpEDS8O7ZMeIAnqC1hAP3RA1990hKI_Fb55v06XJA4sZ0J-IjvT47RcYyBIuzP1vO2chVHHFjxiQ2pUr3k-SZRQlbBx_LIFoEN4zJfzQph_UMQr4hRXmBd456Xy5Uqt6pPKHmkfmzyPAZL2PCnbRpg8qWYu63I7lu4gswOSRYqrPNt3CgeqqzgbNwRK1A76w76YqjFspfcQTWmK3vJHlQm1puSTVSeqdOc_r9GaeCHfUSY26TXry6Br4RSK3C6yMEGT-aqVU3YbUZ2NF6rfP2KzXgbuYzY46czdgyazy0On_FlLH3F-UDXhgIO35UGlA1rAgAA).
 
 ```svelte
 <script>
-	let total = 100;
+	const total = 100;
 	let spent = $state(0);
 	let left = $state(total);
 
@@ -358,33 +358,27 @@ pas d'effets pour faire ça
 
 Utilisez plutôt des callbacks `oninput` ou — encore mieux — des [liaisons de
 fonctions](bind#Function-bindings) lorsque c'est possible
-([démo](/playground/untitled#H4sIAAAAAAAACo1SMW6EMBD8imWluFMSIEUaDiKlvy5lSOHjlhOSMRZeTiDkv8deMEEJRcqdmZ1ZjzzxqpZgePo5cRw18JQA_sSVaPz0rnVk7iDRYxdhYA8vW4Wg0NnwzJRdrfGtUAVKQIYtCsly9pIkp4AZ7cQOezAoEA7JcWUkVBuCdol0dNWrEutWsV5fHfnhPQ5wZJMnCwyejxCh6G6A0V3IHk4zu_jOxzzPBxBld83PTr7xXrb3rUNw8PbiYJ3FP22oTIoLSComq5XuXTeu8LzgnVA3KDgj13wiQ8taRaJ82rzXskYM-URRlsXktejjgNLoo9e4fyf70_8EnwncySX1GuunX6kGRwnzR_BgaPNaGy3FmLJKwrCUeBM6ZUn0Cs2mOlp3vwthQJ5i14P9st9vZqQlsQIAAA==)).
+([démo](/playground/untitled#H4sIAAAAAAAAE5VRvW7CMBB-FcvqECQK6dDFJEgsnfoGTQdDLsjSxVjxhYKivHvPBwFUsXS8774_nwftbQva6I_e78gdvNo6Xzu_j3quG4cQtfkaNJ1DIiWA8atkE8IiHgEpYVsb4Rm-O3gCT2yji7jrXKB15StiOJKiA1lUpXrL81VCEUjFwHTGXiJZgiyf3TYIjSxq6NwR6uyifr0ohMbEZnpHH2rWf7ImS8KZGtK6osl_UqelRIyVL5b3ir5AuwWUtoXzoee6fIWy0p31e6i0XMocLfZQDuI6qtaeykGcR7UU6XWznFAZU9LN_X9B2UyVayk9f3ji0-REugen6U9upDOCcAWcLlS7GNCejWoQTqsLtrfBqHzxDu3DrUTOf0xwIm2o62H85sk6_OHG2jQWI4y_3byXXGMCAAA=)).
 
 ```svelte
 <script>
-	let total = 100;
+	const total = 100;
 	let spent = $state(0);
-	let left = $state(total);
+	let left = $derived(total - spent);
 
-	function updateSpent(value) {
-		spent = value;
-		left = total - spent;
-	}
-
-	function updateLeft(value) {
-		left = value;
++++	function updateLeft(left) {
 		spent = total - left;
-	}
+	}+++
 </script>
 
 <label>
-	<input type="range" bind:value={() => spent, updateSpent} max={total} />
+	<input type="range" bind:value={spent} max={total} />
 	{spent}/{total} dépensé
 </label>
 
 <label>
-	<input type="range" bind:value={() => left, updateLeft} max={total} />
-	{left}/{total} restant
+	<input type="range" +++bind:value={() => left, updateLeft}+++ max={total} />
+	{left}/{total} dépensé
 </label>
 ```
 

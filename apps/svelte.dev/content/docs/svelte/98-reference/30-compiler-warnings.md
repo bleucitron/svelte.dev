@@ -728,6 +728,12 @@ laisser le sélecteur intact :
 </style>
 ```
 
+### custom_element_props_identifier
+
+```
+Using a rest element or a non-destructured declaration with `$props()` means that Svelte can't infer what properties to expose when creating a custom element. Consider destructuring all the props or explicitly specifying the `customElement.props` option.
+```
+
 ### element_implicitly_closed
 
 ```

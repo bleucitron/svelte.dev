@@ -162,6 +162,12 @@ pour une meilleure intégration des formulaires HTML.
 ...
 ```
 
+> [!NOTE] Bien que TypeScript soit supporté dans la fonction `extend`, il existe des limitations :
+> vous devez définir `lang="ts"` sur l'un des scripts ET vous pouvez uniquement y utiliser la
+> [syntaxe effaçable (_erasable
+> syntax_)](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly). Ces scripts ne sont pas
+> traités par les pré-processeurs de scripts.
+
 ## Mises en garde et limitations [!VO]Caveats and limitations
 
 Les éléments personnalisés sont un moyen utile pour empaqueter des composants et les rendre
