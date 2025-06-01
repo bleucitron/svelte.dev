@@ -46,8 +46,8 @@ placez-le dans `devDependencies` ou `dependencies` respectivement, au sein de vo
 ### Compresser les réponses
 
 Vous souhaitez normalement compresser les réponses venant du serveur. Si vous déployez déjà votre
-serveur derrière un proxy SSL ou un gestionnaire charge (_load balancer_), il est généralement plus
-efficace en termes de performances de gérer la compression à ce niveau-là, car Node.js ne peut
+serveur derrière un proxy SSL ou un gestionnaire de charge (_load balancer_), il est généralement
+plus efficace en termes de performances de gérer la compression à ce niveau-là, car Node.js ne peut
 utiliser qu'un seul thread.
 
 Cependant, si vous compilez un [serveur personnalisé](#Custom-server) et ne souhaitez pas y ajouter
