@@ -1062,13 +1062,13 @@ cas où le navigateur aurait besoin de réparer le DOM.
 Les assignations à des parties déstructurées d'une déclaration `@const` ne sont plus permises. Cela
 n'aurait jamais dû être possible.
 
-### `:is(...)` et `:where(...)` sont scopés [!VO]:is(...) and :where(...) are scoped
+### `:is(...)`, `:has()`, et `:where(...)` sont scopés [!VO]:is(...), :has(), and :where(...) are scoped
 
-Auparavant, Svelte n'analysait pas les sélecteurs au sein de `:is(...)` et de `:where(...)`, les
-traitant de facto comme globaux. Svelte 5 les analyse dans le contexte du composant courant. Ainsi,
-certains sélecteurs peuvent désormais être traités comme non utilisés s'ils ne se basaient que sur
-ces traitements. Pour corriger cela, utilisez `:global(...)` dans les sélecteurs
-`:is(...)`/`:where(...)`.
+Auparavant, Svelte n'analysait pas les sélecteurs au sein de `:is(...)`, de `:has()` et de
+`:where(...)`, les traitant de facto comme globaux. Svelte 5 les analyse dans le contexte du
+composant courant. Ainsi, certains sélecteurs peuvent désormais être traités comme non utilisés
+s'ils ne se basaient que sur ces traitements. Pour corriger cela, utilisez `:global(...)` dans les
+sélecteurs `:is(...)`/`:has()`/`:where(...)`.
 
 Si vous utilisez la directive Tailwind `@apply`, ajoutez un sélecteur `:global` pour conserver les
 règles qui utilisent les sélecteurs `:is(...)` générés par Tailwind :
