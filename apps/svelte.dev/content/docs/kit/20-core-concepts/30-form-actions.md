@@ -422,8 +422,7 @@ de même les mettre à jour, vous devez utiliser
 
 Pour personnaliser le comportement, vous pouvez fournir une `SubmitFunction` qui sera exécutée
 immédiatement avant la soumission du formulaire, et (optionnellement) renvoyer un callback qui
-fournira une `ActionResult`. Notez que si vous renvoyez un callback, le comportement par défaut
-mentionné plus haut sera ignoré. Pour récupérer ce comportement, vous devez exécuter `update`.
+fournira une `ActionResult`.
 
 ```svelte
 <form
@@ -447,9 +446,9 @@ mentionné plus haut sera ignoré. Pour récupérer ce comportement, vous devez 
 Vous pouvez utiliser ces fonctions pour afficher et cacher des éléments d'interface de chargement,
 entre autres.
 
-Si vous renvoyez un callback, vous pourriez avoir besoin de reproduire en partie le comportement par
-défaut de `use:enhance`, mais sans invalider toutes les données lors d'une réponse réussie. Vous
-pouvez faire cela grâce à `applyAction` :
+Si vous renvoyez un callback, vous écrasez le comportement post-soumission par défaut. Pour le
+récupérer, appelez `update`, qui accepte les paramètres `invalidateAll` et `reset`, ou utilisez
+`applyAction` sur le résultat :
 
 ```svelte
 /// file: src/routes/login/+page.svelte

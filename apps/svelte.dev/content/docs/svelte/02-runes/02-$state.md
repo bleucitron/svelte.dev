@@ -28,9 +28,9 @@ profondément réactif. Les
 permettent à Svelte d'exécuter du code lors de la lecture ou de l'écriture de propriétés, en
 particulier via des méthodes comme `array.push(...)`, déclenchant des mises à jour granulaires.
 
-
 L'état est transformé en Proxy de manière récursive jusqu'à ce que Svelte trouve autre chose qu'un
-tableau ou un objet simple (comme une classe par exemple). Dans un cas comme celui-là...
+tableau ou un objet simple (comme une classe par exemple, ou un objet créé avec `Objet.create`).
+Dans un cas comme celui-là...
 
 ```js
 let todos = $state([
@@ -45,7 +45,7 @@ let todos = $state([
 tous les éléments de votre UI qui dépendent spécifiquement de cette propriété :
 
 ```js
-let todos = [{ done: false, text: 'add more todos' }];
+let todos = [{ done: false, text: 'ajouter plus de todos' }];
 // ---cut---
 todos[0].done = !todos[0].done;
 ```
@@ -54,7 +54,7 @@ Si vous ajoutez un nouvel objet à ce tableau via `.push`, celui-ci sera égalem
 Proxy :
 
 ```js
-let todos = [{ done: false, text: 'add more todos' }];
+let todos = [{ done: false, text: 'ajouter plus de todos' }];
 // ---cut---
 todos.push({
 	done: false,
