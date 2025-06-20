@@ -36,8 +36,9 @@ Pour définir un style comme important, vous pouvez utiliser le modificateur `|i
 ```
 
 Lorsque des directives de `style:` sont combinées avec des attributs `style`, les directives seront
-prioritaires :
+prioritaires, même sur les propriétés `!important` :
 
 ```svelte
 <div style="color: blue;" style:color="red">Ceci sera rouge</div>
+<div style:color="red" style="color: blue !important">Ceci sera toujours rouge</div>
 ```

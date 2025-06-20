@@ -416,8 +416,8 @@ export async function reroute({ url, fetch }) {
 
 Une collection de _transporteurs_, qui vous permettent de fournir des types personnalisés — renvoyés
 depuis une fonction `load`, au travers de la frontière serveur/client. Chaque transporteur contient
-une fonction `encode`, qui encode les valeurs sur le serveur (ou renvoie `false` pour ce qui n'est
-pas une instance du type) et une fonction `decode` correspondante :
+une fonction `encode`, qui encode les valeurs sur le serveur (ou renvoie une valeur falsy pour ce
+qui n'est pas une instance du type) et une fonction `decode` correspondante :
 
 ```js
 /// file: src/hooks.js

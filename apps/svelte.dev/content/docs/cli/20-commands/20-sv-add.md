@@ -40,3 +40,4 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 - [`sveltekit-adapter`](sveltekit-adapter)
 - [`tailwindcss`](tailwind)
 - [`vitest`](vitest)
+- [`devtools-json`](devtools-json)

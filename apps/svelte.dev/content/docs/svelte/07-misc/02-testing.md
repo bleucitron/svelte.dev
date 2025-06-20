@@ -143,12 +143,12 @@ test('Effet', () => {
 		// les effets sont en général exécutés après une micro-tâche,
 		// utiliser `flushSync` pour exécuter tous les effets en attente de manière synchrone
 		flushSync();
-		expect(log.value).toEqual([0]);
+		expect(log).toEqual([0]);
 
 		count = 1;
 		flushSync();
 
-		expect(log.value).toEqual([0, 1]);
+		expect(log).toEqual([0, 1]);
 	});
 
 	cleanup();
@@ -162,17 +162,13 @@ test('Effet', () => {
  */
 export function logger(getValue) {
 	/** @type {any[]} */
-	let log = $state([]);
+	let log = [];
 
 	$effect(() => {
 		log.push(getValue());
 	});
 
-	return {
-		get value() {
-			return log;
-		}
-	};
+	return log;
 }
 ```
 
