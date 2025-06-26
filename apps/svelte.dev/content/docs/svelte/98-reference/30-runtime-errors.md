@@ -132,7 +132,7 @@ Cannot set prototype of `$state` object
 ### state_unsafe_mutation
 
 ```
-Updating state inside a derived or a template expression is forbidden. If the value should not be reactive, declare it without `$state`
+Updating state inside `$derived(...)`, `$inspect(...)` or a template expression is forbidden. If the value should not be reactive, declare it without `$state`
 ```
 
 Cette erreur se produit lorsqu'un état est mis à jour pendant l'évaluation d'un `$derived`. Vous
