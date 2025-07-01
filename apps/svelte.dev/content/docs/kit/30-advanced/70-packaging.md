@@ -379,7 +379,7 @@ par défaut `true`
 
 Pour publier le paquet généré :
 
-```sh
+```bash
 npm publish
 ```
 

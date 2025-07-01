@@ -88,7 +88,7 @@ node +++--env-file=.env+++ build
 Par défaut, le serveur va accepter des connections entrantes sur `0.0.0.0` en utilisant le port
 3000. Ces valeurs peuvent être personnalisées avec les variables d'environnement `PORT` et `HOST` :
 
-```
+```bash
 HOST=127.0.0.1 PORT=4000 node build
 ```
 
@@ -96,7 +96,7 @@ Comme alternative, le serveur peut être configuré pour accepter les connection
 chemin de socket défini. Lorsque vous faites en utilisant la variable d'environnement `SOCKET_PATH`,
 les variables d'environnement `HOST` et `PORT` seront ignorées.
 
-```
+```bash
 SOCKET_PATH=/tmp/socket node build
 ```
 
@@ -106,7 +106,7 @@ HTTP ne fournit pas à SvelteKit une manière fiable de connaître l'URL qui est
 requêtée. La manière la plus simple de dire à SvelteKit depuis où l'application est servie est de
 définir la variable d'environnement `ORIGIN` :
 
-```
+```bash
 ORIGIN=https://my.site node build
 
 # ou par ex. pour prévisualiser et tester
@@ -117,7 +117,7 @@ Avec ceci, une requête pour le chemin `/stuff` sera correctement résolue en `h
 Alternativement, vous pouvez définir les en-têtes précisant à SvelteKit les protocole et hôte de
 requête, à partir desquels il va pouvoir construire l'URL d'origine :
 
-```
+```bash
 PROTOCOL_HEADER=x-forwarded-proto HOST_HEADER=x-forwarded-host node build
 ```
 
@@ -147,7 +147,7 @@ l'adresse de connexion `remoteAddress`. Si votre serveur est derrière un ou plu
 un load balancer), cette valeur contiendra l'adresse IP du proxy le plus profond et non celle du
 client, et il est donc nécessaire de spécifier `ADDRESS_HEADER` pour lire l'adresse :
 
-```
+```bash
 ADDRESS_HEADER=True-Client-IP node build
 ```
 
@@ -244,7 +244,7 @@ contrôlez pas), vous pouvez préciser un préfixe :
 envPrefix: 'MY_CUSTOM_';
 ```
 
-```sh
+```bash
 MY_CUSTOM_HOST=127.0.0.1 \
 MY_CUSTOM_PORT=4000 \
 MY_CUSTOM_ORIGIN=https://my.site \

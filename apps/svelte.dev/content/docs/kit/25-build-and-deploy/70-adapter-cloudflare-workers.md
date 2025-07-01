@@ -85,14 +85,14 @@ Vous aurez besoin d'installer
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) et de vous y
 connecter, si vous l'avez pas déjà fait :
 
-```sh
+```bash
 npm i -D wrangler
 wrangler login
 ```
 
 Vous pourrez ensuite compiler votre application et la déployer :
 
-```sh
+```bash
 wrangler deploy
 ```
 
@@ -102,7 +102,7 @@ L'objet [`env`](https://developers.cloudflare.com/workers/runtime-apis/fetch-eve
 contient les [liaisons](https://developers.cloudflare.com/workers/runtime-apis/bindings/) de votre
 projet, qui consistent en des namespaces KV/DO, etc. Il est passé à SvelteKit via la propriété
 `platform`, de même que
-[`context`](https://developers.cloudflare.com/workers/runtime-apis/context/),
+[`ctx`](https://developers.cloudflare.com/workers/runtime-apis/context/),
 [`caches`](https://developers.cloudflare.com/workers/runtime-apis/cache/), et
 [`cf`](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties),
 ce qui signifie que vous pouvez y accéder dans les hooks et les endpoints :

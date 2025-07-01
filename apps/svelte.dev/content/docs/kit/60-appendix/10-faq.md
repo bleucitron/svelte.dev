@@ -263,14 +263,14 @@ Actuellement la dernière version (3) de Yarn supporte de manière
 L'exemple ci-dessous semble fonctionner même si les résultats peuvent être différents. Créez d'abord
 une nouvelle application :
 
-```sh
+```bash
 yarn create svelte myapp
 cd myapp
 ```
 
 Puis activez Yarn Berry :
 
-```sh
+```bash
 yarn set version berry
 yarn install
 ```
