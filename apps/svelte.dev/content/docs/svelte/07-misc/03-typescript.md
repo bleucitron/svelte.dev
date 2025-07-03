@@ -111,10 +111,8 @@ Lorsque vous utilisez TypeScript, assurez-vous que votre fichier `tsconfig.json`
 défini.
 
 - Utilisez une [`target`](https://www.typescriptlang.org/tsconfig/#target) qui soit au moins
-`ES2022`, ou bien une `target` d'au moins `ES2015` avec
-[`useDefineForClassFields`](https://www.typescriptlang.org/tsconfig/#useDefineForClassFields). Ceci
-permet de s'assurer que les déclarations de rune dans les champs de classes restent intactes, pour
-permettre au compilateur de fonctionner correctement
+`ES2015`, ou bien une `target` d'au moins `ES2015` afin que les classes ne soient pas compilées en
+tant que fonctions
 - Mettez [`verbatimModuleSyntax`](https://www.typescriptlang.org/tsconfig/#verbatimModuleSyntax) à
 `true` pour conserver les imports tels quels
 - Mettez [`isolatedModules`](https://www.typescriptlang.org/tsconfig/#isolatedModules) à `true` pour

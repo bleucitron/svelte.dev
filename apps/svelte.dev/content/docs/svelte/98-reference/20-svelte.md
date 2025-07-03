@@ -15,6 +15,7 @@ import {
 	createEventDispatcher,
 	createRawSnippet,
 	flushSync,
+	getAbortSignal,
 	getAllContexts,
 	getContext,
 	hasContext,
@@ -294,6 +295,42 @@ Ne renvoie rien si aucun callback n'est fourni, renvoie le résultat de l'appel 
 
 ```dts
 function flushSync<T = void>(fn?: (() => T) | undefined): T;
+```
+
+</div>
+
+
+
+## getAbortSignal
+
+Renvoie un [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) qui
+s'annule lorsque le [`$derived`](/docs/svelte/$derived) ou [`$effect`](/docs/svelte/$effect) courant
+est ré-exécuté ou détruit.
+
+Doit être appelée lorsqu'un `$derived` ou `$effect` est en cours d'exécution.
+
+```svelte
+<script>
+	import { getAbortSignal } from 'svelte';
+
+	let { id } = $props();
+
+	async function getData(id) {
+		const response = await fetch(`/items/${id}`, {
+			signal: getAbortSignal()
+		});
+
+		return await response.json();
+	}
+
+	const data = $derived(await getData(id));
+</script>
+```
+
+<div class="ts-block">
+
+```dts
+function getAbortSignal(): AbortSignal;
 ```
 
 </div>

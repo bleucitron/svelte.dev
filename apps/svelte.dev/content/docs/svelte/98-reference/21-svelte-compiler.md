@@ -213,6 +213,8 @@ namespace AST {
 		instance: Script | null;
 		/** L'élément `<script module>` parsé, s'il existe */
 		module: Script | null;
+		/** Commentaires dans les <script> et {expressions} */
+		comments: JSComment[];
 	}
 
 	export interface SvelteOptions {
@@ -559,6 +561,17 @@ namespace AST {
 		attributes: Attribute[];
 	}
 
+	export interface JSComment {
+		type: 'Line' | 'Block';
+		value: string;
+		start: number;
+		end: number;
+		loc: {
+			start: { line: number; column: number };
+			end: { line: number; column: number };
+		};
+	}
+
 	export type AttributeLike =
 		| Attribute
 		| SpreadAttribute
@@ -622,7 +635,8 @@ namespace AST {
 		| Node
 		| TemplateNode
 		| AST.Fragment
-		| _CSS.Node;
+		| _CSS.Node
+		| Script;
 
 	export type { _CSS as CSS };
 }
