@@ -73,10 +73,10 @@ const VERSION: string;
 
 ## error
 
-Throws an error with a HTTP status code and an optional message.
-When called during request handling, this will cause SvelteKit to
-return an error response without invoking `handleError`.
-Make sure you're not catching the thrown error, which would prevent SvelteKit from handling it.
+Jette une erreur avec un statut HTTP et un message optionnel. Lorsqu'exécuté lors de la gestion
+d'une requête, cette méthode va imposer à SvelteKit de renvoyer une réponse d'erreur sans invoquer
+`handleError`. Assurez-vous de ne pas "attraper" l'erreur jetée, ce qui empêcherait SvelteKit de la
+gérer.
 
 <div class="ts-block">
 
@@ -105,7 +105,8 @@ function error(
 
 ## fail
 
-Create an `ActionFailure` object. Call when form submission fails.
+Crée un objet `ActionFailure`. Appeler cette méthode lorsque vous voulez faire échouer une
+soumission de formulaire.
 
 <div class="ts-block">
 
@@ -129,7 +130,7 @@ function fail<
 
 ## isActionFailure
 
-Checks whether this is an action failure thrown by `fail`.
+Vérifie si l'action a échoué via le jeté de `fail`.
 
 <div class="ts-block">
 
@@ -143,7 +144,7 @@ function isActionFailure(e: unknown): e is ActionFailure;
 
 ## isHttpError
 
-Checks whether this is an error thrown by `error`.
+Vérifie s'il s'agit d'une erreur jetée par `error`.
 
 <div class="ts-block">
 
@@ -162,7 +163,7 @@ function isHttpError<T extends number>(
 
 ## isRedirect
 
-Checks whether this is a redirect thrown by `redirect`.
+Vérifie s'il s'agit d'une redirection jetée par `redirect`.
 
 <div class="ts-block">
 
@@ -176,7 +177,7 @@ function isRedirect(e: unknown): e is Redirect_1;
 
 ## json
 
-Create a JSON `Response` object from the supplied data.
+Crée un objet de réponse `Response` JSON à partir des données fournies.
 
 <div class="ts-block">
 
@@ -195,13 +196,14 @@ function json(
 
 <blockquote class="since note">
 
-Available since 2.18.0
+Disponible depuis la version 2.18.0
 
 </blockquote>
 
-Strips possible SvelteKit-internal suffixes and trailing slashes from the URL pathname.
-Returns the normalized URL as well as a method for adding the potential suffix back
-based on a new pathname (possibly including search) or URL.
+Supprime tout suffixe potentiel interne à SvelteKit et tout "trailing slash" du pathname d'URL.
+Renvoie l'URL normalisée ainsi qu'une méthode pour ajouter de nouveau le suffixe potentiel basé sur
+un nouveau pathname (incluant potentiellement la chaîne de recherche) ou un nouvelle URL.
+
 ```js
 // @errors: 7031
 import { normalizeUrl } from '@sveltejs/kit';
@@ -227,15 +229,19 @@ function normalizeUrl(url: URL | string): {
 
 ## redirect
 
-Redirect a request. When called during request handling, SvelteKit will return a redirect response.
-Make sure you're not catching the thrown redirect, which would prevent SvelteKit from handling it.
+Redirige une requête. Lorsqu'exécuté lors d'une gestion de requête, SvelteKit va renvoyer une
+réponse de redirection. Assurez-vous de ne pas "attraper" la redirection jetée, ce qui empêcherait
+SvelteKit de la gérer.
 
-Most common status codes:
- * `303 See Other`: redirect as a GET request (often used after a form POST request)
- * `307 Temporary Redirect`: redirect will keep the request method
- * `308 Permanent Redirect`: redirect will keep the request method, SEO will be transferred to the new page
+Les codes de redirection les plus communs :
+ * `303 See Other`: redirige en tant que requête GET (souvent utilisé après une requête POST de
+ formulaire)
+ * `307 Temporary Redirect`: la redirection va conserver la méthode de requête
+ * `308 Permanent Redirect`: la redirection va conserver la méthode requête, le référencement sera
+ transféré vers la nouvelle page
 
-[See all redirect status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages)
+[Voir tous les codes de redirection
+existants](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages)
 
 <div class="ts-block">
 
@@ -262,7 +268,7 @@ function redirect(
 
 ## text
 
-Create a `Response` object from the supplied body.
+Crée un objet de réponse `Response` à partir du body fourni.
 
 <div class="ts-block">
 
@@ -279,8 +285,9 @@ function text(
 
 ## Action
 
-Shape of a form action method that is part of `export const actions = {...}` in `+page.server.js`.
-See [form actions](/docs/kit/form-actions) for more information.
+Forme d'une action de formulaire faisant partie de `export const actions = {...}` dans un fichier
+`+page.server.js`. Voir la section [Actions de formulaires](/docs/kit/form-actions) pour plus
+d'informations.
 
 <div class="ts-block">
 
@@ -340,11 +347,11 @@ data: T;
 
 ## ActionResult
 
-When calling a form action via fetch, the response will be one of these shapes.
+Lorsqu'une action de formulaire est exécutée via fetch, la réponse aura l'une de ces formes.
 ```svelte
 <form method="post" use:enhance={() => {
 	return ({ result }) => {
-		// result is of type ActionResult
+		// le résultat est de type ActionResult
 	};
 }}
 ```
@@ -370,8 +377,8 @@ type ActionResult<
 
 ## Actions
 
-Shape of the `export const actions = {...}` object in `+page.server.js`.
-See [form actions](/docs/kit/form-actions) for more information.
+Forme de l'objet `export const actions = {...}` dans un fichier `+page.server.js`. Voir la section
+[Actions de formulaires](/docs/kit/form-actions) pour plus d'informations.
 
 <div class="ts-block">
 
@@ -392,7 +399,8 @@ type Actions<
 
 ## Adapter
 
-[Adapters](/docs/kit/adapters) are responsible for taking the production build and turning it into something that can be deployed to a platform of your choosing.
+Les [adaptateurs](/docs/kit/adapters) sont responsables de prendre le build de production et de le
+transformer en quelque chose pouvant être déployé sur une plateforme de votre choix.
 
 <div class="ts-block">
 
@@ -408,7 +416,8 @@ name: string;
 
 <div class="ts-block-property-details">
 
-The name of the adapter, using for logging. Will typically correspond to the package name.
+Le nom de l'adaptateur, à utiliser pour l'affichage de logs. Va correspondre généralement au nom du
+paquet.
 
 </div>
 </div>
@@ -423,11 +432,11 @@ adapt: (builder: Builder) => MaybePromise<void>;
 
 <div class="ts-block-property-bullets">
 
-- `builder` An object provided by SvelteKit that contains methods for adapting the app
+- `builder` Un objet fourni par SvelteKit contenant des méthodes pour adapter l'application
 
 </div>
 
-This function is called after SvelteKit has built your app.
+Cette fonction est exécutée après que SvelteKit a compilé votre application.
 
 </div>
 </div>
@@ -440,7 +449,8 @@ supports?: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Checks called during dev and build to determine whether specific features will work in production with this adapter.
+Vérifications effectuées lors du développement et de la compilation pour déterminer si certaines
+fonctionnalités spécifiques fonctionneront en production avec cet adaptateur.
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -452,11 +462,11 @@ read?: (details: { config: any; route: { id: string } }) => boolean;
 
 <div class="ts-block-property-bullets">
 
-- `details.config` The merged route config
+- `details.config` La configuration mergée de la route
 
 </div>
 
-Test support for `read` from `$app/server`.
+Teste le support de `read` depuis `$app/server`.
 
 </div>
 </div></div>
@@ -472,15 +482,15 @@ emulate?: () => MaybePromise<Emulator>;
 
 <div class="ts-block-property-details">
 
-Creates an `Emulator`, which allows the adapter to influence the environment
-during dev, build and prerendering.
+Crée un `Emulator`, permettant à l'adaptateur d'influencer l'environnement pendant le développement,
+la compilation et le pré-rendu.
 
 </div>
 </div></div>
 
 ## AfterNavigate
 
-The argument passed to [`afterNavigate`](/docs/kit/$app-navigation#afterNavigate) callbacks.
+L'argument passé aux callbacks [`afterNavigate`](/docs/kit/$app-navigation#afterNavigate).
 
 <div class="ts-block">
 
@@ -496,12 +506,12 @@ type: Exclude<NavigationType, 'leave'>;
 
 <div class="ts-block-property-details">
 
-The type of navigation:
-- `enter`: The app has hydrated/started
-- `form`: The user submitted a `<form>`
-- `link`: Navigation was triggered by a link click
-- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
-- `popstate`: Navigation was triggered by back/forward navigation
+Le type de navigation :
+- `enter`: L'application a été hydratée/démarrée
+- `form`: L'utilisateur ou utilisatrice a soumis un `<form>`
+- `link`: La navigation a été déclenchée par un clic sur un lien
+- `goto`: La navigation a été déclenchée par un appel à `goto(...)` ou une redirection
+- `popstate`: La navigation a été déclenchée par les boutons "précédent"/"suivant"
 
 </div>
 </div>
@@ -514,7 +524,8 @@ willUnload: false;
 
 <div class="ts-block-property-details">
 
-Since `afterNavigate` callbacks are called after a navigation completes, they will never be called with a navigation that unloads the page.
+Puisque les callbacks `afterNavigate` sont exécutés après qu'une navigation se soit terminée, ils ne
+seront jamais exécutés lors d'une navigation "déchargeant" la page.
 
 </div>
 </div></div>
@@ -539,7 +550,7 @@ type AwaitedActions<
 
 ## BeforeNavigate
 
-The argument passed to [`beforeNavigate`](/docs/kit/$app-navigation#beforeNavigate) callbacks.
+L'argument passé aux callbacks [`beforeNavigate`](/docs/kit/$app-navigation#beforeNavigate).
 
 <div class="ts-block">
 
@@ -555,15 +566,15 @@ cancel: () => void;
 
 <div class="ts-block-property-details">
 
-Call this to prevent the navigation from starting.
+Appelez cette méthode pour empêcher la navigation de démarrer.
 
 </div>
 </div></div>
 
 ## Builder
 
-This object is passed to the `adapt` function of adapters.
-It contains various methods and properties that are useful for adapting the app.
+Cet objet est fourni à la fonction `adapt` des adaptateurs. Il contient différentes méthodes et
+propriétés utiles pour adapter l'application.
 
 <div class="ts-block">
 
@@ -579,7 +590,8 @@ log: Logger;
 
 <div class="ts-block-property-details">
 
-Print messages to the console. `log.info` and `log.minor` are silent unless Vite's `logLevel` is `info`.
+Affiche des messages dans la console. `log.info` et `log.minor` sont muets tant que le `logLevel` de
+Vite vaut `info`.
 
 </div>
 </div>
@@ -592,7 +604,7 @@ rimraf: (dir: string) => void;
 
 <div class="ts-block-property-details">
 
-Remove `dir` and all its contents.
+Supprime `dir` et tout son contenu.
 
 </div>
 </div>
@@ -605,7 +617,7 @@ mkdirp: (dir: string) => void;
 
 <div class="ts-block-property-details">
 
-Create `dir` and any required parent directories.
+Crée `dir` et tout dossier parent requis.
 
 </div>
 </div>
@@ -618,7 +630,7 @@ config: ValidatedConfig;
 
 <div class="ts-block-property-details">
 
-The fully resolved `svelte.config.js`.
+L'objet `svelte.config.js` entièrement résolu.
 
 </div>
 </div>
@@ -631,7 +643,7 @@ prerendered: Prerendered;
 
 <div class="ts-block-property-details">
 
-Information about prerendered pages and assets, if any.
+Informations au sujet des pages et assets pré-rendus, s'ils existent.
 
 </div>
 </div>
@@ -644,7 +656,7 @@ routes: RouteDefinition[];
 
 <div class="ts-block-property-details">
 
-An array of all routes (including prerendered)
+Un tableau de toutes les routes (incluant les routes pré-rendues)
 
 </div>
 </div>
@@ -659,12 +671,12 @@ createEntries: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
 
 <div class="ts-block-property-bullets">
 
-- `fn` A function that groups a set of routes into an entry point
-- <span class="tag deprecated">deprecated</span> Use `builder.routes` instead
+- `fn` Une fonction qui regroupe un ensemble de routes en un point d'entrée
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `builder.routes`
 
 </div>
 
-Create separate functions that map to one or more routes of your app.
+Crée des fonctions séparées associées à une ou plusieurs routes de votre application.
 
 </div>
 </div>
@@ -677,7 +689,7 @@ findServerAssets: (routes: RouteDefinition[]) => string[];
 
 <div class="ts-block-property-details">
 
-Find all the assets imported by server files belonging to `routes`
+Trouve tous les assets importés par les fichiers de serveur appartenant à `routes`
 
 </div>
 </div>
@@ -690,7 +702,8 @@ generateFallback: (dest: string) => Promise<void>;
 
 <div class="ts-block-property-details">
 
-Generate a fallback page for a static webserver to use when no route is matched. Useful for single-page apps.
+Génère une page de secours pour un serveur web statique à utiliser lorsqu'aucune route n'a été
+trouvée. Utile pour les SPA.
 
 </div>
 </div>
@@ -703,7 +716,8 @@ generateEnvModule: () => void;
 
 <div class="ts-block-property-details">
 
-Generate a module exposing build-time environment variables as `$env/dynamic/public`.
+Génère un module exposant les variables d'environnement de compilation en tant que
+`$env/dynamic/public`.
 
 </div>
 </div>
@@ -718,11 +732,13 @@ generateManifest: (opts: { relativePath: string; routes?: RouteDefinition[] }) =
 
 <div class="ts-block-property-bullets">
 
-- `opts` a relative path to the base directory of the app and optionally in which format (esm or cjs) the manifest should be generated
+- `opts` un chemin relatif au dossier racine de l'application et optionnellement le format (esm ou
+cjs) dans lequel le manifeste devrait être généré
 
 </div>
 
-Generate a server-side manifest to initialise the SvelteKit [server](/docs/kit/@sveltejs-kit#Server) with.
+Génère un manifeste côté serveur avec lequel initialiser le
+[serveur](/docs/kit/@sveltejs-kit#Server) SvelteKit.
 
 </div>
 </div>
@@ -737,11 +753,12 @@ getBuildDirectory: (name: string) => string;
 
 <div class="ts-block-property-bullets">
 
-- `name` path to the file, relative to the build directory
+- le chemin `name` vers le fichier, relatif au dossier de compilation
 
 </div>
 
-Resolve a path to the `name` directory inside `outDir`, e.g. `/path/to/.svelte-kit/my-adapter`.
+Résout un chemin vers le dossier `name` au sein de `outDir`, par ex.
+`/path/to/.svelte-kit/my-adapter`.
 
 </div>
 </div>
@@ -754,7 +771,8 @@ getClientDirectory: () => string;
 
 <div class="ts-block-property-details">
 
-Get the fully resolved path to the directory containing client-side assets, including the contents of your `static` directory.
+Récupère le chemin complet vers le dossier contenant des assets côté client, incluant le contenu de
+votre dossier `static`.
 
 </div>
 </div>
@@ -767,7 +785,7 @@ getServerDirectory: () => string;
 
 <div class="ts-block-property-details">
 
-Get the fully resolved path to the directory containing server-side code.
+Récupère le chemin complet vers le dossier contenu le code côté serveur.
 
 </div>
 </div>
@@ -780,7 +798,8 @@ getAppPath: () => string;
 
 <div class="ts-block-property-details">
 
-Get the application path including any configured `base` path, e.g. `my-base-path/_app`.
+Récupère le chemin de l'application incluant tout chemin `base` configuré, par ex.
+`my-base-path/_app`.
 
 </div>
 </div>
@@ -795,12 +814,12 @@ writeClient: (dest: string) => string[];
 
 <div class="ts-block-property-bullets">
 
-- `dest` the destination folder
-- <span class="tag">returns</span> an array of files written to `dest`
+- le dossier de destination `dest`
+- <span class="tag">renvoie</span> un tableau de fichiers écrits dans `dest`
 
 </div>
 
-Write client assets to `dest`.
+Écrit les assets client dans `dest`.
 
 </div>
 </div>
@@ -815,12 +834,12 @@ writePrerendered: (dest: string) => string[];
 
 <div class="ts-block-property-bullets">
 
-- `dest` the destination folder
-- <span class="tag">returns</span> an array of files written to `dest`
+- le dossier de destination `dest`
+- <span class="tag">renvoie</span> un tableau de fichiers écrits dans `dest`
 
 </div>
 
-Write prerendered files to `dest`.
+Écrit les fichiers pré-rendus vers le dossier `dest`.
 
 </div>
 </div>
@@ -835,12 +854,12 @@ writeServer: (dest: string) => string[];
 
 <div class="ts-block-property-bullets">
 
-- `dest` the destination folder
-- <span class="tag">returns</span> an array of files written to `dest`
+- le dossier de destination `dest`
+- <span class="tag">renvoie</span> un tableau de fichiers écrits dans `dest`
 
 </div>
 
-Write server-side code to `dest`.
+Écrit le code serveur vers `dest`.
 
 </div>
 </div>
@@ -862,15 +881,15 @@ copy: (
 
 <div class="ts-block-property-bullets">
 
-- `from` the source file or directory
-- `to` the destination file or directory
-- `opts.filter` a function to determine whether a file or directory should be copied
-- `opts.replace` a map of strings to replace
-- <span class="tag">returns</span> an array of files that were copied
+- `from` le fichier ou dossier source
+- `to` le fichier ou dossier destination
+- `opts.filter` une fonction pour déterminer si un fichier ou dossier devrait être copié
+- `opts.replace` un dictionnaire de chaînes de caractères à remplacer
+- <span class="tag">renvoie</span> un tableau de fichiers qui ont été copiés
 
 </div>
 
-Copy a file or directory.
+Copie un fichier ou dossier.
 
 </div>
 </div>
@@ -885,11 +904,12 @@ compress: (directory: string) => Promise<void>;
 
 <div class="ts-block-property-bullets">
 
-- `directory` The directory containing the files to be compressed
+- `directory` Le dossier contenant les fichiers à compresser
 
 </div>
 
-Compress files in `directory` with gzip and brotli, where appropriate. Generates `.gz` and `.br` files alongside the originals.
+Compresse les fichiers dans `directory` avec gzip et broli, lorsqu'approprié. Génère des fichiers
+`.gz` et `.br` à côté des originaux.
 
 </div>
 </div></div>
@@ -898,11 +918,12 @@ Compress files in `directory` with gzip and brotli, where appropriate. Generates
 
 <blockquote class="since note">
 
-Available since 2.10.0
+Disponible depuis la version 2.10.0
 
 </blockquote>
 
-The [`init`](/docs/kit/hooks#Shared-hooks-init) will be invoked once the app starts in the browser
+La fonction [`init`](/docs/kit/hooks#Shared-hooks-init) sera exécutée après le démarrage de
+l'application dans le navigateur
 
 <div class="ts-block">
 
@@ -914,7 +935,8 @@ type ClientInit = () => MaybePromise<void>;
 
 ## Config
 
-See the [configuration reference](/docs/kit/configuration) for details.
+Voir le [documentation de référence sur la configuration](/docs/kit/configuration) pour plus de
+détails.
 
 ## Cookies
 
@@ -934,12 +956,12 @@ get: (name: string, opts?: import('cookie').CookieParseOptions) => string | unde
 
 <div class="ts-block-property-bullets">
 
-- `name` the name of the cookie
-- `opts` the options, passed directly to `cookie.parse`. See documentation [here](https://github.com/jshttp/cookie#cookieparsestr-options)
+- `name` le nom du cookie
+- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
 
 </div>
 
-Gets a cookie that was previously set with `cookies.set`, or from the request headers.
+Récupère un cookie précédemment défini avec `cookies.set`, ou depuis les en-têtes de requête.
 
 </div>
 </div>
@@ -954,11 +976,11 @@ getAll: (opts?: import('cookie').CookieParseOptions) => Array<{ name: string; va
 
 <div class="ts-block-property-bullets">
 
-- `opts` the options, passed directly to `cookie.parse`. See documentation [here](https://github.com/jshttp/cookie#cookieparsestr-options)
+- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
 
 </div>
 
-Gets all cookies that were previously set with `cookies.set`, or from the request headers.
+Récupère tous cookies précédemment définis avec `cookies.set`, ou depuis les en-têtes de requête.
 
 </div>
 </div>
@@ -977,17 +999,24 @@ set: (
 
 <div class="ts-block-property-bullets">
 
-- `name` the name of the cookie
-- `value` the cookie value
-- `opts` the options, passed directly to `cookie.serialize`. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+- `name` le nom du cookie
+- `value` la valeur du cookie
+- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
 
 </div>
 
-Sets a cookie. This will add a `set-cookie` header to the response, but also make the cookie available via `cookies.get` or `cookies.getAll` during the current request.
+Définit un cookie. Cela va ajouter un en-tête `set-cookie` à la réponse, mais également rendre le
+cookie disponible via `cookies.get` ou `cookies.getAll` lors de la requête courante.
 
-The `httpOnly` and `secure` options are `true` by default (except on http://localhost, where `secure` is `false`), and must be explicitly disabled if you want cookies to be readable by client-side JavaScript and/or transmitted over HTTP. The `sameSite` option defaults to `lax`.
+Les options `httpsOnly` et `secure` valent `true` par défaut (sauf sur http://localhost, où `secure`
+vaut `false`), et doit être explicitement désactivé si vous souhaitez que les cookies soient
+lisibles par du code JavaScript client et/ou transmis via HTTP. L'option `sameSite` vaut par défaut
+`lax`.
 
-You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
+Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
+préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
+disponible sur le chemin courant et ses enfants.
 
 </div>
 </div>
@@ -1002,14 +1031,20 @@ delete: (name: string, opts: import('cookie').CookieSerializeOptions & { path: s
 
 <div class="ts-block-property-bullets">
 
-- `name` the name of the cookie
-- `opts` the options, passed directly to `cookie.serialize`. The `path` must match the path of the cookie you want to delete. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+- `name` le nom du cookie
+- `opts` les options, passées directement à `cookie.serialize`. Le `path` doit correspondre au
+chemin du cookie que vous souhaitez supprimer. Voir la
+[documentation](https://github.com/jshttp/cookie#cookieserializename-value-options)
 
 </div>
 
-Deletes a cookie by setting its value to an empty string and setting the expiry date in the past.
+Supprime un cookie en définissant sa valeur à une chaîne de caractères vide et sa date d'expiration
+à une date dans le passé.
 
-You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
+Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
+préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
+disponible sur le chemin courant et ses enfants.
 
 </div>
 </div>
@@ -1028,24 +1063,32 @@ serialize: (
 
 <div class="ts-block-property-bullets">
 
-- `name` the name of the cookie
-- `value` the cookie value
-- `opts` the options, passed directly to `cookie.serialize`. See documentation [here](https://github.com/jshttp/cookie#cookieserializename-value-options)
+- `name` le nom du cookie
+- `value` la valeur du cookie
+- `opts` les options, passées directement à `cookie.serialize`. Voir la
+[documentation](https://github.com/jshttp/cookie#cookieserializename-value-options)
 
 </div>
 
-Serialize a cookie name-value pair into a `Set-Cookie` header string, but don't apply it to the response.
+Sérialise la paire nom-valeur d'un cookie en une chaîne de caractères d'en-tête `Set-Cookie`, mais
+ne l'applique pas à la réponse.
 
-The `httpOnly` and `secure` options are `true` by default (except on http://localhost, where `secure` is `false`), and must be explicitly disabled if you want cookies to be readable by client-side JavaScript and/or transmitted over HTTP. The `sameSite` option defaults to `lax`.
+Les options `httpsOnly` et `secure` valent `true` par défaut (sauf sur http://localhost, où `secure`
+vaut `false`), et doit être explicitement désactivé si vous souhaitez que les cookies soient
+lisibles par du code JavaScript client et/ou transmis via HTTP. L'option `sameSite` vaut par défaut
+`lax`.
 
-You must specify a `path` for the cookie. In most cases you should explicitly set `path: '/'` to make the cookie available throughout your app. You can use relative paths, or set `path: ''` to make the cookie only available on the current path and its children
-
+Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
+préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
+disponible sur le chemin courant et ses enfants.
 </div>
 </div></div>
 
 ## Emulator
 
-A collection of functions that influence the environment during dev, build and prerendering
+Une collection de fonctions qui influencent l'environnement lors du développement, de la
+compilation, et du pré-rendu.
 
 <div class="ts-block">
 
@@ -1061,18 +1104,20 @@ platform?(details: { config: any; prerender: PrerenderOption }): MaybePromise<Ap
 
 <div class="ts-block-property-details">
 
-A function that is called with the current route `config` and `prerender` option
-and returns an `App.Platform` object
+Une fonction exécutée avec la `config` de la route courante ainsi que l'options `prerender` et
+renvoie un objet `App.Platform`
 
 </div>
 </div></div>
 
 ## Handle
 
-The [`handle`](/docs/kit/hooks#Server-hooks-handle) hook runs every time the SvelteKit server receives a [request](/docs/kit/web-standards#Fetch-APIs-Request) and
-determines the [response](/docs/kit/web-standards#Fetch-APIs-Response).
-It receives an `event` object representing the request and a function called `resolve`, which renders the route and generates a `Response`.
-This allows you to modify response headers or bodies, or bypass SvelteKit entirely (for implementing routes programmatically, for example).
+Le hook [`handle`](/docs/kit/hooks#Server-hooks-handle) est exécuté à chaque fois que le serveur
+SvelteKit reçoit une [requête](/docs/kit/web-standards#Fetch-APIs-Request) et détermine la
+[réponse](/docs/kit/web-standards#Fetch-APIs-Response).
+Il reçoit un objet `event` représentant la requête et une fonction appelée `resolve`, qui rend la
+route et génère une `Response`. Ceci vous permet de modifier les en-têtes ou corps de réponse, ou de
+contourner complètement SvelteKit (pour implémenter des routes programmatiquement, par exemple).
 
 <div class="ts-block">
 
@@ -1090,10 +1135,11 @@ type Handle = (input: {
 
 ## HandleClientError
 
-The client-side [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) hook runs when an unexpected error is thrown while navigating.
+Le hook client [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) est exécuté lorsqu'une
+erreur inattendue est jetée lors de la navigation.
 
-If an unexpected error is thrown during loading or the following render, this function will be called with the error and the event.
-Make sure that this function _never_ throws an error.
+Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
+exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
 
 <div class="ts-block">
 
@@ -1110,7 +1156,10 @@ type HandleClientError = (input: {
 
 ## HandleFetch
 
-The [`handleFetch`](/docs/kit/hooks#Server-hooks-handleFetch) hook allows you to modify (or replace) the result of an [`event.fetch`](/docs/kit/load#Making-fetch-requests) call that runs on the server (or during prerendering) inside an endpoint, `load`, `action`, `handle`, `handleError` or `reroute`.
+Le hook [`handleFetch`](/docs/kit/hooks#Server-hooks-handleFetch) vous permet de modifier (ou
+remplacer) le résultat d'un appel [`event.fetch`](/docs/kit/load#Making-fetch-requests) s'exécutant
+sur le serveur (ou lors du pré-rendu) au sein d'un endpoint, d'une fonction `load`, `action`,
+`handle`, `handleError`, ou `reroute`.
 
 <div class="ts-block">
 
@@ -1126,10 +1175,11 @@ type HandleFetch = (input: {
 
 ## HandleServerError
 
-The server-side [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) hook runs when an unexpected error is thrown while responding to a request.
+Le hook serveur [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) est exécutée lorsqu'une
+erreur inattendue est jetée lors de la réponse à une requête.
 
-If an unexpected error is thrown during loading or rendering, this function will be called with the error and the event.
-Make sure that this function _never_ throws an error.
+Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
+exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
 
 <div class="ts-block">
 
@@ -1146,7 +1196,7 @@ type HandleServerError = (input: {
 
 ## HttpError
 
-The object returned by the [`error`](/docs/kit/@sveltejs-kit#error) function.
+L'objet renvoyé par la fonction [`error`](/docs/kit/@sveltejs-kit#error).
 
 <div class="ts-block">
 
@@ -1162,7 +1212,8 @@ status: number;
 
 <div class="ts-block-property-details">
 
-The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses), in the range 400-599.
+Le [code HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses),
+dont la valeur vaut entre 400 et 599.
 
 </div>
 </div>
@@ -1175,14 +1226,14 @@ body: App.Error;
 
 <div class="ts-block-property-details">
 
-The content of the error.
+Le contenu de l'erreur.
 
 </div>
 </div></div>
 
 ## KitConfig
 
-See the [configuration reference](/docs/kit/configuration) for details.
+Voir la [documentation sur la configuration](/docs/kit/configuration) pour plus de détails.
 
 ## LessThan
 
@@ -1201,8 +1252,9 @@ type LessThan<
 
 ## Load
 
-The generic form of `PageLoad` and `LayoutLoad`. You should import those from `./$types` (see [generated types](/docs/kit/types#Generated-types))
-rather than using `Load` directly.
+La forme générique de `PageLoad` et `LayoutLoad`. Vous devriez les importer depuis `./$types` (voir
+la section [types générés](/docs/kit/types#Generated-types)) plutôt que d'utiliser `Load`
+directement.
 
 <div class="ts-block">
 
@@ -1233,8 +1285,9 @@ type Load<
 
 ## LoadEvent
 
-The generic form of `PageLoadEvent` and `LayoutLoadEvent`. You should import those from `./$types` (see [generated types](/docs/kit/types#Generated-types))
-rather than using `LoadEvent` directly.
+La forme générique de `PageLoadEvent` et `LayoutLoadEvent`. Vous devriez les importer depuis
+`./$types` (voir la section [types générés](/docs/kit/types#Generated-types)) plutôt que d'utiliser
+`LoadEvent` directement.
 
 <div class="ts-block">
 
@@ -1263,15 +1316,26 @@ fetch: typeof fetch;
 
 <div class="ts-block-property-details">
 
-`fetch` is equivalent to the [native `fetch` web API](https://developer.mozilla.org/en-US/docs/Web/API/fetch), with a few additional features:
+`fetch` est équivalent à l'[API web native
+`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), avec quelques fonctionnalités
+additionnelles :
 
-- It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
-- It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
-- Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
-- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle)
-- During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
+- Elle peut être utilisée pour faire des requêtes authentifiées sur le serveur, puisqu'elle hérite
+des en-têtes `cookie` et `authorization` de la requête de page.
+- Elle peut faire des requêtes relatives sur le serveur (ordinairement, `fetch` nécessite une URL
+avec une origine lorsqu'utilisée dans un contexte serveur).
+- Les requêtes internes (par ex. pour les routes `+server.js`) vont exécuter directement leur
+fonction concernées lorsqu'exécutées sur le serveur, sans la couche supplémentaire nécessaire pour
+faire l'appel HTTP.
+- Lors du rendu côté serveur, la réponse sera capturée et inlinée dans le HTML rendu en utilisant
+les méthodes `text` et `json` de l'objet `Response`. Notez que les en-têtes ne seront _pas_
+sérialisées, à moins qu'elles ne soient incluses explicitement via
+[`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle).
+- Lors de l'hydratation, la réponse sera lue depuis le HTML, en garantissant la consistance et
+empêchant une requête réseau additionnelle.
 
-You can learn more about making credentialed requests with cookies [here](/docs/kit/load#Cookies)
+Vous pouvez en apprendre plus sur les requêtes authentifiées avec cookies
+[ici](/docs/kit/load#Cookies).
 
 </div>
 </div>
@@ -1284,7 +1348,8 @@ data: Data;
 
 <div class="ts-block-property-details">
 
-Contains the data returned by the route's server `load` function (in `+layout.server.js` or `+page.server.js`), if any.
+Contient les données renvoyées par la fonction `load` de serveur de la route (dans un fichier
+`+layout.server.js` ou `+page.server.js`), si elle existe.
 
 </div>
 </div>
@@ -1297,7 +1362,8 @@ setHeaders: (headers: Record<string, string>) => void;
 
 <div class="ts-block-property-details">
 
-If you need to set headers for the response, you can do so using the this method. This is useful if you want the page to be cached, for example:
+Si vous avez besoin de définir des en-têtes sur la réponse, vous pouvez le faire en utilisant cette
+méthode. C'est utile si vous souhaitez mettre la page en cache, par exemple :
 
 ```js
 // @errors: 7031
@@ -1315,11 +1381,13 @@ export async function load({ fetch, setHeaders }) {
 }
 ```
 
-Setting the same header multiple times (even in separate `load` functions) is an error — you can only set a given header once.
+Définir la même en-tête plusieurs fois (même dans des fonctions `load` différentes) est une erreur —
+vous pouvez uniquement définir une en-tête donnée une seule fois.
 
-You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/docs/kit/@sveltejs-kit#Cookies) API in a server-only `load` function instead.
+Vous ne pouvez pas ajouter une en-tête `set-cookie` avec `setHeaders` — utilisez plutôt l'API
+[`cookies`](/docs/kit/@sveltejs-kit#Cookies) dans une fonction `load` de serveur.
 
-`setHeaders` has no effect when a `load` function runs in the browser.
+`setHeaders` n'a pas d'effet lorsqu'une fonction `load` est exécutée dans le navigateur.
 
 </div>
 </div>
@@ -1332,10 +1400,14 @@ parent: () => Promise<ParentData>;
 
 <div class="ts-block-property-details">
 
-`await parent()` returns data from parent `+layout.js` `load` functions.
-Implicitly, a missing `+layout.js` is treated as a `({ data }) => data` function, meaning that it will return and forward data from parent `+layout.server.js` files.
+`await parent()` renvoie les données des fonctions `load` des fichiers `+layout.js` parents.
+Implicitement, un fichier `+layout.js` manquant est traité comme une fonction `({ data }) => data`,
+ce qui veut dire qu'elle va renvoyer et relayer les données des fichiers `+layout.server.js`
+parents.
 
-Be careful not to introduce accidental waterfalls when using `await parent()`. If for example you only want to merge parent data into the returned output, call it _after_ fetching your other data.
+Faites attention à ne pas introduire des cascades de chargement accidentelles lorsque vous utilisez
+`await parent()`. Si par exemple vous voulez uniquement fusionner les données parentes dans l'objet
+renvoyé en sortie, appelez cette méthode _après_ avoir récupéré vos autres données.
 
 </div>
 </div>
@@ -1348,15 +1420,24 @@ depends: (...deps: Array<`${string}:${string}`>) => void;
 
 <div class="ts-block-property-details">
 
-This function declares that the `load` function has a _dependency_ on one or more URLs or custom identifiers, which can subsequently be used with [`invalidate()`](/docs/kit/$app-navigation#invalidate) to cause `load` to rerun.
+Cette fonction déclare que la fonction `load` a une _dépendance_ envers une ou plusieurs URLs ou
+identifiants personnalisés, qui peuvent ultérieurement utilisés avec
+[`invalidate()`](/docs/kit/$app-navigation#invalidate) pour déclencher la ré-exécution de `load`.
 
-Most of the time you won't need this, as `fetch` calls `depends` on your behalf — it's only necessary if you're using a custom API client that bypasses `fetch`.
+La plupart du temps vous ne devriez pas en avoir besoin, puisque les appels `fetch` appellent
+`depends` pour vous — cette méthode est uniquement nécessaire si vous utilisez une API cliente
+personnalisée qui contourne `fetch`.
 
-URLs can be absolute or relative to the page being loaded, and must be [encoded](https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding).
+Les URLs peuvent être absolues ou relatives à la page en train d'être chargée, et doivent être
+[encodées](https://developer.mozilla.org/fr/docs/Glossary/percent-encoding).
 
-Custom identifiers have to be prefixed with one or more lowercase letters followed by a colon to conform to the [URI specification](https://www.rfc-editor.org/rfc/rfc3986.html).
+Les identifiants personnalisés doivent être préfixés avec une ou plusieurs lettres en minuscules
+suivies d'un `:` pour correspondre à la [spécification
+d'URI](https://www.rfc-editor.org/rfc/rfc3986.html).
 
-The following example shows how to use `depends` to register a dependency on a custom identifier, which is `invalidate`d after a button click, making the `load` function rerun.
+L'exemple suivant montre comment utiliser `depends` pour enregistrer une dépendance envers un
+identifiant personnalisé, qui est invalidé avec `invalidate` avec un clic sur un bouton, déclenchant
+la ré-exécution de la fonction `load`.
 
 ```js
 // @errors: 7031
@@ -1382,7 +1463,7 @@ export async function load({ depends }) {
 </script>
 
 <p>{data.count}<p>
-<button on:click={increase}>Increase Count</button>
+<button on:click={increase}>Incrémenter le compte</button>
 ```
 
 </div>
@@ -1396,15 +1477,17 @@ untrack: <T>(fn: () => T) => T;
 
 <div class="ts-block-property-details">
 
-Use this function to opt out of dependency tracking for everything that is synchronously called within the callback. Example:
+Utilisez cette fonction pour annuler le suivi de dépendances pour tout ce qui est exécuté de
+manière synchrone au sein du callback. Exemple :
 
 ```js
 // @errors: 7031
 /// file: src/routes/+page.server.js
 export async function load({ untrack, url }) {
-	// Untrack url.pathname so that path changes don't trigger a rerun
+	// Annule le suivi de `url.pathname` afin que les changements de path ne déclenchent pas de
+	// ré-exécution de la fonction `load`
 	if (untrack(() => url.pathname === '/')) {
-		return { message: 'Welcome!' };
+		return { message: 'Bienvenue !' };
 	}
 }
 ```
@@ -1444,7 +1527,7 @@ from: NavigationTarget | null;
 
 <div class="ts-block-property-details">
 
-Where navigation was triggered from
+L'endroit d'où la navigation a été déclenchée
 
 </div>
 </div>
@@ -1457,7 +1540,7 @@ to: NavigationTarget | null;
 
 <div class="ts-block-property-details">
 
-Where navigation is going to/has gone to
+L'endroit où la navigation est/a été dirigée
 
 </div>
 </div>
@@ -1470,12 +1553,14 @@ type: Exclude<NavigationType, 'enter'>;
 
 <div class="ts-block-property-details">
 
-The type of navigation:
-- `form`: The user submitted a `<form>`
-- `leave`: The app is being left either because the tab is being closed or a navigation to a different document is occurring
-- `link`: Navigation was triggered by a link click
-- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
-- `popstate`: Navigation was triggered by back/forward navigation
+Le type de navigation :
+- `form` : L'utilisateur ou l'utilisatrice a soumis un élément `<form>`
+- `leave` : L'utilisateur ou l'utilisatrice quitte l'application soit parce que l'onglet a été fermé
+ou qu'une navigation vers un document différent se produit
+- `link` : La navigation a été déclenchée par un clic sur un lien
+- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
+- `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
+navigateur
 
 </div>
 </div>
@@ -1488,7 +1573,8 @@ willUnload: boolean;
 
 <div class="ts-block-property-details">
 
-Whether or not the navigation will result in the page being unloaded (i.e. not a client-side navigation)
+Si oui ou non la navigation entraîne le "déchargement" de la page (c-à-d pas une navigation côté
+client)
 
 </div>
 </div>
@@ -1501,7 +1587,8 @@ delta?: number;
 
 <div class="ts-block-property-details">
 
-In case of a history back/forward navigation, the number of steps to go back/forward
+Dans le cas d'une navigation via l'historique précédent/suivant, le nombre d'étapes pour retourner
+en arrière/avant
 
 </div>
 </div>
@@ -1514,8 +1601,8 @@ complete: Promise<void>;
 
 <div class="ts-block-property-details">
 
-A promise that resolves once the navigation is complete, and rejects if the navigation
-fails or is aborted. In the case of a `willUnload` navigation, the promise will never resolve
+Une promesse qui est résolue une fois la navigation terminée, et est rejetée si la navigation échoue
+ou est annulée. Dans le cas d'une navigation `willUnload`, la promesse ne sera jamais résolue
 
 </div>
 </div></div>
@@ -1541,7 +1628,8 @@ params: Params;
 
 <div class="ts-block-property-details">
 
-The parameters of the current page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object
+Les paramètres de la page courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
+string }`
 
 </div>
 </div>
@@ -1554,7 +1642,7 @@ route: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Info about the current route
+Informations sur la route courante
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -1564,7 +1652,8 @@ id: RouteId;
 
 <div class="ts-block-property-details">
 
-The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
+`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
 
 </div>
 </div></div>
@@ -1580,14 +1669,14 @@ url: URL;
 
 <div class="ts-block-property-details">
 
-The URL of the current page
+L'URL de la page courante
 
 </div>
 </div></div>
 
 ## NavigationTarget
 
-Information about the target of a specific navigation.
+Informations à propos de la cible d'une navigation spécifique.
 
 <div class="ts-block">
 
@@ -1603,8 +1692,9 @@ params: Record<string, string> | null;
 
 <div class="ts-block-property-details">
 
-Parameters of the target page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
-Is `null` if the target is not part of the SvelteKit app (could not be resolved to a route).
+Paramètres de la page cible — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug: string
+}`. Vaut `null` si la cible ne fait pas partie de l'application SvelteKit (et ne peut donc pas être
+résolue en tant que route).
 
 </div>
 </div>
@@ -1617,7 +1707,7 @@ route: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Info about the target route
+Informations à propos de la route cible
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -1627,7 +1717,8 @@ id: string | null;
 
 <div class="ts-block-property-details">
 
-The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
+`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
 
 </div>
 </div></div>
@@ -1643,19 +1734,21 @@ url: URL;
 
 <div class="ts-block-property-details">
 
-The URL that is navigated to
+L'URL vers laquelle la navigation s'effectue
 
 </div>
 </div></div>
 
 ## NavigationType
 
-- `enter`: The app has hydrated/started
-- `form`: The user submitted a `<form>` with a GET method
-- `leave`: The user is leaving the app by closing the tab or using the back/forward buttons to go to a different document
-- `link`: Navigation was triggered by a link click
-- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
-- `popstate`: Navigation was triggered by back/forward navigation
+- `enter`: L'application a été hydratée/relancée
+- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form>` avec une méthode GET
+- `leave`: L'utilisateur ou l'utilisatrice en train de quitter l'application en fermant l'onglet ou
+en utilisant les boutons précédent/suivant du navigateur pour aller sur un document différent
+- `link` : La navigation a été déclenchée par un clic sur un lien
+- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
+- `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
+navigateur
 
 <div class="ts-block">
 
@@ -1686,7 +1779,7 @@ type NumericRange<
 
 ## OnNavigate
 
-The argument passed to [`onNavigate`](/docs/kit/$app-navigation#onNavigate) callbacks.
+L'argument passé aux callbacks [`onNavigate`](/docs/kit/$app-navigation#onNavigate).
 
 <div class="ts-block">
 
@@ -1702,11 +1795,13 @@ type: Exclude<NavigationType, 'enter' | 'leave'>;
 
 <div class="ts-block-property-details">
 
-The type of navigation:
-- `form`: The user submitted a `<form>`
-- `link`: Navigation was triggered by a link click
-- `goto`: Navigation was triggered by a `goto(...)` call or a redirect
-- `popstate`: Navigation was triggered by back/forward navigation
+Le type de navigation :
+
+- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form>`
+- `link` : La navigation a été déclenchée par un clic sur un lien
+- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
+- `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
+navigateur
 
 </div>
 </div>
@@ -1719,14 +1814,16 @@ willUnload: false;
 
 <div class="ts-block-property-details">
 
-Since `onNavigate` callbacks are called immediately before a client-side navigation, they will never be called with a navigation that unloads the page.
+Puisque les callbacks `onNavigate` sont appelés immédiatement avant une navigation client, ils ne
+seront jamais appelés avec une navigation qui "décharge" la page.
 
 </div>
 </div></div>
 
 ## Page
 
-The shape of the [`page`](/docs/kit/$app-state#page) reactive object and the [`$page`](/docs/kit/$app-stores) store.
+La forme de l'objet réactif [`page`](/docs/kit/$app-state#page) et du store
+[`$page`](/docs/kit/$app-stores).
 
 <div class="ts-block">
 
@@ -1748,7 +1845,7 @@ url: URL;
 
 <div class="ts-block-property-details">
 
-The URL of the current page.
+L'URL de la page courange.
 
 </div>
 </div>
@@ -1761,7 +1858,8 @@ params: Params;
 
 <div class="ts-block-property-details">
 
-The parameters of the current page - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
+Les paramètres de la page courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
+string }`.
 
 </div>
 </div>
@@ -1774,7 +1872,7 @@ route: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Info about the current route.
+Informations à propos de la route courante.
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -1784,7 +1882,8 @@ id: RouteId;
 
 <div class="ts-block-property-details">
 
-The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
+`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
 
 </div>
 </div></div>
@@ -1800,7 +1899,7 @@ status: number;
 
 <div class="ts-block-property-details">
 
-HTTP status code of the current page.
+Code HTTP de la page courante.
 
 </div>
 </div>
@@ -1813,7 +1912,7 @@ error: App.Error | null;
 
 <div class="ts-block-property-details">
 
-The error object of the current page, if any. Filled from the `handleError` hooks.
+L'objet d'erreur de la page courante, s'il existe. Construit depuis les hooks `handleError`.
 
 </div>
 </div>
@@ -1826,7 +1925,8 @@ data: App.PageData & Record<string, any>;
 
 <div class="ts-block-property-details">
 
-The merged result of all data from all `load` functions on the current page. You can type a common denominator through `App.PageData`.
+Le résultat fusionné de toutes les données venant de toutes les fonctions `load` de la page
+courante. Vous pouvez typer un dénominateur commun grâce à `App.PageData`.
 
 </div>
 </div>
@@ -1839,7 +1939,9 @@ state: App.PageState;
 
 <div class="ts-block-property-details">
 
-The page state, which can be manipulated using the [`pushState`](/docs/kit/$app-navigation#pushState) and [`replaceState`](/docs/kit/$app-navigation#replaceState) functions from `$app/navigation`.
+L'état de la page, qui peut être manipulé en utilisant les fonctions
+[`pushState`](/docs/kit/$app-navigation#pushState) et
+[`replaceState`](/docs/kit/$app-navigation#replaceState) importées depuis `$app/navigation`.
 
 </div>
 </div>
@@ -1852,14 +1954,16 @@ form: any;
 
 <div class="ts-block-property-details">
 
-Filled only after a form submission. See [form actions](/docs/kit/form-actions) for more info.
+Rempli uniquement après une soumission de formulaire. Voir la section [actions de
+formulaire](/docs/kit/form-actions) pour plus d'informations.
 
 </div>
 </div></div>
 
 ## ParamMatcher
 
-The shape of a param matcher. See [matching](/docs/kit/advanced-routing#Matching) for more info.
+La forme d'un matcher de paramètres. Voir la section [matching](/docs/kit/advanced-routing#Matching)
+pour plus d'informations.
 
 <div class="ts-block">
 
@@ -1881,7 +1985,7 @@ type PrerenderOption = boolean | 'auto';
 
 ## Redirect
 
-The object returned by the [`redirect`](/docs/kit/@sveltejs-kit#redirect) function.
+L'objet renvoyé par la fonction [`redirect`](/docs/kit/@sveltejs-kit#redirect).
 
 <div class="ts-block">
 
@@ -1897,7 +2001,8 @@ status: 300 | 301 | 302 | 303 | 304 | 305 | 306 | 307 | 308;
 
 <div class="ts-block-property-details">
 
-The [HTTP status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages), in the range 300-308.
+Le [code HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages), entre
+300 et 308.
 
 </div>
 </div>
@@ -1910,7 +2015,7 @@ location: string;
 
 <div class="ts-block-property-details">
 
-The location to redirect to.
+L'endroit vers lequel rediriger.
 
 </div>
 </div></div>
@@ -1936,7 +2041,7 @@ cookies: Cookies;
 
 <div class="ts-block-property-details">
 
-Get or set cookies related to the current request
+Récupère ou définit des cookies liés à la requête courante
 
 </div>
 </div>
@@ -1949,15 +2054,26 @@ fetch: typeof fetch;
 
 <div class="ts-block-property-details">
 
-`fetch` is equivalent to the [native `fetch` web API](https://developer.mozilla.org/en-US/docs/Web/API/fetch), with a few additional features:
+`fetch` est équivalent à l'[API web native
+`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch), avec quelques fonctionnalités
+additionnelles :
 
-- It can be used to make credentialed requests on the server, as it inherits the `cookie` and `authorization` headers for the page request.
-- It can make relative requests on the server (ordinarily, `fetch` requires a URL with an origin when used in a server context).
-- Internal requests (e.g. for `+server.js` routes) go directly to the handler function when running on the server, without the overhead of an HTTP call.
-- During server-side rendering, the response will be captured and inlined into the rendered HTML by hooking into the `text` and `json` methods of the `Response` object. Note that headers will _not_ be serialized, unless explicitly included via [`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle)
-- During hydration, the response will be read from the HTML, guaranteeing consistency and preventing an additional network request.
+- Elle peut être utilisée pour faire des requêtes authentifiées sur le serveur, puisqu'elle hérite
+des en-têtes `cookie` et `authorization` de la requête de page.
+- Elle peut faire des requêtes relatives sur le serveur (ordinairement, `fetch` nécessite une URL
+avec une origine lorsqu'utilisée dans un contexte serveur).
+- Les requêtes internes (par ex. pour les routes `+server.js`) vont exécuter directement leur
+fonction concernées lorsqu'exécutées sur le serveur, sans la couche supplémentaire nécessaire pour
+faire l'appel HTTP.
+- Lors du rendu côté serveur, la réponse sera capturée et inlinée dans le HTML rendu en utilisant
+les méthodes `text` et `json` de l'objet `Response`. Notez que les en-têtes ne seront _pas_
+sérialisées, à moins qu'elles ne soient incluses explicitement via
+[`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle).
+- Lors de l'hydratation, la réponse sera lue depuis le HTML, en garantissant la consistance et
+empêchant une requête réseau additionnelle.
 
-You can learn more about making credentialed requests with cookies [here](/docs/kit/load#Cookies).
+Vous pouvez en apprendre plus sur les requêtes authentifiées avec cookies
+[ici](/docs/kit/load#Cookies).
 
 </div>
 </div>
@@ -1970,7 +2086,7 @@ getClientAddress: () => string;
 
 <div class="ts-block-property-details">
 
-The client's IP address, set by the adapter.
+L'adresse IP du client, définie par l'adaptateur.
 
 </div>
 </div>
@@ -1983,7 +2099,8 @@ locals: App.Locals;
 
 <div class="ts-block-property-details">
 
-Contains custom data that was added to the request within the [`server handle hook`](/docs/kit/hooks#Server-hooks-handle).
+Contient les données personnalisées ajoutées à la requête au sein du hook serveur
+[`handle`](/docs/kit/hooks#Server-hooks-handle).
 
 </div>
 </div>
@@ -1996,7 +2113,8 @@ params: Params;
 
 <div class="ts-block-property-details">
 
-The parameters of the current route - e.g. for a route like `/blog/[slug]`, a `{ slug: string }` object.
+Les paramètres de la route courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
+string }`.
 
 </div>
 </div>
@@ -2009,7 +2127,7 @@ platform: Readonly<App.Platform> | undefined;
 
 <div class="ts-block-property-details">
 
-Additional data made available through the adapter.
+Les données supplémentaires rendues disponibles via l'adaptateur.
 
 </div>
 </div>
@@ -2022,7 +2140,7 @@ request: Request;
 
 <div class="ts-block-property-details">
 
-The original request object.
+L'objet représentant la requête d'origine.
 
 </div>
 </div>
@@ -2035,7 +2153,7 @@ route: {/*…*/}
 
 <div class="ts-block-property-details">
 
-Info about the current route.
+Des informations sur la route courante.
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -2045,7 +2163,8 @@ id: RouteId;
 
 <div class="ts-block-property-details">
 
-The ID of the current route - e.g. for `src/routes/blog/[slug]`, it would be `/blog/[slug]`. It is `null` when no route is matched.
+L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
+`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
 
 </div>
 </div></div>
@@ -2061,7 +2180,8 @@ setHeaders: (headers: Record<string, string>) => void;
 
 <div class="ts-block-property-details">
 
-If you need to set headers for the response, you can do so using the this method. This is useful if you want the page to be cached, for example:
+Si vous avez besoin de définir des en-têtes sur la réponse, vous pouvez le faire en utilisant cette
+méthode. C'est utile si vous souhaitez mettre la page en cache, par exemple :
 
 ```js
 // @errors: 7031
@@ -2079,9 +2199,11 @@ export async function load({ fetch, setHeaders }) {
 }
 ```
 
-Setting the same header multiple times (even in separate `load` functions) is an error — you can only set a given header once.
+Définir la même en-tête plusieurs fois (même dans des fonctions `load` différentes) est une erreur —
+vous pouvez uniquement définir une en-tête donnée une seule fois.
 
-You cannot add a `set-cookie` header with `setHeaders` — use the [`cookies`](/docs/kit/@sveltejs-kit#Cookies) API instead.
+Vous ne pouvez pas ajouter une en-tête `set-cookie` avec `setHeaders` — utilisez plutôt l'API
+[`cookies`](/docs/kit/@sveltejs-kit#Cookies) dans une fonction `load` de serveur.
 
 </div>
 </div>
@@ -2094,7 +2216,7 @@ url: URL;
 
 <div class="ts-block-property-details">
 
-The requested URL.
+L'URL requêtée.
 
 </div>
 </div>
@@ -2107,8 +2229,9 @@ isDataRequest: boolean;
 
 <div class="ts-block-property-details">
 
-`true` if the request comes from the client asking for `+page/layout.server.js` data. The `url` property will be stripped of the internal information
-related to the data request in this case. Use this property instead if the distinction is important to you.
+Vaut `true` si la requête vient du client et demande les données de `+page/layout.server.js`. La
+propriété `url` sera supprimée des informations internes relatives à la requête de données dans ce
+cas. Utilisez cette propriété si la distinction est importante pour vous.
 
 </div>
 </div>
@@ -2121,16 +2244,20 @@ isSubRequest: boolean;
 
 <div class="ts-block-property-details">
 
-`true` for `+server.js` calls coming from SvelteKit without the overhead of actually making an HTTP request. This happens when you make same-origin `fetch` requests on the server.
+Vaut `true` pour les appels `+server.js` venant de SvelteKit sans la surcharge d'une requête HTTP.
+Ceci se produit lorsque vous faites des requêtes `fetch` ayant la même origine sur le serveur.
 
 </div>
 </div></div>
 
 ## RequestHandler
 
-A `(event: RequestEvent) => Response` function exported from a `+server.js` file that corresponds to an HTTP verb (`GET`, `PUT`, `PATCH`, etc) and handles requests with that method.
+Une fonction `(event: RequestEvent) => Response` exportée depuis un fichier `+server.js`
+correspondant à un verbe HTTP (`GET`, `PUT`, `PATCH`, etc.) et gérant les requêtes avec cette
+méthode.
 
-It receives `Params` as the first generic argument, which you can skip by using [generated types](/docs/kit/types#Generated-types) instead.
+Elle reçoit des `Params` en tant que premier argument générique, que vous pouvez ignorer en
+utilisant plutôt les [types générés](/docs/kit/types#Generated-types).
 
 <div class="ts-block">
 
@@ -2151,11 +2278,12 @@ type RequestHandler<
 
 <blockquote class="since note">
 
-Available since 2.3.0
+Disponible depuis la version 2.3.0
 
 </blockquote>
 
-The [`reroute`](/docs/kit/hooks#Universal-hooks-reroute) hook allows you to modify the URL before it is used to determine which route to render.
+Le hook [`reroute`](/docs/kit/hooks#Universal-hooks-reroute) vous permet de modifier l'URL avant
+qu'elle ne soit utilisée pour déterminer quelle route afficher.
 
 <div class="ts-block">
 
@@ -2186,13 +2314,14 @@ transformPageChunk?: (input: { html: string; done: boolean }) => MaybePromise<st
 
 <div class="ts-block-property-bullets">
 
-- `input` the html chunk and the info if this is the last chunk
+- `input` le morceau de html et l'information de s'il s'agit du dernier morceau
 
 </div>
 
-Applies custom transforms to HTML. If `done` is true, it's the final chunk. Chunks are not guaranteed to be well-formed HTML
-(they could include an element's opening tag but not its closing tag, for example)
-but they will always be split at sensible boundaries such as `%sveltekit.head%` or layout/page components.
+Applique des transformations personnalisées au HTML. Si `done` vaut `true`, il s'agit du dernier
+morceau. Il n'y a pas de garantie que chaque morceau soit du HTML bien formé (ils pourraient inclure
+la balise ouvrante d'un élément mais pas sa balise fermante, par exemple) mais ils seront toujours
+divisés à des endroits sensibles, tels que `%sveltekit.head%` ou les composants de page/layout.
 
 </div>
 </div>
@@ -2207,13 +2336,14 @@ filterSerializedResponseHeaders?: (name: string, value: string) => boolean;
 
 <div class="ts-block-property-bullets">
 
-- `name` header name
-- `value` header value
+- `name` nom de l'en-tête
+- `value` valeur de l'en-tête
 
 </div>
 
-Determines which headers should be included in serialized responses when a `load` function loads a resource with `fetch`.
-By default, none will be included.
+Détermine quelles en-têtes devraient être incluses dans les réponses sérialisées lorsqu'une fonction
+`load` charge une ressource avec `fetch`.
+Par défaut, aucune ne sera incluse.
 
 </div>
 </div>
@@ -2228,12 +2358,12 @@ preload?: (input: { type: 'font' | 'css' | 'js' | 'asset'; path: string }) => bo
 
 <div class="ts-block-property-bullets">
 
-- `input` the type of the file and its path
+- `input` le type de fichier et son chemin
 
 </div>
 
-Determines what should be added to the `<head>` tag to preload it.
-By default, `js` and `css` files will be preloaded.
+Détermine ce qui devrait être ajouté à la balise `<head>` pour le précharger.
+Par défaut, les fichiers `js` et `css` seront préchargés.
 
 </div>
 </div></div>
@@ -2356,7 +2486,7 @@ assets: Set<string>;
 
 <div class="ts-block-property-details">
 
-Static files from `kit.config.files.assets` and the service worker (if any).
+Fichiers statiques venant de `kit.config.files.assets` et du service worker (s'il en existe).
 
 </div>
 </div>
@@ -2378,7 +2508,7 @@ _: {/*…*/}
 
 <div class="ts-block-property-details">
 
-private fields
+champs privés
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -2428,7 +2558,7 @@ server_assets: Record<string, number>;
 
 <div class="ts-block-property-details">
 
-A `[file]: size` map of all assets imported by server code.
+Un dictionnaire `[file]: size` de tous les assets importés par le code serveur.
 
 </div>
 </div></div>
@@ -2440,11 +2570,12 @@ A `[file]: size` map of all assets imported by server code.
 
 <blockquote class="since note">
 
-Available since 2.10.0
+Disponible depuis la version 2.10.0
 
 </blockquote>
 
-The [`init`](/docs/kit/hooks#Shared-hooks-init) will be invoked before the server responds to its first request
+Le hook [`init`](/docs/kit/hooks#Shared-hooks-init) sera invoqué avant que le serveur ne réponde à
+sa première requête.
 
 <div class="ts-block">
 
@@ -2470,7 +2601,7 @@ env: Record<string, string>;
 
 <div class="ts-block-property-details">
 
-A map of environment variables.
+Un dictionnaire des variables d'environnement.
 
 </div>
 </div>
@@ -2483,15 +2614,17 @@ read?: (file: string) => ReadableStream;
 
 <div class="ts-block-property-details">
 
-A function that turns an asset filename into a `ReadableStream`. Required for the `read` export from `$app/server` to work.
+Une fonction qui transforme le nom de fichier d'un asset en `ReadableStream`. Requis pour que
+l'export `read` importé depuis `$app/server` fonctionne.
 
 </div>
 </div></div>
 
 ## ServerLoad
 
-The generic form of `PageServerLoad` and `LayoutServerLoad`. You should import those from `./$types` (see [generated types](/docs/kit/types#Generated-types))
-rather than using `ServerLoad` directly.
+La forme générique de `PageServerLoad` et `LayoutServerLoad`. Vous devriez importer ces types depuis
+`./$types` (voir la section [types générés](/docs/kit/types#Generated-types)) plutôt que d'utiliser
+`ServerLoad` directement.
 
 <div class="ts-block">
 
@@ -2541,9 +2674,11 @@ parent: () => Promise<ParentData>;
 
 <div class="ts-block-property-details">
 
-`await parent()` returns data from parent `+layout.server.js` `load` functions.
+`await parent()` renvoie les données des fonctions `load` des fichiers `+layout.server.js` parents.
 
-Be careful not to introduce accidental waterfalls when using `await parent()`. If for example you only want to merge parent data into the returned output, call it _after_ fetching your other data.
+Faites attention à ne pas introduire des cascades de chargement accidentelles lorsque vous utilisez
+`await parent()`. Si par exemple vous voulez uniquement fusionner les données parentes dans l'objet
+renvoyé en sortie, appelez cette méthode _après_ avoir récupéré vos autres données.
 
 </div>
 </div>
@@ -2556,15 +2691,24 @@ depends: (...deps: string[]) => void;
 
 <div class="ts-block-property-details">
 
-This function declares that the `load` function has a _dependency_ on one or more URLs or custom identifiers, which can subsequently be used with [`invalidate()`](/docs/kit/$app-navigation#invalidate) to cause `load` to rerun.
+Cette fonction déclare que la fonction `load` a une _dépendance_ envers une ou plusieurs URLs ou
+identifiants personnalisés, qui peuvent ultérieurement utilisés avec
+[`invalidate()`](/docs/kit/$app-navigation#invalidate) pour déclencher la ré-exécution de `load`.
 
-Most of the time you won't need this, as `fetch` calls `depends` on your behalf — it's only necessary if you're using a custom API client that bypasses `fetch`.
+La plupart du temps vous ne devriez pas en avoir besoin, puisque les appels `fetch` appellent
+`depends` pour vous — cette méthode est uniquement nécessaire si vous utilisez une API cliente
+personnalisée qui contourne `fetch`.
 
-URLs can be absolute or relative to the page being loaded, and must be [encoded](https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding).
+Les URLs peuvent être absolues ou relatives à la page en train d'être chargée, et doivent être
+[encodées](https://developer.mozilla.org/fr/docs/Glossary/percent-encoding).
 
-Custom identifiers have to be prefixed with one or more lowercase letters followed by a colon to conform to the [URI specification](https://www.rfc-editor.org/rfc/rfc3986.html).
+Les identifiants personnalisés doivent être préfixés avec une ou plusieurs lettres en minuscules
+suivies d'un `:` pour correspondre à la [spécification
+d'URI](https://www.rfc-editor.org/rfc/rfc3986.html).
 
-The following example shows how to use `depends` to register a dependency on a custom identifier, which is `invalidate`d after a button click, making the `load` function rerun.
+L'exemple suivant montre comment utiliser `depends` pour enregistrer une dépendance envers un
+identifiant personnalisé, qui est invalidé avec `invalidate` avec un clic sur un bouton, déclenchant
+la ré-exécution de la fonction `load`.
 
 ```js
 // @errors: 7031
@@ -2590,7 +2734,7 @@ export async function load({ depends }) {
 </script>
 
 <p>{data.count}<p>
-<button on:click={increase}>Increase Count</button>
+<button on:click={increase}>Incrémenter le compte</button>
 ```
 
 </div>
@@ -2604,13 +2748,15 @@ untrack: <T>(fn: () => T) => T;
 
 <div class="ts-block-property-details">
 
-Use this function to opt out of dependency tracking for everything that is synchronously called within the callback. Example:
+Utilisez cette fonction pour annuler le suivi de dépendances pour tout ce qui est exécuté de
+manière synchrone au sein du callback. Exemple :
 
 ```js
 // @errors: 7031
 /// file: src/routes/+page.js
 export async function load({ untrack, url }) {
-	// Untrack url.pathname so that path changes don't trigger a rerun
+	// Annule le suivi de `url.pathname` afin que les changements de path ne déclenchent pas de
+	// ré-exécution de la fonction `load`
 	if (untrack(() => url.pathname === '/')) {
 		return { message: 'Welcome!' };
 	}
@@ -2622,7 +2768,7 @@ export async function load({ untrack, url }) {
 
 ## Snapshot
 
-The type of `export const snapshot` exported from a page or layout component.
+Le type de `export const snapshot` exporté depuis un composant de page ou de layout.
 
 <div class="ts-block">
 
@@ -2675,9 +2821,10 @@ type SubmitFunction<
 			action: URL;
 			result: ActionResult<Success, Failure>;
 			/**
-			 * Call this to get the default behavior of a form submission response.
-			 * @param options Set `reset: false` if you don't want the `<form>` values to be reset after a successful submission.
-			 * @param invalidateAll Set `invalidateAll: false` if you don't want the action to call `invalidateAll` after submission.
+			 * Appelez cette fonction pour récupérer le comportement par défaut d'une réponse de
+			 * soumission de formulaire.
+			 * @param options Définissez `reset: false` si vous ne voulez pas que les valeurs du `<form>` soient réinitialisées après une soumission réussie.
+			 * @param invalidateAll Définissez `invalidateAll: false` si vous ne souhaitez pas que l'action appelle `invalidateAll` après la soumission.
 			 */
 			update: (options?: {
 				reset?: boolean;
@@ -2693,15 +2840,19 @@ type SubmitFunction<
 
 <blockquote class="since note">
 
-Available since 2.11.0
+Disponible depuis la version 2.11.0
 
 </blockquote>
 
-The [`transport`](/docs/kit/hooks#Universal-hooks-transport) hook allows you to transport custom types across the server/client boundary.
+Le hook [`transport`](/docs/kit/hooks#Universal-hooks-transport) vous permet de transporter des
+types personnalisés au travers de la frontière serveur/client.
 
-Each transporter has a pair of `encode` and `decode` functions. On the server, `encode` determines whether a value is an instance of the custom type and, if so, returns a non-falsy encoding of the value which can be an object or an array (or `false` otherwise).
+Chaque transporteur possède une paire de fonctions `encode` et `decode`. Sur le serveur, `encode`
+détermine si une valeur est une instance du type personnalisé et, si c'est le cas, renvoie une
+encodage non-falsy de la valeur pouvant être un objet ou un tableau (ou `false` sinon).
 
-In the browser, `decode` turns the encoding back into an instance of the custom type.
+Dans le navigateur, `decode` transforme l'encodage dans l'autre sens vers une instance du type
+personnalisé.
 
 ```ts
 import type { Transport } from '@sveltejs/kit';
@@ -2729,7 +2880,7 @@ type Transport = Record<string, Transporter>;
 
 ## Transporter
 
-A member of the [`transport`](/docs/kit/hooks#Universal-hooks-transport) hook.
+Un membre du hook [`transport`](/docs/kit/hooks#Universal-hooks-transport).
 
 <div class="ts-block">
 
@@ -2765,7 +2916,8 @@ decode: (data: U) => T;
 
 ## Private types
 
-The following are referenced by the public types documented above, but cannot be imported directly:
+Les types qui suivent sont référencés par les types publics documentés plus haut, mais ne peuvent
+pas être importés directement :
 
 ## AdapterEntry
 
@@ -2783,9 +2935,11 @@ id: string;
 
 <div class="ts-block-property-details">
 
-A string that uniquely identifies an HTTP service (e.g. serverless function) and is used for deduplication.
-For example, `/foo/a-[b]` and `/foo/[c]` are different routes, but would both
-be represented in a Netlify _redirects file as `/foo/:param`, so they share an ID
+Une chaîne de caractères qui identifie de manière unique un service HTTP (c-à-d une fonction
+serverless) et est utilisée pour dédupliquer.
+Par exemple, `/foo/a-[b]` et `/foo/[c]` sont des routes différentes, mais toutes les deux seraient
+représentées dans un fichier `_redirects` de Netlify en tant que `/foo/:param`, et partageraient
+donc un ID
 
 </div>
 </div>
@@ -2798,12 +2952,14 @@ filter(route: RouteDefinition): boolean;
 
 <div class="ts-block-property-details">
 
-A function that compares the candidate route with the current route to determine
-if it should be grouped with the current route.
+Une fonction qui compare la route candidate avec la route courante pour déterminer si elle devrait
+être groupée avec la route courante.
 
-Use cases:
-- Fallback pages: `/foo/[c]` is a fallback for `/foo/a-[b]`, and `/[...catchall]` is a fallback for all routes
-- Grouping routes that share a common `config`: `/foo` should be deployed to the edge, `/bar` and `/baz` should be deployed to a serverless function
+Cas d'usage :
+- Pages de secours : `/foo/[c]` est une route de secours pour `/foo/a-[b]`, et `/[...catchall]` est
+une route de secours pour toutes les routes
+- Grouper les routes qui partagent une `config` commune : `/foo` devrait être déployée sur le réseau
+edge, `/bar` et `/baz` devraient être déployées sur une fonction serverless
 
 </div>
 </div>
@@ -2816,8 +2972,8 @@ complete(entry: { generateManifest(opts: { relativePath: string }): string }): M
 
 <div class="ts-block-property-details">
 
-A function that is invoked once the entry has been created. This is where you
-should write the function to the filesystem and generate redirect manifests.
+Une fonction qui est invoquée une fois que l'entrée a été créée. C'est ici que vous devriez écrire
+la fonction vers le système de fichiers et générer les manifestes de redirection.
 
 </div>
 </div></div>
@@ -3142,7 +3298,7 @@ sandbox?: Array<
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> 
+- <span class="tag deprecated">déprécié</span>
 
 </div>
 
@@ -3159,7 +3315,7 @@ sandbox?: Array<
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> 
+- <span class="tag deprecated">déprécié</span>
 
 </div>
 
@@ -3176,7 +3332,7 @@ sandbox?: Array<
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> 
+- <span class="tag deprecated">déprécié</span>
 
 </div>
 
@@ -3203,7 +3359,7 @@ referrer?: Array<
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag deprecated">deprecated</span> 
+- <span class="tag deprecated">déprécié</span>
 
 </div>
 
@@ -3432,7 +3588,7 @@ interface Prerendered {/*…*/}
 pages: Map<
 string,
 {
-	/** The location of the .html file relative to the output directory */
+	/** L'emplacement du fichier .html relatif au dossier de compilation */
 	file: string;
 }
 >;
@@ -3440,7 +3596,8 @@ string,
 
 <div class="ts-block-property-details">
 
-A map of `path` to `{ file }` objects, where a path like `/foo` corresponds to `foo.html` and a path like `/bar/` corresponds to `bar/index.html`.
+Un dictionnaire de `path` vers des objets `{ file }`, où un chemin comme `/foo` correspond à
+`foo.html` et un chemin comme `/bar/` correspond à `bar/index.html`.
 
 </div>
 </div>
@@ -3451,7 +3608,7 @@ A map of `path` to `{ file }` objects, where a path like `/foo` corresponds to `
 assets: Map<
 string,
 {
-	/** The MIME type of the asset */
+	/** Le type MIME de l'asset */
 	type: string;
 }
 >;
@@ -3459,7 +3616,7 @@ string,
 
 <div class="ts-block-property-details">
 
-A map of `path` to `{ type }` objects.
+Un dictionnaire de `path` vers des objets `{ type }`
 
 </div>
 </div>
@@ -3478,7 +3635,7 @@ string,
 
 <div class="ts-block-property-details">
 
-A map of redirects encountered during prerendering.
+Un dictionnaire de redirections rencontrées lors du pré-rendu.
 
 </div>
 </div>
@@ -3491,7 +3648,8 @@ paths: string[];
 
 <div class="ts-block-property-details">
 
-An array of prerendered paths (without trailing slashes, regardless of the trailingSlash config)
+Un tableau de chemins pré-rendus (sans les trailing slashs, indépendamment de la configuration
+`trailingSlash`)
 
 </div>
 </div></div>
