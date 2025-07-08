@@ -12,11 +12,12 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 ## sequence
 
-A helper function for sequencing multiple `handle` calls in a middleware-like manner.
-The behavior for the `handle` options is as follows:
-- `transformPageChunk` is applied in reverse order and merged
-- `preload` is applied in forward order, the first option "wins" and no `preload` options after it are called
-- `filterSerializedResponseHeaders` behaves the same as `preload`
+Une fonction utilitaire pour séquencer plusieurs appels `handle` à la manière d'un middleware.
+Le comportement des options de `handle` est le suivant :
+- `transformPageChunk` est appliquée en ordre inversé et fusionné
+- `preload` est appliquée en ordre normal, la première option "gagne" et aucune option `preload`
+n'est appelée après elle
+- `filterSerializedResponseHeaders` se comporte comme `preload`
 
 ```js
 // @errors: 7031
@@ -28,12 +29,12 @@ async function first({ event, resolve }) {
 	console.log('first pre-processing');
 	const result = await resolve(event, {
 		transformPageChunk: ({ html }) => {
-			// transforms are applied in reverse order
+			// les transformations sont appliquées en ordre inverse
 			console.log('first transform');
 			return html;
 		},
 		preload: () => {
-			// this one wins as it's the first defined in the chain
+			// c'est ce `preload` qui gagne car c'est le premier défini dans la chaîne
 			console.log('first preload');
 			return true;
 		}
@@ -55,7 +56,7 @@ async function second({ event, resolve }) {
 			return true;
 		},
 		filterSerializedResponseHeaders: () => {
-			// this one wins as it's the first defined in the chain
+			// ce `filterSerializedResponseHeaders` gagne car c'est le premier défini dans la chaîne
 			console.log('second filterSerializedResponseHeaders');
 			return true;
 		}
@@ -67,7 +68,7 @@ async function second({ event, resolve }) {
 export const handle = sequence(first, second);
 ```
 
-The example above would print:
+L'exemple ci-dessus affichera :
 
 ```
 first pre-processing

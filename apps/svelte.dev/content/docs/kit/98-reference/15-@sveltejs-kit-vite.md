@@ -12,7 +12,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 ## sveltekit
 
-Returns the SvelteKit Vite plugins.
+Renvoie les plugins Vite de SvelteKit.
 
 <div class="ts-block">
 

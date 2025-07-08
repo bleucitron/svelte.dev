@@ -18,11 +18,11 @@ import {
 
 <blockquote class="since note">
 
-Available since 2.4.0
+Disponible depuis la version 2.4.0
 
 </blockquote>
 
-Converts a file on disk to a readable stream
+Convertit un fichier sur le disque en stream de lecture
 
 <div class="ts-block">
 

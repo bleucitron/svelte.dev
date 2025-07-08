@@ -12,7 +12,7 @@ import { browser, building, dev, version } from '$app/environment';
 
 ## browser
 
-`true` if the app is running in the browser.
+Vaut `true` si l'application est exécutée dans le navigateur.
 
 <div class="ts-block">
 
@@ -26,7 +26,8 @@ const browser: boolean;
 
 ## building
 
-SvelteKit analyses your app during the `build` step by running it. During this process, `building` is `true`. This also applies during prerendering.
+SvelteKit analyse votre application lors de l'étape de `build` en l'exécutant. Lors de ce processus,
+`building` vaut `true`. Ceci s'applique également lors du pré-rendu.
 
 <div class="ts-block">
 
@@ -40,7 +41,8 @@ const building: boolean;
 
 ## dev
 
-Whether the dev server is running. This is not guaranteed to correspond to `NODE_ENV` or `MODE`.
+Si oui ou non le serveur de développement est en cours d'exécution. Ceci ne garantit pas la
+correspondance avec `NODE_ENV` ou `MODE`.
 
 <div class="ts-block">
 
@@ -54,7 +56,7 @@ const dev: boolean;
 
 ## version
 
-The value of `config.kit.version.name`.
+La valeur de `config.kit.version.name`.
 
 <div class="ts-block">
 

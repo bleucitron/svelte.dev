@@ -12,7 +12,7 @@ import { installPolyfills } from '@sveltejs/kit/node/polyfills';
 
 ## installPolyfills
 
-Make various web APIs available as globals:
+Rend plusieurs APIs web disponibles en tant que variables globales :
 - `crypto`
 - `File`
 
