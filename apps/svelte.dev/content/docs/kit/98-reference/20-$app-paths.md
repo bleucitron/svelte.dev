@@ -12,9 +12,11 @@ import { assets, base, resolveRoute } from '$app/paths';
 
 ## assets
 
-An absolute path that matches [`config.kit.paths.assets`](/docs/kit/configuration#paths).
+Un chemin absolu qui matche [`config.kit.paths.assets`](/docs/kit/configuration#paths).
 
-> [!NOTE] If a value for `config.kit.paths.assets` is specified, it will be replaced with `'/_svelte_kit_assets'` during `vite dev` or `vite preview`, since the assets don't yet live at their eventual URL.
+> [!NOTE] Si une valeur de `config.kit.paths.assets` est fournie, elle sera remplacé par
+> `'/_svelte_kit_assets'` lors de `vite dev` ou `vite preview`, puisque les assets ne sont pas
+> encore placés sur leur URL future.
 
 <div class="ts-block">
 
@@ -32,9 +34,9 @@ let assets:
 
 ## base
 
-A string that matches [`config.kit.paths.base`](/docs/kit/configuration#paths).
+Une chaîne de caractères qui matche [`config.kit.paths.base`](/docs/kit/configuration#paths).
 
-Example usage: `<a href="{base}/your-page">Link</a>`
+Exemple d'usage : `<a href="{base}/your-page">Link</a>`
 
 <div class="ts-block">
 
@@ -48,7 +50,7 @@ let base: '' | `/${string}`;
 
 ## resolveRoute
 
-Populate a route ID with params to resolve a pathname.
+Remplit un ID de route avec les paramètres permettant de résoudre un chemin.
 
 ```js
 // @errors: 7031

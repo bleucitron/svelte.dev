@@ -14,13 +14,16 @@ import { getRequestEvent, read } from '$app/server';
 
 <blockquote class="since note">
 
-Available since 2.20.0
+Disponible depuis la version 2.20.0
 
 </blockquote>
 
-Returns the current `RequestEvent`. Can be used inside server hooks, server `load` functions, actions, and endpoints (and functions called by them).
+Renvoie l'objet `RequestEvent` courant. Peut être utilisé dans les hooks de serveur, les fonctions
+`load` de serveur, les actions, et les endpoints (et dans les fonctions exécutées par ceux-ci).
 
-In environments without [`AsyncLocalStorage`](https://nodejs.org/api/async_context.html#class-asynclocalstorage), this must be called synchronously (i.e. not after an `await`).
+Dans les environnements ne possédant pas de
+[`AsyncLocalStorage`](https://nodejs.org/api/async_context.html#class-asynclocalstorage), cette
+méthode doit être appelée de manière synchrone (c'est-à-dire pas après un `await`).
 
 <div class="ts-block">
 
@@ -39,11 +42,11 @@ function getRequestEvent(): RequestEvent<
 
 <blockquote class="since note">
 
-Available since 2.4.0
+Disponible depuis la version 2.4.0
 
 </blockquote>
 
-Read the contents of an imported asset from the filesystem
+Lit le contenu d'un asset importé depuis le système de fichiers.
 
 ```js
 // @errors: 7031

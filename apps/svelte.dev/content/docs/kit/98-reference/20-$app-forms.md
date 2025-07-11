@@ -12,8 +12,9 @@ import { applyAction, deserialize, enhance } from '$app/forms';
 
 ## applyAction
 
-This action updates the `form` property of the current page with the given data and updates `page.status`.
-In case of an error, it redirects to the nearest error page.
+Cette action met à jour la propriété `form` de la page courante avec les données correspondantes et
+met à jour `page.status`.
+Dans le cas d'une erreur, elle redirige vers la page d'erreur la plus proche.
 
 <div class="ts-block">
 
@@ -35,7 +36,8 @@ function applyAction<
 
 ## deserialize
 
-Use this function to deserialize the response from a form submission.
+Utilisez cette fonction pour désérialiser la réponse à une soumission de formulaire.
+
 Usage:
 
 ```js
@@ -70,25 +72,33 @@ function deserialize<
 
 ## enhance
 
-This action enhances a `<form>` element that otherwise would work without JavaScript.
+Cette action améliore un élément `<form>` sans laquelle il ne pourrait pas fonctionner en l'absence
+de JavaScript.
 
-The `submit` function is called upon submission with the given FormData and the `action` that should be triggered.
-If `cancel` is called, the form will not be submitted.
-You can use the abort `controller` to cancel the submission in case another one starts.
-If a function is returned, that function is called with the response from the server.
-If nothing is returned, the fallback will be used.
+La fonction `submit` est appelée à la soumission avec le `FormData` fourni et l'`action` qui devrait
+être déclenchée.
+Si `cancel` est appelée, le formulaire ne sera pas soumis.
+Vous pouvez utiliser le `controller` d'annulation pour annuler la soumission dans le cas où une
+autre soumission démarré.
+Si une fonction est renvoyée, cette fonction est appelée avec la réponse venant du serveur.
+Si rien n'est renvoyé, le comportement par défaut sera utilisé.
 
-If this function or its return value isn't set, it
-- falls back to updating the `form` prop with the returned data if the action is on the same page as the form
-- updates `page.status`
-- resets the `<form>` element and invalidates all data in case of successful submission with no redirect response
-- redirects in case of a redirect response
-- redirects to the nearest error page in case of an unexpected error
+Si cette fonction ou sa valeur de retour ne sont pas définies, `enhance` va
+- par défaut mettre à jour la prop `form` avec les données renvoyées si l'action est sur la même
+page que le formulaire
+- mettre à jour `page.status`
+- réinitialiser l'élément `<form>` et invalider toutes les données en cas de soumission réussie sans
+réponse de redirection
+- rediriger dans le cas d'une réponse de redirection
+- rediriger vers la page d'erreur la plus proche dans le cas d'une erreur inattendue
 
-If you provide a custom function with a callback and want to use the default behavior, invoke `update` in your callback.
-It accepts an options object
-- `reset: false` if you don't want the `<form>` values to be reset after a successful submission
-- `invalidateAll: false` if you don't want the action to call `invalidateAll` after submission
+Si vous fournissez une fonction personnalisée avec un callback et souhaitez utiliser le comportement
+par défaut, invoquez la fonction `update` dans votre callback.
+Elle accepte un objet d'options
+- `reset: false` si vous ne voulez pas que les valeurs de l'élément `<form>` soient réinitialisées
+après une soumission réussie
+- `invalidateAll: false` si vous ne voulez pas que l'action appelle `invalidateAll` après la
+soumission
 
 <div class="ts-block">
 

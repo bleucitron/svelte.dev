@@ -24,9 +24,11 @@ import {
 
 ## afterNavigate
 
-A lifecycle function that runs the supplied `callback` when the current component mounts, and also whenever we navigate to a URL.
+Une fonction de cycle de vie qui exécute le `callback` fourni lorsque le composant courant est
+monté, ainsi que lorsque l'on navigue vers une URL.
 
-`afterNavigate` must be called during a component initialization. It remains active as long as the component is mounted.
+`afterNavigate` doit être appelée lors de l'initialisation d'un composant. Elle reste active aussi
+longtemps que le composant reste monté.
 
 <div class="ts-block">
 
@@ -44,15 +46,27 @@ function afterNavigate(
 
 ## beforeNavigate
 
-A navigation interceptor that triggers before we navigate to a URL, whether by clicking a link, calling `goto(...)`, or using the browser back/forward controls.
+Un intercepteur de navigation qui se déclenche lorsque l'on navigue vers une URL, soit en cliquant
+sur lien, en appelant `goto(...)`, ou en utilisant les boutons précédent/suivant.
 
-Calling `cancel()` will prevent the navigation from completing. If `navigation.type === 'leave'` — meaning the user is navigating away from the app (or closing the tab) — calling `cancel` will trigger the native browser unload confirmation dialog. In this case, the navigation may or may not be cancelled depending on the user's response.
+Appeler `cancel()` va empêcher la navigation de se terminer. Si `navigation.type === 'leave'` — ce
+qui veut dire que l'utilisateur ou utilisatrice est en train de quitter l'application (ou de fermer
+l'onglet) — appeler `cancel` va déclencher la boîte de dialogue de confirmation native du
+navigateur demandant si l'on souhaite quitter l'application. Dans ce cas, la navigation peut être
+annulée ou non en fonction de la réponse fournie.
 
-When a navigation isn't to a SvelteKit-owned route (and therefore controlled by SvelteKit's client-side router), `navigation.to.route.id` will be `null`.
+Lorsqu'une navigation ne se dirige pas vers une route appartenant à SvelteKit (donc non contrôlée
+par le routeur client de SvelteKit), `navigation.to.route.id` a pour valeur `null`.
 
-If the navigation will (if not cancelled) cause the document to unload — in other words `'leave'` navigations and `'link'` navigations where `navigation.to.route === null` — `navigation.willUnload` is `true`.
+Si la navigation (lorsque non annulée) provoque le déchargement du document — autrement dit les
+navigation `'leave'` et `'link'` où `navigation.to.route === null` — `navigation.willUnload` a une
+valeur de `true`.
+If the navigation will (if not cancelled) cause the document to unload — in other words `'leave'`
+navigations and `'link'` navigations where `navigation.to.route === null` — `navigation.willUnload`
+is `true`.
 
-`beforeNavigate` must be called during a component initialization. It remains active as long as the component is mounted.
+`beforeNavigate` doit être appelée lors de l'initialisation d'un composant. Elle reste active aussi
+longtemps que le composant reste monté.
 
 <div class="ts-block">
 
@@ -70,8 +84,11 @@ function beforeNavigate(
 
 ## disableScrollHandling
 
-If called when the page is being updated following a navigation (in `onMount` or `afterNavigate` or an action, for example), this disables SvelteKit's built-in scroll handling.
-This is generally discouraged, since it breaks user expectations.
+Si appelée lorsque la page est en train d'être mise à jour à la suite d'une navigation (dans
+`onMount` ou `afterNavigate` ou une action, par exemple), cette méthode désactive la gestion du
+défilement intégrée de SvelteKit.
+Ceci est généralement déconseillé, puisque cela va à l'encontre des attentes des utilisateurs et
+utilisatrices.
 
 <div class="ts-block">
 
@@ -85,10 +102,12 @@ function disableScrollHandling(): void;
 
 ## goto
 
-Allows you to navigate programmatically to a given route, with options such as keeping the current element focused.
-Returns a Promise that resolves when SvelteKit navigates (or fails to navigate, in which case the promise rejects) to the specified `url`.
+Vous permet de naviguer programmatiquement vers une route donnée, avec des options permettant
+notamment de garder sur le focus sur l'élément courant.
+Renvoie une `Promise` qui se résout lorsque SvelteKit navigue (ou échoue à naviguer, auquel cas la
+promesse échoue) vers l'`url` fournie.
 
-For external URLs, use `window.location = url` instead of calling `goto(url)`.
+Pour les URLs externes, utilisez `window.location = url` plutôt que d'appeler `goto(url)`.
 
 <div class="ts-block">
 
@@ -116,16 +135,22 @@ function goto(
 
 ## invalidate
 
-Causes any `load` functions belonging to the currently active page to re-run if they depend on the `url` in question, via `fetch` or `depends`. Returns a `Promise` that resolves when the page is subsequently updated.
+Provoque la ré-exécution de toutes les fonctions `load` appartenant à la page actuellement active si
+celles-ci dépendent de l'`url` en question, via `fetch` ou `depends`. Renvoie une `Promise` qui se
+résout lorsque la page est mise à jour en conséquence.
 
-If the argument is given as a `string` or `URL`, it must resolve to the same URL that was passed to `fetch` or `depends` (including query parameters).
-To create a custom identifier, use a string beginning with `[a-z]+:` (e.g. `custom:state`) — this is a valid URL.
+Si l'argument est fourni en tant que `string` ou `URL`, il doit correspondre à la même URL qui aura
+été passé à `fetch` ou `depends` (en incluant les paramètres de requête).
+Pour créer un identifiant personnalisé, utilisez une chaîne de caractères commençant par `[a-z]+:`
+(par ex. `custom:state`) — il s'agit en effet d'une URL valide.
 
-The `function` argument can be used define a custom predicate. It receives the full `URL` and causes `load` to rerun if `true` is returned.
-This can be useful if you want to invalidate based on a pattern instead of a exact match.
+L'argument `function` peut être utilisé pour définir un prédicat personnalisé. La fonction reçoit
+l'`URL` complète et provoque la ré-exécution de `load` si la valeur `true` est renvoyée.
+Ceci peut être utilse si vous souhaitez invalider en fonction d'un motif plutôt que d'un match
+exact.
 
 ```ts
-// Example: Match '/path' regardless of the query parameters
+// Exemple : Correspond à '/path' peu importe les paramètres de requête
 import { invalidate } from '$app/navigation';
 
 invalidate((url) => url.pathname === '/path');
@@ -145,7 +170,8 @@ function invalidate(
 
 ## invalidateAll
 
-Causes all `load` functions belonging to the currently active page to re-run. Returns a `Promise` that resolves when the page is subsequently updated.
+Provoque la ré-exécution de toutes les fonctions `load` appartenant à la page actuellement active.
+Renvoie une `Promise` qui se résout lorsque la page est mise en jour en conséquence.
 
 <div class="ts-block">
 
@@ -159,13 +185,19 @@ function invalidateAll(): Promise<void>;
 
 ## onNavigate
 
-A lifecycle function that runs the supplied `callback` immediately before we navigate to a new URL except during full-page navigations.
+Une fonction de cycle de vie qui exécute le `callback` fourni immédiatement avant la navigation vers
+une nouvelle URL, sauf lors des navigations "complètes" (rechargeant entièrement la page).
 
-If you return a `Promise`, SvelteKit will wait for it to resolve before completing the navigation. This allows you to — for example — use `document.startViewTransition`. Avoid promises that are slow to resolve, since navigation will appear stalled to the user.
+Si vous renvoyez une `Promise`, SvelteKit attendra sa résolution avant de terminer la navigation.
+Cela vous permet — par exemple — d'utiliser `document.startViewTransition`. Évitez les promesses qui
+mettent du temps à résoudre, puisque la navigation apparaîtra comme lente à l'utilisateur ou
+utilisatrice.
 
-If a function (or a `Promise` that resolves to a function) is returned from the callback, it will be called once the DOM has updated.
+Si une fonction (ou une `Promise` résolvant en une fonction) est renvoyée du callback, elle sera
+exécutée une fois la mise à jour du DOM terminée.
 
-`onNavigate` must be called during a component initialization. It remains active as long as the component is mounted.
+`onNavigate` doit être exécutée lors de l'initialisation d'un composant. Elle reste active aussi
+longtemps que le composant reste monté.
 
 <div class="ts-block">
 
@@ -183,13 +215,15 @@ function onNavigate(
 
 ## preloadCode
 
-Programmatically imports the code for routes that haven't yet been fetched.
-Typically, you might call this to speed up subsequent navigation.
+Importe programmatiquement le code des routes qui n'a pas encore été récupéré.
+Typiquement, vous pourriez appeler cette méthode pour accélerer les navigations à venir.
 
-You can specify routes by any matching pathname such as `/about` (to match `src/routes/about/+page.svelte`) or `/blog/*` (to match `src/routes/blog/[slug]/+page.svelte`).
+Vous pouvez préciser les routes en utilisant n'importe quel chemin correspondant, comme `/about`
+(pour cibler `src/routes/about/+page.svelte`) ou `/blog/*` (pour cibler
+`src/routes/blog/[slug]/+page.svelte`).
 
-Unlike `preloadData`, this won't call `load` functions.
-Returns a Promise that resolves when the modules have been imported.
+À la différence de `preloadData`, ceci n'exécutera aucune fonction `load`.
+Renvoie une `Promise` qui se résout lorsque les modules ont été importés.
 
 <div class="ts-block">
 
@@ -203,13 +237,16 @@ function preloadCode(pathname: string): Promise<void>;
 
 ## preloadData
 
-Programmatically preloads the given page, which means
- 1. ensuring that the code for the page is loaded, and
- 2. calling the page's load function with the appropriate options.
+Précharge programmatiquement la page demandée, ce qui implique que
+ 1. l'on s'assure que le code pour la page est chargé, et
+ 2. l'on exécute les fonctions `load` de la page avec les options appropriées.
 
-This is the same behaviour that SvelteKit triggers when the user taps or mouses over an `<a>` element with `data-sveltekit-preload-data`.
-If the next navigation is to `href`, the values returned from load will be used, making navigation instantaneous.
-Returns a Promise that resolves with the result of running the new route's `load` functions once the preload is complete.
+Ceci est le même comportement qui est déclenché par SvelteKit lorsque l'utilisateur ou utilisatrice
+appuie ou survole un élément `<a>` ayant l'attribut `data-sveltekit-preload-data`.
+Si la prochaine navigation est vers `href`, les valeurs renvoyées par la fonction `load` seront
+utilisées, rendant la navigation instantanée.
+Renvoie une `Promise` qui se résout avec le résultat de l'exécution des fonctions `load` de la
+nouvelle route une fois le préchargement terminé.
 
 <div class="ts-block">
 
@@ -233,7 +270,9 @@ function preloadData(href: string): Promise<
 
 ## pushState
 
-Programmatically create a new history entry with the given `page.state`. To use the current URL, you can pass `''` as the first argument. Used for [shallow routing](/docs/kit/shallow-routing).
+Crée programmatiquement une nouvelle entrée d'historique avec le `page.state` fourni. Pour utiliser
+l'URL courante, vous pouvez passer `''` comme premier argument. Utilisé pour le [shallow
+routing](/docs/kit/shallow-routing).
 
 <div class="ts-block">
 
@@ -250,7 +289,9 @@ function pushState(
 
 ## replaceState
 
-Programmatically replace the current history entry with the given `page.state`. To use the current URL, you can pass `''` as the first argument. Used for [shallow routing](/docs/kit/shallow-routing).
+Remplace programmatiquement l'entrée d'historique courante avec la `page.state` fourni. Pour
+utiliser l'URL courante, vous pouvez passer `''` comme premier argument. Utilisé pour le [shallow
+routing](/docs/kit/shallow-routing).
 
 <div class="ts-block">
 
