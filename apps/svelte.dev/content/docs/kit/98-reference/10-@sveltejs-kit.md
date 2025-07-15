@@ -630,7 +630,7 @@ config: ValidatedConfig;
 
 <div class="ts-block-property-details">
 
-L'objet `svelte.config.js` entièrement résolu.
+L'objet de configuration Svelte entièrement résolu.
 
 </div>
 </div>

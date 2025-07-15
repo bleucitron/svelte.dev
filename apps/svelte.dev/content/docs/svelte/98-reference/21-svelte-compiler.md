@@ -1298,6 +1298,45 @@ Utilisez ceci pour filtrer les warnings. Renvoyez `true` pour garder le warning,
 l'ignorer.
 
 </div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+experimental?: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v5.36
+
+</div>
+
+Options expérimentales
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+async?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v5.36
+
+</div>
+
+Autorise le mot-clé `await` dans les expressions dérivées, les expressions de template, et à la
+racine des composants
+
+</div>
+</div></div>
+
+</div>
 </div></div>
 
 ## Preprocessor

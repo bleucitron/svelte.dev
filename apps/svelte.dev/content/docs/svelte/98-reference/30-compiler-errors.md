@@ -488,6 +488,12 @@ Expected token %token%
 Expected whitespace
 ```
 
+### experimental_async
+
+```
+Cannot use `await` in deriveds and template expressions, or at the top level of a component, unless the `experimental.async` compiler option is `true`
+```
+
 ### export_undefined
 
 ```
@@ -540,6 +546,12 @@ The arguments keyword cannot be used within the template or at the top level of 
 
 ```
 %message%
+```
+
+### legacy_await_invalid
+
+```
+Cannot use `await` in deriveds and template expressions, or at the top level of a component, unless in runes mode
 ```
 
 ### legacy_export_invalid

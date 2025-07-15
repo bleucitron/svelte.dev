@@ -24,6 +24,7 @@ import {
 	onDestroy,
 	onMount,
 	setContext,
+	settled,
 	tick,
 	unmount,
 	untrack
@@ -506,6 +507,27 @@ du composant.
 
 ```dts
 function setContext<T>(key: any, context: T): T;
+```
+
+</div>
+
+
+
+## settled
+
+<blockquote class="since note">
+
+Disponible depuis la version 5.36
+
+</blockquote>
+
+Renvoie une promesse qui se résout une fois que tout état a changé, ainsi que tout travail
+asynchrone résultant de ces changements d'état se sont résolus et que le DOM a été mis à jour.
+
+<div class="ts-block">
+
+```dts
+function settled(): Promise<void>;
 ```
 
 </div>

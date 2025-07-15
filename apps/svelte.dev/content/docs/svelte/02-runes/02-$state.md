@@ -63,6 +63,9 @@ todos.push({
 ```
 
 > [!NOTE] Lorsque vous mettez à jour les propriétés d'un Proxy, l'objet d'origine n'est _pas_ muté.
+Si vous avez besoin d'utiliser vos propres gestionnaires de proxy dans un proxy d'état, [vous
+devriez entourer l'objet _après_ l'avoir entouré d'un
+`$state`](https://svelte.dev/playground/hello-world?version=latest#H4sIAAAAAAAACpWR3WoDIRCFX2UqhWyIJL3erAulL9C7XnQLMe5ksbUqOpsfln33YuyGFNJC8UKdc2bOhw7Myk9kJXsJ0nttO9jcR5KEG9AWJDwHdzwxznbaYGTl68Do5JM_FRifuh-9X8Y9Gkq1rYx4q66cJbQUWcmqqIL2VDe2IYMEbvuOikBADi-GJDSkXG-phId0G-frye2DO2psQYDFQ0Ys8gQO350dUkEydEg82T0GOs0nsSG9g2IqgxACZueo2ZUlpdvoDC6N64qsg1QKY8T2bpZp8gpIfbCQ85Zn50Ud82HkeY83uDjspenxv3jXcSDyjPWf9L1vJf0GH666J-jLu1ery4dV257IWXBWGa0-xFDMQdTTn2ScxWKsn86ROsLwQxqrVR5QM84Ij8TKFD2-cUZSm4O2LSt30kQcvwCgCmfZnAIAAA==).
 
 Notez que si vous déstructurez une valeur réactive, les références ne sont pas réactives — comme
 pour du JavaScript classique, elles sont évaluées au moment de la déstructuration :

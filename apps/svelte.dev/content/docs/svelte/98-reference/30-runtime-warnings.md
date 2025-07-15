@@ -43,6 +43,96 @@ function add() {
 }
 ```
 
+### await_reactivity_loss
+
+```
+Detected reactivity loss when reading `%name%`. This happens when state is read in an async function after an earlier `await`
+```
+
+La réactivité basée sur des signaux de Svelte fonctionne en traçant quels morceaux d'état sont lus
+lorsqu'une expression de template ou une expression `$derived(...)` est exécutée. Si une expression
+contient un `await`, Svelte la transforme de sorte que tout état _suivant_ le `await` soit aussi
+tracé — en d'autres mots, dans un cas comme celui-ci...
+
+```js
+let a = Promise.resolve(1);
+let b = 2;
+// ---cut---
+let total = $derived(await a + b);
+```
+
+... à la fois `a` et `b` sont tracés, même si `b` n'est lu qu'après la résolution de `a`, après
+l'exécution initiale.
+
+Ceci ne s'applique _pas_ à un `await` qui n'est pas "visible" au sein de l'expression. Dans un cas
+comme celui-ci...
+
+```js
+let a = Promise.resolve(1);
+let b = 2;
+// ---cut---
+async function sum() {
+	return await a + b;
+}
+
+let total = $derived(await sum());
+```
+
+... `total` dépend de `a` (qui est lu immédiatement) mais pas de `b` (qui ne l'est pas). La solution
+est de passe les valeurs à la fonction :
+
+```js
+let a = Promise.resolve(1);
+let b = 2;
+// ---cut---
+/**
+ * @param {Promise<number>} a
+ * @param {number} b
+ */
+async function sum(a, b) {
+	return await a + b;
+}
+
+let total = $derived(await sum(a, b));
+```
+
+### await_waterfall
+
+```
+An async derived, `%name%` (%location%) was not read immediately after it resolved. This often indicates an unnecessary waterfall, which can slow down your app
+```
+
+Dans un cas comme celui-ci...
+
+```js
+async function one() { return 1 }
+async function two() { return 2 }
+// ---cut---
+let a = $derived(await one());
+let b = $derived(await two());
+```
+
+... le second `$derived` ne sera pas créé avant que le premier n'ait été résolu. Puisque `await
+two()` ne dépend pas de la valeur de `a`, ce délai, souvent décrit comme une "cascade", n'est pas
+nécessaire.
+
+(Notez que si les valurs de `await one()` et `await two()` changent plus tard, elles peuvent le
+faire de manière concurrente — la cascade ne se produit que lors de la création des dérivés.)
+
+Vous pouvez résoudre ceci en créant d'abord les promesse, _puis_ en utilisant `await` dans un second
+temps :
+
+```js
+async function one() { return 1 }
+async function two() { return 2 }
+// ---cut---
+let aPromise = $derived(one());
+let bPromise = $derived(two());
+
+let a = $derived(await aPromise);
+let b = $derived(await bPromise);
+```
+
 ### binding_property_non_reactive
 
 ```
