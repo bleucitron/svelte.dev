@@ -52,13 +52,13 @@ const nav_links: NavigationLink[] = [
 ];
 
 const banner: BannerData = {
-	id: 'french-in-progress',
-	start: new Date('24 Oct, 2024 00:00:00 UTC'),
-	end: new Date('31 Oct, 2026 00:00:00 UTC'),
+	id: 'french-non-official',
+	start: new Date('16 Jul, 2025 00:00:00 UTC'),
+	end: new Date('31 Dec, 2027 00:00:00 UTC'),
 	arrow: false,
 	content: {
-		lg: "⚠️ Le contenu SvelteKit n'est pas encore entièrement traduit ⚠️",
-		sm: '⚠️ Traduction en cours... ⚠️'
+		lg: "⚠️ Cette traduction n'est pas officielle, veuillez vous référrer au site officiel en cas de doute. ⚠️",
+		sm: '⚠️ Traduction non officielle ⚠️'
 	},
 	href: 'https://github.com/bleucitron/svelte.dev'
 };

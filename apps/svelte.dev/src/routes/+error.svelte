@@ -16,26 +16,27 @@
 	<div class="inner">
 		{#if online}
 			{#if $page.status === 404}
-				<h1>Not found!</h1>
+				<h1>Introuvable !</h1>
 				<p>
-					If you were expecting to find something here, please drop by the
-					<a href="/chat"> Discord chatroom </a>
-					and let us know, or raise an issue on
-					<a href="https://github.com/sveltejs/svelte.dev/issues">GitHub</a>. Thanks!
+					Si vous vous attendiez à trouver quelque chose ici, merci de faire un tour du côté du
+					<a href="/chat"> serveur Discord </a> et parlez nous-en, ou ouvrez une issue sur
+					<a href="https://github.com/bleucitron/svelte.dev/issues">GitHub</a>. Merci !
 				</p>
 			{:else}
-				<h1>Yikes!</h1>
-
-				<p>Something went wrong when we tried to render this page. Please try reloading.</p>
+				<h1>Beurk !</h1>
 
 				<p>
-					If the error persists, please let us know on <a href="/chat">Discord</a> or
-					<a href="https://github.com/sveltejs/svelte.dev/issues">GitHub</a>. Thanks!
+					Quelque chose s'est mal passé lors du rendu de cette page. Merci d'essayer de recharger.
+				</p>
+
+				<p>
+					Si l'erreur persiste, merci de nous le faire savoir sur <a href="/chat">Discord</a> ou sur
+					<a href="https://github.com/sveltejs/svelte.dev/issues">GitHub</a>. Merci !
 				</p>
 			{/if}
 		{:else}
-			<h1>It looks like you're offline</h1>
-			<p>Reload the page once you've found the internet.</p>
+			<h1>Il semblerait que vous soyez hors ligne</h1>
+			<p>Rechargez la page une fois que vous avez retrouvé une connexion internet.</p>
 		{/if}
 	</div>
 </div>
