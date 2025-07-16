@@ -256,7 +256,8 @@ Une fonction `load` de serveur doit renvoyer des données pouvant être sériali
 JSON plus des choses comme `BigInt`, `Date`, `Map`, `Set` et `RegExp`, ou des références
 répétées/cycliques — afin qu'elles puissent être transportées sur le réseau. Vos données peuvent
 inclure des [promesses](#Streaming-with-promises), auquel cas elles seront streamées vers les
-navigateurs.
+navigateurs. Si vous avez besoin de sérialiser/désérialiser des types personnalisés, veuillez
+utiliser les [hooks de transport](hooks#Universal-hooks-transport).
 
 ### Quand utiliser quoi [!VO]When to use which
 

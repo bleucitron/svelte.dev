@@ -267,6 +267,24 @@ C'est notamment utilisé pour implémenter des abstractions comme
 gestionnaires permettant de mettre à jour des valeurs réactives _seulement_ si ces valeurs sont
 trackées (plutôt que, par exemple, simplement lues dans un gestionnaire d'évènement).
 
+## `$effect.pending`
+
+Lorsque vous utilisez [`await`](await-expressions) dans des composants, la rune `$effect.pending()`
+vous dit combien de promesses sont en cours de résolution dans la [frontière](svelte-boundary)
+courante, en n'incluant pas les frontières enfant
+([demo](/playground/untitled#H4sIAAAAAAAAE3WRMU_DMBCF_8rJdHDUqilILGkaiY2RgY0yOPYZWbiOFV8IleX_jpMUEAIWS_7u-d27c2ROnJBV7B6t7WDsequAozKEqmAbpo3FwKqnyOjsJ90EMr-8uvN-G97Q0sRaEfAvLjtH6CjbsDrI3nhqju5IFgkEHGAVSBDy62L_SdtvejPTzEU4Owl6cJJM50AoxcUG2gLiVM31URgChyM89N3JBORcF3BoICA9mhN2A3G9gdvdrij2UJYgejLaSCMsKLTivNj0SEOf7WEN7ZwnHV1dfqd2dTsQ5QCdk9bI10PkcxexXqcmH3W51Jt_le2kbH8os9Y3UaTcNLYpDx-Xab6GTHXpZ128MhpWqDVK2np0yrgXXqQpaLa4APDLBkIF8bd2sYql0Sn_DeE7sYr6AdNzvgljR-MUq7SwAdMHeUtgHR4CAAA=)) :
+
+```svelte
+<button onclick={() => a++}>a++</button>
+<button onclick={() => b++}>b++</button>
+
+<p>{a} + {b} = {await add(a, b)}</p>
+
+{#if $effect.pending()}
+	<p>promesses en cours : {$effect.pending()}</p>
+{/if}
+```
+
 ## `$effect.root`
 
 La rune `$effect.root` est une fonctionnalité avancée qui crée un scope non suivi qui ne

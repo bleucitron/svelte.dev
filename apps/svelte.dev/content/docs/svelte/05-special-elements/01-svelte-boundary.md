@@ -10,27 +10,52 @@ title: <svelte:boundary>
 > [!NOTE]
 > Cette fonctionnalité a été ajoutée avec la version 5.3.0
 
-Les frontières (_boundaries_) vous permettent d'éviter que des erreurs se produisant dans des
-parties de votre application fassent s'effondrer l'entièreté de l'application, et de traiter
-correctement ces erreurs tout en permettant d'assurer un comportement normal.
+Les frontières (_boundaries_) vous permettent de compartimenter votre application, afin que vous
+puissiez :
+- fournir une interface à afficher lorsque les expressions [`await`](await-expressions) sont en
+cours de première résolution
+- gérer les erreurs qui se produisent lors du rendu ou lors de l'exécution des effets, et fournir
+une interface à afficher lorsqu'une erreur se produit
 
-Si une erreur se produit lors du rendu ou de la mise à jour des enfants d'un élément
-`<svelte:boundary>`, ou lors de l'exécution d'une fonction [`$effect`]($effect) qui y serait
-définie, son contenu sera alors supprimé.
+Si une frontière gère une erreur (avec un snippet `failed` ou un gestionnaire `onerror`, ou les
+deux), son contenu existant sera supprimé.
 
-Les erreurs se produisant en dehors du processus de rendu (par exemple, dans des gestionnaires
-d'évènement, après un `setTimeout`, ou après une tâche asynchrone) ne sont _pas_ traitées pas les
-frontières d'erreurs.
+> [!NOTE] Les erreurs se produisant à l'extérieur du processus de rendu (par exemple, dans les
+> gestionnaires d'évènement ou après un `setTimeout` ou du travail asynchrone) ne sont _pas_
+> attrapées par les frontières d'erreur.
 
 ## Propriétés [!VO]Properties
 
-Pour que les frontières puissent fonctionner, l'une des propriétés `failed` et `onerror` doit être
-fournie en props.
+Pour que les frontières puissent fonctionner, l'une des propriétés suivantes doit être fournie en
+props.
+
+### `pending`
+
+Depuis Svelte 5.36, les frontières ayant un snippet `pending` peuvent contenir des expressions
+[`await`](await-expressions). Ce snippet sera affiché lors de la création initiale de la frontière,
+et restera visible tant que les expressions `await` au sein de la frontière ne sont pas résolues
+([démo](/playground/untitled#H4sIAAAAAAAAE21QQW6DQAz8ytY9BKQVpFdKkPqDHnorPWzAaSwt3tWugUaIv1eE0KpKD5as8YxnNBOw6RAKKOOAVrA4up5bEy6VGknOyiO3xJ8qMnmPAhpOZDFC8T6BXPyiXADQ258X77P1FWg4moj_4Y1jQZZ49W0CealqruXUcyPkWLVozQXbZDC2R606spYiNo7bqA7qab_fp2paFLUElD6wYhzVa3AdRUySgNHZAVN1qDZaLRHljTp0vSTJ9XJjrSbpX5f0eZXN6zLXXOa_QfmurIVU-moyoyH5ib87o7XuYZfOZe6vnGWmx1uZW7lJOq9upa-sMwuUZdkmmfIbfQ1xZwwaBL8ECgk9zh8axJAdiVsoTsZGnL8Bg4tX_OMBAAA=)):
+
+```svelte
+<svelte:boundary>
+	<p>{await delayed('salut !')}</p>
+
+	{#snippet pending()}
+		<p>chargement...</p>
+	{/snippet}
+</svelte:boundary>
+```
+
+Le snippet `pending` ne sera _pas_ affiché pour les mises à jour asynchrones suivantes — pour
+celles-ci, vous pouvez utiliser [`$effect.pending()`]($effect#$effect.pending).
+
+> [!NOTE] Dans le [bac à sable](/playground), votre application est rendue au sein d'une frontière
+> ayant un snippet `pending` vide, afin que vous puissez utiliser `await` sans avoir à en créer un.
 
 ### `failed`
 
-Si un snippet `failed` est fourni, il sera rendu avec l'erreur levée et une fonction `reset`
-permettant de recréer le contenu
+Si un snippet `failed` est fourni, il sera rendu lorsque l'erreur sera levée au sein d'une
+frontière, avec l'`error` et une fonction `reset` permettant de recréer le contenu
 ([demo](/playground/hello-world#H4sIAAAAAAAAE3VRy26DMBD8lS2tFCIh6JkAUlWp39Cq9EBg06CAbdlLArL87zWGKk8ORnhmd3ZnrD1WtOjFXqKO2BDGW96xqpBD5gXerm5QefG39mgQY9EIWHxueRMinLosti0UPsJLzggZKTeilLWgLGc51a3gkuCjKQ7DO7cXZotgJ3kLqzC6hmex1SZnSXTWYHcrj8LJjWTk0PHoZ8VqIdCOKayPykcpuQxAokJaG1dGybYj4gw4K5u6PKTasSbjXKgnIDlA8VvUdo-pzonraBY2bsH7HAl78mKSHZpgIcuHjq9jXSpZSLixRlveKYQUXhQVhL6GPobXAAb7BbNeyvNUs4qfRg3OnELLj5hqH9eQZqCnoBwR9lYcQxuVXeBzc8kMF8yXY4yNJ5oGiUzP_aaf_waTRGJib5_Ad3P_vbCuaYxzeNpbU0eUMPAOKh7Yw1YErgtoXyuYlPLzc10_xo_5A91zkQL_AgAA)).
 
 ```svelte

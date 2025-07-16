@@ -101,6 +101,10 @@ class Todo {
 }
 ```
 
+> [!NOTE] Le compilateur transforme `done` et `text` en méthodes `get`/`set` sur le prototype de
+> classe qui référencent des champs privés. Cela signifie que les propriétés ne sont pas
+> énumérables.
+
 Lorsque vous appelez des méthodes en JavaScript, la valeur de
 [`this`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/this) a de
 l'importance. L'exemple suivant ne fonctionne pas, car la référence `this` dans la méthode `reset`
@@ -137,12 +141,9 @@ class Todo {
 	}
 }
 ```
-> [!NOTE] Le compilateur transforme `done` et `text` en méthodes `get`/`set` sur le prototype de
-> classe qui référencent des champs privés. Cela signifie que les propriétés ne sont pas
-> énumérables.
 
-> Svelte fournit des implémentations réactives de classes intégrées comme `Set` et `Map` que vous
-> pouvez importer depuis [`svelte/reactivity`](svelte-reactivity).
+> [!NOTE] Svelte fournit des implémentations réactives de classes intégrées comme `Set` et `Map` que
+> vous pouvez importer depuis [`svelte/reactivity`](svelte-reactivity).
 
 ## `$state.raw`
 
