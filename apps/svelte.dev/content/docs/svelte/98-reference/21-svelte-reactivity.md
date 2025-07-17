@@ -369,11 +369,16 @@ Disponible à partir de la version 5.7.0
 
 </blockquote>
 
-Renvoie une fonction `subscribe` qui, si appelée dans un effet (incluant les expressions du
-template), appelle son callback `start` avec une fonction `update`. Chaque fois que `update` est
-appelée, l'effect sera rejoué.
+Renvoie une fonction `subscribe` qui intègre des systèmes externes basés sur des évènements dans la
+réactivité de Svelte.
+C'est particulièrement utile pour intégrer des APIs comme `MediaQuery`, `IntersectionObserver`, ou
+`WebSocket`.
 
-Si `start` renvoie une fonction, celle-ci sera appelée lorsque l'effet sera détruit.
+Si `subscribe` est appelée au sein d'un effet (y compris indirectement, par exemple dans un getter),
+le callback `start` sera appelé avec une fonction `update`. À chaque fois que `update` est appelée,
+l'effet est ré-exécuté.
+
+Si `start` renvoie une fonction de nettoyage, elle sera exécutée lors de la destruction de l'effet.
 
 Si `subscribe` est appelée dans plusieurs effets, `start` ne sera appelé qu'une seule fois tant que
 les effets sont actifs, et la fonction de "destruction" renvoyée ne sera appelée que lorsque tous
@@ -404,6 +409,7 @@ export class MediaQuery {
 	}
 
 	get current() {
+		// This makes the getter reactive, if read in an effect
 		this.#subscribe();
 
 		// renvoie l'état courant de la query, que l'on soit ou non dans un effet

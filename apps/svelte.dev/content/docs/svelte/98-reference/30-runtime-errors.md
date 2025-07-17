@@ -107,8 +107,52 @@ Effect cannot be created inside a `$derived` value that was not itself created i
 ### effect_update_depth_exceeded
 
 ```
-Maximum update depth exceeded. This can happen when a reactive block or effect repeatedly sets a new value. Svelte limits the number of nested updates to prevent infinite loops
+Maximum update depth exceeded. This typically indicates that an effect reads and writes the same piece of state
 ```
+
+Si un effet met à jour un ou plusieurs états dont il dépend, il sera ré-exécuté, potentiellement en
+boucle :
+
+```js
+let count = $state(0);
+
+$effect(() => {
+	// ceci lit et écrit `count`,
+	// provoquant une boucle infinie
+	count += 1;
+});
+```
+
+(Svelte intervient avant que ceci ne fasse planter votre onglet de navigateur.)
+
+La même chose est vraie pour les mutations de tableau, puisqu'elles lisent et écrivent le tableau :
+
+```js
+let array = $state(['hello']);
+
+$effect(() => {
+	array.push('goodbye');
+});
+```
+
+Notez que c'est acceptable pour un effet de se ré-exécuter lui-même tant qu'il "converge" :
+
+```js
+let array = ['a', 'b', 'c'];
+// ---cut---
+$effect(() => {
+	// ceci est acceptable, car le tri d'un tableau déjà trié
+	// ne va pas déclencher une mutation
+	array.sort();
+});
+```
+
+Souvent lorsque l'on tombe sur ce problème, la valeur en question ne devrait pas être un état (par
+exemple, si vous ajoutez des éléments dans un tableau de `logs` dans un effet, transformez `logs` en
+un tableau normal plutôt qu'un `$state([])`). Dans les rares cas où vous avez _vraiment_ besoin
+de mettre à jour un état dans un effet — [ce que vous devriez
+éviter]($effect#When-not-to-use-$effect) — vous pouvez lire l'état avec [`untrack`](svelte#untrack)
+pour éviter de l'ajouter en tant que dépendance.
 
 ### flush_sync_in_effect
 

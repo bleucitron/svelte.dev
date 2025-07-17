@@ -112,6 +112,28 @@ let selected = $derived(items[index]);
 d'`items` sous-jacent. Si `items` n'était _pas_ profondément réactif, muter `selected` n'aurait
 aucun effet.
 
+## Déstructuration [!VO]Destructuring
+
+Si vous utilisez la déstructuration avec une déclaration `$derived`, les variables en résultant
+seront toutes réactives — ceci...
+
+```js
+function stuff() { return { a: 1, b: 2, c: 3 } }
+// ---cut---
+let { a, b, c } = $derived(stuff());
+```
+
+... est grosso modo équivalent à ceci :
+
+```js
+function stuff() { return { a: 1, b: 2, c: 3 } }
+// ---cut---
+let _stuff = $derived(stuff());
+let a = $derived(_stuff.a);
+let b = $derived(_stuff.b);
+let c = $derived(_stuff.c);
+```
+
 ## Propagation de la mise à jour [!VO]Update propagation
 
 Svelte utilise un concept appelée _réactivité push-pull_ — lorsque l'état est mis à jour, tout ce
