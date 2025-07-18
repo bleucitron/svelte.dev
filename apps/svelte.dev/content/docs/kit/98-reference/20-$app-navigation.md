@@ -114,16 +114,18 @@ Pour les URLs externes, utilisez `window.location = url` plutôt que d'appeler `
 ```dts
 function goto(
 	url: string | URL,
-	opts?: {
-		replaceState?: boolean | undefined;
-		noScroll?: boolean | undefined;
-		keepFocus?: boolean | undefined;
-		invalidateAll?: boolean | undefined;
-		invalidate?:
-			| (string | URL | ((url: URL) => boolean))[]
-			| undefined;
-		state?: App.PageState | undefined;
-	}
+	opts?:
+		| {
+				replaceState?: boolean | undefined;
+				noScroll?: boolean | undefined;
+				keepFocus?: boolean | undefined;
+				invalidateAll?: boolean | undefined;
+				invalidate?:
+					| (string | URL | ((url: URL) => boolean))[]
+					| undefined;
+				state?: App.PageState | undefined;
+		  }
+		| undefined
 ): Promise<void>;
 ```
 

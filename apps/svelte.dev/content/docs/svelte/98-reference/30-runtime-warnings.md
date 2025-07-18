@@ -368,6 +368,37 @@ Pour contourner ce problème, assurez-vous de toujours comparer des valeurs qui 
 deux été créées avec `$state(...)`, soit toutes les deux pas. Notez que `$state.raw(...)` ne va
 _pas_ créer de proxy d'état.
 
+### svelte_boundary_reset_noop
+
+```
+A `<svelte:boundary>` `reset` function only resets the boundary the first time it is called
+```
+
+Lorsqu'une erreur se produit pendant le rendu du contenu d'une balise
+[`<svelte:boundary>`](https://svelte.dev/docs/svelte/svelte-boundary), le gestionnaire `onerror` est
+appelé avec l'erreur ainsi qu'un fonction `reset` qui tente de re-rendre le contenu.
+
+Cette fonction `reset` ne devrait être appelée qu'une seule fois. Après ce premier appel, elle n'a
+aucun effet — dans un cas comme celui-ci, où une référence à `reset` est stockée en dehors de la
+frontière, un clic sur le bouton pendant le rendu de `<Contents />` ne va _pas_ de nouveau
+déclencher le re-rendu du contenu.
+
+```svelte
+<script>
+	let reset;
+</script>
+
+<button onclick={reset}>réinitialiser</button>
+
+<svelte:boundary onerror={(e, r) => (reset = r)}>
+	<!-- contenu -->
+
+	{#snippet failed(e)}
+		<p>oups ! {e.message}</p>
+	{/snippet}
+</svelte:boundary>
+```
+
 ### transition_slide_display
 
 ```

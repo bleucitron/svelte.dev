@@ -151,7 +151,7 @@ Vérifie s'il s'agit d'une erreur jetée par `error`.
 ```dts
 function isHttpError<T extends number>(
 	e: unknown,
-	status?: T
+	status?: T | undefined
 ): e is HttpError_1 & {
 	status: T extends undefined ? never : T;
 };
@@ -182,7 +182,10 @@ Crée un objet de réponse `Response` JSON à partir des données fournies.
 <div class="ts-block">
 
 ```dts
-function json(data: any, init?: ResponseInit): Response;
+function json(
+	data: any,
+	init?: ResponseInit | undefined
+): Response;
 ```
 
 </div>
@@ -270,7 +273,10 @@ Crée un objet de réponse `Response` à partir du body fourni.
 <div class="ts-block">
 
 ```dts
-function text(body: string, init?: ResponseInit): Response;
+function text(
+	body: string,
+	init?: ResponseInit | undefined
+): Response;
 ```
 
 </div>
@@ -2603,7 +2609,7 @@ Un dictionnaire des variables d'environnement.
 <div class="ts-block-property">
 
 ```dts
-read?: (file: string) => ReadableStream;
+read?: (file: string) => MaybePromise<ReadableStream | null>;
 ```
 
 <div class="ts-block-property-details">

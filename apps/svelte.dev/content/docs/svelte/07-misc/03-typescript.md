@@ -304,45 +304,25 @@ types. S'il s'agit d'attributs ou d'évènements standards non-expérimentaux, c
 HTML](https://github.com/sveltejs/svelte/blob/main/packages/svelte/elements.d.ts). Dans ce cas, vous
 pouvez ouvrir une issue et/ou une PR pour corriger le problème.
 
-Dans le cas d'un attribut/évènement personnalisé ou expérimental, vous pouvez améliorer les types de
-cette manière :
-
-```ts
-/// file: additional-svelte-typings.d.ts
-declare namespace svelteHTML {
-	// améliorer les éléments
-	interface IntrinsicElements {
-		'mon-element-perso': { unattribut: string; 'on:event': (e: CustomEvent<any>) => void };
-	}
-	// améliorer les attributs
-	interface HTMLAttributes<T> {
-		// si vous souhaitez utiliser l'évènement beforeinstallprompt
-		onbeforeinstallprompt?: (event: any) => any;
-		// If you want to use myCustomAttribute={..} (note: all lowercase)
-		// si vous souhaitez utiliser myCustomAttribute={..} (note: tout en minuscules)
-		mycustomattribute?: any; // vous pouvez remplacer any avec quelque chose de plus spécifique
-	}
-}
-```
-
-Puis, assurez-vous que le fifhier `.d.ts` est référencé dans votre fichier `tsconfig.json`. S'il
-possède quelque chose comme `"include": ["src/**/*"]` et que votre `.d.ts` se trouve dans le dossier
-`src`, cela devrait fonctionner. Il se peut que vous ayez besoin de recharger votre éditeur pour que
-les changements soient pris en compte.
-
-Vous pouvez aussi déclarer des types en augmentant le module `svelte/elements` de la façon suivante
-:
+S'il s'agit d'un évènement/attribut expérimental, vous pouvez améliorer le typage en augmentant le
+module `svelte/elements` de cette manière :
 
 ```ts
 /// file: additional-svelte-typings.d.ts
 import { HTMLButtonAttributes } from 'svelte/elements';
 
 declare module 'svelte/elements' {
+	// ajoute un nouvel élément
 	export interface SvelteHTMLElements {
 		'bouton-perso': HTMLButtonAttributes;
 	}
 
-	// permet un contrôle plus granulaire sur l'élément sur lequel vous voulez ajouter des types
+	// ajout un nouvel attribut global qui est disponible sur tous les éléments HTML
+	export interface HTMLAttributes<T> {
+		globalattribute?: string;
+	}
+
+	// ajoute un nouvel attribut pour les éléments bouton
 	export interface HTMLButtonAttributes {
 		attributtresexperimental?: string;
 	}
@@ -350,3 +330,8 @@ declare module 'svelte/elements' {
 
 export {}; // assure que ceci n'est pas un module ambiant, sans quoi les types seraient écrasés
 ```
+
+Assurez-vous ensuite que le fichier `.d.ts` est référencé dans votre fichier `tsconfig.json`. S'il
+contient quelque chose comme `"include": ["src/**/*"]` et que votre fichier `.d.ts` se trouve dans
+`src`, cela devrait fonctionner. Vous aurez peut-être besoin de recharger pour que les changements
+aient de l'effet.

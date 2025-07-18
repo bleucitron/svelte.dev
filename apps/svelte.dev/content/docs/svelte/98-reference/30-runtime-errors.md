@@ -269,6 +269,30 @@ let odd = $derived(!even);
 
 Si les effets de bord sont inévitable, utilisez plutôt [`$effect`]($effect).
 
+### svelte_boundary_reset_onerror
+
+```
+A `<svelte:boundary>` `reset` function cannot be called while an error is still being handled
+```
+
+Si une balise [`<svelte:boundary>`](svelte-boundary) a une fonction `onerror`, elle ne doit pas
+appeler la fonction `reset` de manière synchrone, puisque la frontière est toujours dans un état
+d'erreur. `reset()` est typiquement appelée plus tard, une fois que l'erreur a été résolue.
+
+S'il est possible de résoudre l'erreur dans le callback `onerror`, vous devez au moins attendre que
+la frontière se stabilise avant d'appeler `reset()`, par exemple en utilisant
+[`tick`](https://svelte.dev/docs/svelte/lifecycle-hooks#tick) :
+
+```svelte
+<svelte:boundary onerror={async (error, reset) => {
+	fixTheError();
+	+++await tick();+++
+	reset();
+}}>
+
+</svelte:boundary>
+```
+
 
 ## Erreurs serveur [!VO]Server errors
 
