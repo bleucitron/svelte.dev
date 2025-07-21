@@ -19,5 +19,4 @@ Nous pouvons maintenant utiliser ceci dans notre markup :
 ```
 
 L'expression dans la déclaration `$derived` sera ré-évaluée dès qu'une de ses dépendances (dans ce
-cas, uniquement `numbers`) sera mise à jour. À la différence d'un état normal, l'état dérivé est en
-lecture seule.
+cas, uniquement `numbers`) sera mise à jour.
