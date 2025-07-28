@@ -15,13 +15,13 @@ Nécessite Node 16 ou plus récent.
 
 Vous aurez besoin d'avoir le paquet `svelte-check` installé sur votre projet :
 
-```bash
+```sh
 npm i -D svelte-check
 ```
 
 ## Usage
 
-```bash
+```sh
 npx sv check
 ```
 
@@ -71,7 +71,7 @@ Les fichiers/dossiers à ignorer, relativement à la racine du workspace. Les pa
 guillemets et séparés par des virgules.
 Exemple :
 
-```bash
+```sh
 npx sv check --ignore "dist,build"
 ```
 
@@ -91,7 +91,7 @@ Une liste de valeurs `code:behaviour` entre guillemets et séparées par des vir
 [code de warning compilateur](../svelte/compiler-warnings) et `behaviour` est soit `ignore` soit
 `error` :
 
-```bash
+```sh
 npx sv check --compiler-warnings "css_unused_selector:ignore,a11y_missing_attribute:error"
 ```
 
@@ -107,7 +107,7 @@ analysées. par défaut, elles sont toutes actives.
 
 Exemple :
 
-```bash
+```sh
 npx sv check --diagnostic-sources "js,svelte"
 ```
 

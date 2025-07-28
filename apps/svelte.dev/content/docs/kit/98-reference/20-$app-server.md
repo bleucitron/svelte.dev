@@ -29,8 +29,8 @@ méthode doit être appelée de manière synchrone (c'est-à-dire pas après un 
 
 ```dts
 function getRequestEvent(): RequestEvent<
-	Partial<Record<string, string>>,
-	string | null
+	AppLayoutParams<'/'>,
+	any
 >;
 ```
 

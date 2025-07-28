@@ -12,7 +12,7 @@ La façon la plus simple d'exécuter `sv` est via [`npx`](https://docs.npmjs.com
 (ou la commande équivalente si vous utilisez un autre gestionnaire de paquets — par exemple, `pnpx`
 si vous utilisez [pnpm](https://pnpm.io/)) :
 
-```bash
+```sh
 npx sv <command> <args>
 ```
 

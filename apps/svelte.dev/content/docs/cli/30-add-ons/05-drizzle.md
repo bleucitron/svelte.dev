@@ -8,7 +8,7 @@ requêtes type SQL, et qui est compatible serverless par design.
 
 ## Usage
 
-```bash
+```sh
 npx sv add drizzle
 ```
 
@@ -30,7 +30,7 @@ Le type de base de données à utiliser :
 - `mysql` — une autre base de données open-source populaire
 - `sqlite` — une base de données basée sur des fichiers, et ne nécessitant donc pas de serveur
 
-```bash
+```sh
 npx sv add drizzle=database:postgresql
 ```
 
@@ -42,7 +42,7 @@ Le client SQL à utiliser, dépend de `database` :
 - Pour `mysql`: `mysql2`, `planetscale`
 - Pour `sqlite`: `better-sqlite3`, `libsql`, `turso`
 
-```bash
+```sh
 npx sv add drizzle=database:postgresql+client:postgres.js
 ```
 
@@ -57,6 +57,6 @@ des drivers compatibles de Drizzle](https://orm.drizzle.team/docs/connect-overvi
 Si oui ou non ajouter la configuration de Docker Compose. Uniquement disponible pour les options
 [`database`](#Options-database) `postgresql` ou `mysql`.
 
-```bash
+```sh
 npx sv add drizzle=database:postgresql+client:postgres.js+docker:yes
 ```

@@ -7,10 +7,50 @@ title: $app/paths
 
 ```js
 // @noErrors
-import { assets, base, resolveRoute } from '$app/paths';
+import { asset, assets, base, resolve, resolveRoute } from '$app/paths';
 ```
 
+## asset
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.26
+
+</blockquote>
+
+Résout l'URL d'un asset se trouvant dans votre dossier `static`, en le préfixant avec
+[`config.kit.paths.assets`](/docs/kit/configuration#paths) si configuré, ou avec le chemin de base
+sinon.
+
+Lors du rendu côté serveur, le chemin de base est relatif et dépend de la page en train d'être
+rendue.
+
+```svelte
+<script>
+	import { asset } from '$app/paths';
+</script>
+
+<img alt="a potato" src={asset('potato.jpg')} />
+```
+
+<div class="ts-block">
+
+```dts
+function asset(file: Asset): string;
+```
+
+</div>
+
+
+
 ## assets
+
+
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt [`asset(...)`](/docs/kit/$app-paths#asset)
+
+</blockquote>
 
 Un chemin absolu qui matche [`config.kit.paths.assets`](/docs/kit/configuration#paths).
 
@@ -34,6 +74,12 @@ let assets:
 
 ## base
 
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt [`resolve(...)`](/docs/kit/$app-paths#resolve)
+
+</blockquote>
+
 Une chaîne de caractères qui matche [`config.kit.paths.base`](/docs/kit/configuration#paths).
 
 Exemple d'usage : `<a href="{base}/your-page">Link</a>`
@@ -48,30 +94,59 @@ let base: '' | `/${string}`;
 
 
 
-## resolveRoute
+## resolve
 
-Remplit un ID de route avec les paramètres permettant de résoudre un chemin.
+<blockquote class="since note">
+
+Disponible depuis la version 2.26
+
+</blockquote>
+
+Résout un chemin en le préfixant avec le chemin de base, s'il existe, ou avec un ID de route en
+remplissant les segments dynamiques avec des paramètres.
+
+Lors du rendu côté serveur, le chemin de base est relatif et dépend de la page en train d'être
+rendue.
 
 ```js
 // @errors: 7031
-import { resolveRoute } from '$app/paths';
+import { resolve } from '$app/paths';
 
-resolveRoute(
-	`/blog/[slug]/[...somethingElse]`,
-	{
-		slug: 'hello-world',
-		somethingElse: 'something/else'
-	}
-); // `/blog/hello-world/something/else`
+// avec un chemin
+const resolved = resolve(`/blog/hello-world`);
+
+// avec un ID de route et ses paramètres
+const resolved = resolve('/blog/[slug]', {
+	slug: 'hello-world'
+});
 ```
 
 <div class="ts-block">
 
 ```dts
-function resolveRoute(
-	id: string,
-	params: Record<string, string | undefined>
-): string;
+function resolve<T extends RouteId | Pathname>(
+	...args: ResolveArgs<T>
+): ResolvedPathname;
+```
+
+</div>
+
+
+
+## resolveRoute
+
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt [`resolve(...)`](/docs/kit/$app-paths#resolve)
+
+</blockquote>
+
+<div class="ts-block">
+
+```dts
+function resolveRoute<T extends RouteId | Pathname>(
+	...args: ResolveArgs<T>
+): ResolvedPathname;
 ```
 
 </div>

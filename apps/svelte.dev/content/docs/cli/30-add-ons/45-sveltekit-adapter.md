@@ -11,7 +11,7 @@ disponibles.
 
 ## Usage
 
-```bash
+```sh
 npx sv add sveltekit-adapter
 ```
 
@@ -37,6 +37,6 @@ déployer sur Cloudflare
 - `netlify` — [`@sveltejs/adapter-netlify`](/docs/kit/adapter-netlify) vous permet de déployer sur
 Netlify
 
-```bash
+```sh
 npx sv add sveltekit-adapter=adapter:node
 ```

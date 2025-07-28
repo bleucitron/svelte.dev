@@ -8,7 +8,7 @@ sans jamais quitter votre HTML.
 
 ## Usage
 
-```bash
+```sh
 npx sv add tailwindcss
 ```
 
@@ -29,6 +29,6 @@ Quel plugin utiliser :
 - `typography` — [`@tailwindcss/typography`](https://github.com/tailwindlabs/tailwindcss-typography)
 - `forms` — [`@tailwindcss/forms`](https://github.com/tailwindlabs/tailwindcss-forms)
 
-```bash
+```sh
 npx sv add tailwindcss="plugins:typography"
 ```

@@ -8,7 +8,7 @@ fonctionnalités additionnelles](sv-add#Official-add-ons).
 
 ## Usage
 
-```bash
+```sh
 npx sv create [options] [path]
 ```
 

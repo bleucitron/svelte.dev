@@ -8,7 +8,7 @@ composants.
 
 ## Usage
 
-```bash
+```sh
 npx sv add storybook
 ```
 

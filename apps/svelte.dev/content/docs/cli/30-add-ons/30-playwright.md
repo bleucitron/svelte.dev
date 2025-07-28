@@ -7,7 +7,7 @@ Tester dans le navigateur avec [Playwright](https://playwright.dev).
 
 ## Usage
 
-```bash
+```sh
 npx sv add playwright
 ```
 

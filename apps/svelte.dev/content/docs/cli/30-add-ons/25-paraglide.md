@@ -10,7 +10,7 @@ permet également d'éviter les cascades asynchrones, de soigner son typage, ent
 
 ## Usage
 
-```bash
+```sh
 npx sv add paraglide
 ```
 
@@ -29,7 +29,7 @@ npx sv add paraglide
 
 Les langues que vous voudriez supporter fournies sous le format IETF BCP 47.
 
-```bash
+```sh
 npx sv add paraglide="languageTags:en,es"
 ```
 
@@ -37,6 +37,6 @@ npx sv add paraglide="languageTags:en,es"
 
 Si oui ou non générer une page de démo optionnelle montrant comment se servir de paraglide.
 
-```bash
+```sh
 npx sv add paraglide="demo:yes"
 ```

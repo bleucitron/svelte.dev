@@ -9,7 +9,7 @@ dans vos composants Svelte.
 
 ## Usage
 
-```bash
+```sh
 npx sv add mdsvex
 ```
 

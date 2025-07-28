@@ -8,7 +8,7 @@ Lucia](https://lucia-auth.com/).
 
 ## Usage
 
-```bash
+```sh
 npx sv add lucia
 ```
 
@@ -24,6 +24,6 @@ npx sv add lucia
 
 Si oui ou non inclure les pages de démo pour l'inscription et la connexion.
 
-```bash
+```sh
 npx sv add lucia=demo:yes
 ```
