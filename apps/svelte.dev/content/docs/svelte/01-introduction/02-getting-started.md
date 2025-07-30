@@ -7,7 +7,7 @@ Nous recommandons d'utiliser [SvelteKit](../kit), qui vous permet de [construire
 vous voulez](../kit/project-types). Il s'agit du framework d'application officiel développé par
 l'équipe Svelte, qui se base sur [Vite](https://vite.dev) :
 
-```bash
+```sh
 npx sv create myapp
 cd myapp
 npm install

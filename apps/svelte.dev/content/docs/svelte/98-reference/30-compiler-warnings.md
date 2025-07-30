@@ -790,7 +790,7 @@ fermante.
 
 Pour automatiser ceci, lancer la commande de migration dédiée :
 
-```bash
+```sh
 npx sv migrate self-closing-tags
 ```
 

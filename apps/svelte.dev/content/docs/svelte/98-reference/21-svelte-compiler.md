@@ -369,7 +369,17 @@ namespace AST {
 		name: string;
 		/** Le 'y' de `on:x={y}` */
 		expression: null | Expression;
-		modifiers: string[];
+		modifiers: Array<
+			| 'capture'
+			| 'nonpassive'
+			| 'once'
+			| 'passive'
+			| 'preventDefault'
+			| 'self'
+			| 'stopImmediatePropagation'
+			| 'stopPropagation'
+			| 'trusted'
+		>;
 	}
 
 	/** Une directive `style:` */

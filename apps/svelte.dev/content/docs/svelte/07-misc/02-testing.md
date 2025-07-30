@@ -20,7 +20,7 @@ Vitest](/docs/cli/vitest) soit lors de la création du projet, soit plus tard.
 
 Pour mettre en place Vitest manuellement, commencez par installer Vitest :
 
-```bash
+```sh
 npm install -D vitest
 ```
 
@@ -183,7 +183,7 @@ Il est possible de tester vos composants en isolation en utilisant Vitest.
 
 Pour commencer, installer jsdom (une librairie qui simule les APIs du DOM) :
 
-```bash
+```sh
 npm install -D jsdom
 ```
 
