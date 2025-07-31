@@ -48,7 +48,7 @@ projet basé sur Vite, incluant mais ne se limitant pas aux projets SvelteKit.
 
 Installez le paquet :
 
-```bash
+```sh
 npm install --save-dev @sveltejs/enhanced-img
 ```
 

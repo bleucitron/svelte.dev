@@ -178,7 +178,7 @@ Pour récupérer cette clé lors du développement, vous pouvez utiliser le [CLI
 Vercel](https://vercel.com/docs/cli/env) en lançant la commande `vercel env pull` localement, de
 cette manière :
 
-```bash
+```sh
 vercel env pull .env.development.local
 ```
 

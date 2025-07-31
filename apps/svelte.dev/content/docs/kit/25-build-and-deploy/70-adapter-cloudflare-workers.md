@@ -85,14 +85,14 @@ Vous aurez besoin d'installer
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) et de vous y
 connecter, si vous l'avez pas déjà fait :
 
-```bash
+```sh
 npm i -D wrangler
 wrangler login
 ```
 
 Vous pourrez ensuite compiler votre application et la déployer :
 
-```bash
+```sh
 wrangler deploy
 ```
 

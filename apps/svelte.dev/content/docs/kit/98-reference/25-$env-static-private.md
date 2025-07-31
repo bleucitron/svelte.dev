@@ -28,7 +28,7 @@ MY_FEATURE_FLAG=""
 
 Vous pouvez écraser toute valeur du fichier `.env` depuis la ligne de commande de cette manière :
 
-```bash
+```sh
 MY_FEATURE_FLAG="enabled" npm run dev
 ```
 

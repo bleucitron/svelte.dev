@@ -6,7 +6,7 @@ title: Créer un projet
 La manière la plus simple de créer une application SvelteKit est de lancer la commande `npx sv
 create` :
 
-```bash
+```sh
 npx sv create my-app
 cd my-app
 npm install

@@ -158,7 +158,7 @@ SvelteKit va découvrir les pages à pré-rendre automatiquement, en commençant
 d'entrée_ et en les parcourant. Par défaut, toutes vos routes non dynamiques sont considérées comme
 des points d'entrée — par exemple, si vous avez ces routes...
 
-```bash
+```sh
 /             # non dynamique
 /blog         # non dynamique
 /blog/[slug]  # dynamique, à cause de `[slug]`

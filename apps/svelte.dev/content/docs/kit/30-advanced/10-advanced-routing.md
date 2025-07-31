@@ -8,7 +8,7 @@ title: Routing avancé
 Si le nombre de segments de route est inconnu, vous pouvez utiliser la syntaxe de reste — par
 exemple vous pourriez implémenter le visualisateur de fichiers de Github de cette manière...
 
-```bash
+```sh
 /[org]/[repo]/tree/[branch]/[...file]
 ```
 
@@ -125,7 +125,7 @@ Chaque module dans le dossier `params` correspond à un matcher, à l'exception 
 Il est possible pour plusieurs routes de correspondre à un chemin donné. Par exemple, chacune de ces
 routes sont compatibles avec le chemin `/foo-abc` :
 
-```bash
+```sh
 src/routes/[...catchall]/+page.svelte
 src/routes/[[a=x]]/+page.svelte
 src/routes/[b]/+page.svelte
@@ -149,7 +149,7 @@ la route, et dans ce cas ils sont traités avec la priorité la plus faible. En 
 `src/routes/foo-abc/+page.svelte` et `/foo-def` à invoquer `src/routes/foo-[c]/+page.svelte`, plutôt
 que des routes moins spécifiques :
 
-```bash
+```sh
 src/routes/foo-abc/+page.svelte
 src/routes/foo-[c]/+page.svelte
 src/routes/[[a=x]]/+page.svelte
