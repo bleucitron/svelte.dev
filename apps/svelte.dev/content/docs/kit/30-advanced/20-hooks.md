@@ -200,6 +200,44 @@ export async function handleFetch({ event, request, fetch }) {
 }
 ```
 
+### handleValidationError
+
+Ce hook est appelé lorsqu'une fonction distante est appelée avec un argument qui ne correspond pas
+au [Standard Schema](https://standardschema.dev/) fourni. Il doit renvoyer un objet correspondant à
+la forme de [`App.Error`](types#Error).
+
+Si par exemple vous avez une fonction distante qui attend une chaîne de caractères comme argument...
+
+```js
+/// file: todos.remote.js
+import * as v from 'valibot';
+import { query } from '$app/server';
+
+export const getTodo = query(v.string(), (id) => {
+	// implémentation...
+});
+```
+
+... mais est exécutée avec quelque chose qui ne correspond pas au schéma — comme un nombre (par ex.
+`await getTodos(1)`) — la validation va alors échouer, le serveur va répondre avec un [code
+400](https://http.dog/400), et la fonction va jeter une erreur avec le message 'Bad Request'.
+
+Pour personnaliser ce message et ajouter des propriétés additionnelles à l'objet d'erreur,
+implémentez `handleValidationError` :
+
+```js
+/// file: src/hooks.server.js
+/** @type {import('@sveltejs/kit').HandleValidationError} */
+export function handleValidationError({ issues }) {
+	return {
+		message: 'Non merci'
+	};
+}
+```
+
+Soyez conscient•e des informations que vous exposez ici, car la raison d'échec de validation la plus
+probable est que quelqu'un de mal intentionné envoie des requêtes mal formées à votre serveur.
+
 ## Hooks partagés [!VO]Shared hooks
 
 Vous pouvez ajouter les hooks suivants aux fichiers `src/hooks.server.js` _et_ `src/hooks.client.js`

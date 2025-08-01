@@ -119,9 +119,10 @@ function fail(status: number): ActionFailure<undefined>;
 <div class="ts-block">
 
 ```dts
-function fail<
-	T extends Record<string, unknown> | undefined = undefined
->(status: number, data: T): ActionFailure<T>;
+function fail<T = undefined>(
+	status: number,
+	data: T
+): ActionFailure<T>;
 ```
 
 </div>
@@ -312,9 +313,7 @@ type Action<
 <div class="ts-block">
 
 ```dts
-interface ActionFailure<
-	T extends Record<string, unknown> | undefined = undefined
-> {/*…*/}
+interface ActionFailure<T = undefined> {/*…*/}
 ```
 
 <div class="ts-block-property">
@@ -1192,6 +1191,28 @@ type HandleServerError = (input: {
 
 </div>
 
+## HandleValidationError
+
+Le hook [`handleValidationError`](/docs/kit/hooks#Server-hooks-handleValidationError) est exécuté
+lorsque l'argument d'une fonction distante échoue lors de sa validation.
+
+Il sera appelée avec les erreurs de validation et l'évènement, et doit renvoyer un objet dont la
+forme correspond à `App.Error`.
+
+<div class="ts-block">
+
+```dts
+type HandleValidationError<
+	Issue extends
+		StandardSchemaV1.Issue = StandardSchemaV1.Issue
+> = (input: {
+	issues: Issue[];
+	event: RequestEvent;
+}) => MaybePromise<App.Error>;
+```
+
+</div>
+
 ## HttpError
 
 L'objet renvoyé par la fonction [`error`](/docs/kit/@sveltejs-kit#error).
@@ -2013,6 +2034,231 @@ L'endroit vers lequel rediriger.
 </div>
 </div></div>
 
+## RemoteCommand
+
+La valeur de retour d'une fonction distante `command`. Voir la [section sur les fonctions
+distantes](/docs/kit/remote-functions#command) pour lire la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemoteCommand<Input, Output> = (arg: Input) => Promise<
+	Awaited<Output>
+> & {
+	updates(
+		...queries: Array<
+			RemoteQuery<any> | RemoteQueryOverride
+		>
+	): Promise<Awaited<Output>>;
+};
+```
+
+</div>
+
+## RemoteForm
+
+La valeur de retour d'une fonction distante `form`. Voir la [section sur les fonctions
+distantes](/docs/kit/remote-functions#form) pour lire la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemoteForm<Result> = {
+	method: 'POST';
+	/** L'URL à laquelle envoyer le formulaire. */
+	action: string;
+	/** Le gestionnaire d'évènement qui intercepte la soumission du formulaire sur le client pour empêcher un rechargement complet de la page. */
+	onsubmit: (event: SubmitEvent) => void;
+	/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
+	enhance(
+		callback: (opts: {
+			form: HTMLFormElement;
+			data: FormData;
+			submit: () => Promise<void> & {
+				updates: (
+					...queries: Array<
+						RemoteQuery<any> | RemoteQueryOverride
+					>
+				) => Promise<void>;
+			};
+		}) => void
+	): {
+		method: 'POST';
+		action: string;
+		onsubmit: (event: SubmitEvent) => void;
+	};
+	/**
+	 * Crée une instance du formualaire pour la clé donné.
+	 * La clé est transformée en chaîne de caractères pour déduplication afin de pouvoir réutiliser des instances existantes.
+	 * Utile lorsque vous avez plusieurs formulaires qui utilisent la même action de formulaire distante, par exemple dans une boucle.
+	 * ```svelte
+	 * {#each todos as todo}
+	 *	{@const todoForm = updateTodo.for(todo.id)}
+	 *	<form {...todoForm}>
+	 *		{#if todoForm.result?.invalid}<p>Invalid data</p>{/if}
+	 *		...
+	 *	</form>
+	 *	{/each}
+	 * ```
+	 */
+	for(
+		key: string | number | boolean
+	): Omit<RemoteForm<Result>, 'for'>;
+	/** Le résultat de la soumission du formulaire */
+	get result(): Result | undefined;
+	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
+	buttonProps: {
+		type: 'submit';
+		formmethod: 'POST';
+		formaction: string;
+		onclick: (event: Event) => void;
+		/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
+		enhance(
+			callback: (opts: {
+				form: HTMLFormElement;
+				data: FormData;
+				submit: () => Promise<void> & {
+					updates: (
+						...queries: Array<
+							RemoteQuery<any> | RemoteQueryOverride
+						>
+					) => Promise<void>;
+				};
+			}) => void
+		): {
+			type: 'submit';
+			formmethod: 'POST';
+			formaction: string;
+			onclick: (event: Event) => void;
+		};
+	};
+};
+```
+
+</div>
+
+## RemotePrerenderFunction
+
+La valeur de retour d'une fonction distante `prerender`. Voir la [section sur les fonctions
+distantes](/docs/kit/remote-functions#prerender) pour lire la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemotePrerenderFunction<Input, Output> = (
+	arg: Input
+) => RemoteResource<Output>;
+```
+
+</div>
+
+## RemoteQuery
+
+<div class="ts-block">
+
+```dts
+type RemoteQuery<T> = RemoteResource<T> & {
+	/**
+	 * Sur le client, cette fonction va re-requêter la query au serveur.
+	 *
+	 * Sur le serveur, cette méthode peut être appelée dans le contexte d'une `command` ou d'une `form`, et la donnée rafraîchie va alors accompagner la réponse de l'action lors de son retour au client.
+	 * Ceci évite à SvelteKit de rafraîchir toutes les queries sur la pages lors d'un deuxième aller-retour.
+	 */
+	refresh(): Promise<void>;
+	/**
+	 * Surcharge temporairement la valeur de la query. Ceci est utilisé avec la méthode `updates` d'une [`command`](/docs/kit/remote-functions#command-Single-flight-mutations) ou d'une [soumission de formulaire améliorée](/docs/kit/remote-functions#form-enhance) pour fournir des mises-à-jour optimistes.
+	 *
+	 * ```svelte
+	 * <script>
+	 *   import { getTodos, addTodo } from './todos.remote.js';
+	 *   const todos = getTodos();
+	 * </script>
+	 *
+	 * <form {...addTodo.enhance(async ({ data, submit }) => {
+	 *   await submit().updates(
+	 *     todos.withOverride((todos) => [...todos, { text: data.get('text') }])
+	 *   );
+	 * }}>
+	 *   <input type="text" name="text" />
+	 *   <button type="submit">Add Todo</button>
+	 * </form>
+	 * ```
+	 */
+	withOverride(
+		update: (current: Awaited<T>) => Awaited<T>
+	): RemoteQueryOverride;
+};
+```
+
+</div>
+
+## RemoteQueryFunction
+
+La valeur de retour d'une fonction distante `query`. Voir la [section sur les fonctions
+distantes](/docs/kit/remote-functions#query) pour lire la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemoteQueryFunction<Input, Output> = (
+	arg: Input
+) => RemoteQuery<Output>;
+```
+
+</div>
+
+## RemoteQueryOverride
+
+<div class="ts-block">
+
+```dts
+interface RemoteQueryOverride {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+_key: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+release(): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## RemoteResource
+
+<div class="ts-block">
+
+```dts
+type RemoteResource<T> = Promise<Awaited<T>> & {
+	/** L'erreur lorsque la query échoue. La plupart du temps ce sera une [`HttpError`](/docs/kit/@sveltejs-kit#HttpError), mais ce n'est pas garanti. */
+	get error(): any;
+	/** `true` avant que le premier résultat ne soit disponible et lors des mises-à-jour. */
+	get loading(): boolean;
+} & (
+		| {
+				/** La valeur courante de la query. `undefined` tant que `ready` ne vaut pas `true` */
+				get current(): undefined;
+				ready: false;
+		  }
+		| {
+				/** La valeur courante de la query. `undefined` tant que `ready` ne vaut pas `true` */
+				get current(): Awaited<T>;
+				ready: true;
+		  }
+	);
+```
+
+</div>
+
 ## RequestEvent
 
 <div class="ts-block">
@@ -2238,6 +2484,21 @@ isSubRequest: boolean;
 
 Vaut `true` pour les appels `+server.js` venant de SvelteKit sans la surcharge d'une requête HTTP.
 Ceci se produit lorsque vous faites des requêtes `fetch` ayant la même origine sur le serveur.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+isRemoteRequest: boolean;
+```
+
+<div class="ts-block-property-details">
+
+`true` si la requête vient du client via une fonction distante. La propriété `url` sera supprimée
+des informations internes liées à la requête de données dans ce cas. Utilisez cette propriété si la
+distinction est importante pour vous.
 
 </div>
 </div></div>
@@ -2516,6 +2777,18 @@ nodes: SSRNodeLoader[];
 ```
 
 <div class="ts-block-property-details"></div>
+</div>
+<div class="ts-block-property">
+
+```dts
+remotes: Record<string, () => Promise<any>>;
+```
+
+<div class="ts-block-property-details">
+
+nom de fichier hashé -> import vers ce fichier
+
+</div>
 </div>
 <div class="ts-block-property">
 

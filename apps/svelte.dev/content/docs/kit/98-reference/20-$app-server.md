@@ -7,8 +7,91 @@ title: $app/server
 
 ```js
 // @noErrors
-import { getRequestEvent, read } from '$app/server';
+import {
+	command,
+	form,
+	getRequestEvent,
+	prerender,
+	query,
+	read
+} from '$app/server';
 ```
+
+## command
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.27
+
+</blockquote>
+
+Crée une commande distante. Lorsqu'exécutée sur le navigateur, la fonction sera invoquée sur le
+serveur via un appel `fetch`.
+
+Voir la section sur les [fonctions distantes](/docs/kit/remote-functions#command) pour lire la
+documentation complète.
+
+<div class="ts-block">
+
+```dts
+function command<Output>(
+	fn: () => Output
+): RemoteCommand<void, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function command<Input, Output>(
+	validate: 'unchecked',
+	fn: (arg: Input) => Output
+): RemoteCommand<Input, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function command<Schema extends StandardSchemaV1, Output>(
+	validate: Schema,
+	fn: (arg: StandardSchemaV1.InferOutput<Schema>) => Output
+): RemoteCommand<
+	StandardSchemaV1.InferOutput<Schema>,
+	Output
+>;
+```
+
+</div>
+
+
+
+## form
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.27
+
+</blockquote>
+
+Crée un objet de formulaire pouvant être "étalé" sur un élément `<form>`
+
+Voir la section sur les [fonctions distantes](/docs/kit/remote-functions#form) pour lire la
+documentation complète.
+
+<div class="ts-block">
+
+```dts
+function form<T>(
+	fn: (data: FormData) => MaybePromise<T>
+): RemoteForm<T>;
+```
+
+</div>
+
+
 
 ## getRequestEvent
 
@@ -31,6 +114,132 @@ méthode doit être appelée de manière synchrone (c'est-à-dire pas après un 
 function getRequestEvent(): RequestEvent<
 	AppLayoutParams<'/'>,
 	any
+>;
+```
+
+</div>
+
+
+
+## prerender
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.27
+
+</blockquote>
+
+Crée une fonction de pré-rendu distante. Lorsqu'exécutée sur le navigateur, la fonction sera invoquée sur le
+serveur via un appel `fetch`.
+
+Voir la section sur les [fonctions distantes](/docs/kit/remote-functions#prerender) pour lire la
+documentation complète.
+
+<div class="ts-block">
+
+```dts
+function prerender<Output>(
+	fn: () => MaybePromise<Output>,
+	options?:
+		| {
+				inputs?: RemotePrerenderInputsGenerator<void>;
+				dynamic?: boolean;
+		  }
+		| undefined
+): RemotePrerenderFunction<void, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function prerender<Input, Output>(
+	validate: 'unchecked',
+	fn: (arg: Input) => MaybePromise<Output>,
+	options?:
+		| {
+				inputs?: RemotePrerenderInputsGenerator<Input>;
+				dynamic?: boolean;
+		  }
+		| undefined
+): RemotePrerenderFunction<Input, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function prerender<Schema extends StandardSchemaV1, Output>(
+	schema: Schema,
+	fn: (
+		arg: StandardSchemaV1.InferOutput<Schema>
+	) => MaybePromise<Output>,
+	options?:
+		| {
+				inputs?: RemotePrerenderInputsGenerator<
+					StandardSchemaV1.InferOutput<Schema>
+				>;
+				dynamic?: boolean;
+		  }
+		| undefined
+): RemotePrerenderFunction<
+	StandardSchemaV1.InferOutput<Schema>,
+	Output
+>;
+```
+
+</div>
+
+
+
+## query
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.27
+
+</blockquote>
+
+Crée une query distante. Lorsqu'exécutée sur le navigateur, la fonction sera invoquée sur le serveur
+via un appel `fetch`.
+
+Voir la section sur les [fonctions distantes](/docs/kit/remote-functions#query) pour lire la
+documentation complète.
+
+<div class="ts-block">
+
+```dts
+function query<Output>(
+	fn: () => MaybePromise<Output>
+): RemoteQueryFunction<void, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function query<Input, Output>(
+	validate: 'unchecked',
+	fn: (arg: Input) => MaybePromise<Output>
+): RemoteQueryFunction<Input, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function query<Schema extends StandardSchemaV1, Output>(
+	schema: Schema,
+	fn: (
+		arg: StandardSchemaV1.InferOutput<Schema>
+	) => MaybePromise<Output>
+): RemoteQueryFunction<
+	StandardSchemaV1.InferOutput<Schema>,
+	Output
 >;
 ```
 

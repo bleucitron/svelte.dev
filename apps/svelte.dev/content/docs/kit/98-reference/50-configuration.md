@@ -405,6 +405,42 @@ complètement supprimées. Voir les sections [`$env/static/private`](/docs/kit/$
 
 </div>
 
+## experimental
+
+<div class="ts-block-property-bullets">
+
+
+
+</div>
+
+Fonctionnalités expérimentales qui sont exclues du versionnement sémantique. Ces fonctionnalités
+peuvent changer ou être supprimées à tout moment.
+
+<div class="ts-block-property-children">
+
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+remoteFunctions?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">default</span> `false`
+
+</div>
+
+Si oui ou non activer la fonctionnalité expérimentale des fonctions distantes. Cette fonctionnalité
+n'est pas encore stable et peut changer ou être supprimée à tout moment.
+
+</div>
+</div>
+
+</div>
+
 ## files
 
 <div class="ts-block-property-bullets">
