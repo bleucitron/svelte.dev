@@ -153,7 +153,7 @@ navigator.serviceWorker.register('/service-worker.js', {
 Mettre en place des types propres pour les service workers nécessite un peu de configuration
 manuelle. Ajoutez les choses suivantes tout en haut de votre fichier `service-worker.js` :
 
-```original-js
+```js
 /// <reference types="@sveltejs/kit" />
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
@@ -161,7 +161,7 @@ manuelle. Ajoutez les choses suivantes tout en haut de votre fichier `service-wo
 
 const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
 ```
-```generated-ts
+```ts
 /// <reference types="@sveltejs/kit" />
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />

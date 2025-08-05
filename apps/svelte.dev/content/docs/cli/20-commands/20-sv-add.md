@@ -21,7 +21,7 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 ## Options
 
 - `-C`, `--cwd` — path vers la racine de votre projet Svelte(Kit)
-- `--no-preconditions` — passe l'étape de vérification des préconditions <!-- TODO what does this mean? -->
+- `--no-git-check` — même si certains fichiers ne sont pas propres, aucun prompt ne sera affiché
 - `--install` — installe les dépendances avec le gestionnaire de paquet spécifié
 - `--no-install` — empêche l'installation des dépendances
 
