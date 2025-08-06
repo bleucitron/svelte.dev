@@ -50,9 +50,8 @@ Si une fonction est renvoyée par `onMount`, elle sera appelée lorsque le compo
 </script>
 ```
 
-> [!NOTE] Ce comportement ne fonctionne que si la fonction passée à `onMount` renvoie une valeur de
-> manière _synchrone_. Les fonctions `async` renvoient toujours une `Promise`, et en tant que telles
-> ne peuvent pas renvoyer une fonction de manière _synchrone_.
+> [!NOTE] Ce comportement ne fonctionne que si la fonction passée à `onMount` est _synchrone_. Les
+> fonctions `async` renvoient toujours une `Promise`.
 
 ## `onDestroy`
 

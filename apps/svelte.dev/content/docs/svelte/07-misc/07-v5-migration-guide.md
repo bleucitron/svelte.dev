@@ -303,8 +303,8 @@ Avec Svelte 4, vous pouvez ajouter des modificateurs aux gestionnaires d'évène
 <button on:click|once|preventDefault={handler}>...</button>
 ```
 
-Les modificateurs sont spécifiques à `on:` et ne sont pas compatibles avec la nouvelle syntaxe de
-gestion des évènements. L'ajout de choses comme `event.preventDefault()` dans le gestionnaire
+Les modificateurs sont spécifiques à `on:` et ne sont donc pas compatibles avec la nouvelle syntaxe
+de gestion des évènements. L'ajout de choses comme `event.preventDefault()` dans le gestionnaire
 lui-même est préférable, puisque toute la logique est placée à un seul endroit plutôt que d'être
 séparée entre gestionnaire et modificateur.
 
@@ -429,8 +429,8 @@ le spread, ou ils risquent d'être écrasés :
 ## Des snippets plutôt que des slots [!VO]Snippets instead of slots
 
 Avec Svelte 4, du contenu peut être passé aux composants en utilisant des slots. Svelte 5 les
-remplace par les snippets, qui sont plus puissants et plus flexibles. En conséquence, les slots sont
-dépréciés par Svelte 5.
+remplace par les snippets, qui sont plus puissants et plus flexibles. Les slots sont donc dépréciés
+avec Svelte 5.
 
 Ils continuent toutefois de fonctionner, et vous pouvez passer des snippets à un composant qui
 utilise des slots :
@@ -1066,8 +1066,8 @@ n'aurait jamais dû être possible.
 
 Auparavant, Svelte n'analysait pas les sélecteurs au sein de `:is(...)`, de `:has()` et de
 `:where(...)`, les traitant de facto comme globaux. Svelte 5 les analyse dans le contexte du
-composant courant. Ainsi, certains sélecteurs peuvent désormais être traités comme non utilisés
-s'ils ne se basaient que sur ces traitements. Pour corriger cela, utilisez `:global(...)` dans les
+composant courant. Certains sélecteurs peuvent donc désormais être traités comme non utilisés s'ils
+ne se basaient que sur ces traitements. Pour corriger cela, utilisez `:global(...)` dans les
 sélecteurs `:is(...)`/`:has()`/`:where(...)`.
 
 Si vous utilisez la directive Tailwind `@apply`, ajoutez un sélecteur `:global` pour conserver les
@@ -1242,8 +1242,8 @@ mais en mode développement, Svelte 5 vous préviendra qu'elles sont différente
 ### L'hydratation fonctionne différemment [!VO]Hydration works differently
 
 Svelte 5 utilise des commentaires lors du rendu côté serveur, commentaires qui sont utilisés pour
-une hydratation plus robuste et plus efficace sur le client. Dès lors, vous ne devriez pas supprimer
-ces commentaires du HTML généré si vous avez l'intention de l'hydrater ; de plus, si vous avez
+une hydratation plus robuste et plus efficace sur le client. Vous ne devriez donc pas supprimer ces
+commentaires du HTML généré si vous avez l'intention de l'hydrater ; de plus, si vous avez
 manuellement écrit du HTML qui doit être hydraté par un composant Svelte, vous devez ajuster ce HTML
 pour inclure ces commentaires aux endroits adéquats.
 

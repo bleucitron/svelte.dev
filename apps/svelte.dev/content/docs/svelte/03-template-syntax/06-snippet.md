@@ -313,5 +313,4 @@ Les snippets peuvent être créés programmatiquement avec l'API
 ## Snippets et slots [!VO]Snippets and slots
 
 En Svelte 4, du contenu peut être fourni aux composants en utilisant des [slots](legacy-slots). Les
-snippets sont plus puissants et plus polyvalents, de sorte que les slots sont dépréciés avec Svelte
-5.
+snippets sont plus puissants et plus polyvalents, les slots ont donc été dépréciés avec Svelte 5.

@@ -170,8 +170,8 @@ Un effet dépend uniquement des valeurs qu'il a lues la dernière fois qu'il a �
 conséquences intéressantes pour les effets qui impliquent du code conditionnel.
 
 Par exemple, si `condition` vaut `true` dans le code ci-dessous, le code dans le bloc `#if` sera
-joué et `color` sera ré-évalué. Dans ce cas, n'importe quel changement sur `condition` ou `color`
-[va déclencher la ré-exécution de
+joué et `color` sera ré-évalué. Cela signifie que n'importe quel changement sur `condition` ou
+`color` [va déclencher la ré-exécution de
 l'effet](/playground/untitled#H4sIAAAAAAAAE21RQW6DMBD8ytaNBJHaJFLViwNIVZ8RcnBgXVk1xsILTYT4e20TQg89IOPZ2fHM7siMaJBx9tmaWpFqjQNlAKXEihx7YVJpdIyfRkY3G4gB8Pi97cPanRtQU8AuwuF_eNUaQuPlOMtc1SlLRWlKUo1tOwJflUikQHZtA0klzCDc64Imx0ANn8bInV1CDhtHgjClrsftcSXotluLybOUb3g4JJHhOZs5WZpuIS9gjNqkJKQP5e2ClrR4SMdZ13E4xZ8zTPOTJU2A2uE_PQ9COCI926_hTVarIU4hu_REPlBrKq2q73ycrf1N-vS4TMUsulaVg3EtR8H9rFgsg8uUsT1B2F9eshigZHBRpuaD0D3mY8Qm2BfB5N2YyRzdNEYVDy0Ja-WsFjcOUuP1HvFLWA6H3XuHTUSmmDV2--0TXonxsKbp7G9C6R__NONS-MFNvxj_d6mBAgAA).
 
 À l'inverse, si `condition` vaut `false`, `color` ne sera pas ré-évalué, et l'effet ne sera rejoué

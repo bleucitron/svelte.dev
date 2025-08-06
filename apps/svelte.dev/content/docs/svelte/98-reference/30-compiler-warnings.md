@@ -784,9 +784,8 @@ ceci, avec le texte _à l'intérieur_ de l'icône :
 
 Certains langages de templatings (Svelte inclus) vont "corriger" le HTML en transformant `<span />`
 en `<span></span>`. D'autres respectent la spec. Dans les deux cas, il en résulte une ambiguité et
-de la confusion lorsque vous copiez-collez du code entre différents contextes. En conséquence,
-Svelte vous avertit de l'ambiguité pour que vous la résolviez directement en rajoutant la balise
-fermante.
+de la confusion lorsque vous copiez-collez du code entre différents contextes. Svelte vous avertit
+donc de l'ambiguité pour que vous la résolviez directement en rajoutant la balise fermante.
 
 Pour automatiser ceci, lancer la commande de migration dédiée :
 

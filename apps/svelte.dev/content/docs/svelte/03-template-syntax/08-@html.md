@@ -27,7 +27,7 @@ De plus, si vous fournissez du code Svelte, celui-ci ne sera pas compilé.
 ## Style [!VO]Styling
 
 Le contenu affiché de cette manière est "invisible" pour Svelte, et ne sera donc pas concerné par
-les [styles scopés](scoped-styles) — autrement dit, le code suivant ne fonctionnera pas, et les
+les [styles scopés](scoped-styles). Autrement dit, le code suivant ne fonctionnera pas, et les
 styles de `a` et `img` seront considérés comme non utilisés :
 
 <!-- prettier-ignore -->
