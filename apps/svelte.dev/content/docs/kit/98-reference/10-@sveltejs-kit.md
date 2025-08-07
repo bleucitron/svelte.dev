@@ -152,7 +152,7 @@ Vérifie s'il s'agit d'une erreur jetée par `error`.
 ```dts
 function isHttpError<T extends number>(
 	e: unknown,
-	status?: T | undefined
+	status?: T
 ): e is HttpError_1 & {
 	status: T extends undefined ? never : T;
 };
@@ -183,10 +183,7 @@ Crée un objet de réponse `Response` JSON à partir des données fournies.
 <div class="ts-block">
 
 ```dts
-function json(
-	data: any,
-	init?: ResponseInit | undefined
-): Response;
+function json(data: any, init?: ResponseInit): Response;
 ```
 
 </div>
@@ -274,10 +271,7 @@ Crée un objet de réponse `Response` à partir du body fourni.
 <div class="ts-block">
 
 ```dts
-function text(
-	body: string,
-	init?: ResponseInit | undefined
-): Response;
+function text(body: string, init?: ResponseInit): Response;
 ```
 
 </div>

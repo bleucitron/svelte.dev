@@ -9,9 +9,9 @@ title: Fonctions distantes
 
 Les fonctions distantes (_remote functions_) sont un outil pour communiquer de manière typée entre
 le client et le serveur. Elles peuvent être appelées depuis _n'importe où_ dans votre application,
-mais sont _toujours exécutées_ sur le serveur, et peuvent donc accéder de manière sécurisée aux
-[modules réservés au serveur](server-only-modules) contenant des choses comme des variables
-d'environnement ou des clients de base de données.
+mais sont _toujours exécutées_ sur le serveur, ce qui signifie qu'elles peuvent accéder de manière
+sécurisée aux [modules réservés au serveur](server-only-modules) contenant des choses comme des
+variables d'environnement ou des clients de base de données.
 
 Combinées avec le support expérimental de Svelte pour [`await`](/docs/svelte/await-expressions),
 elles vous permettent de charger et de manipuler les données directement au sein de vos composants.
@@ -36,7 +36,8 @@ export default {
 Les fonctions distantes (_remote_) sont exportées depuis un fichier `.remote.js` ou `.remote.ts`, et
 sont disponibles en quatre versions : `query`, `form`, `command`, et `prerender`. Sur le client, les
 fonctions exportées sont transformées en wrappers autour de `fetch` qui invoquent leur contrepartie
-sur le serveur en utilisant un endpoint HTTP généré.
+sur le serveur en utilisant un endpoint HTTP généré. Les fichiers `.remote.` doivent être placés
+dans les dossiers `lib` ou `routes`.
 
 ## query
 
@@ -134,7 +135,7 @@ Les fonctions `query` peuvent accepter un argument, comme le `slug` d'un article
 
 	let { params } = $props();
 
-	const post = getPost(params.slug);
+	const post = $derived(await getPost(params.slug));
 </script>
 
 <h1>{post.title}</h1>
@@ -188,7 +189,7 @@ Toute query peut être mise à jour via sa méthode `refresh` :
 ```
 
 > [!NOTE] Les queries sont mises en cache tant qu'elles sont sur la page, ce qui veut dire que
-> `getPosts() === getPosts()`. En conséquence, vous n'avez pas besoin d'une référence comme `const
+> `getPosts() === getPosts()`. Cela signifie que vous n'avez pas besoin d'une référence comme `const
 > posts = getPosts()` pour mettre à jour la query.
 
 ## form
@@ -311,7 +312,7 @@ export const createPost = form(async (data) => {
 	// Met à jour `getPosts()` sur le serveur, et
 	// renvoie les données au client avec le résultat
 	// de `createPost`
-	+++getPosts().refresh();+++
+	+++await getPosts().refresh();+++
 
 	// Redirige vers la page nouvellement créée
 	redirect(303, `/blog/${slug}`);
@@ -737,10 +738,10 @@ export const getPost = prerender(
 );
 ```
 
-> [!NOTE] Svelte ne supporte pas encore le rendu asynchrone côté serveur, et de ce fait il est
-> probable que vous n'appeliez les fonctions distantes que depuis le serveur, plutôt que lors du
-> pré-rendu. À cause de cela, vous aurez besoin d'utiliser `inputs`, pour le moment. Nous
-> travaillons activement sur point bloquant.
+> [!NOTE] Svelte ne supporte pas encore le rendu asynchrone côté serveur, et il est donc probable
+> que vous n'appeliez les fonctions distantes que depuis le serveur, plutôt que lors du pré-rendu. À
+> cause de cela, vous aurez besoin d'utiliser `inputs`, pour le moment. Nous travaillons activement
+> sur point bloquant.
 
 Par défaut, les fonctions de pré-rendu sont exclues de votre bundle de compilation, ce qui signifie
 que vous ne pouvez pas les exécuter avec des arguments qui n'ont pas été pré-rendus. Vous pouvez

@@ -171,7 +171,7 @@ Vous ne pouvez pas utiliser `fs` dans les déploiements edge.
 Vous _pouvez_ vous servir de ce module lors des déploiements serverless, mais il ne fonctionnera
 probablement pas comme prévu, puisque les fichiers ne sont pas copiés depuis votre projet vers votre
 déploiement. Utilisez plutôt la fonction [`read`]($app-server#read) importée depuis `$app/server`
-pour accéder à vos fichiers. `read` ne fonctionne pas au sein des déploiements edge (cela pourra
-changer dans le futur).
+pour accéder à vos fichiers. Cette fonction marche également au sein de déploiements sur le réseau
+edge en récupérant le fichier depuis l'emplacement déployé des assets publics.
 
 Comme alternative, vous pouvez [pré-rendre](page-options#prerender) les routes en question.

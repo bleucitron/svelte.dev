@@ -115,18 +115,16 @@ Pour les URLs externes, utilisez `window.location = url` plutôt que d'appeler `
 ```dts
 function goto(
 	url: string | URL,
-	opts?:
-		| {
-				replaceState?: boolean | undefined;
-				noScroll?: boolean | undefined;
-				keepFocus?: boolean | undefined;
-				invalidateAll?: boolean | undefined;
-				invalidate?:
-					| (string | URL | ((url: URL) => boolean))[]
-					| undefined;
-				state?: App.PageState | undefined;
-		  }
-		| undefined
+	opts?: {
+		replaceState?: boolean | undefined;
+		noScroll?: boolean | undefined;
+		keepFocus?: boolean | undefined;
+		invalidateAll?: boolean | undefined;
+		invalidate?:
+			| (string | URL | ((url: URL) => boolean))[]
+			| undefined;
+		state?: App.PageState | undefined;
+	}
 ): Promise<void>;
 ```
 
@@ -300,11 +298,9 @@ Renvoie une `Promise` qui est résolue lorsque la page a terminé sa mise à jou
 ```dts
 function refreshAll({
 	includeLoadFunctions
-}?:
-	| {
-			includeLoadFunctions?: boolean;
-	  }
-	| undefined): Promise<void>;
+}?: {
+	includeLoadFunctions?: boolean;
+}): Promise<void>;
 ```
 
 </div>

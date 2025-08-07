@@ -59,7 +59,7 @@ function command<Schema extends StandardSchemaV1, Output>(
 	validate: Schema,
 	fn: (arg: StandardSchemaV1.InferOutput<Schema>) => Output
 ): RemoteCommand<
-	StandardSchemaV1.InferOutput<Schema>,
+	StandardSchemaV1.InferInput<Schema>,
 	Output
 >;
 ```
@@ -179,13 +179,13 @@ function prerender<Schema extends StandardSchemaV1, Output>(
 	options?:
 		| {
 				inputs?: RemotePrerenderInputsGenerator<
-					StandardSchemaV1.InferOutput<Schema>
+					StandardSchemaV1.InferInput<Schema>
 				>;
 				dynamic?: boolean;
 		  }
 		| undefined
 ): RemotePrerenderFunction<
-	StandardSchemaV1.InferOutput<Schema>,
+	StandardSchemaV1.InferInput<Schema>,
 	Output
 >;
 ```
@@ -238,7 +238,7 @@ function query<Schema extends StandardSchemaV1, Output>(
 		arg: StandardSchemaV1.InferOutput<Schema>
 	) => MaybePromise<Output>
 ): RemoteQueryFunction<
-	StandardSchemaV1.InferOutput<Schema>,
+	StandardSchemaV1.InferInput<Schema>,
 	Output
 >;
 ```

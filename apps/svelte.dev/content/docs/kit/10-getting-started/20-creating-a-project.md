@@ -9,15 +9,16 @@ create` :
 ```sh
 npx sv create my-app
 cd my-app
-npm install
 npm run dev
 ```
 
 La première commande va préparer tout le nécessaire pour un nouveau projet dans le dossier `my-app`
-en vous demandant si vous souhaitez certains outillages de base comme TypeScript. Voir le chapitre
-sur les [intégrations](./integrations) pour plus d'infos sur les options d'outillage. Les commandes
-suivantes vont ensuite installer les dépendances et lancer un serveur sur
-[localhost:5173](http://localhost:5173).
+en vous demandant si vous souhaitez certains outillages de base comme TypeScript. Voir la
+[documentation sur les CLI](/docs/cli/overview) pour plus d'informations sur ces options, ainsi que
+le [chapitre sur les intégrations](./integrations) pour plus d'infos sur les options d'outillage.
+`npm run dev` vont ensuite lancer un serveur de développement sur
+[localhost:5173](http://localhost:5173) — assurez-vous d'installer les dépendances avant de lancer
+cette commande si vous ne l'avez pas fait lors de la création du projet.
 
 Il y a deux principes de base :
 

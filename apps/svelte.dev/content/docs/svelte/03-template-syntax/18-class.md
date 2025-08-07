@@ -82,7 +82,7 @@ tableaux et de chaînes de caractères :
 </Button>
 ```
 
-Svelte expose également le type `ClassValue`, qui est le type de valeur que l'attribut `class` des
+Depuis la version 5.19, Svelte expose également le type `ClassValue`, qui est le type de valeur que l'attribut `class` des
 éléments attend. Ceci est utile si vous renforcer le typage des noms de classe dans vos props de
 composant :
 

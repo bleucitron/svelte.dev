@@ -130,7 +130,7 @@ il y a alors moins de risques de casser des choses.
 
 Auparavant il était possible de tracer les URLs depuis les requêtes `fetch` venant du serveur pour
 permettre de ré-exécuter les fonctions `load`. Ceci posait un problème de sécurité potentiel (faire
-fuiter les URLs privées), et en conséquence ce comportement était activable avec le paramètre
+fuiter les URLs privées), et pour cette raison ce comportement était activable avec le paramètre
 `dangerZone.trackServerFetches`, qui n'existe plus avec la version 2.
 
 ## Les arguments de `preloadCode` doivent être préfixés avec `base` [!VO]`preloadCode` arguments must be prefixed with `base`
@@ -153,7 +153,7 @@ SvelteKit 1 possédait une fonction appelée `resolvePath` vous permettant de r�
 Malheureusement la valeur de retour n'incluait pas le chemin `base`, limitant son utilité dans les
 situations où la valeur `base` était définie.
 
-En conséquence, SvelteKit 2 remplace `resolvePath` par une fonction (un tout petit peu mieux nommée)
+Pour cette raison, SvelteKit 2 remplace `resolvePath` par une fonction (un tout petit peu mieux nommée)
 appelée `resolveRoute`, qui est importée depuis `$app/paths` et prend `base` en compte.
 
 ```js
@@ -189,8 +189,8 @@ Les modules `$env/dynamic/public` et `$env/dynamic/private` fournissent un accè
 d'environnement d'_exécution_, tandis que les variables d'environnement de _compilation_ sont
 exposées par `$env/static/public` et `$env/static/private`.
 
-Lors du pré-rendu avec SvelteKit 1, ces deux types de variables d'environnement sont les mêmes. En
-conséquence, les pages pré-rendues utilisant les variables d'environnement "dynamiques" sont en
+Lors du pré-rendu avec SvelteKit 1, ces deux types de variables d'environnement sont les mêmes. Ceci
+signifie que les pages pré-rendues utilisant les variables d'environnement "dynamiques" sont en
 réalité des values intégrées lors de la compilation, ce qui est incorrect. Pire encore,
 `$env/dynamic/public` est rempli dans le navigateur avec ces valeurs périmées s'il se trouve que
 l'utilisateur ou l'utilisatrice se trouve sur une page pré-rendue avant de naviguer vers des pages

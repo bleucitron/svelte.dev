@@ -269,8 +269,13 @@ d'informations.
 
 ### Accéder au système de fichiers [!VO]Accessing the file system
 
-Vous ne pouvez pas utiliser `fs` dans les Cloudflare Workers — vous devez
-[pré-rendre](page-options#prerender) les routes en question.
+Vous ne pouvez pas utiliser `fs` dans les Cloudflare Workers.
+
+Utilisez plutôt la fonction [`read`]($app-server#read) importée depuis `$app/server` pour accéder à
+vos fichiers. Elle fonctionne en récupérant le fichier depuis l'emplacement déployé des assets
+publics.
+
+De manière alternative, vous pouvez [pré-rendre](page-options#prerender) les routes en question.
 
 ## Migrer depuis Workers Sites [!VO]Migrating from Workers Sites
 
