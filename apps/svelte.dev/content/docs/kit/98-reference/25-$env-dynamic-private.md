@@ -20,7 +20,7 @@ import { env } from '$env/dynamic/private';
 console.log(env.DEPLOYMENT_SPECIFIC_VARIABLE);
 ```
 
-> En mode `dev`, `$env/dynamic` inclut toujours les variables d'environnement du fichier `.env`. En
+> [!NOTE] En mode `dev`, `$env/dynamic` inclut toujours les variables d'environnement du fichier `.env`. En
 > mode `prod`, ce comportement dépend de votre adaptateur.
 
 

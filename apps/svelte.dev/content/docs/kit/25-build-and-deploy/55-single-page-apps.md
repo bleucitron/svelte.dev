@@ -28,17 +28,19 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-static`, puis ajoutez-le
 configuration `svelte.config.js` avec les options suivantes :
 
 ```js
-// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			fallback: '200.html' // peut être différent selon l'hébergeur
 		})
 	}
 };
+
+export default config;
 ```
 
 La page `fallback` est une page HTML créée par SvelteKit à partir de votre gabarit de page (par ex.

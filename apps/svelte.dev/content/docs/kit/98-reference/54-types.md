@@ -206,6 +206,9 @@ telles quelles, à moins que vous sachiez ce que vous êtes en train de faire :
 }
 ```
 
+Utilisez la configuration [`typescript.config`](configuration#typescript) du fichier
+`svelte.config.js` pour étendre ou modifier le fichier `tsconfig.json` généré.
+
 ## $lib
 
 Ceci est un simple alias vers `src/lib`, ou vers n'importe quel dossier étant défini via l'option

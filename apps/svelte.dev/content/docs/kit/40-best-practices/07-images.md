@@ -49,7 +49,7 @@ projet basé sur Vite, incluant mais ne se limitant pas aux projets SvelteKit.
 Installez le paquet :
 
 ```sh
-npm install --save-dev @sveltejs/enhanced-img
+npm i -D @sveltejs/enhanced-img
 ```
 
 Ajustez le fichier `vite.config.js`:

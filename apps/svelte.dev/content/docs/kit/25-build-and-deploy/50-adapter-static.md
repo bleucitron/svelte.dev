@@ -17,11 +17,11 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-static`, puis ajoutez-le
 `svelte.config.js` :
 
 ```js
-// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// les options par défaut sont montrées. Sur certaines
@@ -35,6 +35,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 ... et ajoutez l'option [`prerender`](page-options#prerender) à votre layout racine :
@@ -62,13 +64,17 @@ Sur ces plateformes, vous devriez omettre les options d'adaptateur afin que l'ad
 `adapter-static` puisse fournir la configuration optimale :
 
 ```js
-// @errors: 2304
 /// file: svelte.config.js
-export default {
+import adapter from '@sveltejs/adapter-static';
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter(---{...}---)
 	}
 };
+
+export default config;
 ```
 
 ## Options
@@ -118,7 +124,7 @@ Vous allez également avoir besoin de générer une page `404.html` de secours p
 Voici une configuration possible pour Github Pages :
 
 ```js
-// @errors: 2307 2322
+// @errors: 2322
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
@@ -169,7 +175,7 @@ jobs:
           cache: npm
 
       - name: Installer les dépendances
-        run: npm install
+        run: npm i
 
       - name: build
         env:

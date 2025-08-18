@@ -31,7 +31,8 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-cloudflare`, puis ajoute
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-cloudflare';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// Voir plus bas pour une explication de ces options
@@ -49,6 +50,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 ## Options
@@ -183,9 +186,25 @@ projet, qui consistent en des namespaces KV/DO, etc. Il est passé à SvelteKit 
 ce qui signifie que vous pouvez y accéder dans les hooks et les endpoints :
 
 ```js
-// @errors: 7031
+// @filename: ambient.d.ts
+import { DurableObjectNamespace } from '@cloudflare/workers-types';
+
+declare global {
+	namespace App {
+		interface Platform {
+			env: {
+				YOUR_DURABLE_OBJECT_NAMESPACE: DurableObjectNamespace;
+			};
+		}
+	}
+}
+// @filename: +server.js
+// ---cut---
+// @errors: 2355 2322
+/// file: +server.js
+/** @type {import('./$types').RequestHandler} */
 export async function POST({ request, platform }) {
-	const x = platform.env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
+	const x = platform?.env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
 }
 ```
 
@@ -203,7 +222,7 @@ référencez-les dans votre fichier `src/app.d.ts` :
 declare global {
 	namespace App {
 		interface Platform {
-+++			env?: {
++++			env: {
 				YOUR_KV_NAMESPACE: KVNamespace;
 				YOUR_DURABLE_OBJECT_NAMESPACE: DurableObjectNamespace;
 			};+++
@@ -290,15 +309,19 @@ paramètres de configuration `assets.directory` et `assets.bindings` :
 ### svelte.config.js
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 ---import adapter from '@sveltejs/adapter-cloudflare-workers';---
 +++import adapter from '@sveltejs/adapter-cloudflare';+++
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter()
 	}
 };
+
+export default config;
 ```
 
 ### wrangler.toml

@@ -15,17 +15,19 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-vercel`, puis ajoutez-le
 `svelte.config.js` :
 
 ```js
-// @errors: 2307 2345
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-vercel';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// voir plus bas pour les options pouvant être définies ici
 		})
 	}
 };
+
+export default config;
 ```
 
 ## Configuration de déploiement [!VO]Deployment configuration
@@ -101,7 +103,8 @@ exemple, vous pouvez définir la configuration suivante :
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-vercel';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			images: {
@@ -113,6 +116,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 ## Incremental Static Regeneration
@@ -130,9 +135,9 @@ dynamiquement rendu.
 Pour ajouter l'ISR à une route, ajoutez la propriété `isr` à votre objet `config` :
 
 ```js
-// @errors: 2664
 import { BYPASS_TOKEN } from '$env/static/private';
 
+/** @type {import('@sveltejs/adapter-vercel').Config} */
 export const config = {
 	isr: {
 		expiration: 60,
@@ -199,7 +204,6 @@ et `$env/dynamic/private` (parfois — plus sur le sujet un peu plus tard), et i
 les versions publiques de ces modules. Pour accéder à l'une de ces variables depuis le client :
 
 ```js
-// @errors: 2305
 /// file: +layout.server.js
 import { VERCEL_COMMIT_REF } from '$env/static/private';
 

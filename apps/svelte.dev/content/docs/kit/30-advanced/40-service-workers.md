@@ -40,9 +40,24 @@ manière agressive, et met en cache toute autre requête lorsqu'elles se produis
 facto toute page visitée disponible en mode hors-ligne.
 
 ```js
-// @errors: 2339
+/// file: src/service-worker.js
+// Désactive l'accès au types du DOM comme `HTMLElement` qui ne sont pas disponibles
+// dans un service worker et instancie les variables globales pertinentes
+/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />
+/// <reference lib="webworker" />
+
+// Assure que l'import de `$service-worker` soit correctement typé
 /// <reference types="@sveltejs/kit" />
+
+// Uniquement nécessaire si vous avez un import depuis `$env/static/public`
+/// <reference types="../.svelte-kit/ambient.d.ts" />
+
 import { build, files, version } from '$service-worker';
+
+// La réassignation de `self` en `sw` vous permet de typer en castant dans le processus
+// (c'est la manière la plus simple de le faire sans fichiers additionnels)
+const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
 
 // Crée un nom de cache unique pour ce déploiement
 const CACHE = `cache-${version}`;
@@ -52,7 +67,7 @@ const ASSETS = [
 	...files  // tout ce qui est dans `static`
 ];
 
-self.addEventListener('install', (event) => {
+sw.addEventListener('install', (event) => {
 	// Create a new cache and add all files to it
 	// Crée un nouveau cache et y ajoute tous les fichiers
 	async function addFilesToCache() {
@@ -63,7 +78,7 @@ self.addEventListener('install', (event) => {
 	event.waitUntil(addFilesToCache());
 });
 
-self.addEventListener('activate', (event) => {
+sw.addEventListener('activate', (event) => {
 	// Supprime du disque les données précédemment mises en cache
 	async function deleteOldCaches() {
 		for (const key of await caches.keys()) {
@@ -74,7 +89,7 @@ self.addEventListener('activate', (event) => {
 	event.waitUntil(deleteOldCaches());
 });
 
-self.addEventListener('fetch', (event) => {
+sw.addEventListener('fetch', (event) => {
 	// ignorer les requêtes POST, etc
 	if (event.request.method !== 'GET') return;
 
@@ -147,37 +162,6 @@ navigator.serviceWorker.register('/service-worker.js', {
 ```
 
 > [!NOTE] `build` et `prerendered` sont des tableaux vides lors du développement.
-
-## Typage [!VO]Type safety
-
-Mettre en place des types propres pour les service workers nécessite un peu de configuration
-manuelle. Ajoutez les choses suivantes tout en haut de votre fichier `service-worker.js` :
-
-```js
-/// <reference types="@sveltejs/kit" />
-/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />
-/// <reference lib="webworker" />
-
-const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
-```
-```ts
-/// <reference types="@sveltejs/kit" />
-/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />
-/// <reference lib="webworker" />
-
-const sw = self as unknown as ServiceWorkerGlobalScope;
-```
-
-Ceci désactive l'accès aux types du DOM comme `HTMLElement` qui ne sont pas disponibles au sein d'un
-service worker et instancie les bons types globaux. La réassignation de `self` à `sw` vous permet de
-le caster au sein du processus (il existe quelques manières de faire cela, mais celle-ci est la plus
-simple et ne requiert aucun fichier additionnel). Utilisez `sw` plutôt que `self` dans le reste du
-fichier. La référence aux types de SvelteKit vous assure que l'import de `$service-worker` possède
-le bon typage. Si vous importez `$env/static/public`, vous devez soit ignorer l'import avec `//
-@ts-ignore` ou ajouter `/// <reference types="../.svelte-kit/ambient.d.ts" />` aux types de
-référence.
 
 ## Autres solutions [!VO]Other solutions
 

@@ -20,7 +20,8 @@ my-project/
 │ ├ error.html
 │ ├ hooks.client.js
 │ ├ hooks.server.js
-│ └ service-worker.js
+| ├ service-worker.js
+│ └ tracing.server.js
 ├ static/
 │ └ [your static assets]
 ├ tests/
@@ -73,6 +74,10 @@ composants qui ne seraient utilisés que pour une route spécifique
 - `hooks.client.js` contient vos [hooks](hooks) client
 - `hooks.server.js` contient vos [hooks](hooks) serveur
 - `service-worker.js` contient votre [service worker](service-workers)
+- `instrumentation.server.js` contient votre configuration d'[observabilité](observability) et du
+code d'instrumentation
+  - Requiert le support de l'adaptateur. Si votre adaptateur le supporte, il est garanti que ce
+	fichier soit exécuté avant le chargement et l'exécution de votre code applicatif.
 
 (Le fait que votre projet contienne des fichiers `.js` ou `.ts` dépend de si vous avez choisi
 d'utiliser TypeScript lorsque vous avez créé votre projet.)
@@ -110,7 +115,10 @@ Ce fichier (ou `jsconfig.json`, si vous préférez vérifier le typage dans des 
 que dans des fichiers `.ts`) configure TypeScript, si vous avec ajouté la vérification de types
 pendant `npx sv create`. Puisque SvelteKit repose sur le fait que certaines configurations doivent
 être définies d'une certaine manière, il génère lui-même son fichier `.svelte-kit/tsconfig.json` que
-votre propre configuration doit étendre avec `extends`.
+votre propre configuration doit étendre avec `extends`. Pour faire des changements aux options
+de premier niveau telles que `include` et `exclude`, nous recommandons d'étendre la configuration
+générée ; voir la section [sur le paramétrage de `typescript.config`](configuration#typescript) pour
+plus de détails.
 
 ### vite.config.js
 

@@ -535,6 +535,7 @@ Si vous avez un fichier `+server.js` associé à votre `+page.server.js`, les re
 `+page.server.js`, utilisez l'en-tête personnalisée `x-sveltekit-action` :
 
 ```js
+// @errors: 2532 2304
 const response = await fetch(this.action, {
 	method: 'POST',
 	body: data,

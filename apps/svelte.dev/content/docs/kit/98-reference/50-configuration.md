@@ -413,11 +413,100 @@ complètement supprimées. Voir les sections [`$env/static/private`](/docs/kit/$
 
 </div>
 
-Fonctionnalités expérimentales qui sont exclues du versionnement sémantique. Ces fonctionnalités
-peuvent changer ou être supprimées à tout moment.
+Fonctionnalités expérimentales. [_Hic sunt
+dracones_](https://fr.wikipedia.org/wiki/Hic_sunt_dracones). Ces fonctionnalités sont exclues du
+versionnement sémantique, et peuvent donc être sujettes à des breaking changesou être supprimées à
+tout moment.
 
 <div class="ts-block-property-children">
 
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+tracing?: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `{ server: false, serverFile: false }`
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Options permettant d'activer le suivi [OpenTelemetry](https://opentelemetry.io/) côté serveur pour
+les opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#Server-hooks-handle), les
+[fonctions `load`](/docs/kit/load), les [actions de
+formulaire](/docs/kit/hooks#Server-hooks-handle),
+et les [fonctions distantes](/docs/kit/remote-functions).
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```ts
+// @noErrors
+server?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Active l'émission côté serveur de spans [OpenTelemetry](https://opentelemetry.io/) pour les
+opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#Server-hooks-handle), les
+[fonctions `load`](/docs/kit/load), les [actions de
+formulaire](/docs/kit/hooks#Server-hooks-handle), et les [fonctions
+distantes](/docs/kit/remote-functions).
+
+</div>
+</div></div>
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+instrumentation?: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```ts
+// @noErrors
+server?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Active le fichier `instrumentation.server.js` pour le suivi et l'instrumentation de l'observabilité.
+
+</div>
+</div></div>
+
+</div>
+</div>
 <div class="ts-block-property">
 
 ```ts
@@ -445,7 +534,7 @@ n'est pas encore stable et peut changer ou être supprimée à tout moment.
 
 <div class="ts-block-property-bullets">
 
-
+- <span class="tag deprecated">déprécié</span>
 
 </div>
 
@@ -457,6 +546,27 @@ L'emplacement où trouver différents fichiers au sein de votre projet.
 
 ```ts
 // @noErrors
+src?: string;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span>
+- <span class="tag">par défaut</span> `"src"`
+- <span class="tag since">disponible depuis la version</span> v2.28
+
+</div>
+
+l'emplacement de votre code source
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
 assets?: string;
 ```
 
@@ -464,6 +574,7 @@ assets?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"static"`
 
 </div>
@@ -493,6 +604,7 @@ client?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/hooks.client"`
 
 </div>
@@ -512,6 +624,7 @@ server?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/hooks.server"`
 
 </div>
@@ -531,6 +644,7 @@ universal?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/hooks"`
 - <span class="tag since">disponible depuis la version</span> v2.3.0
 
@@ -554,6 +668,7 @@ lib?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/lib"`
 
 </div>
@@ -574,6 +689,7 @@ params?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/params"`
 
 </div>
@@ -593,6 +709,7 @@ routes?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/routes"`
 
 </div>
@@ -613,6 +730,7 @@ serviceWorker?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/service-worker"`
 
 </div>
@@ -633,6 +751,7 @@ appTemplate?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/app.html"`
 
 </div>
@@ -652,6 +771,7 @@ errorTemplate?: string;
 
 <div class="ts-block-property-bullets">
 
+- <span class="tag deprecated">déprécié</span>
 - <span class="tag">par défaut</span> `"src/error.html"`
 
 </div>
@@ -1243,44 +1363,7 @@ La contrepartie est que pour les chemins non visités, la résolution va prendre
 
 <div class="ts-block-property-children">
 
-<div class="ts-block-property">
 
-```ts
-// @noErrors
-register?: boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- <span class="tag">par défaut</span> `true`
-
-</div>
-
-Si oui ou non activer automatiquement le service worker, s'il existe.
-
-</div>
-</div>
-<div class="ts-block-property">
-
-```ts
-// @noErrors
-files?(filepath: string): boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- <span class="tag">par défaut</span> `(filename) => !/\.DS_Store/.test(filename)`
-
-</div>
-
-Détermine quels ficheirs de votre dossier `static` seront disponible dans `$service-worker.files`.
-
-</div>
-</div>
 
 </div>
 
@@ -1316,6 +1399,9 @@ Une fonction qui vous permet de modifier le fichier `tsconfig.json` généré. V
 configuration (recommandé) ou en renvoyer une nouvelle.
 Ceci est utile pour étendre un fichier `tsconfig.json` partagé se trouvant à la racine d'un
 monorepo, par exemple.
+
+Notez que tout chemin configuré ici doit être relatif au fichier de configuration généré, qui est
+écrit dans le fichier `.svelte-kit/tsconfig.json`.
 
 </div>
 </div>

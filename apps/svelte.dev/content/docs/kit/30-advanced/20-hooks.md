@@ -365,6 +365,7 @@ comme l'initialisation d'une connexion à une base de données.
 > — ne le supportent pas.
 
 ```js
+// @errors: 2307
 /// file: src/hooks.server.js
 import * as db from '$lib/server/database';
 
@@ -394,9 +395,8 @@ accessible en tant que `/en/about`, `/de/ueber-uns` ou `/fr/a-propos`. Vous pour
 ceci avec `reroute` :
 
 ```js
+// @errors: 2345 2304
 /// file: src/hooks.js
-// @errors: 2345
-// @errors: 2304
 
 /** @type {Record<string, string>} */
 const translated = {
@@ -427,9 +427,8 @@ des [mêmes bénéfices](load#Making-fetch-requests) que la fonction `fetch` fou
 [`handleFetch`](#Server-hooks-handleFetch) car la route n'est à ce moment-là pas encore déterminée.
 
 ```js
+// @errors: 2345 2304
 /// file: src/hooks.js
-// @errors: 2345`
-// @errors: 2304
 
 /** @type {import('@sveltejs/kit').Reroute} */
 export async function reroute({ url, fetch }) {
@@ -458,6 +457,7 @@ une fonction `encode`, qui encode les valeurs sur le serveur (ou renvoie une val
 qui n'est pas une instance du type) et une fonction `decode` correspondante :
 
 ```js
+// @errors: 2307
 /// file: src/hooks.js
 import { Vector } from '$lib/math';
 

@@ -460,6 +460,25 @@ read?: (details: { config: any; route: { id: string } }) => boolean;
 Teste le support de `read` depuis `$app/server`.
 
 </div>
+</div>
+<div class="ts-block-property">
+
+```dts
+instrumentation?: () => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Teste le support de `instrumentation.server.js`. Pour passer, l'adaptateur doit supporter
+l'exécution de `instrumentation.server.js` avant le code applicatif.
+
+</div>
 </div></div>
 
 </div>
@@ -499,7 +518,7 @@ type: Exclude<NavigationType, 'leave'>;
 
 Le type de navigation :
 - `enter`: L'application a été hydratée/démarrée
-- `form`: L'utilisateur ou utilisatrice a soumis un `<form>`
+- `form`: L'utilisateur ou utilisatrice a soumis un `<form method="GET">`
 - `link`: La navigation a été déclenchée par un clic sur un lien
 - `goto`: La navigation a été déclenchée par un appel à `goto(...)` ou une redirection
 - `popstate`: La navigation a été déclenchée par les boutons "précédent"/"suivant"
@@ -881,6 +900,77 @@ copy: (
 </div>
 
 Copie un fichier ou dossier.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+hasServerInstrumentationFile: () => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">renvoie</span> `true` si le fichier d'instrumentation serveur existe, `false`
+sinon
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Vérifie si le fichier d'instrumentation serveur existe.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+instrument: (args: {
+	entrypoint: string;
+	instrumentation: string;
+	start?: string;
+	module?:
+		| {
+				exports: string[];
+		  }
+		| {
+				generateText: (args: { instrumentation: string; start: string }) => string;
+		  };
+}) => void;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `options` un objet contenant les propriétés suivantes :
+- `options.entrypoint` le chemin vers le point d'entrée à suivre.
+- `options.instrumentation` le chemin vers le fichier d'instrumentation.
+- `options.start` le nom du fichier de démarrage. C'est en quoi `entryPoint` sera renommé.
+- `options.module` configuration pour le module de point d'entrée généré.
+- `options.module.generateText` une fonction qui reçoit les chemins relatifs vers les fichiers
+d'instrumentation et de démarrage, et génère le texte du module à suivre. Si non fourni,
+l'implémentation par défaut, qui utilise des `await` racine, sera utilisée.
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Instrumente `entrypoint` avec `instrumentation`.
+
+Renomme `entrypoint` en `start` et crée un nouveau module à l'emplacement `entrypoint`, module qui
+va importer `instrumentation` puis importer dynamiqument `start`. Ceci permet aux hooks de module
+nécessaires à l'instrumentation d'être chargés avant tout code applicatif.
+
+Avertissements :
+- Les "exports live" ne fonctionneront pas. Si votre adaptateur utilise les exports live, vos
+utilisateurs et utilisatrices devront manuellement importer l'instrumentation serveur au démarrage.
+- Si `tla` vaut `false`, l'auto-instrumentation OTEL peut ne pas fonctionner correctement.
+Utilisez-le si votre environnement le supporte.
+- Utilisez `hasServerInstrumentationFile` pour vérifier si l'utilisateur ou l'utilisatrice a un
+fichier d'instrumentation serveur ; si ce n'est pas le cas, vous ne devriez pas faire cela.
 
 </div>
 </div>
@@ -1504,6 +1594,64 @@ export async function load({ untrack, url }) {
 ```
 
 </div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+tracing: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+
+Accède aux spans de suivi. Si le suivi n'est pas activé ou si la fonction est exécutée dans le
+navigateur, ces spans ne feront rien.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Si oui ou non le suivi est activé.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span racine de la requête. Ce span est nommé `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span associé à la fonction `load` courante.
+
+</div>
+</div></div>
+
+</div>
 </div></div>
 
 ## LoadProperties
@@ -1514,7 +1662,7 @@ export async function load({ untrack, url }) {
 type LoadProperties<
 	input extends Record<string, any> | void
 > = input extends void
-	? undefined // needs to be undefined, because void will break intellisense
+	? undefined // doit être undefined, car void va casser l'intellisense
 	: input extends Record<string, any>
 		? input
 		: unknown;
@@ -1565,7 +1713,7 @@ type: Exclude<NavigationType, 'enter'>;
 <div class="ts-block-property-details">
 
 Le type de navigation :
-- `form` : L'utilisateur ou l'utilisatrice a soumis un élément `<form>`
+- `form` : L'utilisateur ou l'utilisatrice a soumis un élément `<form method="GET">`
 - `leave` : L'utilisateur ou l'utilisatrice quitte l'application soit parce que l'onglet a été fermé
 ou qu'une navigation vers un document différent se produit
 - `link` : La navigation a été déclenchée par un clic sur un lien
@@ -1691,13 +1839,17 @@ Informations à propos de la cible d'une navigation spécifique.
 <div class="ts-block">
 
 ```dts
-interface NavigationTarget {/*…*/}
+interface NavigationTarget<
+	Params extends
+		AppLayoutParams<'/'> = AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
 ```
 
 <div class="ts-block-property">
 
 ```dts
-params: Record<string, string> | null;
+params: Params | null;
 ```
 
 <div class="ts-block-property-details">
@@ -1722,7 +1874,7 @@ Informations à propos de la route cible
 <div class="ts-block-property-children"><div class="ts-block-property">
 
 ```dts
-id: string | null;
+id: RouteId | null;
 ```
 
 <div class="ts-block-property-details">
@@ -1752,7 +1904,7 @@ L'URL vers laquelle la navigation s'effectue
 ## NavigationType
 
 - `enter`: L'application a été hydratée/relancée
-- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form>` avec une méthode GET
+- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form method="GET">` avec une méthode GET
 - `leave`: L'utilisateur ou l'utilisatrice en train de quitter l'application en fermant l'onglet ou
 en utilisant les boutons précédent/suivant du navigateur pour aller sur un document différent
 - `link` : La navigation a été déclenchée par un clic sur un lien
@@ -1807,7 +1959,7 @@ type: Exclude<NavigationType, 'enter' | 'leave'>;
 
 Le type de navigation :
 
-- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form>`
+- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form method="GET">`
 - `link` : La navigation a été déclenchée par un clic sur un lien
 - `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
 - `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
@@ -2036,14 +2188,16 @@ distantes](/docs/kit/remote-functions#command) pour lire la documentation compl�
 <div class="ts-block">
 
 ```dts
-type RemoteCommand<Input, Output> = (arg: Input) => Promise<
-	Awaited<Output>
-> & {
-	updates(
-		...queries: Array<
-			RemoteQuery<any> | RemoteQueryOverride
-		>
-	): Promise<Awaited<Output>>;
+type RemoteCommand<Input, Output> = {
+	(arg: Input): Promise<Awaited<Output>> & {
+		updates(
+			...queries: Array<
+				RemoteQuery<any> | RemoteQueryOverride
+			>
+		): Promise<Awaited<Output>>;
+	};
+	/** The number of pending command executions */
+	get pending(): number;
 };
 ```
 
@@ -2100,6 +2254,8 @@ type RemoteForm<Result> = {
 	): Omit<RemoteForm<Result>, 'for'>;
 	/** Le résultat de la soumission du formulaire */
 	get result(): Result | undefined;
+	/** Le nombre de soumissions en cours */
+	get pending(): number;
 	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
 	buttonProps: {
 		type: 'submit';
@@ -2125,6 +2281,8 @@ type RemoteForm<Result> = {
 			formaction: string;
 			onclick: (event: Event) => void;
 		};
+		/** The number of pending submissions */
+		get pending(): number;
 	};
 };
 ```
@@ -2160,7 +2318,7 @@ type RemoteQuery<T> = RemoteResource<T> & {
 	 */
 	refresh(): Promise<void>;
 	/**
-	 * Surcharge temporairement la valeur de la query. Ceci est utilisé avec la méthode `updates` d'une [`command`](/docs/kit/remote-functions#command-Single-flight-mutations) ou d'une [soumission de formulaire améliorée](/docs/kit/remote-functions#form-enhance) pour fournir des mises-à-jour optimistes.
+	 * Surcharge temporairement la valeur de la query. Ceci est utilisé avec la méthode `updates` d'une [`command`](/docs/kit/remote-functions#command-Updating-queries) ou d'une [soumission de formulaire améliorée](/docs/kit/remote-functions#form-enhance) pour fournir des mises-à-jour optimistes.
 	 *
 	 * ```svelte
 	 * <script>
@@ -2478,6 +2636,63 @@ isSubRequest: boolean;
 
 Vaut `true` pour les appels `+server.js` venant de SvelteKit sans la surcharge d'une requête HTTP.
 Ceci se produit lorsque vous faites des requêtes `fetch` ayant la même origine sur le serveur.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+tracing: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Accède aux spans de suivi. Si le suivi n'est pas activé, ces spans ne feront rien.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Si oui ou non le suivi est activé.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span racine de la requête. Ce span est nommé `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span associé au hook `handle` courant, à la fonction `load` courante, ou à l'action de formulaire
+courante.
+
+</div>
+</div></div>
 
 </div>
 </div>
@@ -3018,6 +3233,62 @@ export async function load({ untrack, url }) {
 	}
 }
 ```
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+tracing: {/*…*/}
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.31.0
+
+</div>
+
+Accède aux span de suivi. Si le suivi n'est pas activé, ces spans ne feront rien.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+enabled: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Si oui ou non le suivi est activé.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+root: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span racine pour la requête. Ce span est nommé `sveltekit.handle.root`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+current: Span;
+```
+
+<div class="ts-block-property-details">
+
+Le span associé avec la fonction `load` de serveur courante.
+
+</div>
+</div></div>
 
 </div>
 </div></div>

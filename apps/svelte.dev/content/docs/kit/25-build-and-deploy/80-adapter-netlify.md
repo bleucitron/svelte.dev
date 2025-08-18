@@ -15,11 +15,11 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-netlify`, puis ajoutez-l
 `svelte.config.js` :
 
 ```js
-// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-netlify';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		// les options par défaut sont affichées
 		adapter: adapter({
@@ -34,6 +34,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 Ensuite, assurez-vous que vous avez un fichier
@@ -70,11 +72,11 @@ site. Si l'option est définie à `false` (par défaut), le site sera déployé 
 basées sur Node.
 
 ```js
-// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-netlify';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// va créer une Netlify Edge Function utilisant Deno
@@ -83,6 +85,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 ## Alternatives Netlify à certaines fonctionnalités SvelteKit [!VO]Netlify alternatives to SvelteKit functionality
@@ -142,10 +146,15 @@ dans la configuration de l'adaptateur ou des [fonctions
 edge](https://docs.netlify.com/edge-functions/overview/#app) lorsqu'elle vaut `true`.
 
 ```js
-// @errors: 2705 7006
+// @errors: 2339
+// @filename: ambient.d.ts
+/// <reference types="@sveltejs/adapter-netlify" />
+// @filename: +page.server.js
+// ---cut---
 /// file: +page.server.js
+/** @type {import('./$types').PageServerLoad} */
 export const load = async (event) => {
-	const context = event.platform.context;
+	const context = event.platform?.context;
 	console.log(context); // s'affiche dans les logs de vos fonctions dans l'application Netlify
 };
 ```

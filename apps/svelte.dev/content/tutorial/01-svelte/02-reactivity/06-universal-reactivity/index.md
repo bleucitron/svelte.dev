@@ -7,7 +7,7 @@ composants. Mais nous pouvons également utiliser les runes _en dehors_ des comp
 pour partager un état global.
 
 Les composants `<Counter>` de cet exercice importent tous un objet `counter` depuis `shared.js`.
-Mais il s'agit d'un objet normal, et rien ne se produit lorsque vous cliquez sur les boutons.
+Mais il s'agit d'un objet normal, et donc rien ne se produit lorsque vous cliquez sur les boutons.
 Ajoutons `$state(...)` autour de l'objet :
 
 ```js

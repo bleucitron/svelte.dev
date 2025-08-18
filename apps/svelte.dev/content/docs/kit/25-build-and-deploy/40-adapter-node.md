@@ -16,11 +16,14 @@ fichier `svelte/config.js` :
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-node';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter()
 	}
 };
+
+export default config;
 ```
 
 ## Déployer
@@ -212,7 +215,8 @@ L'adaptateur peut être configuré avec différentes options :
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-node';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// les options par défaut sont affichées
@@ -222,6 +226,8 @@ export default {
 		})
 	}
 };
+
+export default config;
 ```
 
 ### out
@@ -293,7 +299,7 @@ La plupart des systèmes d'exploitation Linux d'aujourd'hui utilisent un gestion
 moderne appelé systemd pour lancer un serveur et gérer les services. Vous pouvez configurer votre
 serveur pour allouer un socket, démarrer et dimensionner votre application à la demande. Ce
 processus est appelé [activation de
-socket](http://0pointer.de/blog/projects/socket-activated-containers.html). Dans ce cas, l'OS va
+socket](https://0pointer.de/blog/projects/socket-activated-containers.html). Dans ce cas, l'OS va
 fournir deux variables d'environnement à votre application — `LISTEN_PID` et `LISTEN_FDS`.
 L'adaptateur va ensuite écouter le "file descriptor 3" qui fait référence à un socket systemd que
 vous devrez créer.

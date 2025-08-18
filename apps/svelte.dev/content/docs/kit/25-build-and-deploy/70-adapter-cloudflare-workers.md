@@ -23,13 +23,16 @@ fichier `svelte.config.js` :
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-cloudflare-workers';
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		adapter: adapter({
 			// voir plus bas pour les options que vous pouvez définir ici
 		})
 	}
 };
+
+export default config;
 ```
 
 ## Options
@@ -108,9 +111,25 @@ projet, qui consistent en des namespaces KV/DO, etc. Il est passé à SvelteKit 
 ce qui signifie que vous pouvez y accéder dans les hooks et les endpoints :
 
 ```js
-// @errors: 7031
+// @filename: ambient.d.ts
+import { DurableObjectNamespace } from '@cloudflare/workers-types';
+
+declare global {
+	namespace App {
+		interface Platform {
+			env: {
+				YOUR_DURABLE_OBJECT_NAMESPACE: DurableObjectNamespace;
+			};
+		}
+	}
+}
+// @filename: +server.js
+// ---cut---
+// @errors: 2355 2322
+/// file: +server.js
+/** @type {import('./$types').RequestHandler} */
 export async function POST({ request, platform }) {
-	const x = platform.env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
+	const x = platform?.env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
 }
 ```
 

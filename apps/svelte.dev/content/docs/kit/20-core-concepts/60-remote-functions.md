@@ -17,18 +17,27 @@ Combinées avec le support expérimental de Svelte pour [`await`](/docs/svelte/a
 elles vous permettent de charger et de manipuler les données directement au sein de vos composants.
 
 Cette fonctionnalité est actuellement expérimentale, ce qui signifie qu'elle contient très
-certainement des bugs, et peut être modifiée à tout moment. Vous devez l'activer en ajouter l'option
-`kit.experimental.remoteFunctions` dans votre fichier `svelte.config.js` :
+certainement des bugs, et peut être modifiée à tout moment. Vous devez l'activer en ajoutant
+l'option `kit.experimental.remoteFunctions` dans votre fichier `svelte.config.js`, et de manière
+optionnelle en ajoutant l'option `kit.experimental.remoteFunctions` dans votre `svelte.config.js` :
 
 ```js
 /// file: svelte.config.js
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
 	kit: {
 		experimental: {
 			+++remoteFunctions: true+++
 		}
+	},
+	compilerOptions: {
+		experimental: {
+			+++async: true+++
+		}
 	}
 };
+
+export default config;
 ```
 
 ## Aperçu [!VO]Overview
@@ -37,7 +46,7 @@ Les fonctions distantes (_remote_) sont exportées depuis un fichier `.remote.js
 sont disponibles en quatre versions : `query`, `form`, `command`, et `prerender`. Sur le client, les
 fonctions exportées sont transformées en wrappers autour de `fetch` qui invoquent leur contrepartie
 sur le serveur en utilisant un endpoint HTTP généré. Les fichiers `.remote.` doivent être placés
-dans les dossiers `lib` ou `routes`.
+dans le dossier `src`.
 
 ## query
 
@@ -108,6 +117,8 @@ les propriétés `loading`, `error` et `current` de la query :
 
 	const query = getPosts();
 </script>
+
+<h1>Recent posts</h1>
 
 {#if query.error}
 	<p>oups !</p>
@@ -571,12 +582,13 @@ d'évènement :
 
 > [!NOTE] Les commandes ne peuvent pas être appelées lors du rendu.
 
-### Mutations single-flight [!VO]Single-flight mutations
+### Mettre à jour les queries [!VO]Updating queries
 
-Comme avec les formulaires, toute query sur la page (comme `getLikes(item.id)` dans l'exemple
-ci-dessus) sera automatiquement mise à jour à la suite d'une commande qui se passe bien. Mais nous
-pouvons rendre les choses plus efficaces en disant à SvelteKit quelles queries seront affectées par
-la commande, soit au sein de la commande elle-même...
+Pour mettre à jour `getLikes(item.id)`, ou toute autre query, nous avons besoin de préciser à
+SvelteKit _quelles_ queries nécessitent d'être rafraîchies (au contraire de `form`, qui invalide
+tout par défaut, pour se rapprocher du comportement natif d'une soumission de formulaire).
+
+Nous faisons cela soit au sein de la commande elle-même...
 
 ```js
 /// file: likes.remote.js

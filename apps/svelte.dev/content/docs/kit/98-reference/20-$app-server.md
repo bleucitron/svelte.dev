@@ -111,10 +111,7 @@ méthode doit être appelée de manière synchrone (c'est-à-dire pas après un 
 <div class="ts-block">
 
 ```dts
-function getRequestEvent(): RequestEvent<
-	AppLayoutParams<'/'>,
-	any
->;
+function getRequestEvent(): RequestEvent;
 ```
 
 </div>
