@@ -37,26 +37,14 @@ préciser une configuration de déploiement, soit au travers de l'option montré
 [`export const config`](page-options#config) au sein des fichiers `+server.js`, `+page(.server).js`
 et `+layout(.server).js`.
 
-Par exemple, vous pourriez déployer certaines parties de votre application en tant que [Edge
-Functions](https://vercel.com/docs/concepts/functions/edge-functions)...
+Par exemple, vous pourriez déployer une route spécifique en tant que fonction serverless
+individuelle, à l'écart du reste de votre application :
 
 ```js
 /// file: about/+page.js
 /** @type {import('@sveltejs/adapter-vercel').Config} */
 export const config = {
-	runtime: 'edge'
-};
-```
-
-... et d'autres en tant que [Serverless
-Functions](https://vercel.com/docs/concepts/functions/serverless-functions) (notez qu'en précisant
-une `config` au sein d'un layout, celle-ci va s'appliquer à toutes les pages enfant de ce layout) :
-
-```js
-/// file: admin/+layout.js
-/** @type {import('@sveltejs/adapter-vercel').Config} */
-export const config = {
-	runtime: 'nodejs22.x'
+	split: true
 };
 ```
 
@@ -65,6 +53,9 @@ Les options suivantes s'appliquent à toutes les fonctions :
 - `runtime` : `'edge'`, `'nodejs18.x'`, `'nodejs20.x'` ou `'nodejs22.x'`. Par défaut, l'adaptateur
 va choisir la version de Node `'nodejs<version>.x` correspondant à la version sur laquelle votre
 projet est configuré sur l'interface de Vercel
+	> [!NOTE] Cette option est dépréciée et sera supprimée dans une version future, et à ce moment-là
+	> toutes vos fonctions utiliseront la version de Node spécifée dans la configuration de projet de
+	> Vercel
 - `regions` : un tableau de [régions du réseau
 edge](https://vercel.com/docs/concepts/edge-network/regions) (par défaut `["iad1"]` pour les
 fonctions serverless) ou `'all'` si `runtime` vaut `edge` (sa valeur par défaut). Notez que
@@ -88,9 +79,13 @@ maximum](https://vercel.com/docs/functions/runtimes#max-duration) de la fonction
 `10` secondes pour les comptes Hobby, `15` pour les comptes Pro et `900` pour les comptes Enterprise
 - `isr` : configuration de l'ISR (Incremental Static Regeneration), décrite un peu plus bas
 
+Une configuration définie dans un layout s'applique à toutes les routes en-dessous de ce layout, à
+moins qu'elle ne soit surchargée à un niveau plus granulaire.
+
 Si vos fonctions ont besoin d'accéder à des données dans une région précise, il est recommandé
 qu'elles soient déployées dans la même région (ou dans une région proche) pour des performances
 optimales.
+
 
 ## Optimisation d'image [!VO]Image Optimization
 
@@ -127,10 +122,10 @@ Regeneration](https://vercel.com/docs/incremental-static-regeneration) (ISR), qu
 performance et les avantages de coûts d'un contenu pré-rendu avec la flexibilité d'un contenu
 dynamiquement rendu.
 
-> Utilisez l'ISR uniquement pour les routes sur lesquelles chaque visiteur ou visiteuse devrait voir
-> le même contenu (comme pour le pré-rendu). S'il y a du contenu spécifique à l'utilisateur (comme
-> des cookies de session), celui-ci devrait être géré sur le client avec JavaScript afin de ne pas
-> faire fuiter d'information sensible entre les visites.
+> [!NOTE] Utilisez l'ISR uniquement pour les routes sur lesquelles chaque visiteur ou visiteuse
+> devrait voir le même contenu (comme pour le pré-rendu). S'il y a du contenu spécifique à
+> l'utilisateur (comme des cookies de session), celui-ci devrait être géré sur le client avec
+> JavaScript afin de ne pas faire fuiter d'information sensible entre les visites.
 
 Pour ajouter l'ISR à une route, ajoutez la propriété `isr` à votre objet `config` :
 
@@ -147,8 +142,8 @@ export const config = {
 };
 ```
 
-> Utiliser l'ISR sur une route avec `export const prerender = true` n'aura aucun effet, puisque la
-> route est alors pré-rendue au moment de la compilation.
+> [!NOTE] Utiliser l'ISR sur une route avec `export const prerender = true` n'aura aucun effet,
+> puisque la route est alors pré-rendue au moment de la compilation.
 
 La propriété `expiration` est requise ; toutes les autres sont optionnelles. Les propriétés sont
 détaillées ci-dessous.
@@ -193,7 +188,8 @@ Une liste de paramètres de requête valides contribuant à la clé de cache. D'
 les codes de tracking utm) seront ignorés, assurant qu'ils n'amènent pas du contenu à être re-généré
 sans raison. Par défaut, les paramètres de requête sont ignorés.
 
-> Les pages qui sont [pré-rendues](page-options#prerender) vont ignorer la configuration ISR.
+> [!NOTE] Les pages qui sont [pré-rendues](page-options#prerender) vont ignorer la configuration
+> ISR.
 
 ## Variables d'environnement [!VO]Environment variables
 

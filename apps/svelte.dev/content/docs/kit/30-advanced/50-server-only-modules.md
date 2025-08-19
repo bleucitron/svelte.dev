@@ -57,10 +57,13 @@ export const add = (a, b) => a + b;
 ... SvelteKit va produire une erreur :
 
 ```
-Cannot import $lib/server/secrets.js into public-facing code:
-- src/routes/+page.svelte
-	- src/routes/utils.js
-		- $lib/server/secrets.js
+Cannot import $lib/server/secrets.ts into code that runs in the browser, as this could leak sensitive information.
+
+ src/routes/+page.svelte imports
+  src/routes/utils.js imports
+   $lib/server/secrets.ts
+
+If you're only using the import as a type, change it to `import type`.
 ```
 
 Même si le code exposé au public — `src/routes/+page.svelte` — n'utilise que l'export `add` et non
@@ -68,9 +71,7 @@ l'export secret `atlantisCoordinates`, le code secret pourrait se retrouver dans
 le navigateur télécharge, ce qui implique que toute la chaîne d'import est considérée non sécurisée.
 
 Cette fonctionnalité fonctionne également avec les imports dynamiques, même ceux interpolés comme
-``await import(`./${foo}.js`)``, avec un petit inconvénient : pendant le développement, s'il y a
-deux imports dynamiques ou plus entre le code exposé au public et le module réservé au serveur,
-l'import illégal ne sera pas détecté la première fois que le code est chargé.
+``await import(`./${foo}.js`)``.
 
 > [!NOTE] Les frameworks de test unitaire comme Vitest ne font pas la différence entre le code
 > réservé au serveur et celui exposé au public. Pour cette raison, la détection d'imports illégaux

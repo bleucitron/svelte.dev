@@ -1245,6 +1245,38 @@ cette fonction, la compilation va échouer
 
 ```ts
 // @noErrors
+handleUnseenRoutes?: PrerenderUnseenRoutesHandlerValue;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `"fail"`
+- <span class="tag since">disponible depuis la version</span> v2.16.0
+
+</div>
+
+Comment répondre lorsqu'une route est marquée comme pouvant être pré-rendue mais ne l'a été.
+
+- `'fail'` — faire échouer la compilation
+- `'ignore'` — ignorer l'échec en silence et continuer
+- `'warn'` — continuer, mais afficher un avertissement
+- `(details) => void` — un gestionnaire d'erreur personnalisé qui accepte un objet `details` ayant
+une propriété `routes` contenant toutes les routes n'ayant pas été pré-rendues. Si vous jetez une
+erreur depuis cette fonction, la compilation va échouer
+
+Le comportement par défaut est d'échouer la compilation. Ceci peut ne pas être pertinent lorsque
+vous savez que certaines de vos routes ne seront jamais atteintes dans certaines circonstances,
+comme lorsqu'un CMS ne renvoie pas de données pour un sujet donné, amenant certaines routes à ne pas
+être atteintes.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
 origin?: string;
 ```
 

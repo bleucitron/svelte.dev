@@ -4101,6 +4101,37 @@ type PrerenderOption = boolean | 'auto';
 
 </div>
 
+## PrerenderUnseenRoutesHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderUnseenRoutesHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { routes: string[]; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## PrerenderUnseenRoutesHandlerValue
+
+<div class="ts-block">
+
+```dts
+type PrerenderUnseenRoutesHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderUnseenRoutesHandler;
+```
+
+</div>
+
 ## Prerendered
 
 <div class="ts-block">

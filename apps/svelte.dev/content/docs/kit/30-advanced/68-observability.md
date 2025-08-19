@@ -120,3 +120,16 @@ sdk.start();
 
 À partir de maintenant, les requêtes côté serveur vont générer des traces, que vous pouvez afficher
 dans la console web de Jaeger sur [localhost:16686](http://localhost:16686).
+
+## `@opentelemetry/api`
+
+SvelteKit utilise `@opentelemetry/api` pour générer ses spans. Ce paquet est déclaré en tant que
+peerDependency optionnelle afin que les utilisateurs et utilisatrices ne nécessitant pas de suivi ne
+voient pas d'impact sur les tailles de bundle ou sur les performances d'exécution. Dans la plupart
+des cas, si vous configurez votre application pour collecter les spans de SvelteKit, vous finirez
+par installer une librairie comme `@opentelemetry/sdk-node` ou `@vercel/otel`, qui elles-mêmes
+dépendent de `@opentelemetry/api`, ce qui sera donc compatible avec les dépendances de SvelteKit. Si
+vous voyez une erreur venant de SvelteKit vous disant qu'il n'arrive pas à trouver
+`@opentelemetry/api`, il est possible que vous n'ayez pas encore mis en place votre suivi. Si vous
+l'_avez fait_ et avez toujours l'erreur, vous pouvez installer le paquet `@opentelemetry/api`
+vous-même.

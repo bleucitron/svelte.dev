@@ -118,7 +118,7 @@ les propriétés `loading`, `error` et `current` de la query :
 	const query = getPosts();
 </script>
 
-<h1>Recent posts</h1>
+<h1>Articles récents</h1>
 
 {#if query.error}
 	<p>oups !</p>

@@ -55,9 +55,8 @@ facto toute page visitée disponible en mode hors-ligne.
 
 import { build, files, version } from '$service-worker';
 
-// La réassignation de `self` en `sw` vous permet de typer en castant dans le processus
-// (c'est la manière la plus simple de le faire sans fichiers additionnels)
-const sw = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (self));
+// Ceci donne à `self` le typage correct
+const self = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (globalThis.self));
 
 // Crée un nom de cache unique pour ce déploiement
 const CACHE = `cache-${version}`;
@@ -67,7 +66,7 @@ const ASSETS = [
 	...files  // tout ce qui est dans `static`
 ];
 
-sw.addEventListener('install', (event) => {
+self.addEventListener('install', (event) => {
 	// Create a new cache and add all files to it
 	// Crée un nouveau cache et y ajoute tous les fichiers
 	async function addFilesToCache() {
@@ -78,7 +77,7 @@ sw.addEventListener('install', (event) => {
 	event.waitUntil(addFilesToCache());
 });
 
-sw.addEventListener('activate', (event) => {
+self.addEventListener('activate', (event) => {
 	// Supprime du disque les données précédemment mises en cache
 	async function deleteOldCaches() {
 		for (const key of await caches.keys()) {
@@ -89,8 +88,8 @@ sw.addEventListener('activate', (event) => {
 	event.waitUntil(deleteOldCaches());
 });
 
-sw.addEventListener('fetch', (event) => {
-	// ignorer les requêtes POST, etc
+self.addEventListener('fetch', (event) => {
+	// ignore les requêtes POST, etc
 	if (event.request.method !== 'GET') return;
 
 	async function respond() {
