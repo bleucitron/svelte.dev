@@ -16,12 +16,13 @@ import type { RouteId, RouteParams, LayoutParams } from '$app/types';
 
 ## Asset
 
-Une union de tous les chemins de fichiers des assets contenus dans votre dossier `static`.
+Une union de tous les chemins de fichiers des assets contenus dans votre dossier `static`, plus un
+joker `string` pour les chemins de fichiers générés depuis les déclarations d'`import`.
 
 <div class="ts-block">
 
 ```dts
-type Asset = '/favicon.png' | '/robots.txt';
+type Asset = '/favicon.png' | '/robots.txt' | (string & {});
 ```
 
 </div>
@@ -53,8 +54,8 @@ type Pathname = '/' | '/my-route' | `/my-other-route/${string}` & {};
 
 ## ResolvedPathname
 
-Similaire à `Pathname`, mais possiblement préfixé avec un [chemin de
-base](https://svelte.dev/docs/kit/configuration#paths). Utilisé pour `page.url.pathname`.
+Similaire à `Pathname`, mais possiblement préfixé avec un [chemin de base](configuration#paths).
+Utilisé pour `page.url.pathname`.
 
 <div class="ts-block">
 

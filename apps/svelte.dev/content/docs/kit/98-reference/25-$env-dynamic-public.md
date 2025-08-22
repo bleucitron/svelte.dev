@@ -12,8 +12,6 @@ Notez que les variables d'environnement dynamiques publiques doivent toutes êtr
 serveur vers le client, impliquant des requêtes réseau plus lourdes — lorsque c'est possible,
 utilisez plutôt `$env/static/public`.
 
-Les variables d'environnement dynamiques ne peuvent pas être utilisées lors du pré-rendu.
-
 ```ts
 import { env } from '$env/dynamic/public';
 console.log(env.PUBLIC_DEPLOYMENT_SPECIFIC_VARIABLE);

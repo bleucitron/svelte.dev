@@ -21,7 +21,14 @@ Le rendu sur le réseau edge fait référence à effectuer le rendu de l'applica
 distribution de contenu (CDN) proche de l'utilisateur ou utilisatrice. Le rendu edge permet à la
 requête et à la réponse de parcourir une plus courte distance, et donc d'améliorer la latence.
 
+## Application hybride [!VO]Hybrid app
+
+SvelteKit utilise une approche de rendu hybride par défaut lors de laquelle il charge le HTML
+initial depuis le serveur (SSR), puis met à jour le contenu de la page lors des navigations
+suivantes via du rendu côté client (CSR).
+
 ## Hydratation [!VO]Hydration
+
 
 Les composants Svelte stockent de l'état et mettent à jour le DOM lorsque cet état change. Lorsqu'il
 récupère des données lors du SSR, SvelteKit va par défaut stocker ces données et les transmettre au
@@ -99,17 +106,19 @@ l'option [`data-sveltekit-reload`](link-options#data-sveltekit-reload).
 ## SPA
 
 Une SPA (Single-page Application) est une application dans laquelle toutes les requêtes vers les
-serveur chargent un seul et unique fichier HTML qui effectue ensuite le rendu côté client des
-contenus demandés en fonction de l'URL requêtée. Toutes les navigations sont gérées côté client dans
-un processus appelé "routing côté client", chaque page mettant à jour son contenu et les éléments de
-layout restant en grande majorité inchangés. Les SPA ne fournissent pas de SSR et ont en conséquence
-de moins bonnes performances et un moins bon référencement. Cependant, certaines applications ne
-sont pas grandement impactées par ces problématiques, comme par exemple une application orientée
-business avec des fonctionnalités complexes et n'étant accessible que derrière une authentification,
-réduisant l'importance du référencement, et dont on sait que les utilisateurs et utilisatrices y
-accèderont dans un environnement consistant et maîtrisé.
+serveur chargent un seul et unique fichier HTML qui effectue ensuite le rendu côté client en
+fonction de l'URL requêtée. Toutes les navigations sont gérées côté client dans un processus appelé
+"routing côté client", chaque page mettant à jour son contenu et les éléments de layout restant en
+grande majorité inchangés. Dans le contenu de ce site, lorsque nous faisons référence à une SPA,
+nous utilisons la définition qui décrit une SPA comme une application rendant uniquement une coque
+vide lors de la requête initiale. Il ne faut pas confondre ce concept avec une [Application
+hybride](#Hybrid-app), qui sert du HTML pour la requête initiale. Une SPA a un impact significatif
+sur les performances en forçant deux aller-retours réseau avant de pouvoir commencer à afficher
+quelque chose. Puisque le mode SPA de tels impacts négatifs sur les performances et sur le
+référencement, nous recommandons son utilisation dans des cas d'usage très limités, comme lorsque
+vous embarquez votre site dans une application mobile.
 
-Avec SvelteKit, vous pouvez [construire une SPA avec l'adaptateur
+Avec SvelteKit, vous pouvez [construire des SPA avec l'adaptateur
 `adapter-static`](single-page-apps).
 
 ## SSG
@@ -127,13 +136,15 @@ Avec SvelteKit, vous pouvez faire de la génération de site statique en utilisa
 
 ## SSR
 
-Le rendu côté serveur (SSR) est la génération du contenu d'une page sur le serveur. Le SSR est la
-stratégie généralement adoptée pour optimiser le référencement. Bien que certains moteurs de
-recherche soient capables d'indexer du contenu dynamiquement généré côté client, cela peut prendre
-plus de temps dans ces situations. Le SSR a également tendance à améliorer les performances perçues
-et rendent votre application plus accessible aux utilisateurs et utilisatrices si JavaScript n'est
-pas disponible (ce qui se produit [plus souvent qu'on ne le
-pense](https://kryogenix.org/code/browser/everyonehasjs.html)).
+Le rendu côté serveur (SSR) est la génération du contenu d'une page sur le serveur. Renvoyer le
+contenu de la page depuis le serveur via du SSR ou du pré-rendu est largement préférable pour les
+performances ou le référencement. Cela améliore significativement les performances en évitant
+l'introduction d'aller-retours supplémentaires qu'impose une SPA, et rend votre application plus
+accessible aux utilisateurs et utilisatrices si JavaScript n'est pas disponible (ce qui se produit
+[plus souvent qu'on ne le
+pense](https://kryogenix.org/code/browser/everyonehasjs.html)). Bien que certains moteurs de
+recherche soient capables d'indexer du contenu dynamiquement généré sur le client, cela prend
+généralement plus de temps.
 
 Avec SvelteKit, les pages sont rendues sur le serveur par défaut. Vous pouvez désactiver le SSR avec
 l'[option de page `ssr`](page-options#ssr).

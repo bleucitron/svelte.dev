@@ -369,6 +369,8 @@ en ajoutant `src/lib` à `files` dans votre fichier `package.json` :
 - `-o`/`--output` — le dossier de sortie où les fichiers traités sont écrits. Le champ `exports` de
 	votre fichier `package.json` devrait pointer vers des fichiers qui s'y trouvent, et le tableau
 `files` devrait inclure ce dossier. Vaut par défaut `dist`
+- `-p`/`--preserve-output` — empêche la suppression du dossier d'output avant le packaging. Vaut par
+défaut `false`, ce qui veut dire que le dossier d'output sera d'abord vidé
 - `-t`/`--types` — si oui ou non créer des définitions de type (des fichiers `.d.ts`). Nous
 recommandons fortement de le faire car cela améliore globalement la qualité de l'écosytème. Vaut
 par défaut `true`

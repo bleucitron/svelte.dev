@@ -827,7 +827,7 @@ export const getStuff = query('unchecked', async ({ id }: { id: string }) => {
 ## Utiliser `getRequestEvent` [!VO]Using `getRequestEvent`
 
 Dans une fonction `query`, `form` ou `command`, vous pouvez utiliser
-[`getRequestEvent`](/docs/kit/$app-server#getRequestEvent) pour obtenir l'objet
+[`getRequestEvent`]($app-server#getRequestEvent) pour obtenir l'objet
 [`RequestEvent`](@sveltejs-kit#RequestEvent) courant. Ceci permet de construire simplement des
 abstractions pour interagir avec des cookies, par exemple :
 
@@ -863,7 +863,7 @@ détail d'implémentation).
 ## Redirections [!VO]Redirects
 
 Au sein d'une fonction `query`, `form` ou `prerender`, il est possible d'utiliser la fonction
-[`redirect(...)`](/docs/kit/@sveltejs-kit#redirect). Ce n'est *pas* possible au sein d'une fonction
+[`redirect(...)`](@sveltejs-kit#redirect). Ce n'est *pas* possible au sein d'une fonction
 `command`, car vous devriez éviter de rediriger à cet endroit. (Si vous avez absolument besoin de le
 faire, vous pouvez toujours renvoyer un objet `{ redirect: location }` et gérer la redirection côté
 client.)

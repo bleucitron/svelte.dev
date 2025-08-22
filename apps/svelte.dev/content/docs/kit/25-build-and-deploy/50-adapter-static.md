@@ -43,7 +43,9 @@ export default config;
 
 ```js
 /// file: src/routes/+layout.js
-// Ceci peut valoir false si vous utilisez un fallback (c-à-d le mode SPA)
+// Si vous utilisez un fallback (c-à-d le mode SPA) vous n'avez pas besoin de pré-rendre toutes
+// les pages en définissant ce paramètre, mais vous devriez pré-rendre un maximum de pages pour
+// éviter des impacts significatifs sur les performances ou le référencement de votre application
 export const prerender = true;
 ```
 
@@ -92,8 +94,16 @@ besoin de définir vos pages et vos assets dans des endroits différents.
 
 ### fallback
 
-Permet de définir une page de secours pour le [mode SPA](single-page-apps), par ex. `index.html`,
-`200.html` ou `404.html`.
+Pour créer une [SPA](single-page-apps), vous devez préciser le nom de la page de secours que
+SvelteKit va générer, qui peut être utilisé comme point d'entrée pour les URLs qui n'ont pas été
+générées. C'est en général `200.html`, mais peut varier en fonction de votre plate-forme de
+déploiement. Vous devriez éviter `index.html` lorsque c'est possible pour éviter de rentrer en
+conflit avec une éventuelle page d'accueil pré-rendue.
+
+> Cette option a un impact significatif sur les performances et le référencement de votre
+> application. Elle n'est recommandée que dans certaines circonstances telles que l'embarquement du
+> site dans une application mobile. Voir la section sur les [SPA](single-page-apps) pour plus de
+> détails et en apprendre plus sur les alternatives.
 
 ### precompress
 

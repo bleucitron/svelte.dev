@@ -26,11 +26,13 @@ moins que n'ayez une bonne raison de ne pas le faire.
 
 Des indicateurs comme les [Core Web Vitals](https://web.dev/vitals/#core-web-vitals) impactent le
 classment d'une page par les moteurs de recherche. Puisque Svelte et SvelteKit introduisent une
-surcouche minimale, il est plus facile de créer des sites de haute performance. Vous pouvez tester
-les performances de votre site en utilisant les outils de Google [PageSpeed
+surcouche minimale, ils rendent plus simple de créer des sites de haute performance. Vous pouvez
+tester les performances de votre site en utilisant les outils de Google [PageSpeed
 Insights](https://pagespeed.web.dev/) ou
-[Lighthouse](https://developers.google.com/web/tools/lighthouse). Lisez la [page sur les
-performances](performance) pour plus de détails.
+[Lighthouse](https://developers.google.com/web/tools/lighthouse).  Utiliser simplement certaines
+fonctionnalités clé comme le mode de [rendu hybride](glossary#Hybrid-app) qu'utilise SvelteKit par
+défaut, ou encore l'[otpimisation de vos images](images), vous pouvez améliorer significativement la
+rapidité de votre site. Lisez la [page sur les performances](performance) pour plus de détails.
 
 ### URLs normalisées [!VO]Normalized URLs
 

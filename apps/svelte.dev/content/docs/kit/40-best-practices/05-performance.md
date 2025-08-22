@@ -151,28 +151,38 @@ la navigation (ou après le chargement initial de la page).
 
 Un des plus gros problèmes de performance est ce que l'on appele une _cascade_, qui peut être une
 série de requêtes faites séquentiellement. Ceci peut se produire sur le serveur comme dans le
-navigateur.
+navigateur, mais est particulièrement coûteux lorsque cela implique des données devant parcourir de
+longues distances ou naviguant sur des réseaux plus lents, comme une personne sur mobile requêtant
+un serveur distant.
 
-- Les cascades d'assets peuvent se produire dans le navigateur lorsque que votre HTML requête du JS
-qui requête du CSS qui requête une image de fond et une police. SvelteKit va en grande partie vous
-aider à résoudre ce problème en ajoutant des balises ou des en-têtes
+Dans le navigateur, des cascades peuvent se produire lorsque votre HTML déclenche une chaîne de
+requêtes telle que requêter du JavaScript qui va requêter du CSS qui va requêter une image de fond
+et une police. SvelteKit résout grandement ce genre de problèmes pour vous en ajoutant des balises
+ou des en-têtes
 [`modulepreload`](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload),
-mais vous devriez vérifier dans l'[onglet Réseau de vos outils de développement](#Diagnosing-issues)
-si des ressources additionnelles ont besoin d'être préchargées. Portez une attention particulière à
-ce point si vous utilisez des [polices de caractères web](#Optimizing-assets-Fonts) puisqu'elles
-doivent être gérées manuellement.
-- Si une fonction `load` universelle fait un appel API pour récupérer l'utilisateur ou utilisatrice
-actuelle, puis utilise les informations de cette réponse pour récupérer une liste de choses
-sauvegardées, puis utilise _cette_ réponse pour récupérer les détails de chaque chose, le navigateur
-va finir par faire de nombreuses requêtes les unes à la suite des autres. Ceci est fatal pour la
-performance, particulièrement pour les utilisateurs et utilisatrices qui se trouvent physiquement
-loin de votre serveur. Vous pouvez éviter ce problème en utilisant des [fonctions `load` de
-serveur](load#Universal-vs-server) lorsque cela est possible.
-- Les fonctions `load` de serveur ne sont pas non plus immunisées contre les cascades (même si
-celles-ci sont moins coûteuses puisqu'elles impliquent rarement des aller-retours avec une grande
-latence). Par exemple, si vous requêtez l'utilisateur ou utilisatrice actuelle puis utilisez ces
-données pour faire une deuxième requête pour obtenir une liste de choses sauvegardées, il sera
-typiquement plus efficace de faire une seule requête en utilisant une jointure de base de données.
+mais vous devriez observer l'[onglet Réseau de vos outils développeur](#Diagnosing-issues) pour
+vérifier si des ressources additionnelles ont besoin d'être préchargées.
+- Faites particulièrement attention à ce point si vous utilisez des [polices
+web](#Optimizing-assets-Fonts) puisqu'elles ont besoin d'être gérées manuellement.
+- L'activation du [mode SPA](single-page-apps) va provoquer ce genre de cascades. Avec le mode SPA,
+une page vide est générée, et cette page va ensuite récupérer le code JavaScript, qui va s'exécuter
+et rendre la page. Ceci induit des aller-retours réseau supplémentaires avant qu'un seul pixel ne
+puisse être affiché.
+
+Des cascades peuvent également se produire lors d'appels vers le backend faits soit depuis le
+navigateur soit depuis le serveur. Par ex. si une fonction `load` universelle fait un appel API pour
+récupérer l'utilisateur courant, puis utilise les informations de la réponse pour récupérer une
+liste d'éléments sauvegardés, puis utilise _cette_ réponse pour récupérer les détails de chaque
+élément, au final le navigateur va effectuer plusieurs requêtes en séquence. Ce type de scénario est
+destructeur pour les performances, particulièrement pour les personnes étant physiquement éloignées
+de votre backend.
+- Évitez ce problème en utilisant une [fonction `load` de serveur](load#Universal-vs-server) pour
+faire des requêtes vers des services backend depuis le serveur plutôt que depuis le client. Notez
+cependant que les fonctions `load` de serveur ne sont pas immunisées contre les cascades (même si
+ces cascades y sont moins coûteuses puisqu'impliquant rarement des aller-retours à grande latence).
+Par exemple, si vous requêtez une base de données pour récupérer l'utilisateur courant puis utilisez
+cette donnée pour faire une deuxième requête pour une liste d'éléments enregistrés, il sera
+généralement plus performant de créer une seule requête de base de données contenant une jointure.
 
 ## Hébergement [!VO]Hosting
 

@@ -281,3 +281,13 @@ pour accéder à vos fichiers. Cette fonction marche également au sein des rout
 que fonction edge en récupérant le fichier depuis l'emplacement déployé des assets publics.
 
 Comme alternative, vous pouvez [pré-rendre](page-options#prerender) les routes en question.
+
+### Protection des déploiements [!VO]Deployment protection
+
+Si vous utilisez [`read`]($app-server#read) dans une fonction edge, SvelteKit va `fetch` le fichier
+en question depuis votre déploiement. Si vous utilisez la fonctionnalité [Deployment
+Protection](https://vercel.com/docs/deployment-protection), vous devez également activer la
+fonctionnalité [Protection Bypass for
+Automation](https://vercel.com/docs/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation)
+afin que la requête ne provoque pas une réponse [401 Unauthorized](https://http.dog/401).
+

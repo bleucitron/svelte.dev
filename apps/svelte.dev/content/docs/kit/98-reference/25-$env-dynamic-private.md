@@ -13,8 +13,6 @@ que les variables dont le nom ne _commence pas_ par
 
 Ce module ne peut pas être importé dans du code client.
 
-Les variables d'environnement dynamiques ne peuvent pas être utilisées lors du pré-rendu.
-
 ```ts
 import { env } from '$env/dynamic/private';
 console.log(env.DEPLOYMENT_SPECIFIC_VARIABLE);

@@ -94,7 +94,7 @@ cours d'exécution localement :
 - Activez les flags expérimentaux mentionnés plus haut dans votre fichier `svelte.config.js`
 - Utilisez votre gestionnaire de paquet pour installer les dépendances dont vous aurez besoin :
   ```sh
-  npm i @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-trace-oltp-proto import-in-the-middle
+  npm i @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-trace-otlp-proto import-in-the-middle
   ```
 - Créez le fichier `src/instrumentation.server.js` avec le code suivant :
 
