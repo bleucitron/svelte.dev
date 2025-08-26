@@ -201,6 +201,53 @@ Cyclical dependency detected: %cycle%
 `{@const}` must be the immediate child of `{#snippet}`, `{#if}`, `{:else if}`, `{:else}`, `{#each}`, `{:then}`, `{:catch}`, `<svelte:fragment>`, `<svelte:boundary` or `<Component>`
 ```
 
+### const_tag_invalid_reference
+
+```
+The `{@const %name% = ...}` declaration is not available in this snippet
+```
+
+La chose suivante est une erreur :
+
+```svelte
+<svelte:boundary>
+    {@const foo = 'bar'}
+
+    {#snippet failed()}
+        {foo}
+    {/snippet}
+</svelte:boundary>
+```
+
+Ici, `foo` n'est pas disponible au sein de `failed`. Le code à la racine de `<svelte:boundary>`
+devient partie intégrante du snippet `children` implicite, en d'autres termes, le code ci-dessus est
+équivalent à celui-ci :
+
+```svelte
+<svelte:boundary>
+    {#snippet children()}
+        {@const foo = 'bar'}
+    {/snippet}
+
+    {#snippet failed()}
+        {foo}
+    {/snippet}
+</svelte:boundary>
+```
+
+La même chose s'applique aux composants :
+
+```svelte
+<Component>
+    {@const foo = 'bar'}
+
+    {#snippet someProp()}
+        <!-- erreur -->
+        {foo}
+    {/snippet}
+</Component>
+```
+
 ### constant_assignment
 
 ```

@@ -285,6 +285,7 @@ checkOrigin?: boolean;
 <div class="ts-block-property-bullets">
 
 - <span class="tag">par défaut</span> `true`
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `trustedOrigins: ['*']`
 
 </div>
 
@@ -309,16 +310,23 @@ trustedOrigins?: string[];
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `[]`
+- <span class="tag">par défaut</span> `[]`
 
 </div>
 
-An array of origins that are allowed to make cross-origin form submissions to your app, even when `checkOrigin` is `true`.
+Un tableau d'origines autorisées à faire des soumissions de formulaire cross-origin vers votre
+application.
 
-Each origin should be a complete origin including protocol (e.g., `https://payment-gateway.com`).
-This is useful for allowing trusted third-party services like payment gateways or authentication providers to submit forms to your app.
+Chaque origine doit être une origine complète incluant le protocole (par ex.
+`https://payment-gateway.com`).
+Cela est utile pour permettre à des services tiers de confiance comme les passerelles de paiement ou
+les fournisseurs d'authentification de soumettre des formulaires vers votre application.
 
-**Warning**: Only add origins you completely trust, as this bypasses CSRF protection for those origins.
+Si le tableau contient `'*'`, toutes les origines seront autorisées. C'est en général non recommandé
+!
+
+**Avertissement** : N'ajoutez que les origines dans lesquelles vous avez entièrement confiance,
+puisque cette option contourne la protection CSRF pour ces origines.
 
 </div>
 </div>
