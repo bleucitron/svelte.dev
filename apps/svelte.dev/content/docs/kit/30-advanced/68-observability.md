@@ -4,7 +4,7 @@ title: Observabilité
 ---
 
 <blockquote class="since note">
-	<p>Disponible depuis la version 2.29</p>
+	<p>Disponible depuis la version 2.31</p>
 </blockquote>
 
 Parfois, vous pouvez avoir besoin d'observer comment se comporte votre application pour en améliorer

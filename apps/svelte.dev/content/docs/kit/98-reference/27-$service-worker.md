@@ -51,7 +51,7 @@ const build: string[];
 Un tableau de chaînes de caractères d'URL représentant les fichiers dans votre dossier `static`, ou
 dans n'importe quel dossier défini par `config.kit.files.assets`. Vous pouvez personnaliser les
 fichiers à inclure dans le dossier `static` en utilisant
-[`config.kit.serviceWorker.files`](/docs/kit/configuration).
+[`config.kit.serviceWorker.files`](/docs/kit/configuration#serviceWorker).
 
 <div class="ts-block">
 
