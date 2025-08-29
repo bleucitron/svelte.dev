@@ -325,8 +325,10 @@ les fournisseurs d'authentification de soumettre des formulaires vers votre appl
 Si le tableau contient `'*'`, toutes les origines seront autorisées. C'est en général non recommandé
 !
 
-**Avertissement** : N'ajoutez que les origines dans lesquelles vous avez entièrement confiance,
+> [!NOTE] N'ajoutez que les origines dans lesquelles vous avez entièrement confiance,
 puisque cette option contourne la protection CSRF pour ces origines.
+
+Les vérifications CSRF ne s'appliquent qu'en production, pas en mode développement local.
 
 </div>
 </div>

@@ -191,7 +191,8 @@ hook](hooks#Universal-hooks-transport)) en plus du JSON.
 
 ### Mettre les queries à jour [!VO]Refreshing queries
 
-Toute query peut être mise à jour via sa méthode `refresh` :
+Toute query peut être rafraîchie via sa méthode `refresh`, qui récupère la valeur la plus récente
+depuis le serveur :
 
 ```svelte
 <button onclick={() => getPosts().refresh()}>
@@ -312,6 +313,9 @@ import * as v from 'valibot';
 import { error, redirect } from '@sveltejs/kit';
 import { query, form } from '$app/server';
 const slug = '';
+const post = { id: '' };
+/** @type {any} */
+const externalApi = '';
 // ---cut---
 export const getPosts = query(async () => { /* ... */ });
 
@@ -327,6 +331,15 @@ export const createPost = form(async (data) => {
 
 	// Redirige vers la page nouvellement créée
 	redirect(303, `/blog/${slug}`);
+});
+
+export const updatePost = form(async (data) => {
+	// la logique de formulaire s'écrit ici...
+	const result = externalApi.update(post);
+
+	// L'API nous donne déjà l'article mis à jour,
+	// il n'y donc pas besoin de le rafraîchir, nous pouvons le définir directement
+	+++await getPost(post.id).set(result);+++
 });
 ```
 
@@ -612,6 +625,9 @@ export const addLike = command(v.string(), async (id) => {
 	`;
 
 	+++getLikes(id).refresh();+++
+	// Comme au sein des fonctions de formulaire, nous pouvons aussi faire
+	// getLikes(id).set(...)
+	// dans le cas où vous avez déjà le résultat
 });
 ```
 

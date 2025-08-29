@@ -2311,6 +2311,16 @@ type RemotePrerenderFunction<Input, Output> = (
 ```dts
 type RemoteQuery<T> = RemoteResource<T> & {
 	/**
+	 * Sur le client, cette fonction va mettre à jour la valeur de la query sans la re-requêter.
+	 *
+	 * Sur le serveur, cette fonction peut être appelée dans le contexte d'une `command` ou d'un `form`
+	 * et les données fournies vont accompagner la réponse de l'action renvoyée au client.
+	 *
+	 * Ceci permet à SvelteKit de ne pas avoir besoin de rafraîchir toutes les queries de la page dans
+	 * un second aller-retour vers le serveur.
+	 */
+	set(value: T): void;
+	/**
 	 * Sur le client, cette fonction va re-requêter la query au serveur.
 	 *
 	 * Sur le serveur, cette méthode peut être appelée dans le contexte d'une `command` ou d'une `form`, et la donnée rafraîchie va alors accompagner la réponse de l'action lors de son retour au client.
