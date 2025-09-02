@@ -196,7 +196,7 @@ ajouter une [route d'API](./routing#server) :
 /// file: src/routes/api/[...path]/+server.js
 /** @type {import('./$types').RequestHandler} */
 export function GET({ params, url }) {
-	return fetch(`https://my-api-server.com/${params.path + url.search}`);
+	return fetch(`https://example.com/${params.path + url.search}`);
 }
 ```
 

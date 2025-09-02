@@ -8,7 +8,8 @@ title: Éléments personnalisés
 Les composants Svelte peuvent aussi être compilés en éléments personnalisés (aussi connus sous le
 nom de composants web, ou _web components_), en utilisant l'option de compilateur `customElement:
 true`. Il est recommandé de définir un nom de balise pour le composant, et ce en utilisant
-l'[élément `<svelte:options>`](svelte-options).
+l'[élément `<svelte:options>`](svelte-options). Au sein de l'élément personnalisé, vous pouvez
+accéder à l'élément hôte via la rune [`$host`]($host).
 
 ```svelte
 <svelte:options customElement="mon-element" />
