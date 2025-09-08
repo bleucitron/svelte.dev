@@ -210,10 +210,10 @@ configuration qui est définie lors de la mise en place de nouveaux projets :
 }
 ```
 
-> Si les scripts de votre librairie ont des effets de bord, assurez-vous de mettre à jour le champ
-> `sideEffects`. Tous les scripts sont marqués comme n'ayant pas d'effets de bord par défaut dans un
-> projet nouvellement créé. Si un fichier avec des effets de bord est marqué à tort comme n'ayant
-> pas d'effet de bord, cela peut rendre inutilisables certaines fonctionnalités.
+> [!NOTE] Si les scripts de votre librairie ont des effets de bord, assurez-vous de mettre à jour le
+> champ `sideEffects`. Tous les scripts sont marqués comme n'ayant pas d'effets de bord par défaut
+> dans un projet nouvellement créé. Si un fichier avec des effets de bord est marqué à tort comme
+> n'ayant pas d'effet de bord, cela peut rendre inutilisables certaines fonctionnalités.
 
 Si votre paquet possède des fichiers ayant des effets de bord, vous pouvez les préciser dans un
 tableau :

@@ -174,7 +174,9 @@ export function logger(getValue) {
 
 ### Tests de composants [!VO]Component testing
 
-Il est possible de tester vos composants en isolation en utilisant Vitest.
+Il est possible de tester vos composants en isolation, ce qui vous permet de les rendre dans un
+navigateur (réel ou simulé), de simuler leur comportement, et faire des assertions, sans démarrer
+toute votre application.
 
 > [!NOTE] Avant d'écrire des tests de composant, posez-vous la question de si vous avez réellement
 > besoin de tester le composant, ou si vous souhaitez plutôt tester la logique _au sein_ de votre
@@ -275,6 +277,62 @@ Lorsque vous écrivez des tests de composant qui impliquent des liaisons à doub
 ou des props de snippet, il est recommandé de créer un composant parent spécifiquement pour votre
 test, et interagir avec ce composant. `@testing-library/svelte` montre quelques [exemples de cette
 technique](https://testing-library.com/docs/svelte-testing-library/example).
+
+### Tests de composant avec Storybook [!VO]Component testing with Storybook
+
+[Storybook](https://storybook.js.org) est un outil permettant de développer et de documenter des
+composants d'interface, et peut également être utilisé pour tester vos composants. Les tests sont
+lancés avec le mode 'browser' de Vitest, qui rend vos composants dans un vrai navigateur pour
+obtenir un environnement de test le plus réaliste possible.
+
+Tout d'abord, installez Storybook ([en utilisant l'outil CLI de Svelte](/docs/cli/storybook)) dans
+votre projet via `npx sv add storybooK` et choisissez la configuration recommandée incluant les
+fonctionnalités de test.
+Si vous utilisez déjà Storybook, et pour plus d'information sur les fonctionnalités de test de
+Storybook, lisez la [documentation de test de
+Storybook](https://storybook.js.org/docs/writing-tests?renderer=svelte).
+
+Vous pouvez créer des stories montrant les variations de composant et tester les interactions avec
+la [fonction
+`play`](https://storybook.js.org/docs/writing-tests/interaction-testing?renderer=svelte#writing-interaction-tests),
+qui vous permet de simuler le comportement et de faire des assertions en utilisant Testing Library
+et les API Vitest.
+Voici un exemple de deux stories pouvant être testées, une qui rend un composant `LoginForm` vide et
+une qui simule un utilisateur remplissant le formulaire :
+
+```svelte
+/// file: LoginForm.stories.svelte
+<script module>
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import { expect, fn } from 'storybook/test';
+
+	import LoginForm from './LoginForm.svelte';
+
+	const { Story } = defineMeta({
+		component: LoginForm,
+		args: {
+			// On passe une fonction de mock à la prop `onSubmit`
+			onSubmit: fn(),
+		}
+	});
+</script>
+
+<Story name="Formulaire vide" />
+
+<Story
+	name="Formulaire rempli"
+	play={async ({ args, canvas, userEvent }) => {
+		// On simule un utilisateur qui remplir le formulaire
+		await userEvent.type(canvas.getByTestId('email'), 'email@provider.com');
+		await userEvent.type(canvas.getByTestId('password'), 'a-random-password');
+		await userEvent.click(canvas.getByRole('button'));
+
+		// On vérifie les assertions
+		await expect(args.onSubmit).toHaveBeenCalledTimes(1);
+		await expect(canvas.getByText('You’re in!')).toBeInTheDocument();
+	}}
+/>
+```
 
 ## Tests E2E avec Playwright [!VO]E2E tests using Playwright
 
