@@ -807,7 +807,7 @@ cssHash?: CssHashGetter;
 
 Une fonction qui prend un argument de forme `{ hash, css, name, filename }` et renvoie la chaîne de
 caractères utilisée comme nom de classe pour le CSS scopé.
-Par défaut elle renvoie `svelte-${hash(css)}`.
+Par défaut elle renvoie `svelte-${hash(filename ?? css)}`.
 
 </div>
 </div>

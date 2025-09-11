@@ -65,7 +65,7 @@ obtenir des détails sur comment spécifier manuellement une version de Node.
 ## Netlify Edge Functions
 
 SvelteKit supporte les [Netlify Edge
-Functions](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions/). Si vous
+Functions](https://docs.netlify.com/build/edge-functions/overview/). Si vous
 passez l'option `edge: true` à la fonction `adapter`, le rendu côté serveur sera effectué dans une
 fonction edge basée sur Deno et déployée à proximité de l'emplacement de la personne visitant le
 site. Si l'option est définie à `false` (par défaut), le site sera déployé sur des Netlify Functions

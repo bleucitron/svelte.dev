@@ -204,6 +204,65 @@ depuis le serveur :
 > `getPosts() === getPosts()`. Cela signifie que vous n'avez pas besoin d'une référence comme `const
 > posts = getPosts()` pour mettre à jour la query.
 
+## query.batch
+
+`query.batch` fonctionne comme `query` à l'exception du fait qu'il regroupe les requêtes se
+produisant lors de la même micro-tâche. Ceci résout le bien nommé problème n+1 : plutôt que chaque
+requête résulte en un appel séparé à la base de données (par exemple), les requêtes simultanées sont
+regroupées.
+
+Sur le serveur, le callback reçoit un tableau des arguments avec lesquels la fonction a été appelée.
+Il doit renvoyer une fonction de signature `(input: Input, index: number) => Output`. SvelteKit
+exécutera alors cette fonction avec chacun des arguments d'entrée pour résoudre les appels
+individuels et leurs résultats.
+
+```js
+/// file: weather.remote.js
+// @filename: ambient.d.ts
+declare module '$lib/server/database' {
+	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
+}
+// @filename: index.js
+// ---cut---
+import * as v from 'valibot';
+import { query } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const getWeather = query.batch(v.string(), async (cities) => {
+	const weather = await db.sql`
+		SELECT * FROM weather
+		WHERE city = ANY(${cities})
+	`;
+	const lookup = new Map(weather.map(w => [w.city, w]));
+
+	return (city) => lookup.get(city);
+});
+```
+
+```svelte
+<!--- file: Weather.svelte --->
+<script>
+	import CityWeather from './CityWeather.svelte';
+	import { getWeather } from './weather.remote.js';
+
+	let { cities } = $props();
+	let limit = $state(5);
+</script>
+
+<h2>Weather</h2>
+
+{#each cities.slice(0, limit) as city}
+	<h3>{city.name}</h3>
+	<CityWeather weather={await getWeather(city.id)} />
+{/each}
+
+{#if cities.length > limit}
+	<button onclick={() => limit += 5}>
+		Charger plus
+	</button>
+{/if}
+```
+
 ## form
 
 La fonction `form` facilite l'écriture de données sur le serveur. Elle prend un callback qui reçoit

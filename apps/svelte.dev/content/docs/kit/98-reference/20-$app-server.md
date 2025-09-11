@@ -126,8 +126,8 @@ Disponible depuis la version 2.27
 
 </blockquote>
 
-Crée une fonction de pré-rendu distante. Lorsqu'exécutée sur le navigateur, la fonction sera invoquée sur le
-serveur via un appel `fetch`.
+Crée une fonction de pré-rendu distante. Lorsqu'exécutée sur le navigateur, la fonction sera
+invoquée sur le serveur via un appel `fetch`.
 
 Voir la section sur les [fonctions distantes](/docs/kit/remote-functions#prerender) pour lire la
 documentation complète.
@@ -272,5 +272,54 @@ function read(asset: string): Response;
 </div>
 
 
+
+## query
+
+<div class="ts-block">
+
+```dts
+namespace query {
+	/**
+	 * Crée une fonction de requête groupée qui collecte plusieurs appels et les exécute dans une
+	 * seule requête
+	 *
+	 * Voir [Fonctions distantes](https://svelte.dev/docs/kit/remote-functions#query.batch) pour plus
+	 * d'infos
+	 *
+	 * @since 2.35
+	 */
+	function batch<Input, Output>(
+		validate: 'unchecked',
+		fn: (
+			args: Input[]
+		) => MaybePromise<(arg: Input, idx: number) => Output>
+	): RemoteQueryFunction<Input, Output>;
+	/**
+	 * Crée une fonction de requête groupée qui collecte plusieurs appels et les exécute dans une
+	 * seule requête
+	 *
+	 * Voir [Fonctions distantes](https://svelte.dev/docs/kit/remote-functions#query.batch) pour plus
+	 * d'infos
+	 *
+	 * @since 2.35
+	 */
+	function batch<Schema extends StandardSchemaV1, Output>(
+		schema: Schema,
+		fn: (
+			args: StandardSchemaV1.InferOutput<Schema>[]
+		) => MaybePromise<
+			(
+				arg: StandardSchemaV1.InferOutput<Schema>,
+				idx: number
+			) => Output
+		>
+	): RemoteQueryFunction<
+		StandardSchemaV1.InferInput<Schema>,
+		Output
+	>;
+}
+```
+
+</div>
 
 
