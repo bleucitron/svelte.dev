@@ -14,6 +14,18 @@ npx sv create [options] [path]
 
 ## Options
 
+### `--from-playground <url>`
+
+Crée un projet SvelteKit depuis une URL de [bac à sable](/playground). Ceci télécharge tous les
+fichiers du bac à sable, détecte les dépendances externes, et met en place une structure de projet
+SvelteKit complète avec tout le nécessaire pour commencer.
+
+Exemple :
+
+```sh
+npx sv create --from-playground="https://svelte.dev/playground/hello-world"
+```
+
 ### `--template <name>`
 
 Le template de projet à utiliser :
