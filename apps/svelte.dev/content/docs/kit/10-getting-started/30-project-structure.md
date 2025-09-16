@@ -71,6 +71,8 @@ composants qui ne seraient utilisés que pour une route spécifique
 	les placeholders suivants :
 	- `%sveltekit.status%` — le status HTTP
 	- `%sveltekit.error.message%` — le message d'erreur
+	- `%sveltekit.version%` — la version de déploiement, qui peut être spécifiée avec la configuration
+[`version`](configuration#version)
 - `hooks.client.js` contient vos [hooks](hooks) client
 - `hooks.server.js` contient vos [hooks](hooks) serveur
 - `service-worker.js` contient votre [service worker](service-workers)
