@@ -2413,17 +2413,22 @@ distantes](/docs/kit/remote-functions#form) pour lire la documentation complète
 <div class="ts-block">
 
 ```dts
-type RemoteForm<Result> = {
+type RemoteForm<
+	Input extends RemoteFormInput | void,
+	Output
+> = {
+	/** Un attachement qui définit un gestionnaire d'évènement qui intercepte la soumission du
+	 * formulaire sur le client pour empêcher un rechargement complet de la page
+	 */
+	[attachment: symbol]: (node: HTMLFormElement) => void;
 	method: 'POST';
 	/** L'URL à laquelle envoyer le formulaire. */
 	action: string;
-	/** Le gestionnaire d'évènement qui intercepte la soumission du formulaire sur le client pour empêcher un rechargement complet de la page. */
-	onsubmit: (event: SubmitEvent) => void;
 	/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
 	enhance(
 		callback: (opts: {
 			form: HTMLFormElement;
-			data: FormData;
+			data: Input;
 			submit: () => Promise<void> & {
 				updates: (
 					...queries: Array<
@@ -2431,11 +2436,11 @@ type RemoteForm<Result> = {
 					>
 				) => Promise<void>;
 			};
-		}) => void
+		}) => void | Promise<void>
 	): {
 		method: 'POST';
 		action: string;
-		onsubmit: (event: SubmitEvent) => void;
+		[attachment: symbol]: (node: HTMLFormElement) => void;
 	};
 	/**
 	 * Crée une instance du formualaire pour la clé donné.
@@ -2453,11 +2458,43 @@ type RemoteForm<Result> = {
 	 */
 	for(
 		key: string | number | boolean
-	): Omit<RemoteForm<Result>, 'for'>;
+	): Omit<RemoteForm<Input, Output>, 'for'>;
+	/**
+	 * Cette méthode existe pour vous permettre de vérifier le type des attributs `name`. Elle renvoie
+	 * son argument
+	 */
+	 * @example
+	 * ```svelte
+	 * <input name={login.field('username')} />
+	 * ```
+	 **/
+	field<
+		Name extends keyof UnionToIntersection<
+			FlattenKeys<Input, ''>
+		>
+	>(
+		string: Name
+	): Name;
+	/** Les vérifications de preflight */
+	preflight(
+		schema: StandardSchemaV1<Input, any>
+	): RemoteForm<Input, Output>;
+	/** Valider le contenu du formulaire programmatiquement */
+	validate(options?: {
+		includeUntouched?: boolean;
+	}): Promise<void>;
 	/** Le résultat de la soumission du formulaire */
-	get result(): Result | undefined;
+	get result(): Output | undefined;
 	/** Le nombre de soumissions en cours */
 	get pending(): number;
+	/** Les valeurs soumises */
+	input: null | UnionToIntersection<
+		FlattenInput<Input, ''>
+	>;
+	/** Les problèmes de validation */
+	issues: null | UnionToIntersection<
+		FlattenIssues<Input, ''>
+	>;
 	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
 	buttonProps: {
 		type: 'submit';
@@ -2468,7 +2505,7 @@ type RemoteForm<Result> = {
 		enhance(
 			callback: (opts: {
 				form: HTMLFormElement;
-				data: FormData;
+				data: Input;
 				submit: () => Promise<void> & {
 					updates: (
 						...queries: Array<
@@ -2476,7 +2513,7 @@ type RemoteForm<Result> = {
 						>
 					) => Promise<void>;
 				};
-			}) => void
+			}) => void | Promise<void>
 		): {
 			type: 'submit';
 			formmethod: 'POST';
@@ -2490,6 +2527,58 @@ type RemoteForm<Result> = {
 ```
 
 </div>
+
+## RemoteFormInput
+
+<div class="ts-block">
+
+```dts
+interface RemoteFormInput {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+[key: string]: FormDataEntryValue | FormDataEntryValue[] | RemoteFormInput | RemoteFormInput[];
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## RemoteFormIssue
+
+<div class="ts-block">
+
+```dts
+interface RemoteFormIssue {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+name: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+path: Array<string | number>;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+message: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 ## RemotePrerenderFunction
 
@@ -2661,7 +2750,7 @@ fetch: typeof fetch;
 additionnelles :
 
 - Elle peut être utilisée pour faire des requêtes authentifiées sur le serveur, puisqu'elle hérite
-des en-têtes `cookie` et `authorization` de la requête de page.
+des en-têtes `cookie` et `authorization` de la requ��te de page.
 - Elle peut faire des requêtes relatives sur le serveur (ordinairement, `fetch` nécessite une URL
 avec une origine lorsqu'utilisée dans un contexte serveur).
 - Les requêtes internes (par ex. pour les routes `+server.js`) vont exécuter directement leur

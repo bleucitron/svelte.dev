@@ -266,7 +266,8 @@ export const getWeather = query.batch(v.string(), async (cities) => {
 ## form
 
 La fonction `form` facilite l'écriture de données sur le serveur. Elle prend un callback qui reçoit
-le [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) actuel...
+l'objet `data` construit à partir du
+[`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) soumis...
 
 
 ```ts
@@ -298,30 +299,28 @@ export const getPosts = query(async () => { /* ... */ });
 
 export const getPost = query(v.string(), async (slug) => { /* ... */ });
 
-export const createPost = form(async (data) => {
-	// Vérifie si l'utilisateur est connecté
-	const user = await auth.getUser();
-	if (!user) error(401, 'Unauthorized');
+export const createPost = form(
+	v.object({
+		title: v.pipe(v.string(), v.nonEmpty()),
+		content:v.pipe(v.string(), v.nonEmpty())
+	}),
+	async ({ title, content }) => {
+		// Vérifie si l'utilisateur est loggué
+		const user = await auth.getUser();
+		if (!user) error(401, 'Unauthorized');
 
-	const title = data.get('title');
-	const content = data.get('content');
+		const slug = title.toLowerCase().replace(/ /g, '-');
 
-	// Vérifie si les données sont valides
-	if (typeof title !== 'string' || typeof content !== 'string') {
-		error(400, 'Title and content are required');
+		// Insère dans la base de données
+		await db.sql`
+			INSERT INTO post (slug, title, content)
+			VALUES (${slug}, ${title}, ${content})
+		`;
+
+		// Redirige vers la page nouvellement créée
+		redirect(303, `/blog/${slug}`);
 	}
-
-	const slug = title.toLowerCase().replace(/ /g, '-');
-
-	// Insère en base de données
-	await db.sql`
-		INSERT INTO post (slug, title, content)
-		VALUES (${slug}, ${title}, ${content})
-	`;
-
-	// Redirige vers la page nouvellement créée
-	redirect(303, `/blog/${slug}`);
-});
+)
 ```
 
 ... et renvoie un objet qui peut être distribué sur un élément `<form>`. Le callback est appelée à
@@ -350,10 +349,214 @@ chaque fois que le formulaire est soumis.
 </form>
 ```
 
-L'objet de formulaire contient les propriétés `method` et `action` qui lui permettent de fonctionner
-sans JavaScript (c-à-d qu'il enverra les données puis qu'il rechargera la page). Il a également un
-gestionnaire `onsubmit` qui améliore progressivement le formulaire lorsque JavaScript est
-disponible, en soumettant les données *sans* recharger entièrement la page.
+
+Comme avec `query`, si le callback utilise la `data` soumise, celle-ci devrait être
+[validée](#query-Query-arguments) en passant un [Standard Schema](https://standardschema.dev) en
+premier argument de `form`. La seule différence par rapport à `query` est que les entrées du schéma
+doivent toutes être de type `string` ou `File`, puisque le `FormData` d'origine ne peut pas fournir
+autre chose. Vous pouvez cependant transformer la valeur en un type différent — la manière de faire
+cela dépend de la librairie que vous utilisez.
+
+```ts
+/// file: src/routes/count.remote.js
+import * as v from 'valibot';
+import { form } from '$app/server';
+
+export const setCount = form(
+	v.object({
+		// Valibot:
+		count: v.pipe(v.string(), v.transform((s) => Number(s)), v.number()),
+		// Zod:
+		// count: v.coerce.number()
+	}),
+	async ({ count }) => {
+		// ...
+	}
+);
+```
+
+Les attributs `name` dans les contrôles de formulaire doivent correspondre aux propriétés du schéma
+— `title` et `content` dans ce cas. Si votre schéma contient des objets, utilisez la notation objet
+:
+
+```svelte
+<!--
+		résulte en un objet
+    {
+	   name: { first: string, last: string },
+	   jobs: Array<{ title: string, company: string }>
+	}
+-->
+<input name="name.first" />
+<input name="name.last" />
+{#each jobs as job, idx}
+	<input name="jobs[{idx}].title">
+	<input name="jobs[{idx}].company">
+{/each}
+```
+
+Pour indiquer un champ répété, utilisez un suffixe `[]` :
+
+```svelte
+<label><input type="checkbox" name="language[]" value="html" /> HTML</label>
+<label><input type="checkbox" name="language[]" value="css" /> CSS</label>
+<label><input type="checkbox" name="language[]" value="js" /> JS</label>
+```
+
+Si vous souhaitez du typage et de l'autocomplétion lorsque vous définissez des attributs `name`,
+utilisez la méthode `field` de l'objet de formulaire :
+
+```svelte
+<label>
+	<h2>Title</h2>
+	<input name={+++createPost.field('title')+++} />
+</label>
+```
+
+Ceci va provoquer une erreur lors de la vérification de types si `title` n'existe pas dans votre
+schéma :
+
+L'objet de formulaire contient les propriétés `method` et `action` lui permettant de fonctionner
+sans JavaScript (c-à-d qu'il soumet les données et recharge la page). Il possède également un
+[attachement](/docs/svelte/@attach) qui améliore progressivement le formulaire lorsque JavaScript
+est disponible, permmettant de soumettre les données *sans* recharger entièrement la page.
+
+### Validation
+
+Si les données soumises ne correspondent pas au schéma, le callback ne sera pas exécuté. À la place,
+l'objet `issues` présent dans l'objet de formulaire sera rempli :
+
+```svelte
+<form {...createPost}>
+	<label>
+		<h2>Title</h2>
+
++++		{#if createPost.issues.title}
+			{#each createPost.issues.title as issue}
+				<p class="issue">{issue.message}</p>
+			{/each}
+		{/if}+++
+
+		<input
+			name="title"
+			+++aria-invalid={!!createPost.issues.title}+++
+		/>
+	</label>
+
+	<label>
+		<h2>Write your post</h2>
+
++++		{#if createPost.issues.content}
+			{#each createPost.issues.content as issue}
+				<p class="issue">{issue.message}</p>
+			{/each}
+		{/if}+++
+
+		<textarea
+			name="content"
+			+++aria-invalid={!!createPost.issues.content}+++
+		></textarea>
+	</label>
+
+	<button>Publier !</button>
+</form>
+```
+
+Vous n'avez pas besoin d'attendre la fin de la soumission du formulaire pour valider les données —
+vous pouvez appeler `validate()` programmatiquement, par exemple dans un callback `oninput` (qui va
+valider les données à chaque touche du clavier) ou dans un callback `onchange` :
+
+```svelte
+<form {...createPost} oninput={() => createPost.validate()}>
+	<!-- -->
+</form>
+```
+
+Par défaut, les problèmes sont ignorés s'ils concernent des contrôles de formulaires avec lesquels
+il n'y a pas encore eu d'interaction. Pour valider _tous_ les inputs, appelez `validate({
+includeUntouched: true })`.
+
+Pour les navigations côté client, vous pouvez préciser un schéma _preflight_ qui va remplir les
+`issues` et empêcher que les données soient envoyées au serveur si elles ne sont pas validées :
+
+```svelte
+<script>
+	import * as v from 'valibot';
+	import { createPost } from '../data.remote';
+
+	const schema = v.object({
+		title: v.pipe(v.string(), v.nonEmpty()),
+		content:v.pipe(v.string(), v.nonEmpty())
+	});
+</script>
+
+<h1>Créer un nouvel article</h1>
+
+<form {...+++createPost.preflight(schema)+++}>
+	<!-- -->
+</form>
+```
+
+> [!NOTE] Le schéma preflight peut être le même objet que votre schéma utilisé sur le serveur, si
+> cela est pertinent, même s'il ne sera pas capable de faire des validations devant être faites côté
+> serveur comme "cette valeur existe déjà dans la base de données" par exemple. Notez que vous ne
+> pouvez pas exporter un schéma depuis un fichier `.remote.ts` ou `.remote.js`, le schéma doit alors
+> être exporté depuis un module partagé, ou depuis le block `<script module>` du composant contenant
+> le `<form>`.
+
+### Inputs live [!VO]Live inputs
+
+L'objet de formulaire contient une propriété `input` qui reflète sa valeur courante. Au fur et à
+mesure que l'utilisateur ou l'utilisatrice interagit avec le formulaire, `input` est automatiquement
+mis à jour :
+
+```svelte
+<form {...createPost}>
+	<!-- -->
+</form>
+
+<div class="preview">
+	<h2>{createPost.input.title}</h2>
+	<div>{@html render(createPost.input.content)}</div>
+</div>
+```
+
+### Gérer les données sensibles [!VO]Handling sensitive data
+
+Dans le cas d'une soumission de formulaire non-améliorée-progressivement (c-à-d lorsque JavaScript
+n'est pas disponible, quelqu'en soit la raison), `input` est également rempli si les données
+soumises sont invalides, afin que l'utilisateur ou l'utilisatrice n'ait pas besoin de re-remplir
+entièrement le formulaire.
+
+Vous pouvez empêcher que des données sensibles (comme des mots de passe ou des numéros de carte
+bancaire) soient renvoyés au client en utilisant un nom commençant par un tiret-bas :
+
+```svelte
+<form {...register}>
+	<label>
+		Nom
+		<input
+			name="username"
+			value={register.input.username}
+			aria-invalid={!!register.issues.username}
+		/>
+	</label>
+
+	<label>
+		Mot de passe
+		<input
+			type="password"
+			+++name="_password"+++
+			+++aria-invalid={!!register.issues._password}+++
+		/>
+	</label>
+
+	<button>S'inscrire !</button>
+</form>
+```
+
+Dans cet exemple, si les données ne sont pas validées, seul le premier `<input>` sera rempli lorsque
+la page sera rechargée.
 
 ### Mutations single-flight [!VO]Single-flight mutations
 
@@ -380,26 +583,32 @@ export const getPosts = query(async () => { /* ... */ });
 
 export const getPost = query(v.string(), async (slug) => { /* ... */ });
 
-export const createPost = form(async (data) => {
-	// la logique du formulaire se place ici...
+export const createPost = form(
+	v.object({/* ... */}),
+	async (data) => {
+		// la logique du formulaire se place ici...
 
-	// Met à jour `getPosts()` sur le serveur, et
-	// renvoie les données au client avec le résultat
-	// de `createPost`
-	+++await getPosts().refresh();+++
+		// Met à jour `getPosts()` sur le serveur, et
+		// renvoie les données au client avec le résultat
+		// de `createPost`
+		+++await getPosts().refresh();+++
 
-	// Redirige vers la page nouvellement créée
-	redirect(303, `/blog/${slug}`);
-});
+		// Redirige vers la page nouvellement créée
+		redirect(303, `/blog/${slug}`);
+	}
+);
 
-export const updatePost = form(async (data) => {
-	// la logique de formulaire s'écrit ici...
-	const result = externalApi.update(post);
+export const updatePost = form(
+	v.object({/* ... */}),
+	async (data) => {
+		// la logique de formulaire s'écrit ici...
+		const result = externalApi.update(post);
 
-	// L'API nous donne déjà l'article mis à jour,
-	// il n'y donc pas besoin de le rafraîchir, nous pouvons le définir directement
-	+++await getPost(post.id).set(result);+++
-});
+		// L'API nous donne déjà l'article mis à jour,
+		// il n'y donc pas besoin de le rafraîchir, nous pouvons le définir directement
+		+++await getPost(post.id).set(result);+++
+	}
+);
 ```
 
 La seconde est de conduire la mutation single-flight depuis le client, ce que nous verrons dans la
@@ -441,11 +650,14 @@ export const getPosts = query(async () => { /* ... */ });
 export const getPost = query(v.string(), async (slug) => { /* ... */ });
 
 // ---cut---
-export const createPost = form(async (data) => {
-	// ...
+export const createPost = form(
+	v.object({/* ... */}),
+	async (data) => {
+		// ...
 
-	return { success: true };
-});
+		return { success: true };
+	}
+);
 ```
 
 ```svelte
@@ -456,7 +668,9 @@ export const createPost = form(async (data) => {
 
 <h1>Créer un nouvel article</h1>
 
-<form {...createPost}><!-- ... --></form>
+<form {...createPost}>
+	<!-- -->
+</form>
 
 {#if createPost.result?.success}
 	<p>Publié avec succès !</p>
@@ -497,9 +711,7 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 		showToast('Oh non ! Quelque chose s\'est mal passé !');
 	}
 })}>
-	<input name="title" />
-	<textarea name="content"></textarea>
-	<button>publier</button>
+	<!-- -->
 </form>
 ```
 
@@ -590,7 +802,7 @@ où.
 > [!NOTE] Privilégiez l'usage de `form` lorsque c'est possible, puisqu'elle continue de fonctionner
 > lorsque JavaScript est désactivé ou a échoué à se charger.
 
-Comme avec `query`, si la fonction accepte un argument, celui-ci devrait être
+Comme avec `query` et `form`, si la fonction accepte un argument, celui-ci devrait être
 [validé](#query-Query-arguments) en fournissant un [Standard Schema](https://standardschema.dev) en
 tant que premier argument à `command`.
 
