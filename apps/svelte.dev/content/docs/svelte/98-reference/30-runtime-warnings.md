@@ -368,6 +368,27 @@ Pour contourner ce problème, assurez-vous de toujours comparer des valeurs qui 
 deux été créées avec `$state(...)`, soit toutes les deux pas. Notez que `$state.raw(...)` ne va
 _pas_ créer de proxy d'état.
 
+### state_proxy_unmount
+
+```
+Tried to unmount a state proxy, rather than a component
+```
+
+`unmount` was called with a state proxy:
+
+```js
+import { mount, unmount } from 'svelte';
+import Component from './Component.svelte';
+let target = document.body;
+// ---cut---
+let component = $state(mount(Component, { target }));
+
+// later...
+unmount(component);
+```
+
+Avoid using `$state` here. If `component` _does_ need to be reactive for some reason, use `$state.raw` instead.
+
 ### svelte_boundary_reset_noop
 
 ```
