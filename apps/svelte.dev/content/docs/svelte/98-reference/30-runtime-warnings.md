@@ -374,7 +374,7 @@ _pas_ créer de proxy d'état.
 Tried to unmount a state proxy, rather than a component
 ```
 
-`unmount` was called with a state proxy:
+`unmount` a été appelé avec un proxy d'état :
 
 ```js
 import { mount, unmount } from 'svelte';
@@ -387,7 +387,8 @@ let component = $state(mount(Component, { target }));
 unmount(component);
 ```
 
-Avoid using `$state` here. If `component` _does_ need to be reactive for some reason, use `$state.raw` instead.
+Évitez l'usage de `$state` ici. Si `component` a _effectivement_ d'être réactif pour une raison ou
+une autre, utilisez plutôt `$state.raw`.
 
 ### svelte_boundary_reset_noop
 
