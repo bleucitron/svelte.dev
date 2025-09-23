@@ -1089,7 +1089,7 @@ message en implémentant le hook serveur
 /** @type {import('@sveltejs/kit').HandleValidationError} */
 export function handleValidationError({ event, issues }) {
 	return {
-		message: 'Nice try, hacker!'
+		message: 'Bien tenté, hacker !'
 	};
 }
 ```
@@ -1132,13 +1132,13 @@ export const getProfile = query(async () => {
 	};
 });
 
-// cette fonction pourrait être appelée depuis plusieurs endroits
-function getUser() {
-	const { cookies, locals } = getRequestEvent();
+// cette query pourrait être appelée depuis plusieurs endroits,
+// mais cette fonction ne sera exécutée qu'une fois par requête
+const getUser = query(() => {
+	const { cookies } = getRequestEvent();
 
-	locals.userPromise ??= findUser(cookies.get('session_id'));
-	return await locals.userPromise;
-}
+	return await findUser(cookies.get('session_id'));
+});
 ```
 
 Notez que certaines propriétés de `RequestEvent` sont différentes au sein des fonctions distantes.
