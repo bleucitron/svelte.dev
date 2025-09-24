@@ -501,7 +501,7 @@ un gestionnaire d'évènement normal sur l'élément `<form>` :
 	/** @param {SubmitEvent & { currentTarget: EventTarget & HTMLFormElement}} event */
 	async function handleSubmit(event) {
 		event.preventDefault();
-		const data = new FormData(event.currentTarget);
+		const data = new FormData(event.currentTarget, event.submitter);
 
 		const response = await fetch(event.currentTarget.action, {
 			method: 'POST',

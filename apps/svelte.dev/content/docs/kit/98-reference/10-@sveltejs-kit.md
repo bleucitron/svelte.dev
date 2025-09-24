@@ -2482,6 +2482,8 @@ type RemoteForm<
 	/** Valider le contenu du formulaire programmatiquement */
 	validate(options?: {
 		includeUntouched?: boolean;
+		/** Perform validation as if the form was submitted by the given button. */
+		submitter?: HTMLButtonElement | HTMLInputElement;
 	}): Promise<void>;
 	/** Le résultat de la soumission du formulaire */
 	get result(): Output | undefined;

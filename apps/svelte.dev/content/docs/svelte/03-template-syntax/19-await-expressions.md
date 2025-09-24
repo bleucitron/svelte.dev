@@ -27,28 +27,6 @@ export default {
 
 Le drapeau expérimental sera supprimé avec Svelte 6.
 
-## Frontières [!VO]Boundaries
-
-Actuellement, vous pouvez uniquement utiilser `await` au sein d'un balise
-[`<svelte:boundary>`](svelte-boundary) ayant un snippet `pending` :
-
-```svelte
-<svelte:boundary>
-	<MyApp />
-
-	{#snippet pending()}
-		<p>chargement...</p>
-	{/snippet}
-</svelte:boundary>
-```
-
-Cette restriction sera levée lorsque Svelte supportera le rendu côté serveur asynchrone (voir les
-[mises en garde](#Caveats)).
-
-
-> [!NOTE] Dans le [bac à sable](/playground), votre application est rendue au sein d'une frontière
-> ayant un snippet `pending` vide, afin que vous puissez utiliser `await` sans avoir à en créer un.
-
 ## Mises à jour synchronisées [!VO]Synchronized updates
 
 Lorsqu'une expression `await` dépend d'un morceau d'état particulier, les changements de cet état ne
@@ -118,9 +96,19 @@ let b = $derived(await two());
 
 ## Indiquer les états de chargement [!VO]Indicating loading states
 
-En plus du snippet [`pending`](svelte-boundary#Properties-pending) de la frontière la plus proche,
-vous pouvez indiquer que du travail asynchrone est en cours avec la rune
-[`$effect.pending()`]($effect#$effect.pending).
+To render placeholder UI, you can wrap content in a `<svelte:boundary>` with a
+[`pending`](svelte-boundary#Properties-pending) snippet. This will be shown when the boundary is
+first created, but not for subsequent updates, which are globally coordinated.
+
+Pour afficher des interfaces par défaut, vous pouvez entourer le contenu dans une balise
+`<svelte:boundary>` ayant un snippet [`pending`](svelte-boundary#Properties-pending). Ce contenu
+sera affichée lorsque la frontière sera créée pour la première fois, mais pas lors des mises à jour
+suivantes, qui seront globalement coordonnées.
+
+Après que le contenu d'une frontière a été résolu pour la première fois et que son snippet `pending`
+a été remplacé, vous pouvez détecter les tâches asynchrones suivantes avec
+[`$effect.pending()`]($effect#$effect.pending). C'est ce qu'il vous faudra utiliser pour afficher
+une icône de chargement à côté d'un champ de formulaire, par exemple.
 
 Vous pouvez aussi utiliser [`settled()`](svelte#settled) pour obtenir une promesse qui se résout
 lorsque la mise à jour actuelle se termine :
@@ -155,6 +143,29 @@ async function onclick() {
 
 Les erreurs dans les expressions `await` vont remonter jusqu'à la [frontière
 d'erreur](svelte-boundary) la plus proche.
+
+## Rendu côté serveur [!VO]Server-side rendering
+
+Svelte supporte le rendu côté serveur (SSR) asynchrone avec l'API `render(...)`. Pour vous en
+servir, contentez-vous d'utiliser `await` pour récupérer la valeur de retour :
+
+```js
+/// file: server.js
+import { render } from 'svelte/server';
+import App from './App.svelte';
+
+const { head, body } = +++await+++ render(App);
+```
+
+> [!NOTE] Si vous utilisez un framework comme SvelteKit, ceci est déjà fait pour vous.
+
+Si une `<svelte:boundary>` ayant un snippet `pending` est détectée lors du SSR, ce snippet sera
+rendu tandis que le reste du contenu sera ignoré. Toutes les expressions `await` rencontrées en
+dehors de frontières ayant des snippets `pending` seront résolues et leur contenu sera rendu avant
+de renvoyer le résultat de `await render(...)`.
+
+> [!NOTE] Dans le futur, nous prévoyons d'ajouter une implémentation de streaming permettant de
+> rendre du contenu en toile de fond.
 
 ## Mises en garde [!VO]Caveats
 

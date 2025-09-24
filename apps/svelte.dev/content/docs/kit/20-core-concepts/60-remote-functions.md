@@ -486,7 +486,7 @@ Pour les navigations côté client, vous pouvez préciser un schéma _preflight_
 
 	const schema = v.object({
 		title: v.pipe(v.string(), v.nonEmpty()),
-		content:v.pipe(v.string(), v.nonEmpty())
+		content: v.pipe(v.string(), v.nonEmpty())
 	});
 </script>
 
