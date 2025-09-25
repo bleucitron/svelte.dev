@@ -96,10 +96,6 @@ let b = $derived(await two());
 
 ## Indiquer les états de chargement [!VO]Indicating loading states
 
-To render placeholder UI, you can wrap content in a `<svelte:boundary>` with a
-[`pending`](svelte-boundary#Properties-pending) snippet. This will be shown when the boundary is
-first created, but not for subsequent updates, which are globally coordinated.
-
 Pour afficher des interfaces par défaut, vous pouvez entourer le contenu dans une balise
 `<svelte:boundary>` ayant un snippet [`pending`](svelte-boundary#Properties-pending). Ce contenu
 sera affichée lorsque la frontière sera créée pour la première fois, mais pas lors des mises à jour
