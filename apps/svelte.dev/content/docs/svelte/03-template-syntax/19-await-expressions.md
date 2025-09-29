@@ -170,9 +170,6 @@ En tant que fonctionnalité expérimentale, les détails de comment les expressi
 changes en dehors d'un changement de version majeur, même si nous avons l'intention de limiter ces
 changements au minimum.
 
-Actuellement, le rendu côté serveur reste synchrone. Si une balise `<svelte:boundary>` ayant un
-snippet `pending` est rencontrée lors du SSR, seul le snippet `pending` sera affiché.
-
 ## Breaking changes
 
 Les effets sont exécutées dans un ordre légèrement différent lorsque l'option `experimental.async`
