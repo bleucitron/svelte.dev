@@ -115,7 +115,7 @@ est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 
 ## `<input bind:checked>`
 
-Les inputs de type checkbox et radio peuvent être liés avec `bind:checked` :
+Les inputs de type checkbox peuvent être liés avec `bind:checked` :
 
 ```svelte
 <label>
@@ -139,6 +139,8 @@ est prioritaire sauf s'il cette valeur est `null` ou `undefined`.
 	<input type="reset" value="Réinitialiser">
 </form>
 ```
+
+> [!NOTE] Utilisez `bind:group` pour les inputs radio plutôt que `bind:checked`.
 
 ## `<input bind:indeterminate>`
 

@@ -85,7 +85,7 @@ documentation complète.
 
 ```dts
 function form<Output>(
-	fn: () => Output
+	fn: () => MaybePromise<Output>
 ): RemoteForm<void, Output>;
 ```
 

@@ -10,7 +10,7 @@ pouvez écrire des tests unitaires, des tests d'intégration, des tests end-to-e
 solutions comme [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.io/),
 [Cypress](https://www.cypress.io/) et [Playwright](https://playwright.dev/)
 
-## Tests unitaires et d'intégration avec Vitest [!VO]Unit and integration testing using Vitest
+## Tests unitaires et de composants avec Vitest [!VO]Unit and component testing with Vitest
 
 Les tests unitaires vous permettent de tester des petites parties isolées de votre code. Les tests
 d'intégration vous permettent de vérifier comment des morceaux de votre application fonctionnent
@@ -278,7 +278,7 @@ ou des props de snippet, il est recommandé de créer un composant parent spéci
 test, et interagir avec ce composant. `@testing-library/svelte` montre quelques [exemples de cette
 technique](https://testing-library.com/docs/svelte-testing-library/example).
 
-### Tests de composant avec Storybook [!VO]Component testing with Storybook
+### Tests de composant avec Storybook [!VO]Component tests with Storybook
 
 [Storybook](https://storybook.js.org) est un outil permettant de développer et de documenter des
 composants d'interface, et peut également être utilisé pour tester vos composants. Les tests sont
@@ -334,7 +334,7 @@ une qui simule un utilisateur remplissant le formulaire :
 />
 ```
 
-## Tests E2E avec Playwright [!VO]E2E tests using Playwright
+## Tests end-to-end avec Playwright [!VO]Endto-end tests with Playwright
 
 Les tests E2E ("end to end" en anglais, qui se traduit par "de bout en bout") vous permettent de
 tester votre application toute entière depuis le point de vue de vos utilisateurs. Cette section
