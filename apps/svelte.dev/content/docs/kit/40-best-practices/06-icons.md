@@ -17,8 +17,7 @@ fichier `.svelte`.
 
 ## Svelte
 
-Il y a beaucoup de [librairies d'icônes pour
-Svelte](https://www.sveltesociety.dev/packages?category=icons). Lorsque vous choisissez une
+Il y a beaucoup de [librairies d'icônes pour Svelte](/packages#icons). Lorsque vous choisissez une
 librairie d'icônes, il est recommandé d'éviter que celles-ci fournissent un fichier `.svelte` par
 icône, car ces librairies peut avoir des milliers de fichiers `.svelte` qui ralentissent beaucoup le
 [processus d'optimisation de dépendances de Vite](https://vite.dev/guide/dep-pre-bundling.html).

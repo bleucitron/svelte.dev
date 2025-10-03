@@ -82,7 +82,7 @@ de plateformes supportées, mais vous pouvez également utiliser les adaptateurs
 [`adapter-vercel`](adapter-vercel), [`adapter-netlify`](adapter-netlify), ou
 [`adapter-cloudflare`](adapter-cloudflare) pour avoir accès à des configurations spécifiques par
 plateforme. Des [adaptateurs gérés par la
-communauté](https://sveltesociety.dev/packages?category=sveltekit-adapters) vous permettent de
+communauté](/packages#sveltekit-adapters) vous permettent de
 déployer votre application sur quasiment tous les environnements serverless existants. Certains de
 ces adaptateurs comme [`adapter-vercel`](adapter-vercel) et [`adapter-netlify`](adapter-netlify)
 offrent une option `edge`, afin de fournir du [rendu sur edge](glossary#Edge) pour améliorer la
@@ -133,7 +133,7 @@ Vous pouvez transformer une [SPA SvelteKit](single-page-apps) en application des
 
 Vous pouvez construire des extensions navigateur en utilisant soit
 [`adapter-static`](adapter-static) ou des [adaptateurs de la
-communauté](https://sveltesociety.dev/packages?category=sveltekit-adapters) spécialement conçus pour
+communauté](/packages#sveltekit-adapters) spécialement conçus pour
 les extensions navigateur.
 
 ## Appareil embarqué [!VO]Embedded device

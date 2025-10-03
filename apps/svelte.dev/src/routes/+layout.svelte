@@ -32,6 +32,7 @@
 	const sections: Record<string, string> = {
 		docs: 'Docs',
 		playground: 'Bac à sable',
+		packages: 'Packages',
 		blog: 'Blog',
 		tutorial: 'Tutoriel',
 		search: 'Recherche'

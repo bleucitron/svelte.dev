@@ -23,16 +23,14 @@ Vous pouvez aussi utiliser Svelte directement avec Vite en exécutant `npm creat
 choisissant l'option `svelte`. De cette manière, `npm run build` va générer des fichiers HTML, JS,
 et CSS dans le dossier `dist` grâce à
 [vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte). Dans la plupart des cas vous
-aurez également certainement besoin de choisir une [librairie de routing](faq#Is-there-a-router).
+aurez également certainement besoin de choisir une [librairie de routing](/packages#routing).
 
 > [!NOTE] Vite est souvent utilisé en mode standalone pour construire des
 > [SPAs](../kit/glossary#SPA), ce que vous pouvez aussi faire [avec
 > SvelteKit](../kit/single-page-apps).
 
-Il existe également des plugins pour [Rollup](https://github.com/sveltejs/rollup-plugin-svelte),
-[Webpack](https://github.com/sveltejs/svelte-loader) [et quelques
-autres](https://sveltesociety.dev/packages?category=build-plugins), mais nous recommandons
-l'utilisation de Vite.
+Il existe également des plugins pour [d'autres bundlers](/packages#bundler-plugins), mais nous
+recommandons l'utilisation de Vite.
 
 ## Outillage des éditeurs [!VO]Editor tooling
 

@@ -82,9 +82,8 @@ informer sur cette [issue](https://github.com/sveltejs/svelte/issues/2546).
 
 ## Y a t'il une librairie de composants ? [!VO]Is there a UI component library?
 
-Il existe plusieurs librairies de composants. Vous pouvez les retrouver dans la [section "Design
-systems" de la page des composants](https://sveltesociety.dev/packages?category=design-system) sur
-le site de Svelte Society.
+Il existe plusieurs [librairies de composants](/packages#component-libraries) ainsi que des
+composants autonomes listés sur la [page des packages](/packages).
 
 ## Comment tester une application Svelte ? [!VO]How do I test Svelte apps?
 
@@ -140,29 +139,10 @@ Voici quelques ressources pour vous lancer dans les tests :
 La librairie officielle de routing est [SvelteKit](/docs/kit). SvelteKit fournit un routeur basé sur
 le système de fichiers, du rendu côté serveur (SSR), et du rafraîchissement instantané de modules
 (HMR), le tout dans une seule et même librairie simple à utiliser. C'est un outil similaire à
-Next.js pour React.
+Next.js pour React, et Nuxt.js pour Vue.
 
-Cependant, vous pouvez utiliser n'importe quelle librairie de routing. Beaucoup de gens utilisent
-[page.js](https://github.com/visionmedia/page.js). Il y a également
-[navaid](https://github.com/lukeed/navaid), qui est très similaire. Ainsi que
-[universal-router](https://github.com/kriasoft/universal-router), qui est isomorphe sur les routes
-enfant, mais sans support d'historique intégré.
-
-Si vous préférez une approche HTML déclarative, vous pouvez utiliser la librairie isomorphe
-[svelte-routing](https://github.com/EmilTholin/svelte-routing) ainsi qu'un fork de celle-ci appelé
-[svelte-navigator](https://github.com/mefechoel/svelte-navigator) qui inclut des fonctionnalités
-supplémentaires.
-
-Si vous avez besoin de routing basé sur des hashs côté client, renseignez-vous sur l'[option
-hash](/docs/kit/configuration#router),
-[svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router) ou
-[abstract-state-router](https://github.com/TehShrike/abstract-state-router/).
-
-[Routify](https://routify.dev) est un autre routeur basé sur le système de fichiers, similaire au
-routeur de SvelteKit. Sa version 3 supporte le SSR natif de Svelte.
-
-Vous pouvez retrouver une [liste maintenue par la communauté des routeurs disponibles sur
-sveltesociety.dev](https://sveltesociety.dev/packages?category=routers).
+Cependant, vous pouvez utiliser n'importe quelle librairie de routing. Un échantillon des routeurs
+disponibles est disponible sur la [page des packages](/packages#routing).
 
 ## Comment construire une application mobile avec Svelte [!VO]How do I write a mobile app with Svelte?
 

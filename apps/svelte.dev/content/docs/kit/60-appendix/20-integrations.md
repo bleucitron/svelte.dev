@@ -28,7 +28,7 @@ TypeScript est supporté nativement avec Svelte 5 si vous utilisez uniquement la
 Pour utiliser des syntaxes TypeScript plus complexes avec Svelte 5, vous devrez tout de même
 utiliser un préprocesseur, et dans ce cas vous pourrez utiliser `vitePreprocess({ script: true })`.
 
-## Adders
+## Add-ons
 
 Lancer [`npx sv add`](/docs/cli/sv-add) pour mettre en place plusieurs intégrations complexes différents à l'aide d'une
 seule commande, parmi lesquelles :
@@ -43,11 +43,12 @@ seule commande, parmi lesquelles :
 - mdsvex (markdown)
 - storybook (atelier frontend)
 
-## Dossier [!VO]Directory
+## Packages
 
-Retrouvez sur [sveltesociety.dev](https://sveltesociety.dev/) une liste complète de
-[paquets](https://sveltesociety.dev/packages) et de [templates](https://sveltesociety.dev/templates)
-pouvant être utilisés avec Svelte et SvelteKit.
+Allez faire un tour sur [la page concernant les packages](/packages), vous y trouverez une liste de
+packages Svelte de qualité que nous avons sélectionné. Vous pouvez également vous rendre sur le site
+[sveltesociety.dev](https://sveltesociety.dev/) pour plus de librairies, de templates, et de
+ressources.
 
 ## Autres intégrations [!VO]Additional integrations
 

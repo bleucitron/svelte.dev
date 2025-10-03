@@ -1108,9 +1108,6 @@ export const getStuff = query('unchecked', async ({ id }: { id: string }) => {
 });
 ```
 
-> [!NOTE] `form` n'accepte pas de schéma puisque vous recevrez toujours un objet `FormData`. Vous
-> êtes libres de parser et valider ces données comme bon vous semble.
-
 ## Utiliser `getRequestEvent` [!VO]Using `getRequestEvent`
 
 Dans une fonction `query`, `form` ou `command`, vous pouvez utiliser

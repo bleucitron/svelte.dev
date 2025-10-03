@@ -16,8 +16,7 @@ les pages suivantes :
 - [`@sveltejs/adapter-static`](adapter-static) pour la génération de sites statiques (SSG)
 - [`@sveltejs/adapter-vercel`](adapter-vercel) pour Vercel
 
-D'autres [adaptateurs gérés par la
-communauté](https://sveltesociety.dev/packages?category=sveltekit-adapters) existent pour d'autres
+D'autres [adaptateurs gérés par la communauté](/packages#sveltekit-adapters) existent pour d'autres
 plateformes.
 
 ## Utiliser les adaptateurs [!VO]Using adapters
