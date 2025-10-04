@@ -67,11 +67,11 @@ composants qui ne seraient utilisés que pour une route spécifique
 	- `%sveltekit.env.[NAME]%` — ceci sera remplacé au moment du rendu par la variable d'environnement
 		`[NAME]`, dont le nom doit être préfixé par [`publicPrefix`](configuration#env) (en général
 	`PUBLIC_`). Ce placeholder sera remplacé par `''` si aucune variable d'environnement ne correspond
+	- `%sveltekit.version%` — la version de l'application, qui peut être spécifiée avec la configuration
 - `error.html` est la page qui est affichée lorsque tout le reste s'est effondré. Elle peut contenir
 	les placeholders suivants :
 	- `%sveltekit.status%` — le status HTTP
 	- `%sveltekit.error.message%` — le message d'erreur
-	- `%sveltekit.version%` — la version de déploiement, qui peut être spécifiée avec la configuration
 [`version`](configuration#version)
 - `hooks.client.js` contient vos [hooks](hooks) client
 - `hooks.server.js` contient vos [hooks](hooks) serveur

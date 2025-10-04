@@ -3,25 +3,25 @@ title: Exports
 ---
 
 Tout ce qui exporté depuis un bloc de script `module` devient un export du module lui-même.
-Exportons une fonction `stopAll` :
+Exportons une fonction `pauseAll` :
 
 ```svelte
 /// file: AudioPlayer.svelte
 <script module>
 	let current;
 
-+++	export function stopAll() {
++++	export function pauseAll() {
 		current?.pause();
 	}+++
 </script>
 ```
 
-Nous pouvons maintenant importer `stopAll` dans `App.svelte`...
+Nous pouvons maintenant importer `pauseAll` dans `App.svelte`...
 
 ```svelte
 /// file: App.svelte
 <script>
-	import AudioPlayer, +++{ stopAll }+++ from './AudioPlayer.svelte';
+	import AudioPlayer, +++{ pauseAll }+++ from './AudioPlayer.svelte';
 	import { tracks } from './tracks.js';
 </script>
 ```
@@ -36,7 +36,7 @@ Nous pouvons maintenant importer `stopAll` dans `App.svelte`...
 	{/each}
 
 +++	<button onclick={stopAll}>
-		arrêter tout
+		mettre tout en pause
 	</button>+++
 </div>
 ```
