@@ -2459,22 +2459,6 @@ type RemoteForm<
 	for(
 		key: string | number | boolean
 	): Omit<RemoteForm<Input, Output>, 'for'>;
-	/**
-	 * Cette méthode existe pour vous permettre de vérifier le type des attributs `name`. Elle renvoie
-	 * son argument
-	 */
-	 * @example
-	 * ```svelte
-	 * <input name={login.field('username')} />
-	 * ```
-	 **/
-	field<
-		Name extends keyof UnionToIntersection<
-			FlattenKeys<Input, ''>
-		>
-	>(
-		string: Name
-	): Name;
 	/** Les vérifications de preflight */
 	preflight(
 		schema: StandardSchemaV1<Input, any>
@@ -2489,14 +2473,10 @@ type RemoteForm<
 	get result(): Output | undefined;
 	/** Le nombre de soumissions en cours */
 	get pending(): number;
-	/** Les valeurs soumises */
-	input: null | UnionToIntersection<
-		FlattenInput<Input, ''>
-	>;
-	/** Les problèmes de validation */
-	issues: null | UnionToIntersection<
-		FlattenIssues<Input, ''>
-	>;
+	/** Accédez aux champs de formulaire en utilisant la notation objet */
+	fields: Input extends void
+		? never
+		: RemoteFormFields<Input>;
 	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
 	buttonProps: {
 		type: 'submit';
@@ -2530,6 +2510,64 @@ type RemoteForm<
 
 </div>
 
+## RemoteFormField
+
+Type d'accesseur de champ de formulaire qui fournit les méthodes `name()`, `value()` et `issues()`
+
+<div class="ts-block">
+
+```dts
+type RemoteFormField<Value extends RemoteFormFieldValue> =
+	RemoteFormFieldMethods<Value> & {
+		/**
+		 * Renvoie un objet qui peut être étalé sur un élément input avec l'attribut de type correct,
+		 * l'attribut aria-invalid si le champ est invalide, et les getters/setters de propriétés
+		 * value/checked approprié
+		 * @example
+		 * ```svelte
+		 * <input {...myForm.fields.myString.as('text')} />
+		 * <input {...myForm.fields.myNumber.as('number')} />
+		 * <input {...myForm.fields.myBoolean.as('checkbox')} />
+		 * ```
+		 */
+		as<T extends RemoteFormFieldType<Value>>(
+			...args: AsArgs<T, Value>
+		): InputElementProps<T>;
+	};
+```
+
+</div>
+
+## RemoteFormFieldType
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldType<T> = {
+	[K in keyof InputTypeMap]: T extends InputTypeMap[K]
+		? K
+		: never;
+}[keyof InputTypeMap];
+```
+
+</div>
+
+## RemoteFormFieldValue
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldValue =
+	| string
+	| string[]
+	| number
+	| boolean
+	| File
+	| File[];
+```
+
+</div>
+
 ## RemoteFormInput
 
 <div class="ts-block">
@@ -2541,7 +2579,7 @@ interface RemoteFormInput {/*…*/}
 <div class="ts-block-property">
 
 ```dts
-[key: string]: FormDataEntryValue | FormDataEntryValue[] | RemoteFormInput | RemoteFormInput[];
+[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput>;
 ```
 
 <div class="ts-block-property-details"></div>
@@ -2554,24 +2592,6 @@ interface RemoteFormInput {/*…*/}
 ```dts
 interface RemoteFormIssue {/*…*/}
 ```
-
-<div class="ts-block-property">
-
-```dts
-name: string;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-path: Array<string | number>;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
 
 <div class="ts-block-property">
 
@@ -2924,7 +2944,7 @@ isDataRequest: boolean;
 
 Vaut `true` si la requête vient du client et demande les données de `+page/layout.server.js`. La
 propriété `url` sera supprimée des informations internes relatives à la requête de données dans ce
-cas. Utilisez cette propriété si la distinction est importante pour vous.
+cas. Utilisez cette propri��té si la distinction est importante pour vous.
 
 </div>
 </div>

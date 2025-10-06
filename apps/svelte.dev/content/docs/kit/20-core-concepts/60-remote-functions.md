@@ -269,7 +269,6 @@ La fonction `form` facilite l'écriture de données sur le serveur. Elle prend u
 l'objet `data` construit à partir du
 [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) soumis...
 
-
 ```ts
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
@@ -335,127 +334,213 @@ chaque fois que le formulaire est soumis.
 <h1>Créer un nouvel article</h1>
 
 <form {...createPost}>
+	<!-- le contenu du formulaire est défini ici -->
+
+	<button>Publier !</button>
+</form>
+```
+
+L'objet de formulaire contient les propriétés `method` et `action` qui lui permettent de fonctionner
+sans JavaScriptt (c-à-d il soumet les données et recharge la page). Il possède également un
+[attachement](/docs/svelte/@attach) qui améliore progressivement le formulaire lorsque JavaScript
+est disponible, lui permettant de soumettre les données *sans* recharger entièrement la page.
+
+Comme avec `query`, si le callback utilise les `data` soumises, celles-ci doivent être
+[validées](#query-Query-arguments) en passant un [Standard Schema](https://standardschema.dev) en
+tant que premier argument au `form`.
+
+### Champs [!VO]Fields
+
+Un formulaire est composé d'un ensemble de _champs_, qui sont définis par le schéma. Dans le cas
+d'un `createPost`, nous avons deux champs, `title` et `content`, qui sont tous deux des chaînes de
+caractères. Pour récupérer les attributs d'un champ, exécutez sa méthode `as(...)`, en précisant
+quel [type
+d'input](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/input) utiliser :
+
+```svelte
+<form {...createPost}>
 	<label>
 		<h2>Titre</h2>
-		<input name="title" />
+		+++<input {...createPost.fields.title.as('text')} />+++
 	</label>
 
 	<label>
 		<h2>Écrivez votre article</h2>
-		<textarea name="content"></textarea>
+		+++<textarea {...createPost.fields.content.as('text')}></textarea>+++
 	</label>
 
 	<button>Publier !</button>
 </form>
 ```
 
+Ces attributs permettent à SvelteKit de définit le type correct d'input, de définir un `name`
+utilisé pour construire les `data` passées au gestionnaire, de remplir la `value` du formulaire (par
+exemple à la suite de l'échec d'une soumission, permettant de sauvegarder l'utilisateur ou
+l'utilisatrice sans avoir besoin de tout ré-écrire), et de définir l'état
+[`aria-invalid`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-invalid)
 
-Comme avec `query`, si le callback utilise la `data` soumise, celle-ci devrait être
-[validée](#query-Query-arguments) en passant un [Standard Schema](https://standardschema.dev) en
-premier argument de `form`. La seule différence par rapport à `query` est que les entrées du schéma
-doivent toutes être de type `string` ou `File`, puisque le `FormData` d'origine ne peut pas fournir
-autre chose. Vous pouvez cependant transformer la valeur en un type différent — la manière de faire
-cela dépend de la librairie que vous utilisez.
+Les champs peuvent être imbriqués dans des objets et des tableaux, et leurs valeurs peuvent être des
+chaînes de caractères, des nombres, des booléens ou des objets `File`. Par exemple, si votre schéma
+ressemble à ceci...
 
-```ts
-/// file: src/routes/count.remote.js
+```js
+/// file: data.remote.js
 import * as v from 'valibot';
 import { form } from '$app/server';
-
-export const setCount = form(
-	v.object({
-		// Valibot:
-		count: v.pipe(v.string(), v.transform((s) => Number(s)), v.number()),
-		// Zod:
-		// count: z.coerce.number<string>()
+// ---cut---
+const datingProfile = v.object({
+	name: v.string(),
+	photo: v.file(),
+	info: v.object({
+		height: v.number(),
+		likesDogs: v.optional(v.boolean(), false)
 	}),
-	async ({ count }) => {
-		// ...
-	}
+	attributes: v.array(v.string())
+});
+
+export const createProfile = form(datingProfile, (data) => { /* ... */ });
+```
+
+... votre formulaire pourrait avoir cette forme là :
+
+```svelte
+<script>
+	import { createProfile } from './data.remote';
+
+	const { name, photo, info, attributes } = createProfile.fields;
+</script>
+
+<form {...createProfile} enctype="multipart/form-data">
+	<label>
+		<input {...name.as('text')} /> Nom
+	</label>
+
+	<label>
+		<input {...photo.as('file')} /> Photo
+	</label>
+
+	<label>
+		<input {...info.height.as('number')} /> Hauteur (cm)
+	</label>
+
+	<label>
+		<input {...info.likesDogs.as('checkbox')} /> J'aime les chiens
+	</label>
+
+	<h2>Mes meilleures compétences</h2>
+	<input {...attributes[0].as('text')} />
+	<input {...attributes[1].as('text')} />
+	<input {...attributes[2].as('text')} />
+
+	<button>envoyer</button>
+</form>
+```
+
+Puisque notre formulaire contient un input `file`, nous avons ajouté un attribut
+`enctype="multipart/form-data"`. Les valeurs de `info.height` et `info.likesDogs` sont transformées
+en nombre et booléen respectivement.
+
+> [!NOTE] Si un input `checkbox` est non coché, sa valeur n'est pas incluses dans l'objet
+> [`FormData`](https://developer.mozilla.org/fr/docs/Web/API/FormData) à partir duquelSvelteKit
+> construit les données. Ainsi, nous devons rendre la valeur optionnelle dans votre schéma. Avec
+> Valibot cela signifie l'utilisation de `v.optional(v.boolean(), false)` plutôt que juste
+> `v.boolean()`, tandis qu'avec Zod, cela signifie l'utilisation de `z.coerce.boolean<boolean>()`.
+
+Dans le cas d'inputs `radio` et `checkbox` qui appartiennent tous au même champ, la `value` doit
+être précisée en tant que second argument de `.as(...)` :
+
+```js
+/// file: data.remote.js
+import * as v from 'valibot';
+import { form } from '$app/server';
+// ---cut---
+export const survey = form(
+	v.object({
+		operatingSystem: v.picklist(['windows', 'mac', 'linux']),
+		languages: v.optional(v.array(v.picklist(['html', 'css', 'js'])), [])
+	}),
+	(data) => { /* ... */ }
 );
 ```
 
-Les attributs `name` dans les contrôles de formulaire doivent correspondre aux propriétés du schéma
-— `title` et `content` dans ce cas. Si votre schéma contient des objets, utilisez la notation objet
-:
-
 ```svelte
-<!--
-		résulte en un objet
-    {
-	   name: { first: string, last: string },
-	   jobs: Array<{ title: string, company: string }>
-	}
--->
-<input name="name.first" />
-<input name="name.last" />
-{#each jobs as job, idx}
-	<input name="jobs[{idx}].title">
-	<input name="jobs[{idx}].company">
-{/each}
+<form {...survey}>
+	<h2>Quel système d'exploitation utilisez-vous ?</h2>
+
+	{#each ['windows', 'mac', 'linux'] as os}
+		<label>
+			<input {...survey.fields.operatingSystem.as('radio', os)}>
+			{os}
+		</label>
+	{/each}
+
+	<h2>Dans quels langages écrivez-vous du code ?</h2>
+
+	{#each ['html', 'css', 'js'] as language}
+		<label>
+			<input {...survey.fields.languages.as('checkbox', language)}>
+			{language}
+		</label>
+	{/each}
+
+	<button>envoyer</button>
+</form>
 ```
 
-Pour indiquer un champ répété, utilisez un suffixe `[]` :
+De manière alternative, vous pouvez également utiliser `select` et `select multiple` :
 
 ```svelte
-<label><input type="checkbox" name="language[]" value="html" /> HTML</label>
-<label><input type="checkbox" name="language[]" value="css" /> CSS</label>
-<label><input type="checkbox" name="language[]" value="js" /> JS</label>
+<form {...survey}>
+	<h2>Quel système d'exploitation utilisez-vous ?</h2>
+
+	<select {...survey.fields.operatingSystem.as('select')}>
+		<option>windows</option>
+		<option>mac</option>
+		<option>linux</option>
+	</select>
+
+	<h2>Dans quels langages écrivez-vous du code ?</h2>
+
+	<select {...survey.fields.languages.as('select multiple')}>
+		<option>html</option>
+		<option>css</option>
+		<option>js</option>
+	</select>
+
+	<button>envoyer</button>
+</form>
 ```
 
-Si vous souhaitez du typage et de l'autocomplétion lorsque vous définissez des attributs `name`,
-utilisez la méthode `field` de l'objet de formulaire :
-
-```svelte
-<label>
-	<h2>Title</h2>
-	<input name={+++createPost.field('title')+++} />
-</label>
-```
-
-Ceci va provoquer une erreur lors de la vérification de types si `title` n'existe pas dans votre
-schéma :
-
-L'objet de formulaire contient les propriétés `method` et `action` lui permettant de fonctionner
-sans JavaScript (c-à-d qu'il soumet les données et recharge la page). Il possède également un
-[attachement](/docs/svelte/@attach) qui améliore progressivement le formulaire lorsque JavaScript
-est disponible, permmettant de soumettre les données *sans* recharger entièrement la page.
+> [!NOTE] Comme pour les inputs `checkbox` non cochés, si aucune sélection n'est faite, alors les
+> données seront `undefined`. Pour cette raison, le champ `languages` utilise
+> `v.optional(v.array(...), [])`, plutôt que simplement `v.array(...)`.
 
 ### Validation
 
 Si les données soumises ne correspondent pas au schéma, le callback ne sera pas exécuté. À la place,
-l'objet `issues` présent dans l'objet de formulaire sera rempli :
+chaque méthode `issues()` d'un champ invalide renverra un tableau d'objets `{ message: string }`, et
+l'attribut `aria-invalid` (renvoyé depuis `as(...)`) sera défini comme `true` :
 
 ```svelte
 <form {...createPost}>
 	<label>
 		<h2>Title</h2>
 
-+++		{#if createPost.issues.title}
-			{#each createPost.issues.title as issue}
-				<p class="issue">{issue.message}</p>
-			{/each}
-		{/if}+++
++++		{#each createPost.fields.title.issues() as issue}
+			<p class="issue">{issue.message}</p>
+		{/each}+++
 
-		<input
-			name="title"
-			+++aria-invalid={!!createPost.issues.title}+++
-		/>
+		<input {...createPost.fields.title.as('text')} />
 	</label>
 
 	<label>
-		<h2>Write your post</h2>
+		<h2>Écrivez votre article</h2>
 
-+++		{#if createPost.issues.content}
-			{#each createPost.issues.content as issue}
-				<p class="issue">{issue.message}</p>
-			{/each}
-		{/if}+++
++++		{#each createPost.fields.content.issues() as issue}
+			<p class="issue">{issue.message}</p>
+		{/each}+++
 
-		<textarea
-			name="content"
-			+++aria-invalid={!!createPost.issues.content}+++
-		></textarea>
+		<textarea {...createPost.fields.content.as('text')}></textarea>
 	</label>
 
 	<button>Publier !</button>
@@ -476,8 +561,9 @@ Par défaut, les problèmes sont ignorés s'ils concernent des contrôles de for
 il n'y a pas encore eu d'interaction. Pour valider _tous_ les inputs, appelez `validate({
 includeUntouched: true })`.
 
-Pour les navigations côté client, vous pouvez préciser un schéma _preflight_ qui va remplir les
-`issues` et empêcher que les données soient envoyées au serveur si elles ne sont pas validées :
+Pour les validations côté client, vous pouvez préciser un schéma _preflight_ qui va remplir les
+`issues()` et empêcher que les données soient envoyées au serveur si celles-ci ne sont pas validées
+:
 
 ```svelte
 <script>
@@ -504,11 +590,19 @@ Pour les navigations côté client, vous pouvez préciser un schéma _preflight_
 > être exporté depuis un module partagé, ou depuis le block `<script module>` du composant contenant
 > le `<form>`.
 
-### Inputs live [!VO]Live inputs
+Pour obtenir une liste de _tous_ les problèmes, plutôt qu'uniquement ceux appartenant à un champ
+particulier, vous pouvez utiliser la méthode `fields.allIssues()` :
 
-L'objet de formulaire contient une propriété `input` qui reflète sa valeur courante. Au fur et à
-mesure que l'utilisateur ou l'utilisatrice interagit avec le formulaire, `input` est automatiquement
-mis à jour :
+```svelte
+{#each createPost.fields.allIssues() as issue}
+	<p>{issue.message}</p>
+{/each}
+```
+
+### Récupérer/définir des inputs [!VO]Getting/setting inputs
+
+Chaque champ a une méthode `value()` qui reflète sa valeur actuelle. Lorsque quelqu'un interagit
+avec le formulaire, la valeur est automatiquement mise à jour :
 
 ```svelte
 <form {...createPost}>
@@ -516,15 +610,36 @@ mis à jour :
 </form>
 
 <div class="preview">
-	<h2>{createPost.input.title}</h2>
-	<div>{@html render(createPost.input.content)}</div>
+	<h2>{createPost.fields.title.value()}</h2>
+	<div>{@html render(createPost.fields.content.value())}</div>
 </div>
+```
+
+De plus, `createPost.fields` renvoie un objet `{ title, content }`.
+
+Vous pouvez mettre à jour un champ (ou une collection de champs) via la méthode `set(...)` :
+
+
+```svelte
+<script>
+	import { createPost } from '../data.remote';
+
+	// ceci...
+	createPost.fields.set({
+		title: 'Mon nouvel article de blog',
+		content: 'Lorem ipsum dolor sit amet...'
+	});
+
+	// ...est équivalent à ceci :
+	createPost.fields.title.set('Mon nouvel article de blog');
+	createPost.fields.content.set('Lorem ipsum dolor sit amet');
+</script>
 ```
 
 ### Gérer les données sensibles [!VO]Handling sensitive data
 
 Dans le cas d'une soumission de formulaire non-améliorée-progressivement (c-à-d lorsque JavaScript
-n'est pas disponible, quelqu'en soit la raison), `input` est également rempli si les données
+n'est pas disponible, quelqu'en soit la raison), `value()` est également rempli si les données
 soumises sont invalides, afin que l'utilisateur ou l'utilisatrice n'ait pas besoin de re-remplir
 entièrement le formulaire.
 
@@ -535,20 +650,12 @@ bancaire) soient renvoyés au client en utilisant un nom commençant par un tire
 <form {...register}>
 	<label>
 		Nom
-		<input
-			name="username"
-			value={register.input.username}
-			aria-invalid={!!register.issues.username}
-		/>
+		<input {...register.fields.username.as('text')} />
 	</label>
 
 	<label>
 		Mot de passe
-		<input
-			type="password"
-			+++name="_password"+++
-			+++aria-invalid={!!register.issues._password}+++
-		/>
+		<input +++{...register.fields._password.as('password')}+++ />
 	</label>
 
 	<button>S'inscrire !</button>
@@ -777,12 +884,12 @@ Cet attribut existe dans la propriété `buttonProps` d'un objet de formulaire :
 <form {...login}>
 	<label>
 		Votre nom d'utilisateur
-		<input name="username" />
+		<input {...login.fields.username.as('text')} />
 	</label>
 
 	<label>
 		Votre mot de passe
-		<input name="password" type="password" />
+		<input {...login.fields._password.as('password')} />
 	</label>
 
 	<button>se connecter</button>
@@ -1138,11 +1245,16 @@ const getUser = query(() => {
 });
 ```
 
-Notez que certaines propriétés de `RequestEvent` sont différentes au sein des fonctions distantes.
-Il n'y a pas de `params` ou de `route.id`, et vous ne pouvez pas définir d'en-têtes (si ce n'est
-écrire dans des cookies, et uniquement dans des fonctions `form` et `command`), et `url.pathname`
-vaut toujours `/` (puisque le chemin qui est vraiment requêté par le client est essentiellement un
-détail d'implémentation).
+Notez que certaines propriétés de `RequestEvent` sont différentes au sein des fonctions distantes :
+
+- vous ne pouvez pas définir d'en-têtes (si ce n'est écrire dans des cookies, et uniquement dans des
+fonctions `form` et `command`)
+- `route`, `params` et `url` sont relatives à la page depuis laquelle la fonction distante a été
+appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction distante. Les queries ne
+sont pas ré-exécutées lorsque l'utilisateur ou l'utilisatrice navigue (à moins que l'argument de la
+query ait changé suite à une navigation), vous devriez donc être conscient•e de la façon dont vous
+utilisez ces valeurs. En particulier, ne les utilisez jamais pour déterminer si oui ou non une
+personne est autorisée à accéder à certaines données.
 
 ## Redirections [!VO]Redirects
 
