@@ -106,140 +106,160 @@ const FEATURED: {
 		]
 	},
 	{
-		title: 'SvelteKit adapters',
+		title: 'Adaptateurs SvelteKit',
 		packages: [
-			{ name: '@sveltejs/adapter-node', description: 'Builds a standalone Node server' },
-			{ name: '@sveltejs/adapter-cloudflare', description: 'Builds your app for Cloudflare' },
-			{ name: '@sveltejs/adapter-netlify', description: 'Builds your app for Netlify' },
-			{ name: '@sveltejs/adapter-vercel', description: 'Builds your app for Vercel' },
-			{ name: '@sveltejs/adapter-static', description: 'Builds your static site' },
-			{ name: '@deno/svelte-adapter', description: 'Builds your app for Deno Deploy' },
-			{ name: 'amplify-adapter', description: 'Builds your app for AWS Amplify' },
-			{ name: 'svelte-kit-sst', description: 'Builds your app for AWS Lambda and AWS Lamda@Edge' },
-			{ name: 'svelte-adapter-bun', description: 'Builds your app for Bun' },
+			{ name: '@sveltejs/adapter-node', description: 'Compile un serveur Node autonome' },
+			{
+				name: '@sveltejs/adapter-cloudflare',
+				description: 'Compile votre application pour Cloudflare'
+			},
+			{ name: '@sveltejs/adapter-netlify', description: 'Compile votre application pour Netlify' },
+			{ name: '@sveltejs/adapter-vercel', description: 'Compile votre application pour Vercel' },
+			{ name: '@sveltejs/adapter-static', description: 'Compile votre site statique' },
+			{ name: '@deno/svelte-adapter', description: 'Compile votre application pour Deno Deploy' },
+			{ name: 'amplify-adapter', description: 'Compile votre application pour AWS Amplify' },
+			{
+				name: 'svelte-kit-sst',
+				description: 'Compile votre application pour AWS Lambda et AWS Lamda@Edge'
+			},
+			{ name: 'svelte-adapter-bun', description: 'Compile votre application pour Bun' },
 			{
 				name: 'svelte-adapter-appengine',
-				description: 'Builds your app for Google Cloud App Engine'
+				description: 'Compile votre application pour Google Cloud App Engine'
 			},
 			{
 				name: 'sveltekit-adapter-chrome-extension',
-				description: 'Builds your app as a Chrome extension using manifest v3'
+				description:
+					"Compile votre application en tant qu'extension Chrome utilisant un manifeste v3"
 			},
 			{
 				name: '@slicemachine/adapter-sveltekit',
-				description: "Integrate with Prismic's Slice Machine"
+				description: 'Intégration avec la Slice Machine de Prismic'
 			}
 		]
 	},
 	{
-		title: 'Content',
+		title: 'Contenu',
 		packages: [
 			{
 				name: 'mdsvex',
-				description: 'Put Markdown in your Svelte and Svelte in your Markdown'
+				description:
+					'Mettez du Markdown dans vos fichiers Svelte et du code Svelte dans vos fichiers Markdown'
 			},
 			{
 				name: '@content-collections/core',
-				description: 'Transform your content into type-safe data collections'
+				description: 'Transformez votre contenu en collections de données typées'
 			},
-			{ name: 'svelte-exmarkdown', description: 'Extensible component for Markdown rendering' },
+			{
+				name: 'svelte-exmarkdown',
+				description: 'Composant extensible pour faire du rendu Markdown'
+			},
 			{
 				name: '@magidoc/plugin-svelte-marked',
-				description: 'Markdown parser that supports Github Flavored Markdown'
+				description: 'Parser de Markdown qui supporte Github Flavored Markdown'
 			},
 			{
 				name: '@prismicio/svelte',
-				description: 'Components and helpers to fetch and present Prismic content'
+				description: 'Composant et utilitaires permettant de récupérer du contenu Prismic'
 			},
 			{ name: 'carta-md' },
-			{ name: '@sveltepress/vite', description: 'A content centered site build tool' },
+			{
+				name: '@sveltepress/vite',
+				description: 'Un outil de création de site centré sur le contenu'
+			},
 			{
 				name: '@evidence-dev/evidence',
 				description:
-					'A framework for building and publishing data products using SQL, Markdown, and AI'
+					'Un framework permettant de construire et de publier des produits basés sur des données en utilisant SQL, Markdown, and AI'
 			},
-			{ name: 'svelte-pdf', description: 'Render PDF documents using PDF.js' },
+			{ name: 'svelte-pdf', description: 'Fait le rendu de documents PDF en utilisant PDF.js' },
 			{ name: 'typewriter-editor' }
 		]
 	},
 	{
-		title: 'Data visualization',
+		title: 'Dataviz',
 		packages: [
 			{
 				name: 'layerchart',
-				description: 'Composable chart components for building a wide range of visualizations'
+				description:
+					'Composants de graphiques composables permettant de construire une grande variété de visualisations'
 			},
 			{
 				name: 'layercake',
-				description: 'Create responsive graphics that can work without JavaScript'
+				description: 'Crée des graphiques responsives pouvant fonctionner sans JavaScript'
 			},
 			{
 				name: 'svelte-maplibre',
-				description: 'Publish maps on your website with GPU-accelerated vector tile rendering'
+				description:
+					'Publiez des cartes sur votre site avec du rendu de tuiles vectorielles accéléré par GPU'
 			},
 			{
 				name: '@xyflow/svelte',
-				description: 'Customizable component for building node-based UIs and diagrams'
+				description:
+					'Composant personnalisable permettant de construire des interfaces et diagrammes basés sur des noeuds'
 			},
 			{
 				name: 'svelte-maplibre-gl',
-				description: 'Build interactive web maps with MapLibre GL'
+				description: 'Construisez de cartes web interactives avec MapLibre GL'
 			}
 		]
 	},
 	{
 		title: 'Auth',
 		packages: [
-			{ name: 'better-auth', description: 'Comprehensive authentication library' },
+			{ name: 'better-auth', description: "Bibliothèque complète d'authentification" },
 			{
 				name: '@supabase/ssr',
-				description: 'Server-side library for cookie-based authentication with SvelteKit'
+				description:
+					"Bibliothèque server-side pour faire de l'authentification basée sur des cookies avec SvelteKit"
 			},
 			{
 				name: 'altcha',
 				description:
-					'Privacy-first CAPTCHA widget, compliant with global regulations and WCAG accessible'
+					"Widget CAPTCHA orienté vie privée, respectant les régulations internationales et les critères d'accessibilité WCAG"
 			},
 			{
 				name: 'svelte-clerk',
-				description: 'Unofficial implementation of Clerk'
+				description: 'Implémentation non-officielle de Clerk'
 			},
-			{ name: 'svelte-session-manager', description: 'JWT session store' },
+			{ name: 'svelte-session-manager', description: 'Store de session JWT' },
 			{
 				name: 'svelte-kit-sessions',
-				description: 'Session management library for SvelteKit'
+				description: 'Bibliothèque de gestion de session pour SvelteKit'
 			},
 			{ name: '@passlock/sveltekit' }
 		]
 	},
 	{
-		title: 'Third party services',
+		title: 'Services tiers',
 		packages: [
 			{ name: '@sentry/svelte' },
 			{ name: '@sentry/sveltekit' },
-			{ name: 'svelte-stripe', description: 'Add Stripe Elements to your project' },
+			{ name: 'svelte-stripe', description: 'Ajoutez des éléments Stripe à votre projet' },
 			{
 				name: 'svelte-clerk',
-				description: 'Unofficial implementation of Clerk'
+				description: 'Implémentation non officielle de Clerk'
 			},
 			{
 				name: '@storyblok/svelte',
-				description: 'Integrate the Storyblok headless CMS into your project'
+				description: 'Intégration du CMS headless Storyblok dans votre projet'
 			},
 			{
 				name: '@inlang/paraglide-js',
-				description: 'A compiler-based i18n library that emits tree-shakable message functions'
+				description:
+					'Une bibliothèque i18n basée sur un compilateur qui génère des fonctions de messages pouvant être tree-shakées'
 			}
 		]
 	},
 	{
-		title: 'Internationalization (i18n)',
+		title: 'Internationalisation (i18n)',
 		packages: [
 			{
 				name: '@inlang/paraglide-js',
-				description: 'A compiler-based i18n library that emits tree-shakable message functions'
+				description:
+					'Une bibliothèque i18n basée sur un compilateur qui génère des fonctions de messages pouvant être tree-shakées'
 			},
-			{ name: '@wuchale/svelte', description: 'Protobuf-like i18n from plain code' },
+			{ name: '@wuchale/svelte', description: "De l'i18n Protobuf-like à partir de code brut" },
 			{ name: 'i18n-js' }
 		]
 	},
@@ -249,35 +269,39 @@ const FEATURED: {
 			{ name: '@sveltejs/enhanced-img' },
 			{
 				name: '@unpic/svelte',
-				description: 'Responsive image component that integrates with popular CDNs'
+				description: "Composant responsif d'image qui s'intègre avec les CDNs populaires"
 			},
 			{ name: '@poppanator/sveltekit-svg' },
-			{ name: 'svelte-easy-crop', description: 'A component for cropping images' },
+			{ name: 'svelte-easy-crop', description: 'Un composant permettant de cropper les images' },
 			{
 				name: '@uppy/svelte',
-				description: 'Upload files from your computer or cloud storage services'
+				description:
+					'Uploadez des fichiers depuis votre ordinateur ou depuis des services de stockage en ligne'
 			},
 			{ name: 'scrolly-video' }
 		]
 	},
 	{
-		title: 'Individual components',
+		title: 'Composants individuels',
 		packages: [
 			{
 				name: '@tanstack/svelte-table',
-				description: 'Headless UI for building powerful tables & datagrids'
+				description:
+					'Interfaces headless permettant de construire des tables et grilles de données puissantes'
 			},
 			{
 				name: '@ai-sdk/svelte',
-				description: 'Library for building AI-powered applications and agents'
+				description:
+					"Bibliothèque permettant de construire des applications et agents basés sur l'IA"
 			},
 			{
 				name: '@tanstack/svelte-virtual',
-				description: 'Headless UI for virtualizing scrollable elements'
+				description: 'Interfaces headless permettant de virtualiser des éléments de défilement'
 			},
 			{
 				name: 'virtua',
-				description: 'A zero-config, fast and small (~3kB) virtual list and grid component'
+				description:
+					'Un composant de liste et grille virtuelles, sans configuration, rapide et léger (~3kO)'
 			},
 			{ name: '@event-calendar/core' }
 		]
@@ -286,12 +310,13 @@ const FEATURED: {
 		title: 'Animations',
 		packages: [
 			{ name: '@threlte/core' },
-			{ name: '@neoconfetti/svelte', description: 'Confetti explosion' },
-			{ name: 'svelte-motion', description: 'Animation library based on framer-motion' },
-			{ name: '@lottiefiles/svelte-lottie-player', description: 'Lottie animation player' },
+			{ name: '@neoconfetti/svelte', description: 'Explosion de confettis' },
+			{ name: 'svelte-motion', description: "Bibliothèque d'animation basé sur framer-motion" },
+			{ name: '@lottiefiles/svelte-lottie-player', description: "Lecteur d'animation Lottie" },
 			{
 				name: '@tsparticles/svelte',
-				description: 'Easily create highly customizable particles, confetti, and fireworks'
+				description:
+					"Créez facilement des effets personnalisables de particules, de confettis et de feux d'artifices"
 			}
 		]
 	},
@@ -300,110 +325,121 @@ const FEATURED: {
 		packages: [
 			{
 				name: 'svelte-meta-tags',
-				description: 'SEO components with deep merge functionality and JSON-LD support'
+				description:
+					'Composants de référencement avec des fonctionnalités puissantes et du support pour JSON-LD'
 			},
 			{
 				name: 'super-sitemap',
 				description:
-					'A SvelteKit sitemap generator that makes it impossible to forget to add your paths'
+					"Un générateur de sitemap SvelteKit rendant impossible pour vous d'oublier d'ajouter vos paths"
 			},
-			{ name: 'svelte-seo', description: 'Add meta tags, Open Graph, and JSON-LD to your site' },
+			{
+				name: 'svelte-seo',
+				description: 'Ajoutez des balises meta, Open Graph et JSON-LD à votre site'
+			},
 			{
 				name: 'svead',
 				description:
-					'Set head meta information, canonical, title, Twitter and Facebook Open Graph tags, and schema.org data'
+					'Définissez des données meta, canoniques, de titre, pour les balises Open Graph Twitter et Facebook, ainsi que des données schema.org'
 			}
 		]
 	},
 	{
-		title: 'Devtools',
+		title: 'Outillage dev',
 		packages: [
-			{ name: 'svelte-render-scan', description: 'Visual debugging tool' },
-			{ name: 'svelte-inspect-value', description: 'Value inspector component' }
+			{ name: 'svelte-render-scan', description: 'Outil de déboggage visuel' },
+			{ name: 'svelte-inspect-value', description: "Composant permettant d'inspecter des valeurs" }
 		]
 	},
 	{
-		title: 'Icons',
+		title: 'Icônes',
 		description:
-			'See the <a href="/docs/kit/icons">icons documentation</a> for best practices when using an icon library',
+			'Voir la <a href="/docs/kit/icons">documentation sur les icônes</a> pour les bonnes pratiques lorsque vous utilisez une bibliothèque d\'icônes',
 		packages: [
 			{ name: '@iconify/tailwind4' },
 			{ name: '@unocss/preset-icons' },
-			{ name: '@lucide/svelte', description: 'Beautiful and consistent icons' },
-			{ name: 'svelte-awesome', description: 'Font Awesome icons for Svelte' },
-			{ name: 'phosphor-svelte', description: 'A clean and friendly icon family' },
-			{ name: 'unplugin-icons', description: 'A Vite plugin that provides icons on demand' }
+			{ name: '@lucide/svelte', description: 'De jolies icônes consistantes' },
+			{ name: 'svelte-awesome', description: 'Des icônes Font Awesome pour Svelte' },
+			{ name: 'phosphor-svelte', description: "Une famille d'icônes propres" },
+			{ name: 'unplugin-icons', description: 'Un plugin Vite qui fournit des icônes à la demande' }
 		]
 	},
 	{
-		title: 'Testing',
+		title: 'Tests',
 		description:
-			'You might find the <a href="/docs/svelte/testing">documentation about testing</a> to be helpful during setup',
+			'Vous pouvez trouver la <a href="/docs/svelte/testing">documentation sur les tests</a> pertinente lors de la mise en place',
 		packages: [
-			{ name: '@testing-library/svelte', description: 'Testing utilities for DOM interaction' },
-			{ name: 'playwright', description: 'Browser automation for end-to-end testing' },
+			{
+				name: '@testing-library/svelte',
+				description: 'Utilitaires de tests pour les interactions DOM'
+			},
+			{
+				name: 'playwright',
+				description: "Des outils d'automatisation de navigateur pour les tests end-to-end"
+			},
 			{ name: 'vitest' }
 		]
 	},
 	{
-		title: 'Bundler plugins',
+		title: 'Plugins de bundler',
 		description:
-			'If you’re using SvelteKit or a similar framework, this part is taken care of. If you’re <a href="/docs/svelte/getting-started#Alternatives-to-SvelteKit">setting things up on your own</a>, you will need a plugin to tell your bundler how to compile Svelte files',
+			'Si vous utilisez SvelteKit ou un framework similaire, cette partie est déjà gérée. Si vous <a href="/docs/svelte/getting-started#Alternatives-to-SvelteKit">mettez les choses en place vous-même</a>, vous aurez besoin d\'plugin pour dire à votre bundler comment compiler les fichiers Svelte',
 		packages: [
 			{ name: '@sveltejs/vite-plugin-svelte' },
 			{ name: 'rollup-plugin-svelte' },
-			{ name: 'svelte-loader', description: 'Compile Svelte components with webpack' },
-			{ name: 'esbuild-svelte', description: 'Compile Svelte components with esbuild' }
+			{ name: 'svelte-loader', description: 'Compilez les composants Svelte avec webpack' },
+			{ name: 'esbuild-svelte', description: 'Compilez les composants Svelte avec esbuild' }
 		]
 	},
 	{
 		title: 'Routing',
 		description:
-			'The official router is <a href="/docs/kit">SvelteKit</a>, but here are some alternatives',
+			'Le routeur officiel est <a href="/docs/kit">SvelteKit</a>, mais voici quelques alternatives',
 		packages: [
 			{ name: 'svelte5-router' },
-			{ name: '@roxi/routify', description: 'Routes based on file structure' },
-			{ name: 'svelte-pathfinder', description: 'A tiny, state-based router' },
+			{ name: '@roxi/routify', description: 'Routes basée sur la structure de fichiers' },
+			{ name: 'svelte-pathfinder', description: "Un routeur léger basé sur l'état" },
 			{ name: 'universal-router' }
 		]
 	},
 	{
-		title: 'Data fetching',
+		title: 'Chargement de données',
 		description:
-			'We recommend using SvelteKit’s <a href="/docs/kit/remote-functions">remote functions</a>, but for specific needs you can use these alternatives',
+			'Nous recommandons d\'utiliser les <a href="/docs/kit/remote-functions">fonctions distantes</a>, mais pour des besoins spécifiques vous pouvez utiliser ces alternatives',
 		packages: [
 			{
 				name: '@tanstack/svelte-query',
-				description: 'Primitives for managing, caching and syncing asynchronous and remote data'
+				description:
+					'Primitives permettant de gérer, mettre en cache, et synchroniser des données distantes asynchrones'
 			},
-			{ name: '@urql/svelte', description: 'Customizable GraphQL client' },
-			{ name: 'houdini', description: 'The disappearing GraphQL framework' },
+			{ name: '@urql/svelte', description: 'Client GraphQL personnalisable' },
+			{ name: 'houdini', description: 'Le framework GraphQL qui disparaît' },
 			{
 				name: 'trpc-sveltekit',
-				description: 'SvelteKit adapter for tRPC.io that supports Node, Vercel and Netlify'
+				description: 'Un adaptateur SvelteKit pour tRPC.io qui supporte Node, Vercel et Netlify'
 			},
 			{
 				name: '@orpc/svelte-query',
-				description: 'APIs that are end-to-end type-safe and adhere to OpenAPI standards'
+				description: 'Des APIs typées de bout en bout et qui respectent les standard OpenAPI'
 			},
 			{ name: 'sswr' }
 		]
 	},
 	{
-		title: 'Forms',
+		title: 'Formulaires',
 		description:
-			'SvelteKit has built-in <a href="/docs/kit/remote-functions#form">forms</a>, but you can also use these packages',
+			'SvelteKit a une <a href="/docs/kit/remote-functions#form">gestion des formulaires intégrées</a>, mais vous pouvez aussi utiliser ces paquets',
 		packages: [
 			{
 				name: 'sveltekit-superforms',
-				description: 'Server-side and client-side form validation library'
+				description: 'Bibliothèque de validation de formulaire client-side et server-side'
 			},
 			{
 				name: 'formsnap',
-				description: 'Accessible form components built on top of sveltekit-superforms'
+				description: 'Composants de formulaires accessibles basés sur sveltekit-superforms'
 			},
-			{ name: 'felte', description: 'An extensible form library' },
-			{ name: '@tanstack/svelte-form', description: 'Powerful, type-safe forms' }
+			{ name: 'felte', description: 'Une bibliothèque de formulaire extensible' },
+			{ name: '@tanstack/svelte-form', description: 'Des formulaires typées et puissants' }
 		]
 	}
 ];
