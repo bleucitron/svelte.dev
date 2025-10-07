@@ -4,7 +4,7 @@ title: Aperçu
 ---
 
 Le serveur MCP de Svelte ([Model Context
-Protocol](https://modelcontextprotocol.io/docs/getting-started/intro)) peut aider le LLM ou l' agent
+Protocol](https://modelcontextprotocol.io/docs/getting-started/intro)) peut aider le LLM ou l'agent
 de votre choix à écrire du meilleur code Svelte. Il fonctionne en fournissant de la documentation
 pertinente à la tâche en cours, et en analysant de manière statique le code généré afin qu'il puisse
 suggérer des correctifs ou des bonnes pratiques.
@@ -12,7 +12,7 @@ suggérer des correctifs ou des bonnes pratiques.
 ## Installation [!VO] Setup
 
 L'installation varie selon la version du MCP que vous préférez — distant ou local — et le client MCP
-choici (par ex. Claude Code, Codex CLI ou Github Copilot) :
+choisi (par ex. Claude Code, Codex CLI ou Github Copilot) :
 
 - [installation locale](local-setup) en utilisant `@sveltejs/mcp`
 - [installation distante](remote-setup) en utilisant `https://mcp.svelte.dev/mcp`

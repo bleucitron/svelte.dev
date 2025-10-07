@@ -65,7 +65,7 @@ Le `[scope]` doit être `user`, `project` ou `local`.
 
 ## OpenCode
 
-Lancer la commande :
+Lancez la commande :
 
 ```bash
 opencode mcp add
