@@ -515,6 +515,50 @@ De manière alternative, vous pouvez également utiliser `select` et `select mul
 > données seront `undefined`. Pour cette raison, le champ `languages` utilise
 > `v.optional(v.array(...), [])`, plutôt que simplement `v.array(...)`.
 
+### Validation programmatique [!VO]Programmatic validation
+
+En plus de la validation de schéma déclarative, vous pouvez programmatiquement marquer des champs
+comme invalides au sein du gestionnaire de formulaire en utilisant la fonction `invalid`. Cela sert
+dans les cas où vous ne pouvez savoir si quelque chose est valide avant d'avoir effectué certaines
+actions :
+
+```js
+/// file: src/routes/shop/data.remote.js
+import * as v from 'valibot';
+import { form } from '$app/server';
+import * as db from '$lib/server/database';
+
+export const buyHotcakes = form(
+	v.object({
+		qty: v.pipe(
+			v.number(),
+			v.minValue(1, 'vous devez acheter au moins un gâteau')
+		)
+	}),
+	async (data, invalid) => {
+		try {
+			await db.buy(data.qty);
+		} catch (e) {
+			if (e.code === 'OUT_OF_STOCK') {
+				invalid(
+					invalid.qty(`nous n'avons pas assez de gâteaux`)
+				);
+			}
+		}
+	}
+);
+```
+
+La fonction `invalid` fonctionne à la fois comme une fonction et comme un proxy :
+
+- Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation
+- Si une erreur est une `string`, elle s'applique au formulaire en tant que tel (et sera affichée
+dans `fields.allIssues()`)
+- Utilisez `invalid.fieldName(message)` pour créer une erreur pour un champ particulier. Comme
+`fields`, ceci est typé et vous pouvez utiliser la syntaxe classique d'accès aux propriétés pour
+créer des erreurs concernant des objets imbriqués (par ex. `invalid.profile.email('L\'e-mail existe
+déjà'')` ou `invalid.items[0].qty('Stock insuffisant')`))
+
 ### Validation
 
 Si les données soumises ne correspondent pas au schéma, le callback ne sera pas exécuté. À la place,
@@ -859,6 +903,28 @@ await submit().updates(
 ```
 
 La surcharge sera appliquée immédiatement, et annulée lorsque la soumission se termine (ou échoue).
+
+### Instances multiples de formulaire [!VO]Multiple instances of a form
+
+Certains formulaires peuvent être répétés au sein d'une liste. Dans ce cas, vous pouvez créer des
+instances séparées d'une fonction de formulaire via `for(id)` pour les garder en isolation.
+
+```svelte
+<!--- file: src/routes/todos/+page.svelte --->
+<script>
+	import { getTodos, modifyTodo } from '../data.remote';
+</script>
+
+<h1>À faire</h1>
+
+{#each await getTodos() as todo}
+	{@const modify = modifyTodo.for(todo.id)}
+	<form {...modify}>
+		<!-- -->
+		<button disabled={!!modify.pending}>enregistrer les changements</button>
+	</form>
+{/each}
+```
 
 ### buttonProps
 

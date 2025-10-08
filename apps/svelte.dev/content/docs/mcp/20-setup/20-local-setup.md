@@ -117,6 +117,26 @@ configuration suivante :
 }
 ```
 
+## Zed
+
+- Ouvrez la palette de commande
+- Cherchez et sélectionnez "agent: open settings"
+- Dans les paramètres, cherchez l'option `Model Context Protocol (MCP) Servers`
+- Cliquez sur "Add Server"
+- Sélectionnez "Add Custom Server"
+
+Cela ouvrira une popup avec la configuration du serveur MCP où vous pourrez ajouter la configuration
+suivante :
+
+```json
+{
+	"svelte": {
+		"command": "npx",
+		"args": ["-y", "@sveltejs/mcp"]
+	}
+}
+```
+
 ## Autres clients [!VO]Other clients
 
 Si nous n'avons pas inclus le client MCP que vous utilisez, merci de vous référer à leur

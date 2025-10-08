@@ -1313,6 +1313,29 @@ Le contenu de l'erreur.
 </div>
 </div></div>
 
+## Invalid
+
+Une fonction et un objet proxy utilisé pour impérativement créer des erreurs de validations dans les
+gestionnaires de formulaire.
+
+Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation.
+Si une erreur est une `string`, elle s'applique au formulaire en tant quel tel (et sera affichée
+dans `fields.allIssues()`).
+Accédez aux propriétés pour créer des erreurs spécifiques à certains champs :
+`invalid/fieldName('message')`.
+La structure de type reflète la structure des données d'entrée pour un accès typé au champ.
+
+<div class="ts-block">
+
+```dts
+type Invalid<Input = any> = ((
+	...issues: Array<string | StandardSchemaV1.Issue>
+) => never) &
+	InvalidField<Input>;
+```
+
+</div>
+
 ## KitConfig
 
 Voir la [documentation sur la configuration](/docs/kit/configuration) pour plus de détails.
@@ -2443,8 +2466,8 @@ type RemoteForm<
 		[attachment: symbol]: (node: HTMLFormElement) => void;
 	};
 	/**
-	 * Crée une instance du formualaire pour la clé donné.
-	 * La clé est transformée en chaîne de caractères pour déduplication afin de pouvoir réutiliser des instances existantes.
+	 * Crée une instance du formulaire pour la clé `id`.
+	 * La clé `id` est transformée en chaîne de caractères pour déduplication afin de pouvoir réutiliser des instances existantes.
 	 * Utile lorsque vous avez plusieurs formulaires qui utilisent la même action de formulaire distante, par exemple dans une boucle.
 	 * ```svelte
 	 * {#each todos as todo}
@@ -2457,7 +2480,7 @@ type RemoteForm<
 	 * ```
 	 */
 	for(
-		key: string | number | boolean
+		id: ExtractId<Input>
 	): Omit<RemoteForm<Input, Output>, 'for'>;
 	/** Les vérifications de preflight */
 	preflight(
