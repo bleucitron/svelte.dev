@@ -18,7 +18,7 @@ Voici comment l'installer pour quelques uns des clients MCP classiques :
 Pour inclure la version locale du MCP dans Claude Code, lancer simplement la commande suivante :
 
 ```bash
-claude mcp add -t stdio -s [scope] svelte npx -y @sveltejs/mcp
+claude mcp add -t stdio -s [scope] svelte -- npx -y @sveltejs/mcp
 ```
 
 Le `[scope]` doit être `user`, `project` ou `local`.

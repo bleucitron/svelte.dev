@@ -20,8 +20,10 @@ choisi (par ex. Claude Code, Codex CLI ou Github Copilot) :
 ## Usage
 
 Pour utiliser au mieux le serveur MCP, nous recommandons d'inclure le prompt suivant dans un fichier
-`AGENTS.md` (ou `CLAUDE.md`, si vous utilisez Claude Code). Ceci indiquera au LLM quels outils sont
-disponibles et à quel moment il est approprié de les utiliser.
+[`AGENTS.md`](https://agents.md) (ou
+[`CLAUDE.md`](https://docs.claude.com/en/docs/claude-code/memory#claude-md-imports), si vous
+utilisez Claude Code). Ceci indiquera au LLM quels outils sont disponibles et à quel moment il est
+approprié de les utiliser.
 
 ```md
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and
