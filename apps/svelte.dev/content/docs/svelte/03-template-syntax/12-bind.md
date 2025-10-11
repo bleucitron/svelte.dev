@@ -421,6 +421,10 @@ programmatiquement avec les instances de composant.
 </script>
 ```
 
+> [!NOTE] Si vous utilisez les [liaisons de fonctions](#Function-bindings), le getter est requis
+> pour garantir que la valeur correcte est rendue null lors de la destruction du composant ou de
+> l'élément.
+
 ## bind:_property_ pour les composants [!VO]bind:property for components
 
 ```svelte
