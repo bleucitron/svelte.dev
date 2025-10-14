@@ -154,10 +154,14 @@ une application mobile en utilisant [Tauri](https://v2.tauri.app/start/frontend/
 géolocalisation ou les notifications push sont disponibles via des plugins pour chacune des
 plateformes.
 
-Svelte Native était une option disponible pour Svelte 4, mais Svelte 5 n'est actuellement pas
-compatible. Svelte Native vous permet d'écrire des apps NativeScript en utilisant des composants
-Svelte contenant des [composants d'UI NativeScript](https://docs.nativescript.org/ui/) plutôt que
-des éléments DOM, ce qui est similaire à ce que React Native permet.
+Des travaux ont été réalisés dans l'optique de fournir un support pour des [moteurs de rendu
+personnalisés pour Svelte 5](https://github.com/sveltejs/svelte/issues/15470), mais cette
+fonctionnalité n'est pas encore disponible. L'API de rendu personnalisé devrait supporter d'autres
+frameworks mobiles comme Lynx JS et Svelte Native. Svelte Native était une option disponible pour
+Svelte 4, mais Svelte 5 n'est actuellement pas compatible. Svelte Native vous permet d'écrire des
+apps NativeScript en utilisant des composants Svelte contenant des [composants d'UI
+NativeScript](https://docs.nativescript.org/ui/) plutôt que des éléments DOM, ce qui est similaire à
+ce que React Native permet.
 
 ## Puis-je dire à Svelte de ne pas supprimer mes styles non utilisés ? [!VO]Can I tell Svelte not to remove my unused styles?
 
