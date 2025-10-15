@@ -1307,7 +1307,7 @@ export const getProfile = query(async () => {
 
 // cette query pourrait être appelée depuis plusieurs endroits,
 // mais cette fonction ne sera exécutée qu'une fois par requête
-const getUser = query(() => {
+const getUser = query(async () => {
 	const { cookies } = getRequestEvent();
 
 	return await findUser(cookies.get('session_id'));

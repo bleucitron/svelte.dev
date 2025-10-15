@@ -12,6 +12,7 @@ import {
 	SvelteComponentTyped,
 	afterUpdate,
 	beforeUpdate,
+	createContext,
 	createEventDispatcher,
 	createRawSnippet,
 	flushSync,
@@ -219,6 +220,21 @@ En mode runes, utilisez plutôt `$effect.pre`.
 
 ```dts
 function beforeUpdate(fn: () => void): void;
+```
+
+</div>
+
+
+
+## createContext
+
+Renvoie une paire de fonctions `[get, set]` permettant de travailler avec un contexte de manière
+typée.
+
+<div class="ts-block">
+
+```dts
+function createContext<T>(): [() => T, (context: T) => T];
 ```
 
 </div>
