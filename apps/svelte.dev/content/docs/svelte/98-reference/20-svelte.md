@@ -228,8 +228,16 @@ function beforeUpdate(fn: () => void): void;
 
 ## createContext
 
+<blockquote class="since note">
+
+Disponible depuis la version 5.40.0
+
+</blockquote>
+
 Renvoie une paire de fonctions `[get, set]` permettant de travailler avec un contexte de manière
 typée.
+
+`get` va jeter une erreur si aucun composant parent n'a précédemment appelé `set`.
 
 <div class="ts-block">
 
@@ -377,6 +385,8 @@ function getAllContexts<
 Récupère le contexte nommé `key` appartenant au composant parent le plus proche. Doit être exécuté
 pendant l'initialisation du composant.
 
+[`createContext`](/docs/svelte/svelte#createContext) est une alternative typée.
+
 <div class="ts-block">
 
 ```dts
@@ -518,6 +528,8 @@ contenus slottés) avec `getContext`.
 
 Comme pour les fonctions de cycle de vie, cette fonction doit être exécutée lors de l'initialisation
 du composant.
+
+[`createContext`](/docs/svelte/svelte#createContext) est une alternative typée.
 
 <div class="ts-block">
 

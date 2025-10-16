@@ -93,28 +93,19 @@ Svelte vous avertira si vous vous trompez.
 
 ## Contexte typé [!VO]Type-safe context
 
-Une astuce utile est d'englober les appels à `setContext` et `getContext` dans des fonctions
-utilitaires qui vous permettent de préserver votre typage :
+Au lieu d'utiliser `setContext` et `getContext` directement, vous pouvez les utiliser via
+`createContext`, qui vous fournit un contexte typé et permet de ne pas avoir à fournir de clé :
 
-```js
-/// file: context.js
+```ts
+/// file: context.ts
 // @filename: ambient.d.ts
 interface User {}
 
-// @filename: index.js
+// @filename: index.ts
 // ---cut---
-import { getContext, setContext } from 'svelte';
+import { createContext } from 'svelte';
 
-const key = {};
-
-/** @param {User} user */
-export function setUserContext(user) {
-	setContext(key, user);
-}
-
-export function getUserContext() {
-	return /** @type {User} */ (getContext(key));
-}
+export const [getUserContext, setUserContext] = createContext<User>();
 ```
 
 ## Remplacer l'état global [!VO]Replacing global state

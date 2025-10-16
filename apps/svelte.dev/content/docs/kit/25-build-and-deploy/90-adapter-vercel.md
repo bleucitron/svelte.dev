@@ -50,7 +50,7 @@ export const config = {
 
 Les options suivantes s'appliquent à toutes les fonctions :
 
-- `runtime` : `'edge'`, `'nodejs18.x'`, `'nodejs20.x'` ou `'nodejs22.x'`. Par défaut, l'adaptateur
+- `runtime` : `'edge'`, `'nodejs20.x'` ou `'nodejs22.x'`. Par défaut, l'adaptateur
 va choisir la version de Node `'nodejs<version>.x` correspondant à la version sur laquelle votre
 projet est configuré sur l'interface de Vercel
 	> [!NOTE] Cette option est dépréciée et sera supprimée dans une version future, et à ce moment-là
