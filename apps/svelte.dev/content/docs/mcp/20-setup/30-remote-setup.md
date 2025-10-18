@@ -102,6 +102,27 @@ configuration suivante :
 }
 ```
 
+## GitHub Coding Agent
+
+- Ouvrez votre projet dans Github
+- Allez dans les Paramètres
+- Ouvrez Copilot > Coding agent
+- Modifiez la configuration MCP
+
+```json
+{
+   "mcpServers" {
+      "svelte": {
+         "type": "http",
+         "url": "https://mcp.svelte.dev/mcp",
+         "tools": ["*"]
+      }
+   }
+}
+```
+
+- Click _Save MCP configuration_
+
 ## Autres clients [!VO]Other clients
 
 Si nous n'avons pas inclus le client MCP que vous utilisez, merci de vous référer à leur

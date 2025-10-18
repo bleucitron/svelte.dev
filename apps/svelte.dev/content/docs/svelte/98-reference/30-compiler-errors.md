@@ -463,6 +463,12 @@ quelque chose de similaire en utilisant plutôt l'indice :
 {/each}
 ```
 
+### each_key_without_as
+
+```
+An `{#each ...}` block without an `as` clause cannot have a key
+```
+
 ### effect_invalid_placement
 
 ```
