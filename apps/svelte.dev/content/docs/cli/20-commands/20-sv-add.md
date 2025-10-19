@@ -33,6 +33,7 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 - [`drizzle`](drizzle)
 - [`eslint`](eslint)
 - [`lucia`](lucia)
+- [`mcp`](mcp)
 - [`mdsvex`](mdsvex)
 - [`paraglide`](paraglide)
 - [`playwright`](playwright)

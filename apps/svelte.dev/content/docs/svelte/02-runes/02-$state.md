@@ -200,6 +200,28 @@ Pour prendre un instantané statique d'un Proxy profondément réactif `$state`,
 Ceci est pratique lorsque vous souhaitez passer un état à une librairie externe ou à une API qui
 ne s'attend pas à recevoir un proxy, comme dans le cas de `structuredClone`.
 
+## `$state.eager`
+
+Lorsque un état est mis à jour, il peut ne pas être reflété dans l'interface immédiatement s'il est
+utilisé dans une expression `await`, car les [mises à jour sont
+synchronisées](await-expressions#Synchronized-updates).
+
+Dans certains cas, vous pourriez vouloir mettre à jour l'interface dès que l'état est mis à jour.
+Par exemple, vous pourriez vouloir mettre à jour une barre de navigation lorsque l'utilisateur ou
+l'utilisatrice clique sur un lien, afin d'afficher un retour visuel pendant le chargement de la
+nouvelle page. Pour faire cela, utilisez `$state.eager(value)` :
+
+```svelte
+<nav>
+	<a href="/" aria-current={$state.eager(pathname) === '/' ? 'page' : null}>accueil</a>
+	<a href="/about" aria-current={$state.eager(pathname) === '/about' ? 'page' : null}>à propos</a>
+</nav>
+```
+
+Utilisez cette fonctionnalité avec parcimonie, et uniquement pour fournir des retours en réponse à
+des actions utilisateur — en général, laisser Svelte coordonner les mises à jour va permettre une
+meilleure expérience utilisateur.
+
 ## Passer de l'état à des fonctions [!VO]Passing state into functions
 
 JavaScript est un langage qui _passe par valeur_ — lorsque vous appelez une fonction, les arguments
