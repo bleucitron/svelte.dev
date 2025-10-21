@@ -2488,7 +2488,10 @@ type RemoteForm<
 	): RemoteForm<Input, Output>;
 	/** Valider le contenu du formulaire programmatiquement */
 	validate(options?: {
+		/** Définissez cette valeur à `true` pour également afficher les problèmes de validation des champs qui n'ont pas encore été touchés. */
 		includeUntouched?: boolean;
+		/** Définissez cette valeur à `true` pour n'exécuter que la validation `preflight`. */
+		preflightOnly?: boolean;
 		/** Effectuer la validation comme si le formualaire avait été soumis par le bouton fourni */
 		submitter?: HTMLButtonElement | HTMLInputElement;
 	}): Promise<void>;
@@ -2587,6 +2590,37 @@ type RemoteFormFieldValue =
 	| boolean
 	| File
 	| File[];
+```
+
+</div>
+
+## RemoteFormFields
+
+Type récursif pour construire une structure de champs de formulaire ayant un accès de proxy
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFields<T> =
+	WillRecurseIndefinitely<T> extends true
+		? RecursiveFormFields
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? RemoteFormField<NonNullable<T>>
+			: T extends string[] | File[]
+				? RemoteFormField<T> & {
+						[K in number]: RemoteFormField<T[number]>;
+					}
+				: T extends Array<infer U>
+					? RemoteFormFieldContainer<T> & {
+							[K in number]: RemoteFormFields<U>;
+						}
+					: RemoteFormFieldContainer<T> & {
+							[K in keyof T]-?: RemoteFormFields<T[K]>;
+						};
 ```
 
 </div>
