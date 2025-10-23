@@ -24,6 +24,9 @@ en utilisant la réactivité fine va déclencher sa ré-exécution
 <input bind:value={message} />
 ```
 
+Lors des mises à jour, une stack trace sera affichée, permettant de facilement trouver l'origine
+d'un changement d'état (sauf si vous êtes dans le bac à sable, à cause de limitations techniques).
+
 ## $inspect(...).with
 
 `$inspect` renvoie une propriété `with`, que vous pouvez exécuter avec un callback, qui sera ensuite
@@ -43,14 +46,6 @@ utilisé à la place de `console.log`. Le premier argument du callback est soit 
 </script>
 
 <button onclick={() => count++}>Incrémenter</button>
-```
-
-Une manière pratique de trouver l'origine d'une mise à jour est de fournir `console.trace` à `with`
-:
-
-```js
-// @errors: 2304
-$inspect(stuff).with(console.trace);
 ```
 
 ## $inspect.trace(...)

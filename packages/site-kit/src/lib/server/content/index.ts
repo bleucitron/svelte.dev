@@ -6,6 +6,7 @@ const VO_REGEX = /\[\!VO](.+)/;
 export async function create_index(
 	documents: Record<string, string>,
 	assets: Record<string, string>,
+	documents_assets: Record<string, string>,
 	base: string,
 	read: (asset: string) => Response
 ): Promise<Record<string, Document>> {
@@ -101,6 +102,15 @@ export async function create_index(
 		const document = content[slug];
 
 		(document.assets ??= {})[file] = assets[key];
+	}
+
+	for (const key in documents_assets) {
+		const path = key.slice(base.length + 1);
+		const slug = path.slice(0, path.indexOf('+assets') - 1).replace(/(^|\/)\d+-/g, '$1');
+		const file = path.slice(path.indexOf('+assets') + 8);
+		const document = content[slug];
+
+		(document.assets ??= {})[file] = documents_assets[key];
 	}
 
 	let prev: Document | null = null;
