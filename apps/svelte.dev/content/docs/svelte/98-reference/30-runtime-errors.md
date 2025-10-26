@@ -154,6 +154,12 @@ de mettre à jour un état dans un effet — [ce que vous devriez
 éviter]($effect#When-not-to-use-$effect) — vous pouvez lire l'état avec [`untrack`](svelte#untrack)
 pour éviter de l'ajouter en tant que dépendance.
 
+### experimental_async_fork
+
+```
+Cannot use `fork(...)` unless the `experimental.async` compiler option is `true`
+```
+
 ### flush_sync_in_effect
 
 ```
@@ -166,6 +172,18 @@ dit, vous pouvez l'appeler après un changement d'état mais _pas_ au sein d'un 
 
 Cette restriction s'applique uniquement lorsque vous utilisez l'option `experimental.async`, qui
 sera active par défaut en Svelte 6.
+
+### fork_discarded
+
+```
+Cannot commit a fork that was already discarded
+```
+
+### fork_timing
+
+```
+Cannot create a fork inside an effect or when state changes are pending
+```
 
 ### get_abort_signal_outside_reaction
 

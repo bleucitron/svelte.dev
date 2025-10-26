@@ -16,6 +16,7 @@ import {
 	createEventDispatcher,
 	createRawSnippet,
 	flushSync,
+	fork,
 	getAbortSignal,
 	getAllContexts,
 	getContext,
@@ -320,6 +321,40 @@ Ne renvoie rien si aucun callback n'est fourni, renvoie le résultat de l'appel 
 
 ```dts
 function flushSync<T = void>(fn?: (() => T) | undefined): T;
+```
+
+</div>
+
+
+
+## fork
+
+<blockquote class="since note">
+
+Disponible depuis la version 5.42
+
+</blockquote>
+
+Crée un "fork", au sein duquel les changements d'état sont évalués mais pas appliqués au DOM.
+Cela sert à charger des données spéculativement (par exemple) lorsque vous suspectez que
+l'utilisateur ou l'utilisatrice est sur le point de réaliser une action.
+
+Les frameworks comme SvelteKit peuvent se servir de cette API pour précharger des données lorsque
+l'utilisateur ou l'utilisatrice touche ou survole un lien, donnant aux navigations à venir un effet
+"instantané".
+
+Le paramètre `fn` est une fonctino synchrone qui modifie l'état. Les changements d'état seront
+annulés après l'initialisation du fork, puis ré-appliqués si et lorsque le fork sera appliqué pour
+de bon.
+
+Lorsqu'il apparaît évident qu'un fork ne sera _pas_ appliqué pour de bon (par ex. parce que
+l'utilisateur ou l'utilisatrice a navigué vers un autre endroit), le fork doit être supprimé pour
+éviter des fuites de mémoire.
+
+<div class="ts-block">
+
+```dts
+function fork(fn: () => void): Fork;
 ```
 
 </div>
@@ -964,6 +999,50 @@ interface EventDispatcher<
 ```
 
 <div class="ts-block-property-details"></div>
+</div></div>
+
+## Fork
+
+<blockquote class="since note">
+
+Disponible depuis la version 5.42
+
+</blockquote>
+
+Représente des tâches se produisant hors de l'écran, telles que des préchargements de données en
+anticipation d'une navigation.
+
+<div class="ts-block">
+
+```dts
+interface Fork {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+commit(): Promise<void>;
+```
+
+<div class="ts-block-property-details">
+
+Applique le fork pour de bon. La promesse sera résolue lorsque le changement d'état aura été
+appliqué
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+discard(): void;
+```
+
+<div class="ts-block-property-details">
+
+Supprime le fork
+
+</div>
 </div></div>
 
 ## MountOptions

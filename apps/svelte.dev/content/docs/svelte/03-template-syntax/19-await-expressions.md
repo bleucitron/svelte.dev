@@ -163,6 +163,57 @@ de renvoyer le résultat de `await render(...)`.
 > [!NOTE] Dans le futur, nous prévoyons d'ajouter une implémentation de streaming permettant de
 > rendre du contenu en toile de fond.
 
+## Forking
+
+L'API [`fork(...)`](svelte#fork), ajoutée dans la version 5.42, rend possible l'exécution
+d'expressions `await` dont vous _anticipez_ qu'elles vont se produire dans un futur proche. Ceci
+sert principalement aux frameworks comme SvelteKit, leur permettant d'implémenter du préchargement
+lorsque (par exemple) les utilisateurs ou utilisatrices signalent une intention de navigation.
+
+```svelte
+<script>
+	import { fork } from 'svelte';
+	import Menu from './Menu.svelte';
+
+	let open = $state(false);
+
+	/** @type {import('svelte').Fork | null} */
+	let pending = null;
+
+	function preload() {
+		pending ??= fork(() => {
+			open = true;
+		});
+	}
+
+	function discard() {
+		pending?.discard();
+		pending = null;
+	}
+</script>
+
+<button
+	onfocusin={preload}
+	onfocusout={discard}
+	onpointerenter={preload}
+	onpointerleave={discard}
+	onclick={() => {
+		pending?.commit();
+		pending = null;
+
+		// dans le cas où `pending` n'existe pas
+		// (s'il existe, c'est une non-opération)
+		open = true;
+	}}
+>ouvrir le menu</button>
+
+{#if open}
+	<!-- toute tâche asynchrone au sein de ce composant démarrera
+			 aussi tôt que le fork est créé -->
+	<Menu onclose={() => open = false} />
+{/if}
+```
+
 ## Mises en garde [!VO]Caveats
 
 En tant que fonctionnalité expérimentale, les détails de comment les expressions `await` sont gérées
