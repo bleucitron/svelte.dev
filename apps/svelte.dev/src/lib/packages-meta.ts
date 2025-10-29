@@ -377,7 +377,8 @@ const FEATURED: {
 				name: 'playwright',
 				description: "Des outils d'automatisation de navigateur pour les tests end-to-end"
 			},
-			{ name: 'vitest' }
+			{ name: 'vitest' },
+			{ name: 'storybook' }
 		]
 	},
 	{

@@ -2536,6 +2536,23 @@ type RemoteForm<
 
 </div>
 
+## RemoteFormAllIssue
+
+<div class="ts-block">
+
+```dts
+interface RemoteFormAllIssue extends RemoteFormIssue {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+path: Array<string | number>;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 ## RemoteFormField
 
 Type d'accesseur de champ de formulaire qui fournit les méthodes `name()`, `value()` et `issues()`

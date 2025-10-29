@@ -45,8 +45,9 @@ export default config;
 Les fonctions distantes (_remote_) sont exportées depuis un fichier `.remote.js` ou `.remote.ts`, et
 sont disponibles en quatre versions : `query`, `form`, `command`, et `prerender`. Sur le client, les
 fonctions exportées sont transformées en wrappers autour de `fetch` qui invoquent leur contrepartie
-sur le serveur en utilisant un endpoint HTTP généré. Les fichiers `.remote.` doivent être placés
-dans le dossier `src`.
+sur le serveur en utilisant un endpoint HTTP généré. Les fichiers `.remote.` peuvent être placés
+n'importe où dans votre dossier `src` (sauf dans le dossier `src/lib/server`), et des librairies
+externes peuvent également en fournir.
 
 ## query
 
@@ -382,6 +383,13 @@ l'utilisatrice sans avoir besoin de tout ré-écrire), et de définir l'état
 Les champs peuvent être imbriqués dans des objets et des tableaux, et leurs valeurs peuvent être des
 chaînes de caractères, des nombres, des booléens ou des objets `File`. Par exemple, si votre schéma
 ressemble à ceci...
+
+> [!NOTE] L'attribut généré `name` utilise la notation d'objet JS (par ex. `nested.array[0].value`).
+> Les clés exprimés en chaînes de caractères qui nécessitent des guillemets tels que
+> `object['nested-array'][0].value` ne sont pas supportées. Sous le capot, les noms de champs de
+> type nombre et de type booléen (pour les checkbox) sont préfixés par `b:` et `n:`, respectivement,
+> pour signaler à SvelteKit qu'il doit transformer les valeurs depuis des chaînes de caractères
+> avant leur validation.
 
 ```js
 /// file: data.remote.js
