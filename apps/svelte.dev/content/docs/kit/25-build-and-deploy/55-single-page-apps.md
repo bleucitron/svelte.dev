@@ -29,7 +29,7 @@ pouvant pas être servie par d'autres moyens, comme par exemple l'utilisation d'
 ## Usage
 
 D'abord, désactivez le SSR pour les pages que vous ne voulez pas pré-rendre. Ces pages seront
-servies via la page de fallback. Par ex. pour servir par défaut toutes vos pages via la page de
+servies via la page de fallback ; par ex. pour servir par défaut toutes vos pages via la page de
 fallback, vous pouvez mettre à jour le layout racine comme montré ci-dessous. Vous devriez
 [réactiver le pré-rendu individuel de pages et de dossiers](#Prerendering-individual-pages) lorsque
 c'est possible.
