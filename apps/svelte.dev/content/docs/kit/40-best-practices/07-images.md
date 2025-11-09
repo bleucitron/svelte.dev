@@ -121,7 +121,7 @@ préciser `enhanced` via une [custom query](https://vitejs.dev/guide/features.ht
 ```svelte
 <script>
 	const imageModules = import.meta.glob(
-		'/path/to/assets/*.{avif,gif,heif,jpeg,jpg,png,tiff,webp,svg}',
+		'/path/to/assets/*.{avif,gif,heif,jpeg,jpg,png,tiff,webp}',
 		{
 			eager: true,
 			query: {
@@ -135,6 +135,8 @@ préciser `enhanced` via une [custom query](https://vitejs.dev/guide/features.ht
 	<enhanced:img src={module.default} alt="some alt text" />
 {/each}
 ```
+
+> [!NOTE] Les images SVG sont actuellement uniquement supportées de manière statique.
 
 ### Dimensions intrinsèques [!VO]Intrinsic Dimensions
 
