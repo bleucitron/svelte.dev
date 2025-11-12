@@ -399,9 +399,9 @@ En exportant des gestionnaires `POST`/`PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD`, l
 ```svelte
 <!--- file: src/routes/add/+page.svelte --->
 <script>
-	let a = 0;
-	let b = 0;
-	let total = 0;
+	let a = $state(0);
+	let b = $state(0);
+	let total = $state(0);
 
 	async function add() {
 		const response = await fetch('/api/add', {
