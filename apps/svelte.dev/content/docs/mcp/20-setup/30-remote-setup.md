@@ -46,7 +46,7 @@ suivante :
 gemini mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
 ```
 
-Le `[scope]` doit être `user`, `project` ou `local`.
+Le `[scope]` doit être `user` ou `project`.
 
 ## OpenCode
 
