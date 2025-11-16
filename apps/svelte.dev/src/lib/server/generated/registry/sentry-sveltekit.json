@@ -15,10 +15,10 @@
 		"zeeg"
 	],
 	"homepage": "https://github.com/getsentry/sentry-javascript/tree/master/packages/sveltekit",
-	"version": "10.22.0",
-	"downloads": 66606,
+	"version": "10.25.0",
+	"downloads": 64842,
 	"github_stars": 8465,
-	"updated": "2025-10-24T07:07:39.653Z",
+	"updated": "2025-11-11T17:06:13.538Z",
 	"svelte_range": "^4.2.8",
 	"kit_range": "2.x",
 	"typescript": true,
