@@ -20,10 +20,27 @@ ci-dessous](#Official-add-ons), ou simplement utiliser le prompt interactif.
 
 ## Options
 
-- `-C`, `--cwd` — path vers la racine de votre projet Svelte(Kit)
-- `--no-git-check` — même si certains fichiers ne sont pas propres, aucun prompt ne sera affiché
-- `--install` — installe les dépendances avec le gestionnaire de paquet spécifié
-- `--no-install` — empêche l'installation des dépendances
+### `-C`, `--cwd`
+
+Chemin vers la racine de votre projet Svelte(Kit).
+
+### `--no-git-check`
+
+Même si certains fichiers sont sales, aucun prompt ne sera affiché.
+
+### `--install <package-manager>`
+
+Installe les dépendances avec le gestionnaire de paquets spécifié :
+
+- `npm`
+- `pnpm`
+- `yarn`
+- `bun`
+- `deno`
+
+### `--no-install`
+
+Empêche l'installation de dépendances.
 
 ## Add-ons officiels [!VO]Official add-ons
 

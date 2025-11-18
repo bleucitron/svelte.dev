@@ -31,7 +31,7 @@ Le type de base de données à utiliser :
 - `sqlite` — une base de données basée sur des fichiers, et ne nécessitant donc pas de serveur
 
 ```sh
-npx sv add drizzle=database:postgresql
+npx sv add drizzle="database:postgresql"
 ```
 
 ### client
@@ -43,7 +43,7 @@ Le client SQL à utiliser, dépend de `database` :
 - Pour `sqlite`: `better-sqlite3`, `libsql`, `turso`
 
 ```sh
-npx sv add drizzle=database:postgresql+client:postgres.js
+npx sv add drizzle="database:postgresql+client:postgres.js"
 ```
 
 Drizzle est compatible avec plus d'une dizaine de drivers de bases de données. Nous offrons ici
@@ -58,5 +58,5 @@ Si oui ou non ajouter la configuration de Docker Compose. Uniquement disponible 
 [`database`](#Options-database) `postgresql` ou `mysql`.
 
 ```sh
-npx sv add drizzle=database:postgresql+client:postgres.js+docker:yes
+npx sv add drizzle="database:postgresql+client:postgres.js+docker:yes"
 ```

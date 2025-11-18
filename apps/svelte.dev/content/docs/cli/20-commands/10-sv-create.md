@@ -66,6 +66,10 @@ Installe les dépendances avec le gestionnaire de paquet spécifié :
 
 Empêche l'installation des dépendances.
 
+### `--no-dir-check`
+
+Ne vérifie pas si le dossier source est vide.
+
 <!-- ## Programmatic interface
 
 ```js

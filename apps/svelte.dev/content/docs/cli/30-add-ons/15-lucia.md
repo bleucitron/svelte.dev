@@ -25,5 +25,5 @@ npx sv add lucia
 Si oui ou non inclure les pages de démo pour l'inscription et la connexion.
 
 ```sh
-npx sv add lucia=demo:yes
+npx sv add lucia="demo:yes"
 ```
