@@ -9,7 +9,7 @@ n'importe quel élément, et Svelte mettra à jour les valeurs liées en utilisa
 ```svelte
 /// file: App.svelte
 <div +++bind:clientWidth={w} bind:clientHeight={h}+++>
-	<span style="font-size: {size}px" contenteditable>{text}</span>
+	<span style="font-size: {size}px" contenteditable>edit this text</span>
 	<span class="size">{w} x {h}px</span>
 </div>
 ```
