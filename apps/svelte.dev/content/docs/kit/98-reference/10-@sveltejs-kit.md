@@ -12,9 +12,11 @@ import {
 	VERSION,
 	error,
 	fail,
+	invalid,
 	isActionFailure,
 	isHttpError,
 	isRedirect,
+	isValidationError,
 	json,
 	normalizeUrl,
 	redirect,
@@ -129,6 +131,50 @@ function fail<T = undefined>(
 
 
 
+## invalid
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.47.3
+
+</blockquote>
+
+Utilisez cette méthode pour jeter une erreur de validation permettant de faire échouer de manière
+impérative la validation du formulaire.
+Peut être utilisé en combinaison avec `issue` passée aux actions de formulaire pour créer des
+erreurs spécifiques aux champs.
+
+```ts
+import { invalid } from '@sveltejs/kit';
+import { form } from '$app/server';
+import { tryLogin } from '$lib/server/auth';
+import * as v from 'valibot';
+
+export const login = form(
+	v.object({ name: v.string(), _password: v.string() }),
+	async ({ name, _password }) => {
+		const success = tryLogin(name, _password);
+		if (!success) {
+			invalid('Nom ou mot de passe incorrect');
+		}
+
+		// ...
+	}
+);
+```
+
+<div class="ts-block">
+
+```dts
+function invalid(
+	...issues: (StandardSchemaV1.Issue | string)[]
+): never;
+```
+
+</div>
+
+
+
 ## isActionFailure
 
 Vérifie si l'action a échoué via le jeté de `fail`.
@@ -170,6 +216,26 @@ Vérifie s'il s'agit d'une redirection jetée par `redirect`.
 
 ```dts
 function isRedirect(e: unknown): e is Redirect_1;
+```
+
+</div>
+
+
+
+## isValidationError
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.47.3
+
+</blockquote>
+
+Vérifie si l'erreur est une erreur de validation jetée par `invalid`.
+
+<div class="ts-block">
+
+```dts
+function isValidationError(e: unknown): e is ActionFailure;
 ```
 
 </div>
@@ -1313,25 +1379,39 @@ Le contenu de l'erreur.
 </div>
 </div></div>
 
-## Invalid
+## InvalidField
 
 Une fonction et un objet proxy utilisé pour impérativement créer des erreurs de validations dans les
 gestionnaires de formulaire.
 
-Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation.
-Si une erreur est une `string`, elle s'applique au formulaire en tant quel tel (et sera affichée
-dans `fields.allIssues()`).
 Accédez aux propriétés pour créer des erreurs spécifiques à certains champs :
 `invalid/fieldName('message')`.
 La structure de type reflète la structure des données d'entrée pour un accès typé au champ.
+Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation.
 
 <div class="ts-block">
 
 ```dts
-type Invalid<Input = any> = ((
-	...issues: Array<string | StandardSchemaV1.Issue>
-) => never) &
-	InvalidField<Input>;
+type InvalidField<T> =
+	WillRecurseIndefinitely<T> extends true
+		? Record<string | number, any>
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? (message: string) => StandardSchemaV1.Issue
+			: NonNullable<T> extends Array<infer U>
+				? {
+						[K in number]: InvalidField<U>;
+					} & ((message: string) => StandardSchemaV1.Issue)
+				: NonNullable<T> extends RemoteFormInput
+					? {
+							[K in keyof T]-?: InvalidField<T[K]>;
+						} & ((
+							message: string
+						) => StandardSchemaV1.Issue)
+					: Record<string, never>;
 ```
 
 </div>
@@ -2492,17 +2572,13 @@ type RemoteForm<
 		includeUntouched?: boolean;
 		/** Définissez cette valeur à `true` pour n'exécuter que la validation `preflight`. */
 		preflightOnly?: boolean;
-		/** Effectuer la validation comme si le formualaire avait été soumis par le bouton fourni */
-		submitter?: HTMLButtonElement | HTMLInputElement;
 	}): Promise<void>;
 	/** Le résultat de la soumission du formulaire */
 	get result(): Output | undefined;
 	/** Le nombre de soumissions en cours */
 	get pending(): number;
 	/** Accédez aux champs de formulaire en utilisant la notation objet */
-	fields: Input extends void
-		? never
-		: RemoteFormFields<Input>;
+	fields: RemoteFormFields<Input>;
 	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
 	buttonProps: {
 		type: 'submit';
@@ -3826,6 +3902,29 @@ decode: (data: U) => T;
 ```
 
 <div class="ts-block-property-details"></div>
+</div></div>
+
+## ValidationError
+
+Une erreur de validation jetée par `invalid`.
+
+<div class="ts-block">
+
+```dts
+interface ValidationError {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+issues: StandardSchemaV1.Issue[];
+```
+
+<div class="ts-block-property-details">
+
+Les erreurs de validation
+
+</div>
 </div></div>
 
 

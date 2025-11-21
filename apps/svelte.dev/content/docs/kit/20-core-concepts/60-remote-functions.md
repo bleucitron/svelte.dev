@@ -528,11 +528,15 @@ De manière alternative, vous pouvez également utiliser `select` et `select mul
 En plus de la validation de schéma déclarative, vous pouvez programmatiquement marquer des champs
 comme invalides au sein du gestionnaire de formulaire en utilisant la fonction `invalid`. Cela sert
 dans les cas où vous ne pouvez savoir si quelque chose est valide avant d'avoir effectué certaines
-actions :
+actions. Tout comme `redirect` ou `error`, `invalid` jette une erreur. Cette méthode attend une
+liste de chaîne de caractères (pour les problèmes concernant le formulaire en tant que tel) ou des
+entités compatibles avec un schéma (pour les problèmes concernant un champ spécifique). Utilisez le
+paramètre `issue` pour créer ces entitées de manière typée :
 
 ```js
 /// file: src/routes/shop/data.remote.js
 import * as v from 'valibot';
+import { invalid } from '@sveltejs/kit';
 import { form } from '$app/server';
 import * as db from '$lib/server/database';
 
@@ -543,13 +547,13 @@ export const buyHotcakes = form(
 			v.minValue(1, 'vous devez acheter au moins un gâteau')
 		)
 	}),
-	async (data, invalid) => {
+	async (data, issue) => {
 		try {
 			await db.buy(data.qty);
 		} catch (e) {
 			if (e.code === 'OUT_OF_STOCK') {
 				invalid(
-					invalid.qty(`nous n'avons pas assez de gâteaux`)
+					issue.qty(`nous n'avons pas assez de gâteaux`)
 				);
 			}
 		}

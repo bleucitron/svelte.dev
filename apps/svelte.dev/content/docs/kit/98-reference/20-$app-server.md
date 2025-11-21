@@ -85,9 +85,7 @@ documentation complète.
 
 ```dts
 function form<Output>(
-	fn: (
-		invalid: import('@sveltejs/kit').Invalid<void>
-	) => MaybePromise<Output>
+	fn: () => MaybePromise<Output>
 ): RemoteForm<void, Output>;
 ```
 
@@ -100,7 +98,7 @@ function form<Input extends RemoteFormInput, Output>(
 	validate: 'unchecked',
 	fn: (
 		data: Input,
-		invalid: import('@sveltejs/kit').Invalid<Input>
+		issue: InvalidField<Input>
 	) => MaybePromise<Output>
 ): RemoteForm<Input, Output>;
 ```
@@ -120,9 +118,7 @@ function form<
 	validate: Schema,
 	fn: (
 		data: StandardSchemaV1.InferOutput<Schema>,
-		invalid: import('@sveltejs/kit').Invalid<
-			StandardSchemaV1.InferInput<Schema>
-		>
+		issue: InvalidField<StandardSchemaV1.InferInput<Schema>>
 	) => MaybePromise<Output>
 ): RemoteForm<StandardSchemaV1.InferInput<Schema>, Output>;
 ```

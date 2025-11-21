@@ -13,7 +13,10 @@ npx sv add mcp
 
 ## Ce que vous obtenez [!VO]What you get
 
-- Une configuration de MCP correcte pour votre projet, selon votre votre IDE.
+- Une configuration MCP pour une installation [locale](/docs/mcp/local-setup) ou
+[distante](/docs/mcp/remote-setup)
+- Un fichier [README pour agents](https://agents.md/) pour vous aider à utiliser le serveur MCP de
+manière efficace
 
 ## Options
 
