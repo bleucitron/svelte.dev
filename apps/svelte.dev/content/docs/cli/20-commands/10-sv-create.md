@@ -50,9 +50,10 @@ Empêche l'utilisation de la vérification de types. Non recommandé !
 
 ### `--add [add-ons...]`
 
-Add add-ons to the project in the `create` command. Following the same format as [sv add](sv-add#Usage).
+Ajoute des add-ons au projet via la commande `create`, en suivant le même format que [sv
+add](sv-add#Usage).
 
-Example:
+Exemple :
 
 ```sh
 npx sv create --add eslint prettier [path]
