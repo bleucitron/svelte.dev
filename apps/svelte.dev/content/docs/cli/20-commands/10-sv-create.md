@@ -48,6 +48,16 @@ JSDoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) 
 
 Empêche l'utilisation de la vérification de types. Non recommandé !
 
+### `--add [add-ons...]`
+
+Add add-ons to the project in the `create` command. Following the same format as [sv add](sv-add#Usage).
+
+Example:
+
+```sh
+npx sv create --add eslint prettier [path]
+```
+
 ### `--no-add-ons`
 
 Lance la commande sans l'utilitaire de choix d'options.
