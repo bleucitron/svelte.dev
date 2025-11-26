@@ -21,6 +21,7 @@ import {
 	getAllContexts,
 	getContext,
 	hasContext,
+	hydratable,
 	hydrate,
 	mount,
 	onDestroy,
@@ -441,6 +442,18 @@ pendant l'initialisation du composant.
 
 ```dts
 function hasContext(key: any): boolean;
+```
+
+</div>
+
+
+
+## hydratable
+
+<div class="ts-block">
+
+```dts
+function hydratable<T>(key: string, fn: () => T): T;
 ```
 
 </div>

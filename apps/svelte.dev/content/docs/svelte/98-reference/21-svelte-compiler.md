@@ -14,6 +14,7 @@ import {
 	migrate,
 	parse,
 	preprocess,
+	print,
 	walk
 } from 'svelte/compiler';
 ```
@@ -157,6 +158,33 @@ function preprocess(
 		  }
 		| undefined
 ): Promise<Processed>;
+```
+
+</div>
+
+
+
+## print
+
+`print` reconvertit un noeud AST Svelte en code source Svelte. Cette méthode est principalement
+dédiée aux outils de parsing et de transformation utilisant la représentation d'un arbre AST moderne
+du compilateur.
+
+`print(ast)` nécessite un noeud AST produit via parsing avec `modern: true`, ou tout sous-noeud au
+sein de cet arbre AST. Le résultat contient le code source généré et une sourcemap correspondante.
+Le résultat est du code Svelte valide, mais les détails de formattage tels que les espaces ou les
+guillemets utilisés peuvent être différents de l'original.
+
+<div class="ts-block">
+
+```dts
+function print(
+	ast: AST.SvelteNode,
+	options?: Options | undefined
+): {
+	code: string;
+	map: any;
+};
 ```
 
 </div>
@@ -419,7 +447,7 @@ namespace AST {
 		expression: null | Expression;
 	}
 
-	interface BaseElement extends BaseNode {
+	export interface BaseElement extends BaseNode {
 		name: string;
 		attributes: Array<
 			Attribute | SpreadAttribute | Directive | AttachTag

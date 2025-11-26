@@ -167,6 +167,28 @@ instantané de la valeur courante.
 %handler% should be a function. Did you mean to %suggestion%?
 ```
 
+### hydratable_missing_but_expected
+
+```
+Expected to find a hydratable with key `%key%` during hydration, but did not.
+```
+
+Ceci peut se produire si vous rendez sur le client du contenu hydratable qui n'a pas été rendu sur
+le serveur, et signifie qu'il a été contraint de rejouer sa fonction de manière bloquante lors de
+l'hydratation. Ceci est mauvais pour les performances, puisque cela bloque l'hydratation le temps
+que le travail asynchrone soit terminé.
+
+```svelte
+<script>
+  import { hydratable } from 'svelte';
+
+	if (BROWSER) {
+		// nul ! rien ne sera interactif tant que ce travail asynchrone ne sera pas terminé
+		await hydratable('foo', get_slow_random_number);
+	}
+</script>
+```
+
 ### hydration_attribute_changed
 
 ```
