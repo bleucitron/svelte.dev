@@ -348,7 +348,7 @@ namespace AST {
 	}
 
 	/** Une directive `animate:` animate */
-	export interface AnimateDirective extends BaseNode {
+	export interface AnimateDirective extends BaseAttribute {
 		type: 'AnimateDirective';
 		/** Le 'x' de `animate:x` */
 		name: string;
@@ -357,7 +357,7 @@ namespace AST {
 	}
 
 	/** Une directive `bind:` */
-	export interface BindDirective extends BaseNode {
+	export interface BindDirective extends BaseAttribute {
 		type: 'BindDirective';
 		/** Le 'x' de `bind:x` */
 		name: string;
@@ -369,8 +369,7 @@ namespace AST {
 	}
 
 	/** Une directive `class:` */
-	export interface ClassDirective extends BaseNode {
-		type: 'ClassDirective';
+	export interface ClassDirective extends BaseAttribute {
 		/** Le 'x' de `class:x` */
 		name: 'class';
 		/** Le 'y' de `class:x={y}`, ou le `x` de `class:x` */
@@ -378,7 +377,7 @@ namespace AST {
 	}
 
 	/** Une directive `let:` */
-	export interface LetDirective extends BaseNode {
+	export interface LetDirective extends BaseAttribute {
 		type: 'LetDirective';
 		/** Le 'x' de `let:x` */
 		name: string;
@@ -391,7 +390,7 @@ namespace AST {
 	}
 
 	/** Une directive `on:` */
-	export interface OnDirective extends BaseNode {
+	export interface OnDirective extends BaseAttribute {
 		type: 'OnDirective';
 		/** Le 'x' de `on:x` */
 		name: string;
@@ -411,7 +410,7 @@ namespace AST {
 	}
 
 	/** Une directive `style:` */
-	export interface StyleDirective extends BaseNode {
+	export interface StyleDirective extends BaseAttribute {
 		type: 'StyleDirective';
 		/** Le 'x' de `style:x` */
 		name: string;
@@ -425,7 +424,7 @@ namespace AST {
 
 	// TODO have separate in/out/transition directives
 	/** Une directive `transition:`, `in:` ou `out:` */
-	export interface TransitionDirective extends BaseNode {
+	export interface TransitionDirective extends BaseAttribute {
 		type: 'TransitionDirective';
 		/** Le 'x' de `transition:x` */
 		name: string;
@@ -439,7 +438,7 @@ namespace AST {
 	}
 
 	/** Une directive `use:` */
-	export interface UseDirective extends BaseNode {
+	export interface UseDirective extends BaseAttribute {
 		type: 'UseDirective';
 		/** Le 'x' de `use:x` */
 		name: string;
@@ -449,6 +448,7 @@ namespace AST {
 
 	export interface BaseElement extends BaseNode {
 		name: string;
+		name_loc: SourceLocation;
 		attributes: Array<
 			Attribute | SpreadAttribute | Directive | AttachTag
 		>;
@@ -575,9 +575,13 @@ namespace AST {
 		body: Fragment;
 	}
 
-	export interface Attribute extends BaseNode {
-		type: 'Attribute';
+	export interface BaseAttribute extends BaseNode {
 		name: string;
+		name_loc: SourceLocation | null;
+	}
+
+	export interface Attribute extends BaseAttribute {
+		type: 'Attribute';
 		/**
 	   * Les valeurs entre guillemets sont représentées par un tableau, même si elles ne contiennent pas d'expression comme `"{x}"`
 		 */
