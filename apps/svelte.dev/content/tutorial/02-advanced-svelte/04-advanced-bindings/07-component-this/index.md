@@ -7,7 +7,7 @@ composant avec `bind:this`.
 
 Ceci est utile dans les rares situations où vous avez besoin d'interagir avec un composant
 programmatiquement (plutôt que de lui fournir des props mises à jour). Si on repense à notre
-application de canvas [rencontrée il y a quelques exercices](actions), cela pourrait être sympa d'y
+application de canvas [rencontrée il y a quelques exercices](attach), cela pourrait être sympa d'y
 ajouter un bouton pour effacer l'écran.
 
 D'abord, exportons une fonction depuis `Canvas.svelte` :

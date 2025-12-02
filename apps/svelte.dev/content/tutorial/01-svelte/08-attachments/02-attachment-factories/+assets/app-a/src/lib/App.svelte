@@ -3,18 +3,15 @@
 
 	let content = $state('Hello!');
 
-	function tooltip(node, fn) {
-		$effect(() => {
-			const tooltip = tippy(node, fn());
-
-			return tooltip.destroy;
-		});
+	function tooltip(node) {
+		const tooltip = tippy(node);
+		return tooltip.destroy;
 	}
 </script>
 
 <input bind:value={content} />
 
-<button use:tooltip={() => ({ content })}>
+<button {@attach tooltip}>
 	Survolez-moi
 </button>
 
