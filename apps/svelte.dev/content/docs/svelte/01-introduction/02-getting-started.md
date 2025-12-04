@@ -39,8 +39,8 @@ Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode),
 sont également disponibles pour d'autres
 [éditeurs](https://sveltesociety.dev/resources#editor-support) et outils.
 
-Vous pouvez aussi vérifier la qualité de votre code dans votre terminal en utilisant [sv
-check](https://github.com/sveltejs/cli).
+Vous pouvez aussi vérifier la qualité de votre code dans votre terminal en utilisant [`sv
+check`](https://github.com/sveltejs/cli).
 
 ## Obtenir de l'aide [!VO]Getting help
 

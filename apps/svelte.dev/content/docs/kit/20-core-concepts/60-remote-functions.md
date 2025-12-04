@@ -1225,10 +1225,6 @@ export const getPost = prerender(
 );
 ```
 
-> [!NOTE] Svelte ne supporte pas encore le rendu asynchrone côté serveur, et il est donc probable
-> que vous n'appeliez les fonctions distantes que depuis le serveur, plutôt que lors du pré-rendu. À
-> cause de cela, vous aurez besoin d'utiliser `inputs`, pour le moment. Nous travaillons activement
-> sur point bloquant.
 
 Par défaut, les fonctions de pré-rendu sont exclues de votre bundle de compilation, ce qui signifie
 que vous ne pouvez pas les exécuter avec des arguments qui n'ont pas été pré-rendus. Vous pouvez
