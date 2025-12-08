@@ -31,7 +31,7 @@ Overflow est généralement plus adapté.
 
 ## Y a t'il des ressources tierces ? [!VO]Are there any third-party resources?
 
-Svelte Society maintient une [liste de livres et vidéos](https://sveltesociety.dev/resources).
+Svelte Society maintient une [liste de livres et vidéos](https://sveltesociety.dev/collection/a-list-of-books-and-courses-ac01dd10363184fa).
 
 ## Comment activer la coloration syntaxique de VS Code pour mes fichiers .svelte ? [!VO]How can I get VS Code to syntax-highlight my .svelte files?
 

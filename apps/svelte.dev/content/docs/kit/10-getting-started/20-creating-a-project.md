@@ -34,4 +34,5 @@ Essayez de modifier les fichiers pour avoir un aperçu de comment les choses fon
 Nous recommandons d'utiliser [Visual Studio Code (aka VS
 Code)](https://code.visualstudio.com/download) avec l'[extension
 Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode), mais de [nombreux
-autres éditeurs sont également supportés](https://sveltesociety.dev/resources#editor-support).
+autres éditeurs sont également
+supportés](https://sveltesociety.dev/collection/editor-support-c85c080efc292a34).

@@ -24,8 +24,8 @@ blogging
 Les utilisateurs et utilisatrices de SvelteKit ont également publié tout un tas d'exemples sur
 GitHub, que vous pouvez retrouver dans les sujets [#sveltekit](https://github.com/topics/sveltekit)
 et [#sveltekit-template](https://github.com/topics/sveltekit-template), ainsi que sur le [site
-Svelte Society](https://sveltesociety.dev/templates?category=sveltekit). Notez que ces exemples
-n'ont pas été validés par les mainteneurs, et peuvent ne pas être à jour.
+Svelte Society](https://sveltesociety.dev/recipe/sveltekit-templates-and-examples-e789ed397e7f38fc).
+Notez que ces exemples n'ont pas été validés par les mainteneurs, et peuvent ne pas être à jour.
 
 ## Support
 
