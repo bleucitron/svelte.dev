@@ -169,8 +169,9 @@ function invalidate(
 
 ## invalidateAll
 
-Provoque la ré-exécution de toutes les fonctions `load` appartenant à la page actuellement active.
-Renvoie une `Promise` qui se résout lorsque la page est mise en jour en conséquence.
+Provoque la ré-exécution de toutes les fonctions `load` et `query` appartenant à la page
+actuellement active. Renvoie une `Promise` qui se résout lorsque la page est mise en jour en
+conséquence.
 
 <div class="ts-block">
 

@@ -8,8 +8,9 @@ clarifier la manière dont les données circulent au sein de votre application.
 
 Avec Svelte, les props de composant peuvent être _liées_ (_"bound"_), ce qui signifie que les
 données peuvent également remonter de l'enfant vers le parent. Ce n'est pas quelque chose que vous
-devriez faire trop souvent, mais cela peut simplifier votre code si utilisé de manière sporadique et
-précautionneuse.
+devriez faire trop souvent — une utilisation abusive peut rendre votre flux de données imprévisible
+et vos composants plus difficiles à maintenir — mais cela peut simplifier votre code si utilisé de
+manière sporadique et précautionneuse.
 
 Cela signifie aussi qu'un proxy d'état peut être _muté_ dans l'enfant.
 
