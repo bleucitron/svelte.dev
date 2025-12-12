@@ -18,6 +18,9 @@ Vous pouvez itérer sur des valeurs en utilisant un bloc `#each`. Les valeurs en
 `length`), ou des itérables comme `Map` et `Set` — autrement dit, tout ce qui peut être utilisé avec
 `Array.from`.
 
+Si la valeur est `null` ou `undefined`, elle est traitée comme un tableau vide (ce qui provoquer le
+rendu des [blocs {:else}](#Else-blocks), s'ils existent).
+
 ```svelte
 <h1>Shopping list</h1>
 <ul>
