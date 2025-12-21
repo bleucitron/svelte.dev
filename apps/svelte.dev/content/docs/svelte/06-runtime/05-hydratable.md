@@ -84,7 +84,10 @@ plus, grâce à un peu de magie Svelte, vous pouvez également utiliser des prom
 
 ## CSP
 
-`hydratable` adds an inline `<script>` block to the `head` returned from `render`. If you're using [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) (CSP), this script will likely fail to run. You can provide a `nonce` to `render`:
+`hydratable` ajoute un bloc `<script>` inliné au `head` renvoyé depuis par `render`. Si vous
+utilisez les [Content Security Policy](https://developer.mozilla.org/fr/docs/Web/HTTP/Guides/CSP)
+(CSP), ce script va très certainement échouer à s'exécuter. Vous pouvez fournir la valeur `nonce` à
+`render` :
 
 ```js
 /// file: server.js
@@ -98,7 +101,8 @@ const { head, body } = await render(App, {
 });
 ```
 
-This will add the `nonce` to the script block, on the assumption that you will later add the same nonce to the CSP header of the document that contains it:
+Ceci va ajouter la valeur `nonce` au bloc de script, en supposant que vous allez ajouter la même
+valeur `nonce` l'en-tête de CSP du document le contenant :
 
 ```js
 /// file: server.js
@@ -111,9 +115,12 @@ response.headers.set(
  );
 ```
 
-It's essential that a `nonce` — which, British slang definition aside, means 'number used once' — is only used when dynamically server rendering an individual response.
+Il est essentiel qu'une valeur `nonce` — qui, en dehors de sa signification en argot britannique,
+veut dire 'nombre utilisé une seule fois' (_number used once_) — ne soit utilisée que lors du rendu
+dynamique côté serveur d'une réponse individuelle.
 
-If instead you are generating static HTML ahead of time, you must use hashes instead:
+Si à la place vous générez du HTML statique en avance de phase, vous devez plutôt utiliser des
+hashes :
 
 ```js
 /// file: server.js
@@ -125,7 +132,8 @@ const { head, body, hashes } = await render(App, {
 });
 ```
 
-`hashes.script` will be an array of strings like `["sha256-abcd123"]`. As with `nonce`, the hashes should be used in your CSP header:
+`hashes.script` sera un tableau de chaînes de caractères comme `["sha256-abcd123"]`. Comme avec
+`nonce`, les hashes doivent être fournis dans vos en-têtes CSP :
 
 ```js
 /// file: server.js
@@ -138,4 +146,5 @@ response.headers.set(
  );
 ```
 
-We recommend using `nonce` over hash if you can, as `hash` will interfere with streaming SSR in the future.
+Nous recommandons l'usage de `nonce` si possible plutôt que les hashes, puisque `hash` va interférer
+dans le futur avec le streaming du SSR.
