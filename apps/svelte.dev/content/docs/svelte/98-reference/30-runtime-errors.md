@@ -392,6 +392,12 @@ Cause:
 %stack%
 ```
 
+### invalid_csp
+
+```
+`csp.nonce` was set while `csp.hash` was `true`. These options cannot be used simultaneously.
+```
+
 ### lifecycle_function_unavailable
 
 ```
