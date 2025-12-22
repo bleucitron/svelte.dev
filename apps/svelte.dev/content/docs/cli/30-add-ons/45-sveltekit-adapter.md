@@ -43,7 +43,8 @@ npx sv add sveltekit-adapter="adapter:node"
 
 ### cloudflare target
 
-Whether to deploy to Cloudflare Workers or Pages. Only available for `cloudflare` adapter.
+Si oui ou non déployer sur les Cloudflare Workers ou Cloudflare Pages. Uniquement disponible pour
+l'adaptateur `cloudflare`.
 
 ```sh
 npx sv add sveltekit-adapter="adapter:cloudflare+cfTarget:workers"
