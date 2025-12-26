@@ -959,7 +959,7 @@ Cet attribut existe dans la propriété `buttonProps` d'un objet de formulaire :
 ```svelte
 <!--- file: src/routes/login/+page.svelte --->
 <script>
-	import { login, register } from '$lib/auth';
+	import { login, register } from '$lib/auth.remote';
 </script>
 
 <form {...login}>

@@ -246,7 +246,7 @@ l'adaptateur pour changer vos préférences de liaison.
 
 Pour tester le projet compilé, vous devriez utiliser la version 4 de
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Une fois que vous avez compilé
-votre site, lancez `wrangler dev .svelte-kit/cloudflare` si vous testez pour les Cloudflare Workers
+votre site, lancez `wrangler dev .svelte-kit/cloudflare/_worker.js` si vous testez pour les Cloudflare Workers
 ou `wrangler pages dev .svelte-kit/cloudflare` si vous testez pour les Cloudflare Pages.
 
 ## En-têtes et redirections [!VO]Headers and redirects

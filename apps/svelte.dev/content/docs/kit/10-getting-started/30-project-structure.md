@@ -89,8 +89,11 @@ unitaires pourront être placés dans le dossier `src` avec l'extension `.test.j
 
 ### static
 
-Tout asset statique devant être servi tel quel, comme `robots.txt` ou `favicon.png`, doit être placé
-dans ce dossier.
+Tout asset statique devant être servi sans aucune altération sur son nom — comme `robots.txt` ou
+`favicon.png` — doit être placé dans ce dossier. Il est généralement préférable de minimiser le
+nombre d'assets placés dans `static/` et préférer plutôt les `import`er. L'usage de `import` permet
+de profiter de la [gestion d'assets intégrée de Vite](images#Vite's-built-in-handling) afin de
+donner un nom unique à un asset basé sur un hash de son contenu afin qu'il puisse être mis en cache.
 
 ### tests
 
