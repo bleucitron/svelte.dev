@@ -253,6 +253,11 @@ seront gérées au final par la protection skew intégrée de Sveltekit.
 
 ## Notes
 
+### Vercel utilities
+
+Si vous avez besoin d'utilitaires spécifiques à Vercel, comme `waitUntil`, utilisez le paquet
+[`@vercel/functions`](https://vercel.com/docs/functions/functions-api-reference/vercel-functions-package).
+
 ### Fonctions Vercel [!VO]Vercel functions
 
 Si vous avez des fonctions Vercel contenues dans le dossier `api` à la racine du projet, toute
