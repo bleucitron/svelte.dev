@@ -17,6 +17,8 @@ claude mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
 
 Vous pouvez choisir votre `scope` (doit être `user`, `project` ou `local`) et `name` favoris.
 
+If you prefer you can also install the `svelte` plugin in [the Svelte Claude Code Marketplace](plugin) that will give you both the remote server and a useful [skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview).
+
 ## Claude Desktop
 
 - Ouvrez Settings > Connectors

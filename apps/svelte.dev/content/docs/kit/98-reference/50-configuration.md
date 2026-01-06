@@ -122,9 +122,6 @@ const config = {
 };
 ```
 
-> [!NOTE] L'alias intégré `$lib` est contrôlé par `config.kit.files.lib` puisqu'il est utilisé pour
-> le packaging.
-
 > [!NOTE] Vous aurez besoin d'exécuter `npm run dev` pour que SvelteKit génère automatiquement la
 > configuration d'alias dans `jsconfig.json` ou `tsconfig.json`.
 

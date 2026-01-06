@@ -4,8 +4,7 @@ title: $lib
 ---
 
 SvelteKit rend automatiquement disponibles les fichiers dans le dossier `src/lib` disponibles via
-l'utilisation de l'alias d'import `$lib`. Vous pouvez changer le dossier vers lequel pointe cet
-alias dans [fichier de configuration](configuration#files).
+l'utilisation de l'alias d'import `$lib`.
 
 ```svelte
 <!--- file: src/lib/Component.svelte --->
