@@ -206,6 +206,12 @@ secondes après lequel l'application est automatiquement mise en sommeil si elle
 requêtes. Si non précisé, l'application n'est jamais mise en sommeil. Voir la section [Activation de
 socket](#Socket-activation) pour plus de détails.
 
+### `KEEP_ALIVE_TIMEOUT` et `HEADERS_TIMEOUT`
+
+Le nombre de secondes pour
+[`keepAliveTimeout`](https://nodejs.org/api/http.html#serverkeepalivetimeout) et
+[`headersTimeout`](https://nodejs.org/api/http.html#serverheaderstimeout).
+
 ## Options
 
 L'adaptateur peut être configuré avec différentes options :

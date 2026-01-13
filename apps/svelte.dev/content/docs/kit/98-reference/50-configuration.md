@@ -549,12 +549,32 @@ remoteFunctions?: boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `false`
+- <span class="tag">par défaut</span> `false`
 
 </div>
 
 Si oui ou non activer la fonctionnalité expérimentale des fonctions distantes. Cette fonctionnalité
 n'est pas encore stable et peut changer ou être supprimée à tout moment.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+forkPreloads?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non activer la fonctionnalité expérimentale de préchargement par branche utilisant l'API
+'fork' de Svelte.
 
 </div>
 </div>
