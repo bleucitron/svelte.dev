@@ -526,12 +526,15 @@ De manière alternative, vous pouvez également utiliser `select` et `select mul
 ### Validation programmatique [!VO]Programmatic validation
 
 En plus de la validation de schéma déclarative, vous pouvez programmatiquement marquer des champs
-comme invalides au sein du gestionnaire de formulaire en utilisant la fonction `invalid`. Cela sert
-dans les cas où vous ne pouvez savoir si quelque chose est valide avant d'avoir effectué certaines
-actions. Tout comme `redirect` ou `error`, `invalid` jette une erreur. Cette méthode attend une
-liste de chaîne de caractères (pour les problèmes concernant le formulaire en tant que tel) ou des
-entités compatibles avec un schéma (pour les problèmes concernant un champ spécifique). Utilisez le
-paramètre `issue` pour créer ces entitées de manière typée :
+comme invalides au sein du gestionnaire de formulaire en utilisant la fonction `invalid` importé
+depuis `@sveltejs/kit`. Cela sert dans les cas où vous ne pouvez savoir si quelque chose est valide
+avant d'avoir effectué certaines actions.
+
+- Elle jette une exception tout comme `redirect` ou `error`
+- Elle accepte plusieurs arguments qui peuvent être des chaînes de caractères (pour les problèmes
+concernant le formulaire en tant que tel – ces problèmes n'appaîtront que dans `fields.allIssues()`)
+ou des erreurs respectant le format du schéma standard (pour les erreurs relatives à des champs
+spécifiques). Utilisez le paramètre `issue` pour créer de telles erreurs de manière typée :
 
 ```js
 /// file: src/routes/shop/data.remote.js
@@ -560,16 +563,6 @@ export const buyHotcakes = form(
 	}
 );
 ```
-
-La fonction `invalid` fonctionne à la fois comme une fonction et comme un proxy :
-
-- Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation
-- Si une erreur est une `string`, elle s'applique au formulaire en tant que tel (et sera affichée
-dans `fields.allIssues()`)
-- Utilisez `invalid.fieldName(message)` pour créer une erreur pour un champ particulier. Comme
-`fields`, ceci est typé et vous pouvez utiliser la syntaxe classique d'accès aux propriétés pour
-créer des erreurs concernant des objets imbriqués (par ex. `invalid.profile.email('L\'e-mail existe
-déjà'')` ou `invalid.items[0].qty('Stock insuffisant')`))
 
 ### Validation
 
