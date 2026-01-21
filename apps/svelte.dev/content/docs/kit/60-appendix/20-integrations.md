@@ -5,11 +5,8 @@ title: Intégrations
 
 ## `vitePreprocess`
 
-Inclure
-[`vitePreprocess`](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/preprocess.md) dans
-votre projet va vous permettre d'utiliser les différentes options de CSS que Vite supporte :
-PostCSS, SCSS, Less, Stylus, et SugarSS. Si vous mettez en place votre projet avec TypeScript, ce
-plugin sera inclus par défaut :
+[`vitePreprocess`](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/preprocess.md)
+pré-traite vos balises `<style>` et `<script>` de vos fichiers `.svelte`.
 
 ```js
 // svelte.config.js
@@ -17,21 +14,39 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: [vitePreprocess()]
+  preprocess: [
+    vitePreprocess({
+      style: true,      // valeur par défaut
+      script: false     // valeur par défaut
+    })
+  ]
 };
 
 export default config;
 ```
 
-Vous devrez également utiliser un préprocesseur si vous utilisez TypeScript avec Svelte 4.
-TypeScript est supporté nativement avec Svelte 5 si vous utilisez uniquement la syntaxe de types.
-Pour utiliser des syntaxes TypeScript plus complexes avec Svelte 5, vous devrez tout de même
-utiliser un préprocesseur, et dans ce cas vous pourrez utiliser `vitePreprocess({ script: true })`.
+### `style`
+
+Utilisez `vitePreprocess()` pour activer les pré-processeurs CSS dans vos balises `<style>` :
+PostCSS, SCSS, Less, Stylus et SugarSS.
+
+### `script`
+
+Utilisez `vitePreprocess({ script: true })` si :
+- votre projet est antérieur à Svelte 5
+- vous utilisez des fonctionnalités avancées de TypeScript émettant du code _(renseignez-vous sur la
+documentation de
+[`vitePreprocess`](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/preprocess.md))_
+
+> [!NOTE]
+TypeScript est supporté nativement en Svelte 5, donc si vous utilisez Svelte 5 et ne souhaitez pas
+utiliser les fonctionnalités avancées de TypeScript émettant du code, vous n'avez probablement pas
+besoin d'utilisez `vitePreprocess`.
 
 ## Add-ons
 
-Lancer [`npx sv add`](/docs/cli/sv-add) pour mettre en place plusieurs intégrations complexes différents à l'aide d'une
-seule commande, parmi lesquelles :
+Lancer [`npx sv add`](/docs/cli/sv-add) pour mettre en place plusieurs intégrations complexes
+différents à l'aide d'une seule commande, parmi lesquelles :
 - prettier (formattage)
 - eslint (linting)
 - vitest (tests unitaires)

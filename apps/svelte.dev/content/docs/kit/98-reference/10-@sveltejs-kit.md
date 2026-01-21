@@ -2579,34 +2579,6 @@ type RemoteForm<
 	get pending(): number;
 	/** Accédez aux champs de formulaire en utilisant la notation objet */
 	fields: RemoteFormFields<Input>;
-	/** Étalez ceci sur un `<button>` ou un `<input type="submit">` */
-	buttonProps: {
-		type: 'submit';
-		formmethod: 'POST';
-		formaction: string;
-		onclick: (event: Event) => void;
-		/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
-		enhance(
-			callback: (opts: {
-				form: HTMLFormElement;
-				data: Input;
-				submit: () => Promise<void> & {
-					updates: (
-						...queries: Array<
-							RemoteQuery<any> | RemoteQueryOverride
-						>
-					) => Promise<void>;
-				};
-			}) => void | Promise<void>
-		): {
-			type: 'submit';
-			formmethod: 'POST';
-			formaction: string;
-			onclick: (event: Event) => void;
-		};
-		/** The number of pending submissions */
-		get pending(): number;
-	};
 };
 ```
 

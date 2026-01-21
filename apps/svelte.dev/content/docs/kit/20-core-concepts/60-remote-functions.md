@@ -934,45 +934,60 @@ instances séparées d'une fonction de formulaire via `for(id)` pour les garder 
 {/each}
 ```
 
-### buttonProps
+### Multiple submit buttons
 
-Par défaut, soumettre un formulaire va envoyer une requête à l'URL indiquée par l'attribut
-[`action`](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/form#attributs_pour_lenvoi_de_formulaires)
-de l'élément `<form>`, ce qui dans le cas d'une fonction distante est une propriété sur l'objet de
-formulaire généré par SvelteKit.
+Un `<form>` peut avoir plusieurs boutons de soumission. Par exemple, vous pourriez avoir un unique
+formulaire vous permettant de vous connecter ou de vous inscrire selon le bouton sur lequel vous
+cliquez.
 
-Il est possible pour un `<button>` au sein d'un `<form>` d'envoyer la requête à une URL
-_différente_, en utilisant l'attribut
-[`formaction`](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/button#formaction).
-Par exemple, vous pourriez avoir un seul formulaire vous permettant de vous connecter ou de vous
-inscrire, selon le bouton sur lequel vous cliquez.
-
-Cet attribut existe dans la propriété `buttonProps` d'un objet de formulaire :
+Pour faire cela, ajoutez un champ à votre schéma correspondant à la valeur du bouton, et utilisez
+`as('submit', value)` pour le lier :
 
 ```svelte
 <!--- file: src/routes/login/+page.svelte --->
 <script>
-	import { login, register } from '$lib/auth.remote';
+	import { loginOrRegister } from '$lib/auth';
 </script>
 
-<form {...login}>
+<form {...loginOrRegister}>
 	<label>
 		Votre nom d'utilisateur
-		<input {...login.fields.username.as('text')} />
+		<input {...loginOrRegister.fields.username.as('text')} />
 	</label>
 
 	<label>
 		Votre mot de passe
-		<input {...login.fields._password.as('password')} />
+		Your password
+		<input {...loginOrRegister.fields._password.as('password')} />
 	</label>
 
-	<button>se connecter</button>
-	<button {...register.buttonProps}>s'inscrire</button>
+	<button {...loginOrRegister.fields.action.as('submit', 'login')}>se connecter</button>
+	<button {...loginOrRegister.fields.action.as('submit', 'register')}>s'inscrire</button>
 </form>
 ```
 
-Comme l'objet de formulaire lui-même, `buttonProps` possède une méthode `enhance` permettant de
-personnaliser la soumission du formulaire.
+Dans votre gestionnaire de formulaire, vous pouvez vérifier quel bouton a été cliqué :
+
+```js
+/// file: $lib/auth.js
+import * as v from 'valibot';
+import { form } from '$app/server';
+
+export const loginOrRegister = form(
+	v.object({
+		username: v.string(),
+		_password: v.string(),
+		action: v.picklist(['login', 'register'])
+	}),
+	async ({ username, _password, action }) => {
+		if (action === 'login') {
+			// gestion de la connexion
+		} else {
+			// gestion de l'inscription
+		}
+	}
+);
+```
 
 ## command
 
