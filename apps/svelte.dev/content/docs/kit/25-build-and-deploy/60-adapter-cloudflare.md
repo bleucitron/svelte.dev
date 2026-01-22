@@ -81,15 +81,15 @@ Wrangler
 [`assets.not_found_handling`](https://developers.cloudflare.com/workers/static-assets/routing/#2-not_found_handling)
 vaut `"404-page"`, cette page sera servie si une requête échoue à correspondre un asset. Si
 `asset.not_found_handling` est défini comme `"single-page-application"`, l'adaptateur va rendre une
-page de secours index.html en SPA indépendamment de l'option `fallback` précisée.
+page de secours `index.html` en SPA indépendamment de l'option `fallback` précisée.
 
 Pour les Cloudflare Pages, cette page sera uniquement servie lorsqu'une requête correspondant à une
 entrée précisée dans `routes.exclude` échoue à correspondre à un asset.
 
-La plupart du temps `plaintext` suffit, mais si vous utilisez `routes.exclude` pour manuellement
-exclure un ensemble de pages pré-rendues sans dépasser la limite de 100 routes, vous pourriez
-souhaiter plutôt utiliser `spa` pour éviter afficher une page 404 sans aucun style à vos
-utilisateurs et utilisatrices.
+La plupart du temps, `plaintext` suffit, mais si vous utilisez `routes.exclude` pour exclure
+manuellement un ensemble de pages pré-rendues sans dépasser la limite de 100 routes, vous pourriez
+vouloir utiliser plutôt `spa` pour éviter de montrer une page 404 à vos utilisateurs et
+utilisatrices.
 
 Voir la section [Comportement Not
 Found](https://developers.cloudflare.com/pages/configuration/serving-pages/#not-found-behavior) dans
@@ -130,7 +130,7 @@ du projet. Il devrait ressembler à quelque chose comme ça :
 {
 	"name": "<any-name-you-want>",
 	"main": ".svelte-kit/cloudflare/_worker.js",
-	"compatibility_date": "2025-01-01",
+	"compatibility_date": "<YYYY-MM-DD>",
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare",
@@ -140,39 +140,10 @@ du projet. Il devrait ressembler à quelque chose comme ça :
 
 ### Déploiement [!VO]Deployment
 
-Merci de suivre le [guide dédié aux
-frameworks](https://developers.cloudflare.com/workers/frameworks/framework-guides/svelte/) pour vous
-lancer avec les Cloudflare Workers.
-
-## Cloudflare Pages
-
-### Déploiement [!VO]Deployment
-
-Merci de suivre le [Guide Get Started](https://developers.cloudflare.com/pages/get-started/) pour
-vous lancer avec les Cloudflare Pages.
-
-Si vous utilisez l'[intégration
-Git](https://developers.cloudflare.com/pages/get-started/git-integration/) vos paramètres de
-compilation devraient ressembler à ça :
-
-- Framework preset – SvelteKit
-- Build command – `npm run build` ou `vite build`
-- Build output directory – `.svelte-kit/cloudflare`
-
-### Plus de lecture [!VO]Further reading
-
-Vous devriez vous référer à la [documentation de Cloudflare pour déployer un site SvelteKit sur les
-Cloudflare
-Pages](https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/).
-
-### Notes
-
-Les fonctions présentes dans le [dossier
-`/functions`](https://developers.cloudflare.com/pages/functions/routing/) à la racine du projet ne
-seront _pas_ incluses dans le déploiement. À la place, les fonctions devraient être implémentées en
-tant que [endpoints de serveur](routing#server) dans votre application SvelteKit, qui sont compilées
-en [un seul fichier
-`_workers.js`](https://developers.cloudflare.com/pages/functions/advanced-mode/).
+Vous pouvez utiliser le CLI de Wrangler pour déployer votre application en lançant `npx wrangler
+deploy` ou en utilisant l'[intégration Git de
+Cloudflare](https://developers.cloudflare.com/workers/ci-cd/builds/) pour activer les builds et
+déploiements automatiques au push.
 
 ## APIs de runtime [!VO]Runtime APIs
 

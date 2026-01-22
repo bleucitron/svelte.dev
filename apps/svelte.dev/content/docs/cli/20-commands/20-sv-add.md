@@ -28,6 +28,13 @@ Chemin vers la racine de votre projet Svelte(Kit).
 
 Même si certains fichiers sont sales, aucun prompt ne sera affiché.
 
+### `--no-download-check`
+
+Ignore toutes les demandes de confirmation de téléchargement.
+
+> [!IMPORTANT] Les mainteneurs de Svelte ne vérifient pas le code des add-ons communautaires.
+> Utiliser avec précaution.
+
 ### `--install <package-manager>`
 
 Installe les dépendances avec le gestionnaire de paquets spécifié :
@@ -44,8 +51,6 @@ Empêche l'installation de dépendances.
 
 ## Add-ons officiels [!VO]Official add-ons
 
-<!-- TODO: it'd be nice for this to live on the "add-ons" page, but we first need svelte.dev to support making pages from headings -->
-
 - [`devtools-json`](devtools-json)
 - [`drizzle`](drizzle)
 - [`eslint`](eslint)
@@ -59,3 +64,63 @@ Empêche l'installation de dépendances.
 - [`sveltekit-adapter`](sveltekit-adapter)
 - [`tailwindcss`](tailwind)
 - [`vitest`](vitest)
+
+## Add-ons communautaires [!VO]Community add-ons
+
+> [!NOTE] Les add-ons communautaires sont actuellement **expérimentaux**. L'API peut évoluer. Ne les
+> utilisez pas en production pour le moment !
+
+> [!NOTE]
+> Les mainteneurs de Svvelte ne vérifient pas le code des add-ons communautaires.
+
+Vous pouvez trouver des [add-ons communautaires sur
+npm](https://www.npmjs.com/search?q=keywords%3Asv-add) en cherchant `keywords:sv-add`.
+
+### Comment installer un add-on communautaire [!VO]How to install a community add-on
+
+```sh
+npx sv add [PROTOCOL][COMMUNITY_ADDON]
+```
+
+Vous pouvez :
+
+- mélanger des add-ons officiels et communautaires
+- utiliser le prompt interactif ou donner des arguments au cli
+- utiliser l'option `--add` avec la commande `create`
+
+```sh
+npx sv add eslint "@supacool"
+```
+
+```sh
+npx sv create --add eslint "@supacool"
+```
+
+### Protocoles de paquets [!VO]Package Protocols
+
+```sh
+# Paquet scopés : @org (recommandé), nous chercherons toujours les paquets correspondants à @org/sv
+npx sv add "@supacool"
+
+# Paquet npm classique (avec ou sans scope)
+npx sv add my-cool-addon
+
+# Add-on local
+npx sv add file:../path/to/my-addon
+```
+
+### Comment créer un add-on communautaire [!VO]How to create a community add-on
+
+Pour bien commencer, créez votre add-on avec le template `addon`.
+
+```sh
+npx sv create --template addon [path]
+```
+
+Dans le dossier de votre nouvel add-on, consultez les fichiers `README.MD` et `CONTRIBUTING.md` pour
+commencer.
+
+Puis, vous pouvez continuer avec [la documentation d'API](/docs/cli/add-on) pour commencer à
+construire votre add-on. Vous pouvez également jeter un oeil au [code source d'add-ons
+officiels](https://github.com/sveltejs/cli/tree/main/packages/sv/lib/addons) pour trouver de
+l'inspiration sur ce qui peut être fait.

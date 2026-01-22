@@ -462,12 +462,15 @@ Dans le cas d'inputs `radio` et `checkbox` qui appartiennent tous au même champ
 import * as v from 'valibot';
 import { form } from '$app/server';
 // ---cut---
+export const operatingSystems = /** @type {const} */ (['windows', 'mac', 'linux']);
+export const languages = /** @type {const} */ (['html', 'css', 'js']);
+
 export const survey = form(
 	v.object({
-		operatingSystem: v.picklist(['windows', 'mac', 'linux']),
-		languages: v.optional(v.array(v.picklist(['html', 'css', 'js'])), [])
+		operatingSystem: v.picklist(operatingSystems),
+		languages: v.optional(v.array(v.picklist(languages)), []),
 	}),
-	(data) => { /* ... */ }
+	(data) => { /* ... */ },
 );
 ```
 
@@ -475,7 +478,7 @@ export const survey = form(
 <form {...survey}>
 	<h2>Quel système d'exploitation utilisez-vous ?</h2>
 
-	{#each ['windows', 'mac', 'linux'] as os}
+	{#each operatingSystems as os}
 		<label>
 			<input {...survey.fields.operatingSystem.as('radio', os)}>
 			{os}
@@ -484,7 +487,7 @@ export const survey = form(
 
 	<h2>Dans quels langages écrivez-vous du code ?</h2>
 
-	{#each ['html', 'css', 'js'] as language}
+	{#each languages as language}
 		<label>
 			<input {...survey.fields.languages.as('checkbox', language)}>
 			{language}
@@ -502,17 +505,17 @@ De manière alternative, vous pouvez également utiliser `select` et `select mul
 	<h2>Quel système d'exploitation utilisez-vous ?</h2>
 
 	<select {...survey.fields.operatingSystem.as('select')}>
-		<option>windows</option>
-		<option>mac</option>
-		<option>linux</option>
+		{#each operatingSystems as os}
+			<option>{os}</option>
+		{/each}
 	</select>
 
 	<h2>Dans quels langages écrivez-vous du code ?</h2>
 
 	<select {...survey.fields.languages.as('select multiple')}>
-		<option>html</option>
-		<option>css</option>
-		<option>js</option>
+		{#each languages as language}
+			<option>{language}</option>
+		{/each}
 	</select>
 
 	<button>envoyer</button>

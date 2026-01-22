@@ -34,6 +34,8 @@ Le template de projet à utiliser :
 - `demo` — une app de démo incluant un jeu proposant de deviner des mots fonctionnant sans
 JavaScript
 - `library` — un template pour créer une librairie Svelte, utilisant `svelte-package`
+  <!-- TODO: JYC: Uncomment this when the addon template is ready -->
+  <!-- - `addon` — template for a community add-on, ready to be tested & published -->
 
 ### `--types <option>`
 
@@ -81,16 +83,3 @@ Empêche l'installation des dépendances.
 
 Ne vérifie pas si le dossier source est vide.
 
-<!-- ## Programmatic interface
-
-```js
-// TODO: this gives type checking errors in the docs site when not commented out. Need to release sv, install it in the site, and uncomment this.
-// import { create } from 'sv';
-
-// // todo: check if this is right
-// create(cwd, {
-// 	// add your options here
-// 	// todo: list available option
-// });
-```
--->
