@@ -2578,7 +2578,7 @@ type RemoteForm<
 	/** Le nombre de soumissions en cours */
 	get pending(): number;
 	/** Accédez aux champs de formulaire en utilisant la notation objet */
-	fields: RemoteFormFields<Input>;
+	fields: RemoteFormFieldsRoot<Input>;
 };
 ```
 
@@ -4366,6 +4366,16 @@ type HttpMethod =
 	| 'DELETE'
 	| 'PATCH'
 	| 'OPTIONS';
+```
+
+</div>
+
+## IsAny
+
+<div class="ts-block">
+
+```dts
+type IsAny<T> = 0 extends 1 & T ? true : false;
 ```
 
 </div>
