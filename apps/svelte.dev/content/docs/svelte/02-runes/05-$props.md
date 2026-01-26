@@ -226,6 +226,10 @@ Vous pouvez, bien sûr, séparer la déclaration de type de l'annotation :
 > [!NOTE] Les interfaces des éléments natifs du DOM sont fournies par le module `svelte/elements`
 > (voir [Typer des composants haut-niveau](typescript#Typing-wrapper-components)).
 
+Si votre composant expose des props de [snippet](snippet) comme `children`, celles-ci doivent être
+typées en utilisant l'interface `Snippet` importée depuis `'svelte'` — vous trouverez des exemples
+dans la section [Typer les snippets](snippet#Typing-snippets).
+
 L'ajout de types est recommandé, car il permet aux personnes utilisant votre composant de découvrir
 facilement les props à fournir.
 
