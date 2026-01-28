@@ -52,6 +52,27 @@ command = "npx"
 args = ["-y", "@sveltejs/mcp"]
 ```
 
+## Copilot CLI
+
+Use the Copilot CLI to interactively add the MCP server:
+
+```bash
+/mcp add
+```
+
+Alternatively, create or edit `~/.copilot/mcp-config.json` and add the following configuration:
+
+```json
+{
+	"mcpServers": {
+		"svelte": {
+			"command": "npx",
+			"args": ["-y", "@sveltejs/mcp"]
+		}
+	}
+}
+```
+
 ## Gemini CLI
 
 Pour inclure la version locale du MCP dans le CLI de Gemini, lancer simplement la commande suivante

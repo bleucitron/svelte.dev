@@ -100,6 +100,14 @@ lors de l'import de ce composant
 - `shadow` : une propriété optionnelle qui peut être définie à `"none"` pour renoncer à la création
 	de la racine du Shadow DOM. Noter que les styles ne sont alors plus encapsulés, et vous ne pouvez
 	plus utiliser de slots
+- `shadow` : une propriété optionnelle permettant de modifier les propriétés de la racine du Shadow
+DOM. Elle accepte les valeurs suivantes :
+	- `"none"`: Aucune racine de Shadow DOM n'est créée. Notez que les styles ne sont alors plus
+	encapsulés, et vous ne pouvez pas utiliser les slots.
+	- `"open"`: Une racine du Shadow DOM est créée avec l'option `mode: "open"`.
+	- [`ShadowRootInit`](https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#options)
+	: Vous pouvez passer un objet de paramètres qui sera passé à `attachShadow()` lors de la création
+	de la racine du Shadow DOM.
 - `props` : une propriété optionnelle pour modifier certains détails et comportements des propriétés
 	de votre composant. Elle offre les paramètres suivants :
 	- `attribute: string`: Pour mettre à jour une prop d'élément personnalisé, vous avez deux
@@ -127,7 +135,11 @@ pour une meilleure intégration des formulaires HTML.
 <svelte:options
 	customElement={{
 		tag: 'custom-element',
-		shadow: 'none',
+		shadow: {
+			mode: import.meta.env.DEV ? 'open' : 'closed',
+			clonable: true,
+			// ...
+		},
 		props: {
 			name: { reflect: true, type: 'Number', attribute: 'element-index' }
 		},

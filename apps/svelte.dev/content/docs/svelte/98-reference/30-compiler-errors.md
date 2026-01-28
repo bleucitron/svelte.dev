@@ -1125,7 +1125,7 @@ Value must be %list%, if specified
 ### svelte_options_invalid_customelement
 
 ```
-"customElement" must be a string literal defining a valid custom element name or an object of the form { tag?: string; shadow?: "open" | "none"; props?: { [key: string]: { attribute?: string; reflect?: boolean; type: .. } } }
+"customElement" must be a string literal defining a valid custom element name or an object of the form { tag?: string; shadow?: "open" | "none" | `ShadowRootInit`; props?: { [key: string]: { attribute?: string; reflect?: boolean; type: .. } } }
 ```
 
 ### svelte_options_invalid_customelement_props
@@ -1137,8 +1137,11 @@ Value must be %list%, if specified
 ### svelte_options_invalid_customelement_shadow
 
 ```
-"shadow" must be either "open" or "none"
+"shadow" must be either "open", "none" or `ShadowRootInit` object.
 ```
+
+Voir https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow#options pour plus
+d'informations sur les options valides du constructor de racine de Shadow DOM.
 
 ### svelte_options_invalid_tagname
 

@@ -19,11 +19,12 @@ ignorer toutes les choses merveilleuses que SvelteKit apporte et vous y intéres
 
 ## Alternatives à SvelteKit [!VO]Alternatives to SvelteKit
 
-Vous pouvez aussi utiliser Svelte directement avec Vite en exécutant `npm create vite@latest` et en
-choisissant l'option `svelte`. De cette manière, `npm run build` va générer des fichiers HTML, JS,
-et CSS dans le dossier `dist` grâce à
-[vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte). Dans la plupart des cas vous
-aurez également certainement besoin de choisir une [librairie de routing](/packages#routing).
+Vous pouvez aussi utiliser Svelte directement avec Vite via
+[vite-plugin-svelte](https://github.com/sveltejs/vite-plugin-svelte) en exécutant `npm create
+vite@latest` et en choisissant l'option `svelte` (ou, si vous travaillez dans un projet existant, en
+ajoutant le plugin à votre fichier `vite.config.js`). De cette manière, `npm run build` va générer
+des fichiers HTML, JS, et CSS dans le dossier `dist`. Dans la plupart des cas vous aurez également
+certainement besoin de choisir une [librairie de routing](/packages#routing).
 
 > [!NOTE] Vite est souvent utilisé en mode standalone pour construire des
 > [SPAs](../kit/glossary#SPA), ce que vous pouvez aussi faire [avec
@@ -39,8 +40,8 @@ Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode),
 sont également disponibles pour d'autres
 [éditeurs](https://sveltesociety.dev/resources#editor-support) et outils.
 
-Vous pouvez aussi vérifier la qualité de votre code dans votre terminal en utilisant [`sv
-check`](https://github.com/sveltejs/cli).
+Vous pouvez aussi vérifier la qualité de votre code dans votre terminal en utilisant [`npx sv
+check`](https://svelte.dev/docs/cli/sv-check).
 
 ## Obtenir de l'aide [!VO]Getting help
 

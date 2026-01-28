@@ -39,6 +39,26 @@ experimental_use_rmcp_client = true
 url = "https://mcp.svelte.dev/mcp"
 ```
 
+## Copilot CLI
+
+Use the Copilot CLI to interactively add the MCP server:
+
+```bash
+/mcp add
+```
+
+Alternatively, create or edit `~/.copilot/mcp-config.json` and add the following configuration:
+
+```json
+{
+	"mcpServers": {
+		"svelte": {
+			"url": "https://mcp.svelte.dev/mcp"
+		}
+	}
+}
+```
+
 ## Gemini CLI
 
 Pour inclure la version distante du MCP dans le CLI de Gemini, lancer simplement la commande
