@@ -139,7 +139,8 @@ Voici quelques ressources pour vous lancer dans les tests :
 La librairie officielle de routing est [SvelteKit](/docs/kit). SvelteKit fournit un routeur basé sur
 le système de fichiers, du rendu côté serveur (SSR), et du rafraîchissement instantané de modules
 (HMR), le tout dans une seule et même librairie simple à utiliser. C'est un outil similaire à
-Next.js pour React, et Nuxt.js pour Vue.
+Next.js pour React, et Nuxt.js pour Vue. SvelteKit supporte aussi le routage basé sur du hashing
+pour les applications avec du rendu côté client.
 
 Cependant, vous pouvez utiliser n'importe quelle librairie de routing. Un échantillon des routeurs
 disponibles est disponible sur la [page des packages](/packages#routing).
