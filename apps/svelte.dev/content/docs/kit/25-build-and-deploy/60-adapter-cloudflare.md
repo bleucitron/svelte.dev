@@ -153,9 +153,9 @@ déploiements automatiques au push.
 Suivez le [Guide de démarrage](https://developers.cloudflare.com/pages/get-started/) pour commencer
 avec les Cloudflare Pages.
 
-Si vous utilisez l'[intégratin
+Si vous utilisez l'[intégration
 Git](https://developers.cloudflare.com/pages/get-started/git-integration/), vos paramètres de
-compilation devrait ressembler à ceci :
+compilation devraient être les suivants :
 
 - Preset de framework – SvelteKit
 - Commande de compilation – `npm run build` ou `vite build`
@@ -166,7 +166,7 @@ Une fois configuré, rendez vous sur la section **Runtime** des paramètres de v
 ajoutez le flag de compatibilité `nodejs_als` pour activer la fonctionnalité [ AsyncLocalStorage de
 Node.js](https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-asynclocalstorage).
 
-Vous pouvez également faire ceci dans la configuration de Wrangler en utilisant le tableau
+Autrement, vous pouvez faire ceci dans la configuration de Wrangler en utilisant le tableau
 `compatibility_flags`.
 
 ### En savoir plus [!VO]Further reading
