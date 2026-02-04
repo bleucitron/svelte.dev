@@ -20,8 +20,8 @@ plugins.
 }
 ```
 
-Et voilà ! Vous avez maintenant un serveur MCP Svelte ainsi qu'un [sous-agent d'édition de
-fichiers](opencode-subagent) configurés pour vous.
+Et voilà ! Vous avez maintenant un serveur MCP Svelte, ses [skills](skills), ainsi qu'un [sous-agent
+d'édition de fichiers](opencode-subagent) configurés pour vous.
 
 ## Configuration
 
@@ -36,12 +36,15 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 	},
 	"subagent": {
 		"enabled": true
+	},
+	"skills": {
+		"enabled": true
 	}
 }
 ```
 
-... mais si vous préférez, vous pouvez activer uniquement le sous-agent, seulement le MCP, ou
-configurer le type de serveur MCP que vous souhaitez utiliser (`local` ou `remote`).
+... mais si vous préférez, vous pouvez activer uniquement le sous-agent, seulement le MCP, seulement
+les skills, ou configurer le type de serveur MCP que vous souhaitez utiliser (`local` ou `remote`).
 
 Vous pouvez placer ce fichier dans `~/.config/opencode/svelte.json` ou, si vous avez une variable
 d'environnement `OPENCODE_CONFIG_DIR` spécifiée, dans `$OPENCODE_CONFIG_DIR/svelte.json`.

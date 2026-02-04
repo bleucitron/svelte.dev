@@ -86,7 +86,7 @@ Si vous utilisez Node.js v20.6+, vous pouvez utiliser l'option
 node +++--env-file=.env+++ build
 ```
 
-### `PORT`, `HOST` et `SOCKET_PATH`
+### `PORT`, `HOST` et `SOCKET_PATH` [!VO]`PORT`, `HOST` and `SOCKET_PATH`
 
 Par défaut, le serveur va accepter des connections entrantes sur `0.0.0.0` en utilisant le port
 3000. Ces valeurs peuvent être personnalisées avec les variables d'environnement `PORT` et `HOST` :
@@ -103,7 +103,7 @@ les variables d'environnement `HOST` et `PORT` seront ignorées.
 SOCKET_PATH=/tmp/socket node build
 ```
 
-### `ORIGIN`, `PROTOCOL_HEADER`, `HOST_HEADER`, and `PORT_HEADER`
+### `ORIGIN`, `PROTOCOL_HEADER`, `HOST_HEADER`, et `PORT_HEADER` [!VO]`ORIGIN`, `PROTOCOL_HEADER`, `HOST_HEADER`, and `PORT_HEADER`
 
 HTTP ne fournit pas à SvelteKit une manière fiable de connaître l'URL qui est en train d'être
 requêtée. La manière la plus simple de dire à SvelteKit depuis où l'application est servie est de
@@ -142,7 +142,7 @@ peut que vous subissiez cette erreur lors de l'utilisation d'[actions de formula
 > [!NOTE] Cross-site POST form submissions are forbidden (Les soumissions de formulaire cross-site
 > POST sont interdites).
 
-### `ADDRESS_HEADER` et `XFF_DEPTH`
+### `ADDRESS_HEADER` et `XFF_DEPTH` [!VO]`ADDRESS_HEADER` and `XFF_DEPTH`
 
 L'objet [`RequestEvent`](@sveltejs-kit#RequestEvent) passé aux hooks et aux endpoints inclut une
 fonction `event.getClientAddress()` qui renvoie l'adresse IP du client. Par défaut il s'agit de
@@ -206,7 +206,7 @@ secondes après lequel l'application est automatiquement mise en sommeil si elle
 requêtes. Si non précisé, l'application n'est jamais mise en sommeil. Voir la section [Activation de
 socket](#Socket-activation) pour plus de détails.
 
-### `KEEP_ALIVE_TIMEOUT` et `HEADERS_TIMEOUT`
+### `KEEP_ALIVE_TIMEOUT` et `HEADERS_TIMEOUT` [!VO]`KEEP_ALIVE_TIMEOUT` and `HEADERS_TIMEOUT`
 
 Le nombre de secondes pour
 [`keepAliveTimeout`](https://nodejs.org/api/http.html#serverkeepalivetimeout) et

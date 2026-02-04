@@ -130,6 +130,7 @@ du projet. Il devrait ressembler à quelque chose comme ça :
 {
 	"name": "<any-name-you-want>",
 	"main": ".svelte-kit/cloudflare/_worker.js",
+	"compatibility_flags": ["nodejs_als"],
 	"compatibility_date": "<YYYY-MM-DD>",
 	"assets": {
 		"binding": "ASSETS",
@@ -145,6 +146,43 @@ deploy` ou en utilisant l'[intégration Git de
 Cloudflare](https://developers.cloudflare.com/workers/ci-cd/builds/) pour activer les builds et
 déploiements automatiques au push.
 
+## Cloudflare Pages
+
+### Déploiement [!VO]Deployment
+
+Suivez le [Guide de démarrage](https://developers.cloudflare.com/pages/get-started/) pour commencer
+avec les Cloudflare Pages.
+
+Si vous utilisez l'[intégratin
+Git](https://developers.cloudflare.com/pages/get-started/git-integration/), vos paramètres de
+compilation devrait ressembler à ceci :
+
+- Preset de framework – SvelteKit
+- Commande de compilation – `npm run build` ou `vite build`
+- Dossier de sortie de compilation – `.svelte-kit/cloudflare`
+
+
+Une fois configuré, rendez vous sur la section **Runtime** des paramètres de votre projet, et
+ajoutez le flag de compatibilité `nodejs_als` pour activer la fonctionnalité [ AsyncLocalStorage de
+Node.js](https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-asynclocalstorage).
+
+Vous pouvez également faire ceci dans la configuration de Wrangler en utilisant le tableau
+`compatibility_flags`.
+
+### En savoir plus [!VO]Further reading
+
+Vous pouvez vous réferrer à la [documentation de Cloudflare pour déployer un site SvelteKit sur les
+Cloudflare
+Pages](https://developers.cloudflare.com/pages/framework-guides/deploy-a-svelte-kit-site/).
+
+### Notes
+
+Les fonctions contenues dans [le dossier
+`/functions`](https://developers.cloudflare.com/pages/functions/routing/) à la racine du projet ne
+sont _pas_ incluses dans le déploiement. À la place, les fonctions devraient être implémentées en
+tant que [endpoints de server](routing#server) de votre application SvelteKit, qui est compilée en
+[un seul fichier `_worker.js`](https://developers.cloudflare.com/pages/functions/advanced-mode/).
+
 ## APIs de runtime [!VO]Runtime APIs
 
 L'objet [`env`](https://developers.cloudflare.com/workers/runtime-apis/fetch-event#parameters)
@@ -155,6 +193,7 @@ projet, qui consistent en des namespaces KV/DO, etc. Il est passé à SvelteKit 
 [`caches`](https://developers.cloudflare.com/workers/runtime-apis/cache/), et
 [`cf`](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties),
 ce qui signifie que vous pouvez y accéder dans les hooks et les endpoints :
+
 
 ```js
 // @filename: ambient.d.ts
