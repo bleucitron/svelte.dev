@@ -995,10 +995,10 @@ définir `value` comme un champ réactif `$state` sur la classe `Foo`. Entourer 
 `$state(...)` n'aura aucun effet — seuls les objets simples et les tableaux sont profondément
 réactifs.
 
-### Les évènements `touch` et `wheel` sont passifs [!VO]Touch and wheel events are passive
+### Les évènements de toucher sont passifs [!VO]Touch events are passive
 
-Lorsque vous utilisez les attributs d'évènements `onwheel`, `onmousewheel`, `ontouchstart` et
-`ontouchmove`, les gestionnaires y sont attachés en mode
+Lorsque vous utilisez les attributs d'évènements `ontouchstart` et `ontouchmove`, les gestionnaires
+y sont attachés en mode
 [passif](https://developer.mozilla.org/fr/docs/Web/API/EventTarget/addEventListener#using_passive_listeners)
 pour être en phase avec le comportement par défaut des navigateurs. Ceci améliore significativement
 la responsivité en permettant au navigateur de faire défiler le document immédiatement, plutôt que

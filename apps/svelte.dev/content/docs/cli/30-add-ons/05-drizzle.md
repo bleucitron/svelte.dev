@@ -17,7 +17,7 @@ npx sv add drizzle
 - une mise en place qui définit l'accès à votre base de données dans les fichiers serveur de
 SvelteKit
 - un fichier `.env` pour stocker vos identifiants
-- de la compatibilité avec l'add-on d'authentification Lucia
+- de la compatibilité avec l'add-on d'authentification Better-Auth
 - une configuration Docker optionnelle pour vous aider à vous en servir comme base de données locale
 
 ## Options

@@ -2220,6 +2220,28 @@ url: URL;
 L'URL vers laquelle la navigation s'effectue
 
 </div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+scroll: { x: number; y: number } | null;
+```
+
+<div class="ts-block-property-details">
+
+La position de défilement associée à cette navigation.
+
+Pour la cible `from`, il s'agit de la position de défilement au moment de la navigation.
+
+Pour la cible `to`, ceci représente la position de défilement qui sera ou a été restaurée :
+- Dans `beforeNavigate` et `onNavigate`, cette valeur n'est disponible que pour les navigations
+`popstate` (bouton précédent/suivant) et vaudra `null` pour d'autres types de navigation, puisque la
+position de défilement finale n'est pas connue à l'avance.
+- Dans `afterNavigate`, cette valeur est toujours la position de défilement qui a été appliquée
+après la fin de la navigation.
+
+</div>
 </div></div>
 
 ## NavigationType

@@ -39,6 +39,9 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 	},
 	"skills": {
 		"enabled": true
+	},
+	"instructions": {
+		"enabled": true
 	}
 }
 ```
@@ -46,5 +49,6 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 ... mais si vous préférez, vous pouvez activer uniquement le sous-agent, seulement le MCP, seulement
 les skills, ou configurer le type de serveur MCP que vous souhaitez utiliser (`local` ou `remote`).
 
-Vous pouvez placer ce fichier dans `~/.config/opencode/svelte.json` ou, si vous avez une variable
+Vous pouvez placer ce fichier dans `~/.opencode/svelte.json` (dans votre projet), dans
+`~/.config/opencode/svelte.json` ou, si vous avez une variable
 d'environnement `OPENCODE_CONFIG_DIR` spécifiée, dans `$OPENCODE_CONFIG_DIR/svelte.json`.

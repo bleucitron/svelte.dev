@@ -108,6 +108,8 @@ valeurs spéciales suivantes :
 	- `<build>` contient les artéfacts de compilation de votre application (les fichiers générés par
 	Vite)
 	- `<files>` contient le contenu de votre dossier `static`
+	- `<redirects>` contient une liste de chemins depuis [votre fichier
+	`_redirects`](https://developers.cloudflare.com/pages/configuration/redirects/) à la racine
 	- `<prerendered>` contient une liste des pages pré-rendues
 	- `<all>` (par défaut) contient tout ce qui précisé juste au-dessus
 

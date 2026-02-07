@@ -108,6 +108,37 @@ import { createContext } from 'svelte';
 export const [getUserContext, setUserContext] = createContext<User>();
 ```
 
+Lorsque vous écrivez des [tests de
+composants](testing#Unit-and-component-tests-with-Vitest-Component-testing), il peut être utile de
+créer un composant "d'emballage" qui définit le contexte afin de vérifier le comportement d'un
+composant consommant ce contexte. À partir de la version 5.49, vous pouvez faire ce genre de choses
+:
+
+```js
+import { mount, unmount } from 'svelte';
+import { expect, test } from 'vitest';
+import { setUserContext } from './context';
+import MyComponent from './MyComponent.svelte';
+
+test('MyComponent', () => {
+	function Wrapper(...args) {
+		setUserContext({ name: 'Bob' });
+		return MyComponent(...args);
+	}
+
+	const component = mount(Wrapper, {
+		target: document.body
+	});
+
+	expect(document.body.innerHTML).toBe('<h1>Bonjour Bob !</h1>');
+
+	unmount(component);
+});
+```
+
+Cette approche fonctionne également avec [`hydrate`](imperative-component-api#hydrate) et
+[`render`](imperative-component-api#render).
+
 ## Remplacer l'état global [!VO]Replacing global state
 
 Lorsque vous avez un état partagé par plusieurs composants différents, vous pourriez être tenté•e•s

@@ -10,7 +10,7 @@ pouvez écrire des tests unitaires, des tests d'intégration, des tests end-to-e
 solutions comme [Vitest](https://vitest.dev/), [Jasmine](https://jasmine.github.io/),
 [Cypress](https://www.cypress.io/) et [Playwright](https://playwright.dev/)
 
-## Tests unitaires et de composants avec Vitest [!VO]Unit and component testing with Vitest
+## Tests unitaires et de composants avec Vitest [!VO]Unit and component tests with Vitest
 
 Les tests unitaires vous permettent de tester des petites parties isolées de votre code. Les tests
 d'intégration vous permettent de vérifier comment des morceaux de votre application fonctionnent
@@ -204,7 +204,6 @@ export default defineConfig({
 		// environnement DOM. Si tous vos fichiers ne sont pas compatibles avec cet environnement, vous
 		// pouvez plutôt ajouter un commentaire `// @vitest-environment jsdom` en haut des fichiers de
 		// test.
-
 		environment: 'jsdom'
 	},
 
