@@ -66,11 +66,11 @@ sans coût. La contrepartie est que le processus de compilation est plus coûteu
 pré-rendu ne peut être mis à jour qu'en recompilant et redéployant une nouvelle version de
 l'application.
 
-Toutes les pages ne peuvent pas être prérendues. La règle d'or est la suivante : pour qu'un contenu
-puisse être candidat au pré-rendu, deux personnes lambda visitant ce contenu directement doivent
-obtenir exactement le même contenu du serveur, et la page ne doit pas contenir
+Pour qu'un contenu puisse être pré-rendu, deux personnes lambda visitant ce contenu directement
+doivent obtenir exactement le même contenu du serveur, et la page ne doit pas contenir
 d'[actions](form-actions). Notez que vous pouvez toujours pré-rendre du contenu chargé en fonction
 des paramètres de page tant que toutes les personnes recoivent exactement le même contenu pré-rendu.
+Le pré-rendu de toutes vos pages est aussi appelé [Static Site Generation](#SSG).
 
 Les pages pré-rendues ne sont limitées au contenu staitque. Vous pouvez construire des pages
 personnalisées si les données spécifiques à l'utilisateur ou utilisatrice sont récupérées et rendues
@@ -80,6 +80,7 @@ SSR sur le contenu personnalisé, comme discuté plus haut.
 Avec SvelteKit, vous pouvez contrôler le pré-rendu avec l'[option de page
 `prerender`](page-options#prerender) et l'[option de configuration
 `prerender`](configuration#prerender) dans le fichier `svelte.config.js`.
+
 
 ## PWA
 
@@ -130,9 +131,9 @@ besoin de maintenir ou de payer des serveurs pour exécuter le SSR. Une fois gé
 octet" (_time to first byte_). Cette stratégie est souvent appelée "JAMStack".
 
 Avec SvelteKit, vous pouvez faire de la génération de site statique en utilisant l'adaptateur
-[`adapter-static`](adapter-static) ou en configurant chaque page pour qu'elle soit pré-rendue grâce
-à l'[option de page `prerender`](page-options#prerender) ou à la [configuration
-`prerender`](configuration#prerender) du fichier `svelte.config.js`.
+[`adapter-static`](adapter-static) ou en configurant chaque page pour qu'elle soit
+[pré-rendue](#Prerendering) grâce à l'[option de page `prerender`](page-options#prerender) ou à la
+[configuration `prerender`](configuration#prerender) du fichier `svelte.config.js`.
 
 ## SSR
 

@@ -55,6 +55,10 @@ export const prerender = true;
 > devrez alors définir `trailingSlash: 'always'` dans votre layout racine pour créer plutôt
 > `/a/index.html`.
 
+> [!NOTE] Vous devez vous assurer que l'option [`ssr`](page-options#ssr) de SvelteKit n'est pas
+> définie à `false`. Autrement, le pré-rendu ne construira qu'une page "coquille" vide au lieu de la
+> page entièrement rendue.
+
 ## Support zéro configuration [!VO]Zero-config support
 
 Certaines plateformes ont un support ne nécessitant pas de configuration (et d'autres viendront dans

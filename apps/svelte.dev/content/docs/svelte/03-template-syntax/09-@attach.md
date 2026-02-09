@@ -98,6 +98,15 @@ Les attachements peuvent également être inlinés
 > `canvas.getContext(...)` est appelé) n'est exécuté qu'une seule fois, puisqu'il ne lit aucun état
 > réactif.
 
+## Attachements conditionnels [!VO]Conditional attachments
+
+Les valeurs "falsy" comme `false` ou `undefiend` sont traitées comme s'il n'y avait pas
+d'attachement fourni, permettant un usage conditionnel :
+
+```svelte
+<div {@attach enabled && myAttachment}>...</div>
+```
+
 ## Passer des attachements aux composants [!VO]Passing attachments to components
 
 Lorsqu'utilisé sur un composant, `{@attach ...}` va créer une prop dont la clé sera un

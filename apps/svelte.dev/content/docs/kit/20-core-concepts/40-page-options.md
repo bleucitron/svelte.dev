@@ -193,12 +193,14 @@ d'articles depuis un CMS ou une base de données, dans l'exemple ci-dessus.
 
 ## ssr
 
-Normalement, SvelteKit rend votre page d'abord sur le serveur, puis envoie le HTML construit vers le
-client où celui-ci va être [hydraté](glossary#Hydration). Si vous définissez `ssr` à `false`, la
-page construite par le serveur sera alors une "coquille" vide. C'est utile si votre page ne peut pas
-être rendue sur le serveur (parce que vous utilisez des variables globales comme `document` par
-exemple), mais dans la plupart des situations, ce n'est pas recommandé ([voir les
-annexes](glossary#SSR)).
+Normalement, SvelteKit rend votre page sur le serveur avant d'envoyer le HTML construit vers le
+client où celui-ci sera [hydraté](glossary#Hydration). C'est également requis pour le pré-rendu pour
+enregistrer l'intégralité du contenu de la page.
+
+Si vous définissez `ssr` à `false`, la page construite par le serveur sera alors une "coquille"
+vide. C'est utile si votre page ne peut pas être rendue sur le serveur (parce que vous utilisez des
+variables globales comme `document` par exemple), mais dans la plupart des situations, ce n'est pas
+recommandé ([voir les annexes](glossary#SSR)).
 
 ```js
 /// file: +page.js
@@ -208,7 +210,8 @@ export const ssr = false;
 
 Si vous ajoutez `export const ssr = false` à votre fichier `+layout.js` racine, votre application
 toute entière sera uniquement rendue sur le client — ce qui signifie que votre application devient
-une SPA.
+une [SPA](glossary#SPA). Vous ne devriez pas faire ceci si votre objectif est de construire un [site
+généré de manière statique](glossary#SSG).
 
 > [!NOTE] Si toutes vos options de page sont des valeurs booléenes ou des chaînes de caractères
 > litérales, SvelteKit va les évaluer de manière statique. Sinon, il va importer votre fichier
