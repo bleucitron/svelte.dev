@@ -1,5 +1,6 @@
 ---
 title: La directive de style
+tags: template-style
 ---
 
 Comme avec `class`, vous pouvez écrire vos attributs `style` de manière inlinée, car Svelte n'est en

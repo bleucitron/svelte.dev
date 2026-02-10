@@ -1,5 +1,6 @@
 ---
 title: Blocs key
+tags: template-key
 ---
 
 Les blocs `#key` détruisent et reconstruisent leur contenu lorsque la valeur d'une expression

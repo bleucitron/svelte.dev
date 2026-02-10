@@ -1,5 +1,6 @@
 ---
 title: Bloc each
+tags: template-each
 ---
 
 Lorsque vous construisez des interfaces utilisateur, vous avez souvent besoin de travailler avec des

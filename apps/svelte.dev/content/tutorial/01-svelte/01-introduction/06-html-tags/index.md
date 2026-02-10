@@ -1,5 +1,6 @@
 ---
 title: Balises HTML
+tags: template-html
 ---
 
 Par défaut, les chaînes de caractères sont insérées comme du texte brut, ce qui signifie que `<` et

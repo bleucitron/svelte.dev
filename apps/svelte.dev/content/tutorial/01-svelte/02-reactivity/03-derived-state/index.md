@@ -1,5 +1,6 @@
 ---
 title: État dérivé
+tags: rune-derived
 ---
 
 Souvent, vous aurez besoin de _dérivez_ un état depuis un autre état. Pour cela, nous avons la rune

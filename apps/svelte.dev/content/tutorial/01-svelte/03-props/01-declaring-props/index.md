@@ -1,5 +1,6 @@
 ---
 title: Déclarer des props
+tags: rune-props
 ---
 
 Jusqu'à maintenant, nous avons exclusivement eu affaire à des états internes — c'est-à-dire des

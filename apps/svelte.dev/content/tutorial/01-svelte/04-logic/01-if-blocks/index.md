@@ -1,5 +1,6 @@
 ---
 title: Blocs if
+tags: template-if
 ---
 
 Le HTML ne permet pas d'exprimer de la _logique_, comme des conditions ou des boucles. Svelte si.

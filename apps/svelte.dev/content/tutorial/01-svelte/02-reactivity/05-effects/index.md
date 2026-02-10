@@ -1,5 +1,6 @@
 ---
 title: Effets
+tags: rune-effect
 ---
 
 Jusqu'à maintenant, nous avons uniquement parlé de réactivité en termes d'état. Mais ce n'est qu'une

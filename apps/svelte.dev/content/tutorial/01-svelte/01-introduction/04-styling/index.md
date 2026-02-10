@@ -1,5 +1,6 @@
 ---
 title: Styles
+tags: styles-scoped
 ---
 
 Comme en HTML, vous pouvez ajoutez une balise `<style>` à votre composant. Ajoutons du style à notre

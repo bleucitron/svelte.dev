@@ -1,5 +1,6 @@
 ---
 title: Styles de composants
+tags: styles-global, styles-custom-properties
 ---
 
 Il est parfois nécessaire d'influencer les styles au sein d'un composant enfant. Peut-être que nous

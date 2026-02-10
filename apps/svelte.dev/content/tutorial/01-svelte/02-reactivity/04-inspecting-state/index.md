@@ -1,5 +1,6 @@
 ---
 title: Inspecter l'état
+tags: rune-inspect
 ---
 
 Il est souvent utile d'être capable de suivre la valeur d'un morceau d'état lorsqu'évolue dans le

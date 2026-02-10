@@ -1,5 +1,6 @@
 ---
 title: Blocs await
+tags: template-await
 ---
 
 La plupart des applications web doivent gérer des données asynchrones à un moment ou à un autre.

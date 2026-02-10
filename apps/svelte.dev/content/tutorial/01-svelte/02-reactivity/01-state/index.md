@@ -1,5 +1,6 @@
 ---
 title: L'état
+tags: rune-state
 ---
 
 Au coeur de Svelte se trouve un puissant système de _réactivité_ permettant au DOM de rester

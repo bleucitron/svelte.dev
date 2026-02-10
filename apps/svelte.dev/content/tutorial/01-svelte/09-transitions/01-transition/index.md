@@ -1,5 +1,6 @@
 ---
 title: La directive de transition
+tags: transitions
 ---
 
 Nous pouvons créer des interfaces utilisateur plus attrayantes en faisant transitionner les éléments

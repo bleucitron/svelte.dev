@@ -1,5 +1,6 @@
 ---
 title: Inputs texte
+tags: template-bind
 ---
 
 De manière générale, la donnée circule en _descendant_ — un composant parent peut définir des props

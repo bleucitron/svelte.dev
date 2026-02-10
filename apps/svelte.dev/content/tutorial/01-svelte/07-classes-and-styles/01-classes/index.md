@@ -1,5 +1,6 @@
 ---
 title: L'attribut de classe
+tags: template-class
 ---
 
 Comme tout autre attribut, vous pouvez préciser les classes avec un attribut JavaScript. Ici, nous
