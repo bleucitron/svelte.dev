@@ -64,7 +64,9 @@ Les pages peuvent recevoir des données des fonctions `load` via la prop `data`.
 <div>{@html data.content}</div>
 ```
 
-As of 2.24, pages also receive a `params` prop which is typed based on the route parameters. This is particularly useful alongside [remote functions](remote-functions):
+Depuis la version 2.24, les pages recoivent également une prop `params` typée selon les paramètres
+de route. Ceci est particulièrement utile en combinaison avec les [fonctions
+distantes](remote-functions) :
 
 ```svelte
 <!--- file: src/routes/blog/[slug]/+page.svelte --->
