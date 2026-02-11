@@ -64,6 +64,23 @@ Les pages peuvent recevoir des données des fonctions `load` via la prop `data`.
 <div>{@html data.content}</div>
 ```
 
+As of 2.24, pages also receive a `params` prop which is typed based on the route parameters. This is particularly useful alongside [remote functions](remote-functions):
+
+```svelte
+<!--- file: src/routes/blog/[slug]/+page.svelte --->
+<script>
+	import { getPost } from '../blog.remote';
+
+	/** @type {import('./$types').PageProps} */
+	let { params } = $props();
+
+	const post = $derived(await getPost(params.slug));
+</script>
+
+<h1>{post.title}</h1>
+<div>{@html post.content}</div>
+```
+
 > [!LEGACY]
 > `PageProps` a été ajouté dans la version 2.16.0 de SvelteKit. Dans les versions antérieures, vous
 > deviez typer les propriétés `data` manuellement avec `PageData`, voir [$types](#\$types).
