@@ -106,17 +106,9 @@ Les fichiers [`_headers`](https://docs.netlify.com/routing/headers/#syntax-for-t
 peuvent être utilisés comme réponses d'assets statiques (comme les images) en les plaçant à la
 racine de votre projet.
 
-### Règles de redirection [!VO]Redirect rules
-
-Lors de la compilation, les règles de redirection sont automatiquement ajoutées à votre fichier
-`_redirects`. (S'il n'existe pas encore, il sera créé.) Cela signifie que :
-
-- `[[redirects]]` dans `netlify.toml` ne va jamais correspondre puisque `_redirects` a une [plus
-grande priorité](https://docs.netlify.com/routing/redirects/#rule-processing-order)
-- `_redirects` ne devrait pas avoir de règles "attrape-tout" personnalisées comme `/*
-/foobar/:splat`. Autrement, la règle automatiquement ajoutée ne sera jamais appliquée puisque
-Netlify ne traite que [la première règle qui
-correspond](https://docs.netlify.com/routing/redirects/#rule-processing-order).
+Vous pouvez aussi utiliser
+[`[[redirects]]`](https://docs.netlify.com/routing/redirects/#syntax-for-the-netlify-configuration-file)
+dans votre fichier `netlify.toml`.
 
 ### Netlify Forms
 
