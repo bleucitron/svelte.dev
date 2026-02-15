@@ -16,8 +16,9 @@ tags: template-each
 
 Vous pouvez itérer sur des valeurs en utilisant un bloc `#each`. Les valeurs en questions peuvent
 être des tableaux, des objets similaires à des tableaux (c-à-d tout ce qui possède une propriété
-`length`), ou des itérables comme `Map` et `Set` — autrement dit, tout ce qui peut être utilisé avec
-`Array.from`.
+`length`), ou des itérables comme `Map` et `Set`. (En interne, ces itérables sont convertis en
+tableaux avec
+[`Array.from`](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/from).)
 
 Si la valeur est `null` ou `undefined`, elle est traitée comme un tableau vide (ce qui provoquer le
 rendu des [blocs {:else}](#Else-blocks), s'ils existent).
