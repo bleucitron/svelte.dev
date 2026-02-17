@@ -98,11 +98,11 @@ let base: '' | `/${string}`;
 
 <blockquote class="since note">
 
-Available since 2.52.0
+Disponible depuis la version 2.52.0
 
 </blockquote>
 
-Match a path or URL to a route ID and extracts any parameters.
+Fait correspondre un chemin ou une URL à un ID de route et en extrait les paramètres.
 
 ```js
 // @errors: 7031
