@@ -86,7 +86,10 @@ Keyed each block has duplicate key `%value%` at indexes %a% and %b%
 Keyed each block has key that is not idempotent — the key for item at index %index% was `%a%` but is now `%b%`. Keys must be the same each time for a given item
 ```
 
-The key expression in a keyed each block must return the same value when called multiple times for the same item. Using expressions like `[item.a, item.b]` creates a new array each time, which will never be equal to itself. Instead, use a primitive value or create a stable key like `item.a + '-' + item.b`.
+L'expression de clé dans un bloc `{#each}` doit renvoyer la même valeur lorsque calculée plusieurs
+fois pour le même élément. L'utilisation d'expressions comme `[item.a, item.b]` crée un nouveau
+tableau à chaque fois, qui ne sera donc jamais égal à lui-même. Utilisez plutôt une valeur primitive
+ou créez une clé stable comme `item.a + '-' + item.b`.
 
 ### effect_in_teardown
 
