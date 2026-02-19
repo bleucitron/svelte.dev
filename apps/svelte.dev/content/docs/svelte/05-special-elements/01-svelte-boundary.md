@@ -119,3 +119,56 @@ d'erreur...
 
 Si une erreur se produit dans la fonction `onerror` (ou si vous y levez une erreur), celle-ci sera
 gérée par une éventuelle frontière parente, si elle existe.
+
+## Utiliser `tranformError` [!VO]Using `transformError`
+
+Par défaut, les frontières n'ont aucun effet sur le serveur — si une erreur se produit lors du
+rendu, le rendu en entier va échouer.
+
+Depuis la version 5.51, vous pouvez contrôler ce comportement pour les frontières ayant un snippet
+`failed`, en exécutant [`render(...)`](imperative-component-api#render) avec une fonction
+`transformError`.
+
+> [!NOTE] Si vous utilisez Svelte via un framework tel que SvelteKit, vous n'aurez probablement pas
+> un accès direct à l'appel de `render(...)` — le framework doit configurer `transformError` à votre
+> place. SvelteKit ajoutera le support de cette fonctionnalité dans un futur proche, via le hook
+> [`handleError`](../kit/hooks#Shared-hooks-handleError).
+
+La fonction `transformError` doit renvoyer un objet pouvant être sérialisé en JSON et qui sera
+utilisé pour rendre le snippet `failed`. Cet objet sera sérialisé et utilisé pour hydrater le
+snippet dans le navigateur.
+
+```js
+// @errors: 1005
+import { render } from 'svelte/server';
+import App from './App.svelte';
+
+const { head, body } = await render(App, {
+	transformError: (error) => {
+		// affiche l'erreur d'origine, avec la stack trace...
+		console.error(error);
+
+		// ... et renvoie une erreur nettoyée pouvant être affichée à l'utilisateur
+		// dans le sniplet `failed`
+		return {
+			message: 'Une erreur s\'est produite !'
+		};
+	};
+});
+```
+
+Si `transformError` jette (ou re-jette) une erreur, `render(...)` va entièrement échouer avec cette
+erreur.
+
+> [!NOTE] Les erreurs qui se produisent lors du rendu côté serveur peuvent contenir des informations
+> sensibles dans les champs `message` et `stack`. Il est recommandé de caviarder ces informations
+> plutôt que des les envoyer telles quelles au navigateur.
+
+Si la frontière a un gestionnaire `onerror`, celui-ci sera exécuté lors de l'hydratation avec
+l'objet d'erreur sérialisé.
+
+Les fonctions [`mount`](imperative-component-api#mount) et
+[`hydrate`](imperative-component-api#hydrate) acceptent également une option `transformError`, qui
+vaut par défaut la fonction identité. Comme pour `render`, cette fonction transforme une erreur
+générée lors du rendu avant qu'elle ne soit passée à un snippet `failed` ou un gestionnaire
+`onerror`.

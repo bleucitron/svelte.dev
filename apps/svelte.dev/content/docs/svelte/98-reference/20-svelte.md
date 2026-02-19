@@ -483,6 +483,7 @@ function hydrate<
 				context?: Map<any, any>;
 				intro?: boolean;
 				recover?: boolean;
+				transformError?: (error: unknown) => unknown;
 			}
 		: {
 				target: Document | Element | ShadowRoot;
@@ -491,6 +492,7 @@ function hydrate<
 				context?: Map<any, any>;
 				intro?: boolean;
 				recover?: boolean;
+				transformError?: (error: unknown) => unknown;
 			}
 ): Exports;
 ```
@@ -880,6 +882,15 @@ $$inline?: boolean;
 ```
 
 <div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+transformError?: (error: unknown) => unknown;
+```
+
+<div class="ts-block-property-details"></div>
 </div></div>
 
 ## ComponentEvents
@@ -1091,6 +1102,14 @@ type MountOptions<
 	 * @default true
 	 */
 	intro?: boolean;
+	/**
+	 * Une fonction qui transforme les erreurs attrapées par les frontières d'erreur avant qu'elles ne
+	 * soient passées au snippet `failed`.
+	 * Vaut par défaut la fonction identité.
+	 */
+	transformError?: (
+		error: unknown
+	) => unknown | Promise<unknown>;
 } & ({} extends Props
 	? {
 			/**

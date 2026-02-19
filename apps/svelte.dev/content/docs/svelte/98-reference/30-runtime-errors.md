@@ -363,6 +363,17 @@ composant contenant une expression `await`. Vous devez soit `await` le résultat
 entourer le `await` (ou le composant le contenant) dans un [`<svelte:boundary>`](svelte-boundary)
 ayant un snippet `pending`.
 
+### dynamic_element_invalid_tag
+
+```
+`<svelte:element this="%tag%">` is not a valid element name — the element will not be rendered
+```
+
+La valeur passée à la prop `this` de `<svelte:element>` doit être un élément HTML valide, un élément
+SVG, un élément MathML, le nom d'un élément personnalisé. Une valeur contenant des caractères
+invalides (comme un espace ou des caractères spéciaux) était fournie, cela pourrait être une faille
+de sécurité. Assurez-vous de ne fournir que des noms de balises valides.
+
 ### html_deprecated
 
 ```
