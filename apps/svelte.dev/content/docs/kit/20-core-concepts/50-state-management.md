@@ -83,7 +83,7 @@ est partagé avec _tout le monde_. Vous devriez plutôt simplement renvoyer les 
 
 ```js
 /// file: +page.js
-/** @type {import('./$types').PageServerLoad} */
+/** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
 	const response = await fetch('/api/user');
 

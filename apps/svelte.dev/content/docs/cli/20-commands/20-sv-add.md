@@ -122,5 +122,5 @@ commencer.
 
 Puis, vous pouvez continuer avec [la documentation d'API](/docs/cli/add-on) pour commencer à
 construire votre add-on. Vous pouvez également jeter un oeil au [code source d'add-ons
-officiels](https://github.com/sveltejs/cli/tree/main/packages/sv/lib/addons) pour trouver de
+officiels](https://github.com/sveltejs/cli/tree/main/packages/sv/src/addons) pour trouver de
 l'inspiration sur ce qui peut être fait.

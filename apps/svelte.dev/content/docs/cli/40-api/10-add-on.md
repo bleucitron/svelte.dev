@@ -24,7 +24,8 @@ Un add-on ressemble généralement à ceci :
 _survolez les mots-clés dans le code pour obtenir plus de contexte_
 
 ```js
-import { defineAddon, defineAddonOptions, parse, svelte } from 'sv/core';
+import { parse, svelte } from '@sveltejs/sv-utils';
+import { defineAddon, defineAddonOptions } from 'sv';
 
 // Définir des options qui seront présentées à l'utilisateur (ou passées en arguments)
 const options = defineAddonOptions()
@@ -49,7 +50,7 @@ export default defineAddon({
 	run: ({ kit, cancel, sv, options }) => {
 		if (!kit) return cancel('SvelteKit est requis');
 
-		// Ajoute "Bonjour [who]" à la page racine
+		// Ajoute "Bonjour [who] !" à la page racine
 		sv.file(kit.routesDirectory + '/+page.svelte', (content) => {
 			const { ast, generateCode } = parse.svelte(content);
 
