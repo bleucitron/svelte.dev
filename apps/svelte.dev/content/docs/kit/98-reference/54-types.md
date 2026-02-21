@@ -211,9 +211,8 @@ Utilisez la configuration [`typescript.config`](configuration#typescript) du fic
 
 ## $lib
 
-Ceci est un simple alias vers `src/lib`, ou vers n'importe quel dossier étant défini via l'option
-[`config.kit.files.lib`](configuration#files). Cela permet d'accéder aux composants communs et aux
-modules utilitaires sans l'absurdité des `../../../..`.
+Ceci est un simple alias vers `src/lib`. Cela permet d'accéder aux composants communs et aux modules
+utilitaires sans l'absurdité des `../../../..`.
 
 ### $lib/server
 

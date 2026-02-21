@@ -92,7 +92,7 @@ Une route comme `src/routes/fruits/[page]` va matcher `/fruits/apple`, mais auss
 `/fruits/rocketship`. Ce n'est pas souhaitable. Vous pouvez vous assurer que les paramètres de route
 sont bien formés en ajoutant un _matcher_ — une fonction qui va prendre en paramètre une chaîne de
 caractères représentant le paramètre (`"apple"` ou `"rocketship"`) et renvoie `true` si le paramètre
-est valide — à votre dossier [`params`](configuration#files)...
+est valide — à votre dossier `src/params`...
 
 ```js
 /// file: src/params/fruit.js

@@ -10,8 +10,7 @@ l'implémenter à cause du type d'application que vous développez), il est souv
 les service workers pour accélérer la navigation en pré-cachant vos JS et CSS compilés.
 
 Dans SvelteKit, si vous avez un fichier `src/service-worker.js` (ou `src/service-worker/index.js`),
-celui-ci sera compilé et automatiquement activé. Vous pouvez changer l'[emplacement de votre
-fichier de service worker](configuration#files) si besoin.
+celui-ci sera compilé et automatiquement activé.
 
 Vous pouvez [désactiver l'activation automatique](configuration#serviceWorker) si vous avez besoin
 d'activer le service worker selon votre propre logique ou si vous souhaitez utiliser une autre

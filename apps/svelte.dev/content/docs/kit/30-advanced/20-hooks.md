@@ -16,8 +16,6 @@ et sur le serveur
 Le code dans ces modules s'exécutera lors du démarrage de l'application, les rendant utile pour
 l'initialisation de clients de bases de données, parmi d'autres choses.
 
-> [!NOTE] Vous pouvez configurer l'emplacement de ces fichiers avec
-> [`config.kit.files.hooks`](configuration#files).
 
 ## Hooks de serveur [!VO]Server hooks
 
