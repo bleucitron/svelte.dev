@@ -250,7 +250,7 @@ l'exécution d'un endpoint, cette fonction sera exécutée avec les arguments `e
 - vous pouvez afficher l'erreur
 - vous pouvez générer une représentation personnalisée de l'erreur que vous pouvez afficher aux
 utilisateurs et utilisatrices, nettoyée des informations sensibles comme les messages ou les stack
-traces. La valeur renvoyée, qui vaut par défaut `{ message }`, devient la valeur de `$page.error`.
+traces. La valeur renvoyée, qui vaut par défaut `{ message }`, devient la valeur de `page.error`.
 
 Pour les erreurs jetées depuis votre code (ou depuis du code d'une librairie appelée depuis votre
 code), le statut sera 500 et le message sera "Internal Error". Bien que `error.message` peut
@@ -258,7 +258,7 @@ contenir des informations sensibles qui ne devraient pas être exposées aux uti
 utilisatrices, `message` ne pose pas de problèmes (bien que sans grand intérêt pour une personne
 lambda).
 
-Pour ajouter plus d'informations à l'objet `$page.error` de manière typée, vous pouvez personnalisée
+Pour ajouter plus d'informations à l'objet `page.error` de manière typée, vous pouvez personnalisée
 la forme attendue en déclarant une interface `App.Error` (qui doit inclure `message: string`, pour
 garantir un comportement par défaut correct). Cela vous permet de — par exemple — ajouter un ID de
 suivi que les utilisateurs et utilisatrices pourront utiliser comme référence lors de leurs échanges

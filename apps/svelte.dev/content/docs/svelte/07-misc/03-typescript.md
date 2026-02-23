@@ -97,10 +97,7 @@ respectifs. Pour Rollup il s'agit de
 [rollup-plugin-svelte](https://github.com/sveltejs/rollup-plugin-svelte), et pour Webpack il s'agit
 de [svelte-loader](https://github.com/sveltejs/svelte-loader). Dans les deux cas vous aurez besoin
 d'installer `typescript` et `svelte-preprocess` et d'ajouter le préprocesseur à la configuration de
-plugin (référrez-vous aux READMEs respectifs pour plus d'infos). Si vous commencez un nouveau
-projet, vous pouvez aussi utiliser le template [rollup](https://github.com/sveltejs/template) ou
-[webpack](https://github.com/sveltejs/template-webpack) pour mettre en place votre projet à partir
-d'un script.
+plugin (référrez-vous aux READMEs respectifs pour plus d'infos).
 
 > [!NOTE] Si vous commencez un nouveau projet, nous recommandons plutôt d'utiliser SvelteKit ou
 > Vite.

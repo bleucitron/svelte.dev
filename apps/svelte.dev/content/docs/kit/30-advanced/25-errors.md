@@ -116,7 +116,7 @@ de serveur), tandis que l'erreur exposée aux utilisateurs et utilisatrices rest
 
 Les erreurs inattendues vont être passées au hook [`handleError`](hooks#Shared-hooks-handleError),
 où vous pouvez ajouter votre propre gestion d'erreur — par exemple, envoyer ces erreurs à un service
-de suivi d'erreur, ou renvoyer un objet d'erreur personnalisé qui va devenir `$page.error`.
+de suivi d'erreur, ou renvoyer un objet d'erreur personnalisé qui va devenir `page.error`.
 
 ## Réponses [!VO]Responses
 

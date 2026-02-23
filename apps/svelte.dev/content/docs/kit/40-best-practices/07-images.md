@@ -223,7 +223,7 @@ nombre de librairies supportant Svelte pour rendre leur usage plus facile.
 nombre de fournisseurs. Certains fournisseurs de CDNs comme
 [Cloudinary](https://svelte.cloudinary.dev/) supportent Svelte. Enfin, certains CMS supportant
 Svelte (comme [Contentful](https://www.contentful.com/sveltekit-starter-guide/),
-[Storyblok](https://github.com/storyblok/storyblok-svelte), et
+[Storyblok](https://www.storyblok.com/docs/guides/svelte), et
 [Contentstack](https://www.contentstack.com/docs/developers/sample-apps/build-a-starter-website-with-sveltekit-and-contentstack))
 ont un support intégré pour la gestion des images.
 

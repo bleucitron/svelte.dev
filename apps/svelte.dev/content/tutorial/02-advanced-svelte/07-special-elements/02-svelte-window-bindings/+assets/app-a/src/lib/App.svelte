@@ -4,7 +4,7 @@
 
 <svelte:window />
 
-<span>profondeur : {y}px</span>
+<span>profondeur : {Math.round(y)}px</span>
 
 <style>
 	:global(body) {
