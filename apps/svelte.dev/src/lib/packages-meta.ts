@@ -34,6 +34,11 @@ const FEATURED: {
 					"Un outil d'authentification basé sur des mots de passe de sessions et utilisant Drizzle"
 			},
 			{
+				name: 'better-auth',
+				svAlias: 'better-auth',
+				description: "Framework d'authentification et d'authorisation"
+			},
+			{
 				name: 'storybook',
 				svAlias: 'storybook',
 				description: "Développez, documentez et testez vos composants d'interface en isolation"
@@ -102,7 +107,8 @@ const FEATURED: {
 				name: 'melt',
 				description: 'Une librairie de composants headless bas niveau'
 			},
-			{ name: '@sveltestrap/sveltestrap' }
+			{ name: '@sveltestrap/sveltestrap' },
+			{ name: 'm3-svelte', description: 'An implementation of the Material 3 design system' }
 		]
 	},
 	{
@@ -172,7 +178,24 @@ const FEATURED: {
 				description:
 					'Un framework permettant de construire et de publier des produits basés sur des données en utilisant SQL, Markdown, and AI'
 			},
-			{ name: 'svelte-pdf', description: 'Fait le rendu de documents PDF en utilisant PDF.js' },
+			{
+				name: '@embedpdf/svelte-pdf-viewer',
+				description: 'Visualiseur de PDF complet et prêt pour la production'
+			},
+			{ name: 'svelte-pdf', description: 'Fait le rendu de documents PDF en utilisant PDF.js' }
+		]
+	},
+	{
+		title: 'Édition riche de texte',
+		packages: [
+			{
+				name: 'prosekit',
+				description: "Framework d'édition riche de texte agnostique et headless"
+			},
+			{
+				name: 'svelte-lexical',
+				description: 'Éditeur riche de texte pour Svelte basé sur le lexique'
+			},
 			{ name: 'typewriter-editor' }
 		]
 	},

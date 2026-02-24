@@ -19,5 +19,5 @@ Au lieu de faire ça, nous pouvons utiliser la directive `bind:value` :
 <input +++bind:+++value={name}>
 ```
 
-Ceci signifie que non seulement les changements de valeur de `name` vont mettre à jour la valeur de
-l'input, mais aussi que les changements sur la valeur de l'input vont mettre à jour `name`.
+Ceci signifie que les changements à `name` vont mettre à jour `<input>`, tout autant que les
+changements de `<input>` vont mettre à jour `name`.

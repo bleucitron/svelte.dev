@@ -6,10 +6,6 @@
 	Retourner la carte
 	<button
 		class="card"
-		style:transform={flipped ? 'rotateY(0)' : ''}
-		style:--bg-1="palegoldenrod"
-		style:--bg-2="black"
-		style:--bg-3="goldenrod"
 		onclick={() => flipped = !flipped}
 	>
 		<div class="front">

@@ -10,10 +10,7 @@
 </label>
 
 <div>
-	<span style="font-size: {size}px" contenteditable>
-		éditer ce texte
-	</span>
-
+	<span style="font-size: {size}px" contenteditable>éditez ce texte</span>
 	<span class="size">{w} x {h}px</span>
 </div>
 

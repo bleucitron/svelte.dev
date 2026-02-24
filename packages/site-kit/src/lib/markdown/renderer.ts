@@ -859,16 +859,48 @@ function replace_blank_lines(html: string) {
 }
 
 const delimiter_substitutes = {
-	'---': '             ',
-	'+++': '           ',
-	':::': '         '
+	'---': '                                           ',
+	'+++': '                                         ',
+	':::': '                                       '
 };
 
-function highlight_spans(content: string, classname: string) {
-	return content
-		.split('\n')
-		.map((line) => `<span class="${classname}">${line}</span>`)
-		.join('\n');
+const delimiter_patterns = Object.fromEntries(
+	Object.entries(delimiter_substitutes).map(([key, substitute]) => [
+		key,
+		new RegExp(`${substitute}([^ ]|[^ ][^]+?[^ ])${substitute}`, 'g')
+	])
+);
+
+function highlight_all_spans(html: string, pattern: RegExp, classname: string) {
+	const open = `<span class="${classname}">`;
+
+	return html.replace(pattern, (_, content, index) => {
+		let a = content.indexOf('<span');
+		let b = content.indexOf('</span');
+		let c = content.lastIndexOf('<span');
+		let d = content.lastIndexOf('</span');
+
+		let adjusted: string = content;
+
+		if (b !== -1 && (a === -1 || b < a)) {
+			// starts inside a <span>
+			const tag_start = html.lastIndexOf('<span', index);
+			const tag = html.slice(tag_start, html.indexOf('>', tag_start) + 1);
+			adjusted = `</span>${open}${tag}${adjusted}`;
+		} else {
+			adjusted = `${open}${adjusted}`;
+		}
+
+		if (c !== -1 && (d === -1 || c > d)) {
+			// ends inside a <span>
+			const tag = content.slice(c, content.indexOf('>', c) + 1);
+			adjusted = `${adjusted}</span></span>${tag}`;
+		} else {
+			adjusted = `${adjusted}</span>`;
+		}
+
+		return adjusted.replace(/\n/g, `</span>\n${open}`);
+	});
 }
 
 async function syntax_highlight({
@@ -899,7 +931,10 @@ async function syntax_highlight({
 		/** We need to stash code wrapped in `---` highlights, because otherwise TS will error on e.g. bad syntax, duplicate declarations */
 		const redactions: string[] = [];
 
-		const redacted = source.replace(/( {13}(?:[^ ][^]+?) {13})/g, (_, content) => {
+		const sub = delimiter_substitutes['---'];
+		const pattern = new RegExp(`${sub}(?:[^ ]|[^ ][^]+?[^ ])${sub}`, 'g');
+
+		const redacted = source.replace(pattern, (_, content) => {
 			redactions.push(content);
 			return ' '.repeat(content.length);
 		});
@@ -926,7 +961,10 @@ async function syntax_highlight({
 					: []
 			});
 
-			html = html.replace(/ {27,}/g, () => redactions.shift()!);
+			html = html.replace(
+				new RegExp(` {${delimiter_substitutes['---'].length + 1},}`, 'g'),
+				() => redactions.shift()!
+			);
 
 			if (check) {
 				// munge the twoslash output so that it renders sensibly. the order of operations
@@ -1029,16 +1067,9 @@ async function syntax_highlight({
 		// remove tabindex
 		.replace(' tabindex="0"', '');
 
-	html = html
-		.replace(/ {13}([^ ][^]+?) {13}/g, (_, content) => {
-			return highlight_spans(content, 'highlight remove');
-		})
-		.replace(/ {11}([^ ][^]+?) {11}/g, (_, content) => {
-			return highlight_spans(content, 'highlight add');
-		})
-		.replace(/ {9}([^ ][^]+?) {9}/g, (_, content) => {
-			return highlight_spans(content, 'highlight');
-		});
+	html = highlight_all_spans(html, delimiter_patterns['---'], 'highlight remove');
+	html = highlight_all_spans(html, delimiter_patterns['+++'], 'highlight add');
+	html = highlight_all_spans(html, delimiter_patterns[':::'], 'highlight');
 
 	return indent_multiline_comments(html)
 		.replace(/\/\*…\*\//g, '…')
