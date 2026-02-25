@@ -248,9 +248,8 @@ sur comment gérer l'ordre des middleware.
 En quelque sorte. La fonctionalité Plug'n'Play, appelée 'pnp', ne fonctionnera pas (cette
 fonctionnalité ne suit pas l'algorithme de résolution de modules de Node, et ne [fonctionne pas
 encore avec les modules JavaScript natifs](https://github.com/yarnpkg/berry/issues/638), ce que
-SvelteKit — ainsi qu'[un nombre croissant de
-paquets](https://blog.sindresorhus.com/get-ready-for-esm-aa53530b3f77) — utilise). Vous pouvez
-utiliser `nodeLinker: 'node-modules'` dans votre fichier
+SvelteKit — ainsi qu'[un nombre croissant de paquets](https://github.com/wooorm/npm-esm-vs-cjs) —
+utilise). Vous pouvez utiliser `nodeLinker: 'node-modules'` dans votre fichier
 [`.yarnrc.yml`](https://yarnpkg.com/configuration/yarnrc#nodeLinker) pour désactiver le pnp, mais il
 sera probablement plus facile de simplement utiliser npm ou [pnpm](https://pnpm.io/), qui est tout
 aussi rapide et efficace, les problèmes de compatibilité en moins.

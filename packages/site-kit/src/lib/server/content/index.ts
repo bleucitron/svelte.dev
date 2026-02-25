@@ -1,5 +1,5 @@
 import { extract_frontmatter, is_in_code_block, slugify, smart_quotes } from '../../markdown/utils';
-import type { Document } from '../../types';
+import type { Document, Section } from '../../types';
 
 const VO_REGEX = /\[\!VO](.+)/;
 
@@ -32,26 +32,33 @@ export async function create_index(
 				'<code>$1</code>'
 			);
 
-		const sections = Array.from(body.matchAll(/^##\s+(.*)$/gm)).reduce(
-			(arr, match) => {
-				if (is_in_code_block(body, match.index || 0)) return arr;
-				const title = smart_quotes(match[1])
-					// replace < and > inside code spans
-					.replace(/`(.+?)`/g, (_, contents) =>
-						contents.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-					)
-					// turn e.g. `class:_name_` into `class:<em>name</em>`
-					.replace(/_(.+)_/g, (_, contents) => `<em>${contents}</em>`);
+		const sections = Array.from(body.matchAll(/^#{2,3}\s+(.*)$/gm)).reduce((arr, match) => {
+			if (is_in_code_block(body, match.index || 0)) return arr;
+			const title = smart_quotes(match[1])
+				// replace < and > inside code spans
+				.replace(/`(.+?)`/g, (_, contents) => contents.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
+				// turn e.g. `class:_name_` into `class:<em>name</em>`
+				.replace(/:_(.+)_/g, (_, contents) => `:<em>${contents}</em>`);
 
-				const vo = title.match(VO_REGEX)?.[1];
+			const vo = title.match(VO_REGEX)?.[1];
 
-				const slug = slugify(vo || title);
+			const slug = slugify(vo || title);
+			const cleaned_title = title.replace(VO_REGEX, '');
 
-				arr.push({ slug, title: title.replace(VO_REGEX, '') });
-				return arr;
-			},
-			[] as Array<{ slug: string; title: string }>
-		);
+			if (match[0].startsWith('###')) {
+				const section = arr.at(-1);
+				if (section) {
+					section.subsections.push({
+						slug: `${section.slug}-${slug}`,
+						title: cleaned_title
+					});
+				}
+			} else {
+				arr.push({ slug, title: cleaned_title, subsections: [] });
+			}
+
+			return arr;
+		}, [] as Array<Section>);
 
 		content[slug] = {
 			slug,

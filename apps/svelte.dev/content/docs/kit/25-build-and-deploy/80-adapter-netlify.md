@@ -99,7 +99,7 @@ Cependant, dans certains scénarios vous pourriez trouver un bénéfice d'utilis
 de ces fonctionnalités. Par exemple, si vous migrez une application qui était déjà hébergée sur
 Netlify vers SvelteKit.
 
-### `_headers` et `_redirects` [!VO]_headers` and `_redirects`
+### `_headers` et `_redirects` [!VO]`_headers` and `_redirects`
 
 Les fichiers [`_headers`](https://docs.netlify.com/routing/headers/#syntax-for-the-headers-file) et
 [`_redirects`](https://docs.netlify.com/routing/redirects/redirect-options/) spécifiques à Netlify
