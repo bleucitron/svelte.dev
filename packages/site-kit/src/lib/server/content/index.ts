@@ -34,7 +34,8 @@ export async function create_index(
 
 		const sections = Array.from(body.matchAll(/^#{2,3}\s+(.*)$/gm)).reduce((arr, match) => {
 			if (is_in_code_block(body, match.index || 0)) return arr;
-			const title = smart_quotes(match[1])
+			const title = match[1];
+			const displayed_title = smart_quotes(title)
 				// replace < and > inside code spans
 				.replace(/`(.+?)`/g, (_, contents) => contents.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
 				// turn e.g. `class:_name_` into `class:<em>name</em>`
@@ -43,7 +44,7 @@ export async function create_index(
 			const vo = title.match(VO_REGEX)?.[1];
 
 			const slug = slugify(vo || title);
-			const cleaned_title = title.replace(VO_REGEX, '');
+			const cleaned_title = displayed_title.replace(VO_REGEX, '');
 
 			if (match[0].startsWith('###')) {
 				const section = arr.at(-1);
@@ -63,7 +64,7 @@ export async function create_index(
 		content[slug] = {
 			slug,
 			file,
-			metadata: metadata as { title: string; [key: string]: any },
+			metadata: metadata as { title: string },
 			breadcrumbs: [],
 			body,
 			sections,

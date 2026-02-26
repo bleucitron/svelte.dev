@@ -2516,7 +2516,9 @@ distantes](/docs/kit/remote-functions#command) pour lire la documentation compl√
 
 ```dts
 type RemoteCommand<Input, Output> = {
-	(arg: Input): Promise<Awaited<Output>> & {
+	(
+		arg: undefined extends Input ? Input | void : Input
+	): Promise<Awaited<Output>> & {
 		updates(
 			...queries: Array<
 				RemoteQuery<any> | RemoteQueryOverride
@@ -2747,7 +2749,7 @@ distantes](/docs/kit/remote-functions#prerender) pour lire la documentation comp
 
 ```dts
 type RemotePrerenderFunction<Input, Output> = (
-	arg: Input
+	arg: undefined extends Input ? Input | void : Input
 ) => RemoteResource<Output>;
 ```
 
@@ -2812,7 +2814,7 @@ distantes](/docs/kit/remote-functions#query) pour lire la documentation compl√®t
 
 ```dts
 type RemoteQueryFunction<Input, Output> = (
-	arg: Input
+	arg: undefined extends Input ? Input | void : Input
 ) => RemoteQuery<Output>;
 ```
 
@@ -4374,6 +4376,26 @@ referrer?: Array<
 
 </div>
 </div></div>
+
+## DeepPartial
+
+<div class="ts-block">
+
+```dts
+type DeepPartial<T> = T extends
+	| Record<PropertyKey, unknown>
+	| unknown[]
+	? {
+			[K in keyof T]?: T[K] extends
+				| Record<PropertyKey, unknown>
+				| unknown[]
+				? DeepPartial<T[K]>
+				: T[K];
+		}
+	: T | undefined;
+```
+
+</div>
 
 ## HttpMethod
 

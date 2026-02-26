@@ -31,18 +31,14 @@ serveur](hooks#Server-hooks). Si les identifiants d'utilisateur ou utilisatrice 
 entrée dans la base de données, les informations d'utilisateur peuvent être stockées dans le champ
 [`locals`](hooks#Server-hooks-locals).
 
+## Libraries [!VO]Libraries
+
+Le [CLI de Svelte](/docs/cli) vous permet de [mettre en place Better
+Auth](https://svelte.dev/docs/cli/better-auth) sur un nouveau projet ou de l'ajouter à un projet
+existant.
+
 ## Guides
 
-[Lucia](https://lucia-auth.com/) est une bonne référence pour l'auth d'application basée sur des IDs
-de session. Elle contient des exemples de code et de projet pour implémenter une auth de session au
-sein de SvelteKit ainsi que dans d'autres types de projets JS. Vous pouvez ajouter dans votre projet
-du code correspondant au guide de Lucia avec l'utilitaire `npx sv create` lorsque vous créez un
-nouveau projet, ou avec l'utilitaire `npx sv add lucia` pour l'ajouter à un projet existant.
-
-Un système d'auth est profondément couplé à un framework web car la plupart du code concerne la
-validation des entrées des utilisateurs et utilisatrices, la gestion des erreurs, et la direction
-des utilisateurs et utilisatrices vers la prochaine page appropriée. En conséquence, beaucoup de
-librairies d'auth JS génériques incluent un ou plusieurs frameworks dans leur code. Pour cette
-raison, beaucoup de développeurs et développeuses vont trouver préférable de suivre un guide
-spécifique à SvelteKit comme celui fourni par [Lucia](https://lucia-auth.com/) plutôt que d'ajouter
-plusieurs frameworks web dans leur projet.
+Si vous souhaitez implémenter votre propre système d'authentification, le [guide d'authentification
+de Lucia](https://lucia-auth.com/), fournit une référence pour mettre en place une authentification
+d'application web basée sur des tokens de session, avec des exemples SvelteKit.

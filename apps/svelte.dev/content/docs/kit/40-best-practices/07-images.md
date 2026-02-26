@@ -121,7 +121,7 @@ préciser `enhanced` via une [custom query](https://vitejs.dev/guide/features.ht
 ```svelte
 <script>
 	const imageModules = import.meta.glob(
-		'/path/to/assets/*.{avif,gif,heif,jpeg,jpg,png,tiff,webp}',
+		'/path/to/assets/*.{avif,AVIF,gif,GIF,heif,HEIF,jpeg,JPEG,jpg,JPG,png,PNG,tiff,TIFF,webp,WEBP}',
 		{
 			eager: true,
 			query: {

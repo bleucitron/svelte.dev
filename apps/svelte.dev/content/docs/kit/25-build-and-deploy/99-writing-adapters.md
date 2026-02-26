@@ -39,8 +39,8 @@ export default function (options) {
 				// (importé depuis `$app/server`) en production, ou renvoyez `false` si elle ne peut pas.
 				// Vous pouvez aussi jeter une erreur décrivant comment configurer le déploiement
 			},
-			tracing: () => {
-				// Renvoyez `true` si cet adaptateur supporte le chargement du fichier `tracing.server.js`
+			instrumentation: () => {
+				// Renvoyez `true` si cet adaptateur supporte le chargement du fichier `instrumentation.server.js`
 				// Renvoyez `false` sinon, ou jetez une erreur expliquant le problème.
 			}
 		}
