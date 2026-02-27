@@ -68,8 +68,32 @@ Event attribute must be a JavaScript expression, not a string
 ### attribute_invalid_sequence_expression
 
 ```
-Sequence expressions are not allowed as attribute/directive values in runes mode, unless wrapped in parentheses
+Comma-separated expressions are not allowed as attribute/directive values in runes mode, unless wrapped in parentheses
 ```
+
+Une valeur d'attribut ne peut pas être une séquence d'expressions séparées par des virgules — en
+d'autres mots, ceci n'est pas autorisé :
+
+```svelte
+<div class={size, color}>...</div>
+```
+
+Assurez-vous plutôt que la valeur d'attribut contient une expression unique. Dans l'exemple
+ci-dessus, il est probable que l'intention était la suivante (voir la [documentation sur les
+classes](class) pour plus de détails) :
+
+```svelte
+<div class={[size, color]}>...</div>
+```
+
+Si vous avez _besoin_ d'utiliser l'opérateur virgule pour une raison particulière, entourez la
+séquence de parenthèses :
+
+```svelte
+<div class={(size, color)}>...</div>
+```
+
+Notez que cette expression va être évaluée en `color`, ignorant ainsi `size`.
 
 ### attribute_invalid_type
 

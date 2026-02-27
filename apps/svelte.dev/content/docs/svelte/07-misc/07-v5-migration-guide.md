@@ -870,6 +870,26 @@ développeurs et développeuses. Les règles sont :
 - Les espaces au début et à la fin d'une balise sont complètement supprimés
 - Il y a quelques exceptions comme celle de garder les espaces au sein des balises `pre`
 
+	Ce nouveau comportement est légèrement différent du rendu HTML natif. Par exemple, `<p>foo<span> -
+	bar</span></p>` va rendre :
+
+  - `foo - bar` en HTML
+  - `foo- bar` en Svelte 5
+
+	Vous pouvez réintroduire l'espace manquant en le déplaçant en dehors du `<span>`...
+
+  ```svelte
+  <p>foo <span>- bar</span></p>
+  ```
+
+	... ou, si nécessaire pour des raisons stylistiques, l'inclure dans une expression :
+
+  ```svelte
+  <p>foo<span>{' '}- bar</span></p>
+  ```
+
+- Certain exceptions apply such as keeping whitespace inside `pre` tags
+
 Comme avant, vous pouvez désactiver la réduction des espaces en utilisant l'option
 `preserveWhitespace` dans les paramètres de compilation, ou composant par composant dans
 `<svelte:option>`.
