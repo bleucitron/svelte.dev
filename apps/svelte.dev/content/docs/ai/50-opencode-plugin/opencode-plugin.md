@@ -29,7 +29,7 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 
 ```json
 {
-	"$schema": "https://raw.githubusercontent.com/sveltejs/mcp/refs/heads/main/packages/opencode/schema.json",
+	"$schema": "https://raw.githubusercontent.com/sveltejs/ai-tools/refs/heads/main/packages/opencode/schema.json",
 	"mcp": {
 		"type": "remote",
 		"enabled": true
