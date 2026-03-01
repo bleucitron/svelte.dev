@@ -9,7 +9,7 @@ Exécuter `sv` se fait de manière légèrement différent pour chaque gestionna
 liste des commandes les plus communes :
 
 - **npm** : `npx sv create`
-- **pnpm** : `pnpx sv create` ou `pnpm dlx sv create`
+- **pnpm** : `pnpm dlx sv create`
 - **Bun** : `bunx sv create`
 - **Deno** : `deno run npm:sv create`
 - **Yarn** : `yarn dlx sv create`

@@ -9,8 +9,8 @@ Svelte.
 ## Usage
 
 La façon la plus simple d'exécuter `sv` est via [`npx`](https://docs.npmjs.com/cli/v8/commands/npx)
-(ou la commande équivalente si vous utilisez un autre gestionnaire de paquets — par exemple, `pnpx`
-si vous utilisez [pnpm](https://pnpm.io/)) :
+(ou la commande équivalente si vous utilisez un autre gestionnaire de paquets — par exemple, `pnpm
+dlx` si vous utilisez [pnpm](https://pnpm.io/)) :
 
 ```sh
 npx sv <command> <args>
