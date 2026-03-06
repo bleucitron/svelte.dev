@@ -570,18 +570,10 @@ L'argument passé aux callbacks [`afterNavigate`](/docs/kit/$app-navigation#afte
 
 ```dts
 type AfterNavigate = (Navigation | NavigationEnter) & {
-	/**
-	 * The type of navigation:
-	 * - `enter`: L'application a été hydratée/démarrée
-	 * - `form`: L'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-	 * - `link`: La navigation a été déclenchée par un clic sur un lien
-	 * - `goto`: La navigation a été déclenchée par un appel à `goto(...)` ou une redirection
-	 * - `popstate`: La navigation a été déclenchée par les boutons "précédent"/"suivant"
-	 */
 	type: Exclude<NavigationType, 'leave'>;
 	/**
-	 * Puis les callbacks `afterNavigate` sont exécutés après la complétion d'une navigation, ils ne
-	 * seront jamais appelés lors d'une navigation qui décharge la page.
+	 * Puisque les callbacks `afterNavigate` sont exécutés après la complétion d'une navigation, ils
+	 * ne seront jamais appelés lors d'une navigation qui décharge la page.
 	 */
 	willUnload: false;
 };
@@ -1805,7 +1797,7 @@ willUnload: boolean;
 <div class="ts-block-property-details">
 
 Si oui ou non la navigation entraîne le "déchargement" de la page (c-à-d pas une navigation côté
-client)
+client).
 
 </div>
 </div>
@@ -1842,13 +1834,7 @@ type: 'enter';
 <div class="ts-block-property-details">
 
 Le type de navigation :
-- `form` : L'utilisateur ou l'utilisatrice a soumis un élément `<form method="GET">`
-- `leave` : L'utilisateur ou l'utilisatrice quitte l'application soit parce que l'onglet a été fermé
-ou qu'une navigation vers un document différent se produit
-- `link` : La navigation a été déclenchée par un clic sur un lien
-- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
-- `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
-navigateur
+- `enter`: L'application a été hydratée/démarrée
 
 </div>
 </div>
@@ -1951,41 +1937,10 @@ L'URL de la page courante
 <div class="ts-block">
 
 ```dts
-interface NavigationExternal extends NavigationBase {/*…*/}
+type NavigationExternal = NavigationGoto | NavigationLeave;
 ```
 
-<div class="ts-block-property">
-
-```dts
-type: Exclude<NavigationType, 'enter' | 'popstate' | 'link' | 'form'>;
-```
-
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `form` : l'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-- `leave` : l'application est en train d'être fermée car l'onglet est en train d'être fermé ou bien
-une navigation vers un autre document se produit
-- `link` : la navigation a été déclenchée par un clic sur un lien
-- `goto` : la navigation a été déclenchée par un appel à `goto(...)` ou à une redirection
-- `popstate` : la navigation a été déclenchée par une navigation précédent/suivant
-
 </div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation précédent/suivant dans l'historique, le nombre d'étapes pour aller en
-arrière/en avant
-
-</div>
-</div></div>
 
 ## NavigationFormSubmit
 
@@ -2005,11 +1960,6 @@ type: 'form';
 
 Le type de navigation :
 - `form` : l'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-- `leave` : l'application est en train d'être fermée car l'onglet est en train d'être fermé ou bien
-une navigation vers un autre document se produit
-- `link` : la navigation a été déclenchée par un clic sur un lien
-- `goto` : la navigation a été déclenchée par un appel à `goto(...)` ou à une redirection
-- `popstate` : la navigation a été déclenchée par une navigation précédent/suivant
 
 </div>
 </div>
@@ -2041,6 +1991,79 @@ arrière/en avant
 </div>
 </div></div>
 
+## NavigationGoto
+
+<div class="ts-block">
+
+```dts
+interface NavigationGoto extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'goto';
+```
+
+<div class="ts-block-property-details">
+
+Le type de navigation :
+- `goto`: La navigation a été déclenchée par un à `goto(...)` ou par une redirection
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+Dans le cas d'une navigation "précédent/suivant", le nombre d'étapes pour revenir en arrière ou
+avancer
+
+</div>
+</div></div>
+
+## NavigationLeave
+
+<div class="ts-block">
+
+```dts
+interface NavigationLeave extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'leave';
+```
+
+<div class="ts-block-property-details">
+
+Le type de navigation :
+- `leave`: L'application est en train d'être fermée soit parce que l'onglet est en train d'être
+fermé, soit parce qu'une navigation vers un document différent est en train de se produire
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+Dans le cas d'une navigation "précédent/suivant", le nombre d'étapes pour revenir en arrière ou
+avancer
+
+</div>
+</div></div>
+
 ## NavigationLink
 
 <div class="ts-block">
@@ -2058,12 +2081,7 @@ type: 'link';
 <div class="ts-block-property-details">
 
 Le type de navigation :
-- `form` : l'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-- `leave` : l'application est en train d'être fermée car l'onglet est en train d'être fermé ou bien
-une navigation vers un autre document se produit
 - `link` : la navigation a été déclenchée par un clic sur un lien
-- `goto` : la navigation a été déclenchée par un appel à `goto(...)` ou à une redirection
-- `popstate` : la navigation a été déclenchée par une navigation précédent/suivant
 
 </div>
 </div>
@@ -2112,11 +2130,6 @@ type: 'popstate';
 <div class="ts-block-property-details">
 
 Le type de navigation :
-- `form` : l'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-- `leave` : l'application est en train d'être fermée car l'onglet est en train d'être fermé ou bien
-une navigation vers un autre document se produit
-- `link` : la navigation a été déclenchée par un clic sur un lien
-- `goto` : la navigation a été déclenchée par un appel à `goto(...)` ou à une redirection
 - `popstate` : la navigation a été déclenchée par une navigation précédent/suivant
 
 </div>
@@ -2286,14 +2299,6 @@ L'argument passé aux callbacks [`onNavigate`](/docs/kit/$app-navigation#onNavig
 
 ```dts
 type OnNavigate = Navigation & {
-	/**
-	 * The type of navigation:
-	 * - `form`: L'utilisateur ou l'utilisatrice a soumis un `<form method="GET">`
-	 * - `link`: La navigation a été déclenchée par un clic sur un lien
-	 * - `goto`: La navigation a été déclenchée par un appel `goto(...)` ou une redirection
-	 * - `popstate`: La navigation a été déclenchée par les fonctionnalités précédent/suivant du
-	 * navigateur
-	 */
 	type: Exclude<NavigationType, 'enter' | 'leave'>;
 	/**
 	 * Puisque les callbacks `onNavigate` sont appelés immédiatement avant une navigation client, ils
