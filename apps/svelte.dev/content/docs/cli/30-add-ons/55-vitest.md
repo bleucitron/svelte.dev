@@ -16,3 +16,16 @@ npx sv add vitest
 - les paquets pertinents installés, et des scripts ajoutés à votre fichier `package.json`
 - une mise en place client/serveur pour Svelte dans votre fichier de configuration Vite
 - des tests de démo
+
+## Options
+
+### `usages`
+
+Quel types de tests utiliser :
+
+- `unit` — tests unitaires
+- `component` — tests de composant
+
+```sh
+npx sv add vitest="usages:unit,component"
+```
