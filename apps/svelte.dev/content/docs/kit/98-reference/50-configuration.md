@@ -578,6 +578,30 @@ Si oui ou non activer la fonctionnalité expérimentale de préchargement par br
 
 </div>
 </div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+handleRenderingErrors?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non activer la gestion expérimentale de l'affichage des erreurs.
+Lorsqu'activée, une frontière `<svelte:boundary>` sera utilisée pour entourer vos composants à
+chaque niveau où se trouve un `+error.svelte`, permettant d'afficher la page d'erreur si le
+composant provoque une erreur.
+De plus, les frontières d'erreur fonctionnent également sur le serveur et l'objet d'erreur passe
+par `handleError`.
+
+</div>
+</div>
 
 </div>
 

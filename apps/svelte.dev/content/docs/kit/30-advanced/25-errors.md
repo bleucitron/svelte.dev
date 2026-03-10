@@ -118,6 +118,64 @@ Les erreurs inattendues vont être passées au hook [`handleError`](hooks#Shared
 où vous pouvez ajouter votre propre gestion d'erreur — par exemple, envoyer ces erreurs à un service
 de suivi d'erreur, ou renvoyer un objet d'erreur personnalisé qui va devenir `page.error`.
 
+## Afficher les erreurs [!VO]Rendering errors
+
+Normalement, si une erreur se produit lors du rendu côté serveur (par exemple dans le bloc
+`<script>` ou dans le markup), SvelteKit renverra une page d'erreur 500.
+
+Depuis les versions 2.54 de SvelteKit et 5.53 de Svelte, vous pouvez changez ceci en activant
+l'option expérimentale `handleRenderingErrors` dans votre fichier de configuration :
+
+```js
+/// file: svelte.config.js
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	kit: {
+		experimental: {
+			handleRenderingErrors: true
+		}
+	}
+};
+
+export default config;
+```
+
+Lorsque cette option est activée, SvelteKit va entourer vos composants de route d'une frontière
+d'erreur. Si une erreur se produit alors lors du rendu, la page [`+error.svelte`](routing#error) la
+plus proche sera affichée, de la même manière que si l'erreur s'était produite dans une fonction
+`load`.
+
+L'erreur est d'abord passée à [`handleError`](hooks#Shared-hooks-handleError), vous permettant de la
+signaler et de la transformer, avant que l'objet ainsi construit ne soit fourni au composant
+`+error.svelte`.
+
+> [!NOTE]
+> Puisque le rendu des erreurs se produit après que la page ait commencé son rendu, et que plusieurs
+> frontières peuvent en parallèle attraper plusieurs erreurs distinctes, l'objet
+> [`page`]($app-state#page) (et sa propriété `error`) ne sera pas mis à jour. À la place, l'erreur
+> est passée directement au composant `+error.svelte` en tant que prop.
+
+```svelte
+<!--- file: +error.svelte --->
+<script>
+	let { error } = $props();
+</script>
+
+<h1>{error.message}</h1>
+```
+
+Ceci vaut également pour les autres frontières d'erreur que vous définissez dans votre code :
+
+```svelte
+<svelte:boundary>
+	...
+	{#snippet failed(error: App.Error)}
+		<!-- l'erreur est passée par handelError et est de type App.Error -->
+		{error.message}
+	{/snippet}
+</svelte:boundary>
+```
+
 ## Réponses [!VO]Responses
 
 Si une erreur se produit au sein de la fonction `handle` ou d'un gestionnaire de requête
