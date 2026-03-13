@@ -10,8 +10,8 @@ un plugin OpenCode publié sous `@sveltejs/opencode`.
 ## Installation
 
 Pour installer le plugin dans OpenCode, vous pouvez modifier votre [configuration
-OpenCode](#Configuration) (globale ou locale) en y ajoutant `@sveltejs/opencode` à la liste des
-plugins.
+OpenCode](https://opencode.ai/docs/config/) (globale ou locale) en y ajoutant `@sveltejs/opencode` à
+la liste des plugins.
 
 ```json
 {
@@ -29,16 +29,24 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 
 ```json
 {
-	"$schema": "https://raw.githubusercontent.com/sveltejs/ai-tools/refs/heads/main/packages/opencode/schema.json",
+	"$schema": "https://svelte.dev/opencode/schema.json",
 	"mcp": {
 		"type": "remote",
 		"enabled": true
 	},
 	"subagent": {
-		"enabled": true
+		"enabled": true,
+		"agents": {
+			"svelte-file-editor": {
+				"model": "other-model", // defaults to the same as main agent,
+				"temperature": 1, // default to unset
+				"top_p": 0.7, // default to unset,
+				"maxSteps": 20 // default to unlimited
+			}
+		}
 	},
 	"skills": {
-		"enabled": true
+		"enabled": true // it can also be an array of all the skills to enable like ['svelte-core-bestpractices']
 	},
 	"instructions": {
 		"enabled": true
@@ -47,7 +55,9 @@ La configuration par défaut pour le plugin OpenCode de Svelte ressemble à ceci
 ```
 
 ... mais si vous préférez, vous pouvez activer uniquement le sous-agent, seulement le MCP, seulement
-les skills, ou configurer le type de serveur MCP que vous souhaitez utiliser (`local` ou `remote`).
+les skills (`enabled` supporte à la fois un booléen ou un tableau contenant le nom de tous les
+skills à activer), ou configurer le type de serveur MCP que vous souhaitez utiliser (`local` ou
+`remote`).
 
 Vous pouvez placer ce fichier dans `~/.opencode/svelte.json` (dans votre projet), dans
 `~/.config/opencode/svelte.json` ou, si vous avez une variable

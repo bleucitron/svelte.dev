@@ -28,10 +28,12 @@ approprié de les utiliser.
 
 > [!NOTE] Ceci est mis en place pour vous lorsque vous utilisez `npx sv add mcp`.
 
+<!-- prettier-ignore-start -->
+````markdown
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and
 SvelteKit documentation. Here's how to use the available tools effectively:
 
-## Outils disponibles pour le MCP Svelte : [!VO]Available Svelte MCP Tools:
+## Available Svelte MCP Tools:
 
 ### 1. list-sections
 
@@ -53,6 +55,8 @@ You MUST use this tool whenever writing Svelte code before sending it to the use
 Generates a Svelte Playground link with the provided code.
 After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
 
+````
+<!-- prettier-ignore-end -->
 
 Si votre client MCP le supporte, nous recommandons également d'utiliser le prompt
 [svelte-task](prompts#svelte-task) pour apprendre au LLM la meilleure manière d'utiliser le serveur
