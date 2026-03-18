@@ -9,7 +9,7 @@ une fonction `on<nom>` :
 
 ```svelte
 /// file: App.svelte
-<div +++onpointermove={onpointermove}+++>
+<div +++onpointermove={onpointermove}+++ role="presentation">
 	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 ```
@@ -19,7 +19,7 @@ raccourcie :
 
 ```svelte
 /// file: App.svelte
-<div +++{onpointermove}+++>
+<div +++{onpointermove}+++ role="presentation">
 	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 ```

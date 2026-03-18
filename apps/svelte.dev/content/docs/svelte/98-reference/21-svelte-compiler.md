@@ -741,7 +741,7 @@ Si non spécifié, sera inférée depuis `filename`.
 <div class="ts-block-property">
 
 ```dts
-customElement?: boolean;
+customElement?: boolean | ((options: { filename: string }) => boolean);
 ```
 
 <div class="ts-block-property-details">
@@ -754,6 +754,8 @@ customElement?: boolean;
 
 Si `true`, dit au compilateur de générer un constructeur d'élément personnalisé plutôt qu'un
 composant Svelte classique.
+
+Vous pouvez également fournir une fonction qui reçoit `{ filename }` et renvoie un booléen.
 
 </div>
 </div>
@@ -824,7 +826,7 @@ Ceci lui permet d'être moins conservatif lors des vérifications de changements
 <div class="ts-block-property">
 
 ```dts
-css?: 'injected' | 'external';
+css?: 'injected' | 'external' | ((options: { filename: string }) => 'injected' | 'external');
 ```
 
 <div class="ts-block-property-details">
@@ -838,6 +840,9 @@ généré statiquement pour obtenir de meilleures performances, puisque cela con
 JavaScript plus petits, et que l'output peut être servi en tant que fichiers `.css` pouvant être mis
 en cache.
 Cette option vaut toujours `'injected'` lorsque vous compilez avec l'option `customElement`.
+
+Vous pouvez également fournir une fonction qui reçoit `{ filename }` et renvoie soit `'injected'`,
+soit `'external'`.
 
 </div>
 </div>
@@ -932,7 +937,7 @@ partout
 <div class="ts-block-property">
 
 ```dts
-runes?: boolean | undefined;
+runes?: boolean | undefined | ((options: { filename: string }) => boolean | undefined);
 ```
 
 <div class="ts-block-property-details">

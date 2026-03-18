@@ -7,7 +7,7 @@
 	}
 </script>
 
-<div>
+<div role="presentation">
 	Le pointeur se trouve à la position {Math.round(m.x)} x {Math.round(m.y)}
 </div>
 
