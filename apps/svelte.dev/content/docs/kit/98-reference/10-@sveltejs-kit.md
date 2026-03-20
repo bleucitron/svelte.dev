@@ -2519,12 +2519,12 @@ distantes](/docs/kit/remote-functions#command) pour lire la documentation compl�
 type RemoteCommand<Input, Output> = {
 	(
 		arg: undefined extends Input ? Input | void : Input
-	): Promise<Awaited<Output>> & {
+	): Promise<Output> & {
 		updates(
 			...queries: Array<
 				RemoteQuery<any> | RemoteQueryOverride
 			>
-		): Promise<Awaited<Output>>;
+		): Promise<Output>;
 	};
 	/** The number of pending command executions */
 	get pending(): number;
@@ -2763,6 +2763,12 @@ type RemotePrerenderFunction<Input, Output> = (
 ```dts
 type RemoteQuery<T> = RemoteResource<T> & {
 	/**
+	 * Renvoie une promesse brute avec son résultat.
+	 * À la différence d'attendre la ressource directement, cette méthode ne peut être utilisée qu'_en
+	 * dehors_ du rendu (c-à-d dans les fonctions load, les gestionnaires d'évènements etc.)
+	 */
+	run(): Promise<T>;
+	/**
 	 * Sur le client, cette fonction va mettre à jour la valeur de la query sans la re-requêter.
 	 *
 	 * Sur le serveur, cette fonction peut être appelée dans le contexte d'une `command` ou d'un `form`
@@ -2799,7 +2805,7 @@ type RemoteQuery<T> = RemoteResource<T> & {
 	 * ```
 	 */
 	withOverride(
-		update: (current: Awaited<T>) => Awaited<T>
+		update: (current: T) => T
 	): RemoteQueryOverride;
 };
 ```
@@ -2852,7 +2858,7 @@ release(): void;
 <div class="ts-block">
 
 ```dts
-type RemoteResource<T> = Promise<Awaited<T>> & {
+type RemoteResource<T> = Promise<T> & {
 	/** L'erreur lorsque la query échoue. La plupart du temps ce sera une [`HttpError`](/docs/kit/@sveltejs-kit#HttpError), mais ce n'est pas garanti. */
 	get error(): any;
 	/** `true` avant que le premier résultat ne soit disponible et lors des mises-à-jour. */
@@ -2865,7 +2871,7 @@ type RemoteResource<T> = Promise<Awaited<T>> & {
 		  }
 		| {
 				/** La valeur courante de la query. `undefined` tant que `ready` ne vaut pas `true` */
-				get current(): Awaited<T>;
+				get current(): T;
 				ready: true;
 		  }
 	);
