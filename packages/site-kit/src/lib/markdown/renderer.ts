@@ -10,6 +10,7 @@ import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 import { createCssVariablesTheme } from 'shiki';
 import { transformerTwoslash, rendererRich } from '@shikijs/twoslash';
 import { createFileSystemTypesCache } from '@shikijs/vitepress-twoslash/cache-fs';
+import { compress_and_encode_text } from 'gzip';
 import {
 	decode_html_entities,
 	SHIKI_LANGUAGE_MAP,
@@ -90,7 +91,7 @@ const highlighter = await createHighlighterCore({
  * ```
  */
 async function create_snippet_cache() {
-	const cache = new Map();
+	const cache = new Map<string, string[]>();
 	const directory = find_nearest_node_modules(import.meta.url) + '/.snippets';
 	const current = `${directory}/${digest}`;
 
@@ -113,7 +114,7 @@ async function create_snippet_cache() {
 		hash.update(source);
 		const digest = hash.digest().toString('base64').replace(/\//g, '-');
 
-		return `${current}/${digest}.html`;
+		return `${current}/${digest}.json`;
 	}
 
 	return {
@@ -124,21 +125,21 @@ async function create_snippet_cache() {
 				const file = get_file(source);
 
 				if (fs.existsSync(file)) {
-					snippet = fs.readFileSync(file, 'utf-8');
-					cache.set(source, snippet);
+					const json = fs.readFileSync(file, 'utf-8');
+					cache.set(source, JSON.parse(json));
 				}
 			}
 
 			return snippet;
 		},
-		save(source: string, html: string) {
-			cache.set(source, html);
+		save(source: string, data: string[]) {
+			cache.set(source, data);
 
 			try {
 				fs.mkdirSync(directory);
 			} catch {}
 
-			fs.writeFileSync(get_file(source), html);
+			fs.writeFileSync(get_file(source), JSON.stringify(data));
 		}
 	};
 }
@@ -331,12 +332,101 @@ export async function render_content_markdown(
 	const headings: string[] = [];
 	const { check = true, references } = options ?? {};
 
-	return await transform(body, {
-		async walkTokens(token) {
-			if (token.type === 'code') {
-				const decodedText = decode_html_entities(token.text);
+	interface CodeBlockFile {
+		selected: boolean;
+		tab_id: string;
+		panel_id: string;
+		name: string | null;
+		ext: string | null;
+		content: string;
+		rendered: string[];
+		can_copy: boolean;
+	}
 
-				if (snippets.get(decodedText)) return;
+	interface CodeBlock {
+		id: number;
+		title: string | null;
+		selected: string | null;
+		files: CodeBlockFile[];
+		converted: boolean;
+		hash: string | null;
+	}
+
+	const codeblocks: CodeBlock[] = [];
+	let current_block: CodeBlock | null = null;
+
+	let transformed = await transform(body, {
+		async walkTokens(token) {
+			if (token.type === 'html') {
+				if (token.text.startsWith('<!-- codeblock:start')) {
+					if (current_block !== null) {
+						throw new Error('Cannot nest codeblocks');
+					}
+
+					const match = /<!-- codeblock:start ({.+}) -->/.exec(token.text);
+					const { title = 'Demo (from docs)', selected = 'App.svelte' } = match
+						? JSON.parse(match[1])
+						: {};
+
+					current_block = {
+						id: codeblocks.length,
+						title,
+						selected,
+						files: [],
+						converted: false,
+						hash: null
+					};
+
+					return;
+				}
+
+				if (token.text.trim() === '<!-- codeblock:end -->') {
+					const block = current_block!;
+
+					const playground = {
+						name: block.title,
+						files: block.files.map((file) => {
+							const name = file.name! + file.ext!;
+
+							return {
+								basename: name,
+								contents: file.content,
+								name,
+								text: true,
+								type: 'file'
+							};
+						}),
+						tailwind: false
+					};
+
+					codeblocks.push(block);
+					current_block = null;
+
+					const json = JSON.stringify(playground);
+					block.hash = await compress_and_encode_text(json);
+
+					return;
+				}
+			}
+
+			if (token.type === 'code') {
+				let codeblock = current_block;
+
+				if (codeblock === null) {
+					// create a one-file codeblock
+					codeblock = {
+						id: codeblocks.length,
+						title: null,
+						selected: null,
+						files: [],
+						converted: false,
+						hash: null
+					};
+
+					codeblocks.push(codeblock);
+				}
+
+				const decodedText = decode_html_entities(token.text);
 
 				if (token.lang === 'diff') {
 					throw new Error('Use +++ and --- annotations instead of diff blocks');
@@ -344,6 +434,10 @@ export async function render_content_markdown(
 
 				let { source, options } = parse_options(decodedText, token.lang);
 				source = adjust_tab_indentation(source, token.lang);
+
+				if (options.file && !options.file.includes('.')) {
+					throw new Error(`Missing file extension: ${options.file}`);
+				}
 
 				let prelude = '';
 
@@ -362,68 +456,71 @@ export async function render_content_markdown(
 					}
 				);
 
-				const converted =
-					token.lang === 'js' || token.lang === 'svelte'
-						? await generate_ts_from_js(source, token.lang, options)
-						: undefined;
+				const ext = options.file?.slice(options.file.lastIndexOf('.'));
 
-				let html = '<div class="code-block">';
+				const file: CodeBlockFile = {
+					selected: options.file === codeblock.selected,
+					tab_id: `playground-tab-${codeblock.id}-${codeblock.files.length}`,
+					panel_id: `playground-tabpanel-${codeblock.id}-${codeblock.files.length}`,
+					name: options.file?.slice(0, -ext!.length) ?? null,
+					ext: ext ?? null,
+					content: source
+						.replace(delimiter_patterns['---'], '$1')
+						.replace(delimiter_patterns['+++'], '$1')
+						.replace(delimiter_patterns[':::'], '$1'),
+					rendered: [],
+					can_copy: options.copy
+				};
 
-				const needs_controls = options.link || options.copy || converted;
+				codeblock.files.push(file);
 
-				if (needs_controls) {
-					html += '<div class="controls">';
-				}
+				let cached = snippets.get(decodedText);
 
-				if (options.file) {
-					const ext = options.file.slice(options.file.lastIndexOf('.'));
-					if (!ext) throw new Error(`Missing file extension: ${options.file}`);
+				if (!cached) {
+					cached = [];
 
-					html += `<span class="filename" data-ext="${ext}">${options.file.slice(0, -ext.length)}</span>`;
-				}
+					const converted =
+						token.lang === 'js' || token.lang === 'svelte'
+							? await generate_ts_from_js(source, token.lang, options)
+							: undefined;
 
-				if (converted) {
-					html += `<input class="ts-toggle raised" checked title="Toggle language" type="checkbox" aria-label="Toggle JS/TS">`;
-				}
-
-				if (options.copy) {
-					html += `<button class="copy-to-clipboard raised" title="Copy to clipboard" aria-label="Copy to clipboard"></button>`;
-				}
-
-				if (needs_controls) {
-					html += '</div>';
-				}
-
-				html += await syntax_highlight({
-					filename,
-					language: token.lang,
-					prelude,
-					source,
-					check,
-					references
-				});
-
-				if (converted) {
-					const language = token.lang === 'js' ? 'ts' : token.lang;
-
-					if (language === 'ts') {
-						prelude = prelude.replace(/(\/\/ @filename: .+)\.js$/gm, '$1.ts');
-					}
-
-					html += await syntax_highlight({
+					let highlighted = await syntax_highlight({
 						filename,
-						language,
+						language: token.lang,
 						prelude,
-						source: converted,
+						source,
 						check,
 						references
 					});
+
+					cached.push(
+						highlighted.replace('<pre', converted ? '<pre data-js' : '<pre data-js data-ts')
+					);
+
+					if (converted) {
+						const language = token.lang === 'js' ? 'ts' : token.lang;
+
+						if (language === 'ts') {
+							prelude = prelude.replace(/(\/\/ @filename: .+)\.js$/gm, '$1.ts');
+						}
+
+						highlighted = await syntax_highlight({
+							filename,
+							language,
+							prelude,
+							source: converted,
+							check,
+							references
+						});
+
+						cached.push(highlighted.replace('<pre', '<pre data-ts'));
+					}
+
+					snippets.save(decodedText, cached);
 				}
 
-				html += '</div>';
-
-				// Save everything locally now
-				snippets.save(decodedText, html);
+				file.rendered.push(...cached);
+				codeblock.converted ||= cached.length > 1;
 			}
 
 			const tokens = 'tokens' in token ? token.tokens : undefined;
@@ -454,6 +551,37 @@ export async function render_content_markdown(
 				}
 			}
 		},
+		html({ text }) {
+			if (text.startsWith('<!-- codeblock:start')) {
+				current_block = codeblocks.shift()!;
+
+				const buttons: string[] = current_block.files.map((file) => {
+					if (!file.name) {
+						throw new Error('Files in a codeblock must have a name');
+					}
+
+					return `
+						<button id="${file.tab_id}" aria-controls="${file.panel_id}" role="tab" aria-selected="${file.selected}" tabindex="${file.selected ? 0 : -1}">
+							<span class="filename" data-ext="${file.ext}">${file.name}</span>
+						</button>
+					`;
+				});
+
+				return `
+					<div class="code-block">
+						<div class="controls">
+							<div class="tabs" role="tablist" aria-label="Files">${buttons.join('')}</div>
+							<div class="open-in-playground"><a href="/playground/untitled#${current_block.hash}">Open <span class="if-large">in playground</span></a></div>
+							${current_block.converted ? `<input class="ts-toggle raised" checked title="Toggle language" type="checkbox" aria-label="Toggle JS/TS">` : ``}
+							<button class="copy-to-clipboard raised" title="Copy to clipboard" aria-label="Copy to clipboard"></button>
+						</div>`;
+			} else if (text.trim() === '<!-- codeblock:end -->') {
+				current_block = null;
+				return '</div>';
+			}
+
+			return text;
+		},
 		heading({ tokens, depth }) {
 			const text = this.parser!.parseInline(tokens);
 			let html = text.replace(/<\/?code>/g, '');
@@ -472,11 +600,53 @@ export async function render_content_markdown(
 		},
 		code({ text }) {
 			const decodedText = decode_html_entities(text);
-			const cached = snippets.get(decodedText);
-			if (cached) {
-				return injectReferenceLinks(cached, references, extractImportedSymbols(decodedText));
+			const symbols = extractImportedSymbols(decodedText);
+
+			// const cached = snippets.get(decodedText);
+			// if (!cached) throw new Error('huh?');
+
+			// let html = injectReferenceLinks(cached, references, extractImportedSymbols(decodedText));
+
+			const block = current_block ?? codeblocks.shift()!;
+			const file = block.files.shift()!;
+
+			let html = '';
+
+			if (current_block) {
+				// tabs
+				html = `<div id="${file.panel_id}" aria-labelledby="${file.tab_id}" role="tabpanel" data-visible="${file.selected}">`;
+			} else {
+				// single file
+				html = `<div class="code-block">`;
+
+				const needs_controls = file.name !== null || file.can_copy || file.rendered.length > 1;
+
+				if (needs_controls) {
+					html += '<div class="controls">';
+
+					if (file.name) {
+						html += `<span class="filename" data-ext="${file.ext}">${file.name}</span>`;
+					}
+
+					if (file.rendered.length > 1) {
+						html += `<input class="ts-toggle raised" checked title="Toggle language" type="checkbox" aria-label="Toggle JS/TS">`;
+					}
+
+					if (file.can_copy) {
+						html += `<button class="copy-to-clipboard raised" title="Copy to clipboard" aria-label="Copy to clipboard"></button>`;
+					}
+
+					html += '</div>';
+				}
 			}
-			return cached;
+
+			for (const pre of file.rendered) {
+				html += injectReferenceLinks(pre, references, symbols);
+			}
+
+			html += '</div>';
+
+			return html;
 		},
 		blockquote(token) {
 			let content = this.parser?.parse(token.tokens) ?? '';
@@ -499,6 +669,8 @@ export async function render_content_markdown(
 			return `<blockquote>${content}</blockquote>`;
 		}
 	});
+
+	return transformed;
 }
 
 /**
@@ -951,7 +1123,9 @@ async function syntax_highlight({
 									compilerOptions: {
 										allowJs: true,
 										checkJs: true,
-										types: ['svelte', '@sveltejs/kit', 'sv']
+										module: ts.ModuleKind.ESNext,
+										moduleResolution: ts.ModuleResolutionKind.Bundler,
+										types: ['svelte', '@sveltejs/kit', 'sv', '@sveltejs/sv-utils']
 									}
 								},
 								// by default, twoslash does not run on .js files, change that through this option

@@ -58,6 +58,21 @@ de `$derived.by`) est considérée comme une _dépendence_ de l'état dérivé. 
 il dépend est mis à jour, l'état dérivé sera marqué comme _sale_ et recalculé la prochaine fois que
 sa valeur est lue.
 
+De plus, si une expression contient un [`await`](await-expressions), Svelte le transforme de sorte
+que tout état présent _après_ le `await` est aussi suivi — en d'autres mots, dans un cas comme
+celui-ci...
+
+```js
+let a = Promise.resolve(1);
+let b = 2;
+// ---cut---
+let total = $derived(await a + b);
+```
+
+... à la fois `a` et `b` sont suivies, même si `b` n'est lue qu'une fois que `a` a été résolue,
+après l'exécution initiale. (Ceci ne s'applique pas aux `await` dans les fonctions qui sont appelées
+par l'expression, seulement à l'expression elle-même.)
+
 Pour exempter un morceau d'état d'être considéré comme une dépendance, utilisez
 [`untrack`](svelte#untrack).
 

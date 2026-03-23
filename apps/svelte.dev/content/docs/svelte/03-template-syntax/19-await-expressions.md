@@ -69,8 +69,8 @@ Svelte fera autant de travail asynchrone que possible en parallèle. Par exemple
 expressions `await` dans votre markup...
 
 ```svelte
-<p>{await one()}</p>
-<p>{await two()}</p>
+<p>{await one(x)}</p>
+<p>{await two(y)}</p>
 ```
 
 ... les deux fonctions seront exécutées en mêmet temps, puisque ce sont des expressions
@@ -82,13 +82,19 @@ exception : les expressions `$derived` indépendantes seront mises à jour indé
 elles sont exécutées séquentiellement lors de leur création :
 
 ```js
-async function one() { return 1; }
-async function two() { return 2; }
+/** @param {number} x */
+async function one(x) { return x; }
+/** @param {number} y */
+async function two(y) { return y; }
+let x = $state(1);
+let y = $state(2);
 // ---cut---
-// ces expressions sont exécutées séquentiellement la première fois
-// mais seront mises à jour indépendamment
-let a = $derived(await one());
-let b = $derived(await two());
+// `b` ne sera pas créée tant que `a` n'aura pas été résolue,
+// mais une fois créée, ces variables seront mises à jour
+// indépendamment, même i `x` et `y` se mettent à jour
+// simultanément
+let a = $derived(await one(x));
+let b = $derived(await two(y));
 ```
 
 > [!NOTE] Si vous écrivez du code comme celui-là, attendez-vous à ce que Svelte vous affiche un
