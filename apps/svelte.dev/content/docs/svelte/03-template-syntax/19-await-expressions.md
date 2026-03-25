@@ -31,10 +31,11 @@ Le drapeau expérimental sera supprimé avec Svelte 6.
 
 Lorsqu'une expression `await` dépend d'un morceau d'état particulier, les changements de cet état ne
 seront pas reflétés dans l'interface avant que le travail asynchrone ne soit terminé, afin que
-l'interface ne soit pas laissée dans un état inconsistant. En d'autres mots, dans un exemple comme
-[celui-ci](/playground/untitled#H4sIAAAAAAAAE42QsWrDQBBEf2VZUkhYRE4gjSwJ0qVMkS6XYk9awcFpJe5Wdoy4fw-ycdykSPt2dpiZFYVGxgrf2PsJTlPwPWTcO-U-xwIH5zli9bminudNtwEsbl-v8_wYj-x1Y5Yi_8W7SZRFI1ZYxy64WVsjRj0rEDTwEJWUs6f8cKP2Tp8vVIxSPEsHwyKdukmA-j6jAmwO63Y1SidyCsIneA_T6CJn2ZBD00Jk_XAjT4tmQwEv-32eH6AsgYK6wXWOPPTs6Xy1CaxLECDYgb3kSUbq8p5aaifzorCt0RiUZbQcDIJ10ldH8gs3K6X2Xzqbro5zu1KCHaw2QQPrtclvwVSXc2sEC1T-Vqw0LJy-ClRy_uSkx2ogHzn9ADZ1CubKAQAA)...
+l'interface ne soit pas laissée dans un état inconsistant. En d'autres mots, dans un exemple comme :
 
+<!-- codeblock:start {"title":"Synchronized updates"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let a = $state(1);
 	let b = $state(2);
@@ -50,6 +51,7 @@ l'interface ne soit pas laissée dans un état inconsistant. En d'autres mots, d
 
 <p>{a} + {b} = {await add(a, b)}</p>
 ```
+<!-- codeblock:end -->
 
 ... si vous incrémentez `a`, le contenu de `<p>` ne sera _pas_ immédiatement mis à jour et
 n'affichera donc pas ceci —

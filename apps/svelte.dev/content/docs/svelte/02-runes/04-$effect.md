@@ -61,10 +61,11 @@ appelée lors de l'exécution d'un effet parent.
 > change.
 
 Un effet peut renvoyer une _fonction de nettoyage_ qui sera jouée immédiatement avant la
-ré-exécution de l'effet
-([demo](/playground/untitled#H4sIAAAAAAAAE42SQVODMBCF_8pOxkPRKq3HCsx49K4n64xpskjGkDDJ0tph-O8uINo6HjxB3u7HvrehE07WKDbiyZEhi1osRWksRrF57gQdm6E2CKx_dd43zU3co6VB28mIf-nKO0JH_BmRRRVMQ8XWbXkAgfKtI8jhIpIkXKySu7lSG2tNRGZ1_GlYr1ZTD3ddYFmiosUigbyAbpC2lKbwWJkIB8ZhhxBQBWRSw6FCh3sM8GrYTthL-wqqku4N44TyqEgwF3lmRHr4Op0PGXoH31c5rO8mqV-eOZ49bikgtcHBL55tmhIkEMqg_cFB2TpFxjtg703we6NRL8HQFCS07oSUCZi6Rm04lz1yytIHBKoQpo1w6Gsm4gmyS8b8Y5PydeMdX8gwS2Ok4I-ov5NZtvQde95GMsccn_1wzNKfu3RZtS66cSl9lvL7qO1aIk7knbJGvefdtIOzi73M4bYvovUHDFk6AcX_0HRESxnpBOW_jfCDxIZCi_1L_wm4xGQ60wIAAA==)).
+ré-exécution de l'effet :
 
+<!-- codeblock:start {"title":"Effect teardown"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let count = $state(0);
 	let milliseconds = $state(1000);
@@ -89,6 +90,7 @@ ré-exécution de l'effet
 <button onclick={() => (milliseconds *= 2)}>ralentir</button>
 <button onclick={() => (milliseconds /= 2)}>accélérer</button>
 ```
+<!-- codeblock:end -->
 
 Les fonctions de nettoyage sont aussi nettoyées lorsque l'effet est détruit, ce qui se produit
 lorsque le parent est détruit (par exemple, si le composant est démonté), ou si un effet parent est
@@ -247,11 +249,11 @@ Le timing mis à part, `$effect.pre` fonctionne exactement comme `$effect`.
 ## `$effect.tracking`
 
 La rune `$effect.tracking` est une fonctionnalité avancée qui vous informe de si le code est exécuté
-au sein d'un contexte de suivi (_tracking_), comme un effet ou bien dans le template
-([démo](/playground/untitled#H4sIAAAAAAAACn3PwYrCMBDG8VeZDYIt2PYeY8Dn2HrIhqkU08nQjItS-u6buAt7UDzmz8ePyaKGMWBS-nNRcmdU-hHUTpGbyuvI3KZvDFLal0v4qvtIgiSZUSb5eWSxPfWSc4oB2xDP1XYk8HHiSHkICeXKeruDDQ4Demlldv4y0rmq6z10HQwuJMxGVv4mVVXDwcJS0jP9u3knynwtoKz1vifT_Z9Jhm0WBCcOTlDD8kyspmML5qNpHg40jc3fFryJ0iWsp_UHgz3180oBAAA=))
-:
+au sein d'un contexte de suivi (_tracking_), comme un effet ou bien dans le template :
 
+<!-- codeblock:start {"title":"$effect.tracking()"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	console.log('lors de la mise en place du composant :', $effect.tracking()); // false
 
@@ -262,6 +264,7 @@ au sein d'un contexte de suivi (_tracking_), comme un effet ou bien dans le temp
 
 <p>dans le template: {$effect.tracking()}</p> <!-- true -->
 ```
+<!-- codeblock:end -->
 
 C'est notamment utilisé pour implémenter des abstractions comme
 [`createSubscriber`](/docs/svelte/svelte-reactivity#createSubscriber), qui servent à créer des
@@ -272,10 +275,21 @@ trackées (plutôt que, par exemple, simplement lues dans un gestionnaire d'év�
 
 Lorsque vous utilisez [`await`](await-expressions) dans des composants, la rune `$effect.pending()`
 vous dit combien de promesses sont en cours de résolution dans la [frontière](svelte-boundary)
-courante, en n'incluant pas les frontières enfant
-([demo](/playground/untitled#H4sIAAAAAAAAE3WRMU_DMBCF_8rJdHDUqilILGkaiY2RgY0yOPYZWbiOFV8IleX_jpMUEAIWS_7u-d27c2ROnJBV7B6t7WDsequAozKEqmAbpo3FwKqnyOjsJ90EMr-8uvN-G97Q0sRaEfAvLjtH6CjbsDrI3nhqju5IFgkEHGAVSBDy62L_SdtvejPTzEU4Owl6cJJM50AoxcUG2gLiVM31URgChyM89N3JBORcF3BoICA9mhN2A3G9gdvdrij2UJYgejLaSCMsKLTivNj0SEOf7WEN7ZwnHV1dfqd2dTsQ5QCdk9bI10PkcxexXqcmH3W51Jt_le2kbH8os9Y3UaTcNLYpDx-Xab6GTHXpZ128MhpWqDVK2np0yrgXXqQpaLa4APDLBkIF8bd2sYql0Sn_DeE7sYr6AdNzvgljR-MUq7SwAdMHeUtgHR4CAAA=)) :
+courante, en n'incluant pas les frontières enfant :
 
+<!-- codeblock:start {"title":"$effect.pending"} -->
 ```svelte
+<!--- file: App.svelte --->
+<script>
+	let a = $state(1);
+	let b = $state(2);
+
+	async function add(a, b) {
+		await new Promise((f) => setTimeout(f, 500)); // délai artificiel
+		return a + b;
+	}
+</script>
+
 <button onclick={() => a++}>a++</button>
 <button onclick={() => b++}>b++</button>
 
@@ -285,6 +299,7 @@ courante, en n'incluant pas les frontières enfant
 	<p>promesses en cours : {$effect.pending()}</p>
 {/if}
 ```
+<!-- codeblock:end -->
 
 ## `$effect.root`
 
@@ -345,11 +360,12 @@ directement]($derived#Overriding-derived-values) depuis Svelte 5.25.
 
 Vous pourriez être tenté•e de faire des choses tordues avec les effets pour lier une valeur à une
 autre. L'exemple suivant montre deux inputs pour "argent dépensé" et "argent restant" qui sont
-connectés l'un à l'autre. Si vous en mettez un à jour, l'autre s'ajuste automatiquement. N'utilisez
-pas d'effets pour faire ça
-([démo](/playground/untitled#H4sIAAAAAAAAE5WRTWrDMBCFryKGLBJoY3fRjWIHeoiu6i6UZBwEY0VE49TB-O6VxrFTSih0qe_Ne_OjHpxpEDS8O7ZMeIAnqC1hAP3RA1990hKI_Fb55v06XJA4sZ0J-IjvT47RcYyBIuzP1vO2chVHHFjxiQ2pUr3k-SZRQlbBx_LIFoEN4zJfzQph_UMQr4hRXmBd456Xy5Uqt6pPKHmkfmzyPAZL2PCnbRpg8qWYu63I7lu4gswOSRYqrPNt3CgeqqzgbNwRK1A76w76YqjFspfcQTWmK3vJHlQm1puSTVSeqdOc_r9GaeCHfUSY26TXry6Br4RSK3C6yMEGT-aqVU3YbUZ2NF6rfP2KzXgbuYzY46czdgyazy0On_FlLH3F-UDXhgIO35UGlA1rAgAA).
+connectés l'un à l'autre. Si vous en mettez un à jour, l'autre s'ajuste automatiquement. Plutôt que
+d'utiliser un effet pour ceci...
 
+<!-- codeblock:start {"title":"Setting state in effects (don't do this!)"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	const total = 100;
 	let spent = $state(0);
@@ -373,13 +389,22 @@ pas d'effets pour faire ça
 	<input type="range" bind:value={left} max={total} />
 	{left}/{total} restant
 </label>
+
+<style>
+	label {
+		display: flex;
+		gap: 0.5em;
+	}
+</style>
 ```
+<!-- codeblock:end -->
 
-Utilisez plutôt des callbacks `oninput` ou — encore mieux — des [liaisons de
-fonctions](bind#Function-bindings) lorsque c'est possible
-([démo](/playground/untitled#H4sIAAAAAAAAE5VRvW7CMBB-FcvqECQK6dDFJEgsnfoGTQdDLsjSxVjxhYKivHvPBwFUsXS8774_nwftbQva6I_e78gdvNo6Xzu_j3quG4cQtfkaNJ1DIiWA8atkE8IiHgEpYVsb4Rm-O3gCT2yji7jrXKB15StiOJKiA1lUpXrL81VCEUjFwHTGXiJZgiyf3TYIjSxq6NwR6uyifr0ohMbEZnpHH2rWf7ImS8KZGtK6osl_UqelRIyVL5b3ir5AuwWUtoXzoee6fIWy0p31e6i0XMocLfZQDuI6qtaeykGcR7UU6XWznFAZU9LN_X9B2UyVayk9f3ji0-REugen6U9upDOCcAWcLlS7GNCejWoQTqsLtrfBqHzxDu3DrUTOf0xwIm2o62H85sk6_OHG2jQWI4y_3byXXGMCAAA=)).
+... utilisez des callbacks `oninput` ou — encore mieux — des [liaisons de
+fonctions](bind#Function-bindings) lorsque c'est possible :
 
+<!-- codeblock:start {"title":"Setting state with function bindings"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	const total = 100;
 	let spent = $state(0);
@@ -399,7 +424,15 @@ fonctions](bind#Function-bindings) lorsque c'est possible
 	<input type="range" +++bind:value={() => left, updateLeft}+++ max={total} />
 	{left}/{total} dépensé
 </label>
+
+<style>
+	label {
+		display: flex;
+		gap: 0.5em;
+	}
+</style>
 ```
+<!-- codeblock:end -->
 
 Si vous devez absolument mettre à jour un `$state` dans un effet et que cela déclenche une boucle
 infinie parce que vous lisez et écrivez un même `$state`, utilisez [untrack](svelte#untrack).

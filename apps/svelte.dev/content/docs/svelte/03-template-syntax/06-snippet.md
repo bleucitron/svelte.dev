@@ -65,10 +65,11 @@ Vous ne pouvez cependant pas utiliser de paramètre de reste.
 ## Portée de snippet [!VO]Snippet scope
 
 Les snippets peuvent être déclarés n'importe où dans votre composant. Ils peuvent référencer des
-valeurs déclarées en dehors de leur définition, par exemple dans une balise `<script>` ou un bloc
-`{#each ...}` ([demo](/playground/untitled#H4sIAAAAAAAAE12P0QrCMAxFfyWrwhSEvc8p-h1OcG5RC10bmkyQ0n-3HQPBx3vCPUmCemiDrOpLULYbUdXqTKR2Sj6UA7_RCKbMbvJ9Jg33XpMcW9uKQYEAIzJ3T4QD3LSUDE-PnYA4YET4uOkGMc3W5B3xZrtvbVP9HDas2GqiZHqhMW6Tr9jGbG_oOCMImcUCwrIpFk1FqRyqpRpn0cmjHdAvnrIzuscyq_4nd3dPPD01ukE_NA6qFj9hvMYvGjJADw8BAAA=))...
+valeurs déclarées en dehors de leur définition, par exemple dans une balise `<script>` ou un bloc...
 
+<!-- codeblock:start {"title":"Snippets"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let { message = `ça me fait plaisir de te voir` } = $props();
 </script>
@@ -80,6 +81,7 @@ valeurs déclarées en dehors de leur définition, par exemple dans une balise `
 {@render hello('alice')}
 {@render hello('bob')}
 ```
+<!-- codeblock:end -->
 
 ... et ils sont "visibles" par tout ce qui se trouve dans la même portée lexicale (c-à-d les
 balises soeurs, et les enfants de ces balises) :
@@ -101,11 +103,11 @@ balises soeurs, et les enfants de ces balises) :
 {@render x()}
 ```
 
-Les snippets peuvent se référencer eux-mêmes et les uns les autres
-([demo](/playground/untitled#H4sIAAAAAAAAE2WPTQqDMBCFrxLiRqH1Zysi7TlqF1YnENBJSGJLCYGeo5tesUeosfYH3c2bee_jjaWMd6BpfrAU6x5oTvdS0g01V-mFPkNnYNRaDKrxGxto5FKCIaeu1kYwFkauwsoUWtZYPh_3W5FMY4U2mb3egL9kIwY0rbhgiO-sDTgjSEqSTvIDs-jiOP7i_MHuFGAL6p9BtiSbOTl0GtzCuihqE87cqtyam6WRGz_vRcsZh5bmRg3gju4Fptq_kzQBAAA=))
-:
+Les snippets peuvent se référencer eux-mêmes et les uns les autres :
 
+<!-- codeblock:start {"title":"Self-referencing snippets"} -->
 ```svelte
+<!--- file: App.svelte --->
 {#snippet blastoff()}
 	<span>🚀</span>
 {/snippet}
@@ -121,17 +123,18 @@ Les snippets peuvent se référencer eux-mêmes et les uns les autres
 
 {@render countdown(10)}
 ```
+<!-- codeblock:end -->
 
 ## Passer des snippets aux composants [!VO]Passing snippets to components
 
 ### Propriétés explicites [!VO]Explicit props
 
 Au sein du template, les snippets sont des valeurs comme les autres. Ainsi, ils peuvent être passés
-aux composants en tant que props
-([demo](/playground/untitled#H4sIAAAAAAAAE3VS247aMBD9lZGpBGwDASRegonaPvQL2qdlH5zYEKvBNvbQLbL875VzAcKyj3PmzJnLGU8UOwqSkd8KJdaCk4TsZS0cyV49wYuJuQiQpGd-N2bu_ooaI1YwJ57hpVYoFDqSEepKKw3mO7VDeTTaIvxiRS1gb_URxvO0ibrS8WanIrHUyiHs7Vmigy28RmyHHmKvDMbMmFq4cQInvGSwTsBYWYoMVhCSB2rBFFPsyl0uruTlR3JZCWvlTXl1Yy_mawiR_rbZKZrellJ-5JQ0RiBUgnFhJ9OGR7HKmwVoilXeIye8DOJGfYCgRlZ3iE876TBsZPX7hPdteO75PC4QaIo8vwNPePmANQ2fMeEFHrLD7rR1jTNkW986E8C3KwfwVr8HSHOSEBT_kGRozyIkn_zQveXDL3rIfPJHtUDwzShJd_Qk3gQCbOGLsdq4yfTRJopRuin3I7nv6kL7ARRjmLdBDG3uv1mhuLA3V2mKtqNEf_oCn8p9aN-WYqH5peP4kWBl1UwJzAEPT9U7K--0fRrrWnPTXpCm1_EVdXjpNmlA8G1hPPyM1fKgMqjFHjctXGjLhZ05w0qpDhksGrybuNEHtJnCalZWsuaTlfq6nPaaBSv_HKw-K57BjzOiVj9ZKQYKzQjZodYFqydYTRN4gPhVzTDO2xnma3HsVWjaLjT8nbfwHy7Q5f2dBAAA))
-:
+aux composants en tant que props :
 
+<!-- codeblock:start {"title":"Explicit snippet props"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	import Table from './Table.svelte';
 
@@ -156,8 +159,45 @@ aux composants en tant que props
 	<td>{d.qty * d.price}</td>
 {/snippet}
 
-<Table data={fruits} {header} {row} />
+<Table data={fruits} +++{header} {row}+++ />
 ```
+
+```svelte
+<!--- file: Table.svelte --->
+<script>
+	let { data, header, row } = $props();
+</script>
+
+<table>
+	{#if header}
+		<thead>
+			<tr>{@render header()}</tr>
+		</thead>
+	{/if}
+
+	<tbody>
+		{#each data as d}
+			<tr>{@render row(d)}</tr>
+		{/each}
+	</tbody>
+</table>
+
+<style>
+	table {
+		text-align: left;
+		border-spacing: 0;
+	}
+
+	tbody tr:nth-child(2n+1) {
+		background: ButtonFace;
+	}
+
+	table :global(th), table :global(td) {
+		padding: 0.5em;
+	}
+</style>
+```
+<!-- codeblock:end -->
 
 On peut voir cette technique comme une façon de passer du contenu à un composant, plutôt que des
 données. Le concept est similaire à celui des slots pour les composants web.
@@ -165,12 +205,21 @@ données. Le concept est similaire à celui des slots pour les composants web.
 ### Propriétés implicites [!VO]Implicit props
 
 Pour simplifier l'écriture, les snippets déclarés directement _à l'intérieur_ d'un composant
-deviennent implicitement des props _sur_ le composant
-([demo](/playground/untitled#H4sIAAAAAAAAE3VSTa_aMBD8Kyu_SkAbCA-JSzBR20N_QXt6vIMTO8SqsY29tI2s_PcqTiB8vaPHs7MzuxuIZgdBMvJLo0QlOElIJZXwJHsLBBvb_XUASc7Mb9Yu_B-hsMMK5sUzvDQahUZPMkJ96aTFfKd3KA_WOISfrFACKmcOMFmk8TWUTjY73RFLoz1C5U4SPWzhrcN2GKDrlcGEWauEnyRwxCaDdQLWyVJksII2uaMWTDPNLtzX5YX8-kgua-GcHJVXI3u5WEPb0d83O03TMZSmfRzOkG1Db7mNacOL19JagVALxoWbztq-H8U6j0SaYp2P2BGbOyQ2v8PQIFMXLKRDk177pq0zf6d8bMrzwBdd0pamyPMb-IjNEzS2f86Gz_Dwf-2F9nvNSUJQ_EOSoTuJNvngqK5v4Pas7n4-OCwlEEJcQTIMO-nSQwtb-GSdsX46e9gbRoP9yGQ11I0rEuycunu6PHx1QnPhxm3SFN15MOlYEFJZtf0dUywMbwZOeBGsrKNLYB54-1R9WNqVdki7usim6VmQphf7mnpshiQRhNAXdoOfMyX3OgMlKtz0cGEcF27uLSul3mewjPjgOOoDukxjPS9rqfh0pb-8zs6aBSt_7505aZ7B9xOi0T9YKW4UooVsr0zB1BTrWQJ3EL-oWcZ572GxFoezCk37QLe3897-B2i2U62uBAAA))
-:
+deviennent implicitement des props _sur_ le composant :
 
+<!-- codeblock:start {"title":"Implicit snippet props"} -->
 ```svelte
-<!-- ceci est sémantiquement la même chose qu'au-dessus -->
+<!--- file: App.svelte --->
+<script>
+	import Table from './Table.svelte';
+
+	const fruits = [
+		{ name: 'apples', qty: 5, price: 2 },
+		{ name: 'bananas', qty: 10, price: 1 },
+		{ name: 'cherries', qty: 20, price: 0.5 }
+	];
+</script>
+
 <Table data={fruits}>
 	{#snippet header()}
 		<th>fruit</th>
@@ -188,15 +237,55 @@ deviennent implicitement des props _sur_ le composant
 </Table>
 ```
 
+```svelte
+<!--- file: Table.svelte --->
+<script>
+	let { data, header, row } = $props();
+</script>
+
+<table>
+	{#if header}
+		<thead>
+			<tr>{@render header()}</tr>
+		</thead>
+	{/if}
+
+	<tbody>
+		{#each data as d}
+			<tr>{@render row(d)}</tr>
+		{/each}
+	</tbody>
+</table>
+
+<style>
+	table {
+		text-align: left;
+		border-spacing: 0;
+	}
+
+	tbody tr:nth-child(2n+1) {
+		background: ButtonFace;
+	}
+
+	table :global(th), table :global(td) {
+		padding: 0.5em;
+	}
+</style>
+```
+<!-- codeblock:end -->
+
 ### Snippet `children` implicite [!VO]Implicit `children` snippet
 
 Tout contenu à l'intérieur d'une balise de composant qui n'est pas une déclaration de snippet
-fait implicitement partie du snippet `children`
-([demo](/playground/untitled#H4sIAAAAAAAAE3WOQQrCMBBFrzIMggql3ddY1Du4si5sOmIwnYRkFKX07lKqglqX8_7_w2uRDw1hjlsWI5ZqTPBoLEXMdy3K3fdZDzB5Ndfep_FKVnpWHSKNce1YiCVijirqYLwUJQOYxrsgsLmIOIZjcA1M02w4n-PpomSVvTclqyEutDX6DA2pZ7_ABIVugrmEC3XJH92P55_G39GodCmWBFrQJ2PrQAwdLGHig_NxNv9xrQa1dhWIawrv1Wzeqawa8953D-8QOmaEAQAA))
-:
+fait implicitement partie du snippet `children` :
 
+<!-- codeblock:start {"title":"Implicit children snippet","selected":"Button.svelte"} -->
 ```svelte
 <!--- file: App.svelte --->
+<script>
+	import Button from './Button.svelte';
+</script>
+
 <Button>cliquez-moi</Button>
 ```
 
@@ -209,6 +298,7 @@ fait implicitement partie du snippet `children`
 <!-- le résultat sera <button>cliquez-moi</button> -->
 <button>{@render children()}</button>
 ```
+<!-- codeblock:end -->
 
 > [!NOTE] Notez que vous ne pouvez pas avoir une prop appelée `children` si vous avez également du
 > contenu au sein du composant — pour cette raison, vous devriez éviter de définir des props avec ce
@@ -287,12 +377,21 @@ Nous pouvons restreindre encore un peu le typage en déclarant un générique, d
 Les snippets déclarés à la racine d'un fichier `.svelte` peuvent être exportés depuis un `<script
 module>` pour qu'ils soient utilisés par d'autres composants, tant qu'ils ne référencent pas de
 déclarations présentes dans un `<script>` non "`module`" (que ce soit directement ou indirectement,
-vis d'autres snippets)
-([demo](/playground/untitled#H4sIAAAAAAAAE3WPwY7CMAxEf8UyB1hRgdhjl13Bga8gHFJipEqtGyUGFUX5dxJUtEB3b9bYM_MckHVLWOKut50TMuC5tpbEY4GnuiGP5T6gXG0-ykLSB8vW2oW_UCNZq7Snv_Rjx0Kc4kpc-6OrrfwoVlK3uQ4CaGMgwsl1LUwXy0f54J9-KV4vf20cNo7YkMu22aqAz4-oOLUI9YKluDPF4h_at-hX5PFyzA1tZ84N3fGpf8YfUU6GvDumLqDKmEqCjjCHUEX4hqDTWCU5PJ6Or38c4g1cPu9tnAEAAA==))
-:
+vis d'autres snippets) :
 
+<!-- codeblock:start {"title":"Exported snippets","selected":"snippets.svelte"} -->
+```svelte
+<!--- file: App.svelte --->
+<script>
+	import { add } from './snippets.svelte';
+</script>
+
+{@render add(1, 2)}
+
+```
 
 ```svelte
+<!--- file: snippets.svelte --->
 <script module>
 	export { add };
 </script>
@@ -301,6 +400,7 @@ vis d'autres snippets)
 	{a} + {b} = {a + b}
 {/snippet}
 ```
+<!-- codeblock:end -->
 
 > [!NOTE]
 > Ceci nécessite Svelte 5.5.0 ou plus récent

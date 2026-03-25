@@ -76,9 +76,9 @@ let { a, b, c, ...others } = $props();
 Les références à une prop à l'intérieur d'un composant se mettent à jour lorque la prop elle-même se
 met à jour — lorsque `count` change dans `App.svelte`, elle va également changer dans
 `Child.svelte`. Mais le composant enfant est capable d'écraser la valeur de la prop, ce qui peut
-être utile pour des états temporaires qui ne seront pas sauvegardés
-([démo](/playground/untitled#H4sIAAAAAAAAE6WQ0WrDMAxFf0WIQR0Wmu3VTQJln7HsIfVcZubIxlbGRvC_DzuBraN92qPula50tODZWB1RPi_IX16jLALWSOOUq6P3-_ihLWftNEZ9TVeOWBNHlNhGFYznfqCBzeRdYHh6M_YVzsFNsNs3pdpGd4eBcqPVDMrNxNDBXeSRtXioDgO1zU8ataeZ2RE4Utao924RFXQ9iHXwvoPHKpW1xY4g_Bg0cSVhKS0p560Za95612ZC02ONrD8ZJYdZp_rGQ37ff_mSP86Np2TWZaNNmdcH56P4P67K66_SXoK9pG-5dF5Z9QEAAA==)).
+être utile pour des états temporaires qui ne seront pas sauvegardés :
 
+<!-- codeblock:start {"title":"Temporarily updating props","selected":"Child.svelte"} -->
 ```svelte
 <!--- file: App.svelte --->
 <script>
@@ -104,14 +104,14 @@ met à jour — lorsque `count` change dans `App.svelte`, elle va également cha
 	clics (child): {count}
 </button>
 ```
+<!-- codeblock:end -->
 
 Bien que vous puissiez temporairement _réassigner_ des props, vous ne devriez pas _muter_ de props,
 à moins qu'elles soient définies comme [bindable]($bindable).
 
-Si une props est un objet classique, la mutation n'aura aucun effet
-([démo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2W1QmorQgJXk0RC3PkBwiExG9WQrC17U4Es_ztKUkQp9OjxzM7bjcjtSKjwyfKNp1aLORA4b13ADHszUED1HFE-3eyaBcy-Mw_O5eFAg8xa1wb6T9eWhVgCKiyD9sZJ3XAjZnTWCzzuzfAKvbcjbPJieR2jm_uGy-InweXqtd0baaliBG0nFgW3kBIUNWYo9CGoxE-UsgvIpw2_oc9-LmAPJBCPDJCggqvlVtvdH9puErEMlvVg9HsVtzuoaojzkKKAfRuALVDfk5ZZW0fmy05wXcFdwyktlUs-KIinljTXrRVnm7-kL9dYLVbUAQAA)
-:
+Si une props est un objet classique, la mutation n'aura aucun effet :
 
+<!-- codeblock:start {"title":"Non-reactive props","selected":"Child.svelte"} -->
 ```svelte
 <!--- file: App.svelte --->
 <script>
@@ -134,14 +134,14 @@ Si une props est un objet classique, la mutation n'aura aucun effet
 	clicks: {object.count}
 </button>
 ```
+<!-- codeblock:end -->
 
 Toutefois, si la props est un proxy réactif, les mutations _auront_ un effet, mais vous aurez un
 warning
 [`_ownership_invalid_mutation`](runtime-warnings#Client-warnings-ownership_invalid_mutation), car le
-composant mute un état qui ne lui "appartient" pas
-([démo](/playground/untitled#H4sIAAAAAAAAE3WR0U7DMAxFf8VESBuiauG1WycheOEbKA9p67FA6kSNszJV-XeUZhMw2GN8r-1znUmQ7FGU4pn2UqsOes-SlSGRia3S6ET5Mgk-2OiJBZGdOh6szd0eNcdaIx3-V28NMRI7UYq1awdleVNTzaq3ZmB43CndwXYwPSzyYn4dWxermqJRI4Np3rFlqODasWRcTtAaT1zCHYSbVU3r4nsyrdPMKTUFKDYiE4yfLEoePIbsQpqfy3_nOVMuJIqg0wk1RFg7GOuWfwEbz2wIDLVatR_VtLyBagNTHFIUMCqtoZXeIfAOU1JoUJsR2IC3nWTMjt7GM4yKdyBhlAMpesvhydCC0y_i0ZagHByMh26WzUhXUUxKnpbcVnBfUwhznJnNlac7JkuIURL-2VVfwxflyrWcSQIAAA==))
-:
+composant mute un état qui ne lui "appartient" pas :
 
+<!-- codeblock:start {"title":"Invalid mutation","selected":"Child.svelte"} -->
 ```svelte
 <!--- file: App.svelte --->
 <script>
@@ -168,11 +168,21 @@ composant mute un état qui ne lui "appartient" pas
 	clics: {object.count}
 </button>
 ```
+<!-- codeblock:end -->
 
 La valeur par défaut d'une prop non déclarée avec `$bindable` n'est pas affectée — elle n'est pas
 tranformée en proxy réactif d'état — ce qui implique que les mutations ne provoqueront pas de mise à
 jour
-([démo](/playground/untitled#H4sIAAAAAAAAE3WQwU7DMBBEf2VkIbUVoYFraCIh7vwA4eC4G9Wta1vxpgJZ_nfkBEQp9OjxzOzTRGHlkUQlXpy9G0gq1idCL43ppDrAD84HUYheGwqieo2CP3y2Z0EU3-En79fhRIaz1slA_-nKWSbLQVRiE9SgPTetbVkfvRsYzztttugHd8RiXU6vr-jisbWb8idhN7O3bEQhmN5ZVDyMlIorcOddv_Eufq4AGmJEuG5PilEjQrnRcoV7JCTUuJlGWq7-YHYjs7NwVhmtDnVcrlA3iLmzLLGTAdaB-j736h68Oxv-JM1I0AFjoG1OzPfX023c1nhobUoT39QeKsRzS8owM8DFTG_pE6dcVl70AQAA)) :
+
+<!-- codeblock:start {"title":"Non-reactive fallback props","selected":"Child.svelte"} -->
+```svelte
+<!--- file: App.svelte --->
+<script>
+	import Child from './Child.svelte';
+</script>
+
+<Child />
+```
 
 ```svelte
 <!--- file: Child.svelte --->
@@ -187,6 +197,7 @@ jour
 	clics: {object.count}
 </button>
 ```
+<!-- codeblock:end -->
 
 En résumé : ne mutez pas les props. Vous pouvez soit utiliser des props de callback pour communiquer
 des changements, ou — si le parent et l'enfant partagent le même objet — utiliser la rune

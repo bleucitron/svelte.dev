@@ -10,10 +10,11 @@ tags: rune-inspect
 La rune `$inspect` est plus ou moins équivalente à `console.log`, si ce n'est qu'elle va déclencher
 sa ré-exécution si sont argument est mis à jour. `$inspect` suit les changements d'états reactifs de
 manière profonde, ce qui signifie que mettre à jour quelque chose au sein d'un objet ou d'un tableau
-en utilisant la réactivité fine va déclencher sa ré-exécution
-([démo](/playground/untitled#H4sIAAAAAAAACkWQ0YqDQAxFfyUMhSotdZ-tCvu431AXtGOqQ2NmmMm0LOK_r7Utfby5JzeXTOpiCIPKT5PidkSVq2_n1F7Jn3uIcEMSXHSw0evHpAjaGydVzbUQCmgbWaCETZBWMPlKj29nxBDaHj_edkAiu12JhdkYDg61JGvE_s2nR8gyuBuiJZuDJTyQ7eE-IEOzog1YD80Lb0APLfdYc5F9qnFxjiKWwbImo6_llKRQVs-2u91c_bD2OCJLkT3JZasw7KLA2XCX31qKWE6vIzNk1fKE0XbmYrBTufiI8-_8D2cUWBA_AQAA)).
+en utilisant la réactivité fine va déclencher sa ré-exécution :
 
+<!-- codeblock:start {"title":"$inspect(...)"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let count = $state(0);
 	let message = $state('coucou');
@@ -24,18 +25,20 @@ en utilisant la réactivité fine va déclencher sa ré-exécution
 <button onclick={() => count++}>Incrémenter</button>
 <input bind:value={message} />
 ```
+<!-- codeblock:end -->
 
 Lors des mises à jour, une stack trace sera affichée, permettant de facilement trouver l'origine
 d'un changement d'état (sauf si vous êtes dans le bac à sable, à cause de limitations techniques).
 
 ## $inspect(...).with
 
-`$inspect` renvoie une propriété `with`, que vous pouvez exécuter avec un callback, qui sera ensuite
-utilisé à la place de `console.log`. Le premier argument du callback est soit `"init"` ou `"update"`
-; les arguments suivants sont les valeurs passées à `$inspect`
-([démo](/playground/untitled#H4sIAAAAAAAACkVQ24qDMBD9lSEUqlTqPlsj7ON-w7pQG8c2VCchmVSK-O-bKMs-DefKYRYx6BG9qL4XQd2EohKf1opC8Nsm4F84MkbsTXAqMbVXTltuWmp5RAZlAjFIOHjuGLOP_BKVqB00eYuKs82Qn2fNjyxLtcWeyUE2sCRry3qATQIpJRyD7WPVMf9TW-7xFu53dBcoSzAOrsqQNyOe2XUKr0Xi5kcMvdDB2wSYO-I9vKazplV1-T-d6ltgNgSG1KjVUy7ZtmdbdjqtzRcphxMS1-XubOITJtPrQWMvKnYB15_1F7KKadA_AQAA))
+`$inspect(...)` renvoie un objet ayant une propriété `with`, que vous pouvez exécuter avec un
+callback, qui sera ensuite utilisé à la place de `console.log`. Le premier argument du callback est
+soit `"init"` ou `"update"` ; les arguments suivants sont les valeurs passées à `$inspect` :
 
+<!-- codeblock:start {"title":"$inspect(...).with(...)"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let count = $state(0);
 
@@ -48,6 +51,7 @@ utilisé à la place de `console.log`. Le premier argument du callback est soit 
 
 <button onclick={() => count++}>Incrémenter</button>
 ```
+<!-- codeblock:end -->
 
 ## $inspect.trace(...)
 

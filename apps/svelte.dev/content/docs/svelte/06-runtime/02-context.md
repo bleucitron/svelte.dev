@@ -228,7 +228,7 @@ Dans plusieurs situations ceci ne posera pas de problèmes, mais il y a un risqu
 l'état lors d'un rendu côté serveur (ce qui est découragé, mais tout à fait possible !)...
 
 ```svelte
-<!--- file: App.svelte ---->
+<!--- file: App.svelte --->
 <script>
 	import { myGlobalState } from './state.svelte.js';
 

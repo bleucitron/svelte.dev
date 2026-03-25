@@ -67,11 +67,11 @@ l'input :
 ```
 
 Dans le cas d'un input numérique (`type="number"` ou `type="range"`), la valeur sera transformée en
-nombre
-([démo](/playground/untitled#H4sIAAAAAAAAE6WPwYoCMQxAfyWEPeyiOOqx2w74Hds9pBql0IllmhGXYf5dKqwiyILsLXnwwsuI-5i4oPkaUX8yo7kCnKNQV7dNzoty4qSVBSr8jG-Poixa0KAt2z5mbb14TaxA4OCtKCm_rz4-f2m403WltrlrYhMFTtcLNkoeFGqZ8yhDF7j3CCHKzpwoDexGmqCL4jwuPUJHZ-dxVcfmyYGe5MAv-La5pbxYFf5Z9Zf_UJXb-sEMquFgJJhBmGyTW5yj8lnRaD_w9D1dAKSSj7zqAQAA))
-:
+nombre :
 
+<!-- codeblock:start {"title":"Numeric bindings"} -->
 ```svelte
+<!--- file: App.svelte --->
 <script>
 	let a = $state(1);
 	let b = $state(2);
@@ -89,6 +89,7 @@ nombre
 
 <p>{a} + {b} = {a + b}</p>
 ```
+<!-- codeblock:end -->
 
 Si l'input est vide ou invalide (dans le cas de `type="number"`), la valeur sera `undefined`.
 
@@ -169,17 +170,19 @@ indépendamment de si elles sont cochées ou non :
 
 ## `<input bind:group>`
 
-Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`
-([demo](/playground/untitled#H4sIAAAAAAAAE62T32_TMBDH_5XDQkpbrct7SCMGEvCEECDxsO7BSW6L2c227EvbKOv_jp0f6jYhQKJv5_P3PvdL1wstH1Bk4hMSGdgbRzUssFaM9VJciFtF6EV23QvubNRFR_BPUVfWXvodEkdfKT3-zl8Zzag5YETuK6csF1u9ZUIGNo4VkYQNvPYsGRfJF5JKJ8s3QRJE6WoFb2Nq6K-ck13u2Sl9Vxxhlc6QUBIFnz9Brm9ifJ6esun81XoNd860FmtwslYGlLYte5AO4aHlVhJ1gIeKWq92COt1iMtJlkhFPkgh1rHZiiF6K6BUus4G5KafGznCTlIbVUMfQZUWMJh5OrL-C_qjMYSwb1DyiH7iOEuCb1ZpWTUjfHqcwC_GWDVY3ZfmME_SGttSmD9IHaYatvWHIc6xLyqad3mq6KuqcCwnWn9p8p-p71BqP2IH81zc9w2in-od7XORP7ayCpd5YCeXI_-p59mObPF9WmwGpx3nqS2Gzw8TO3zOaS5_GqUXyQUkS3h8hOSz0ZhMESHGc0c4Hm3MAn00t1wrb0l2GZRkqvt4sXwczm6Qh8vnUJzI2LV4vAkvqWgfehTZrSSPx19WiVfFfAQAAA==)).
+Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group` :
 
+<!-- codeblock:start {"title":"bind:group"} -->
 ```svelte
-<!--- file: BurritoChooser.svelte --->
+<!--- file: App.svelte --->
 <script>
 	let tortilla = $state('Nature');
 
 	/** @type {string[]} */
 	let fillings = $state([]);
 </script>
+
+<h1>Customize your burrito</h1>
 
 <!-- les inputs radio groupés sont mutuellement exclusifs -->
 <label><input type="radio" bind:group={tortilla} value="Nature" />Nature</label>
@@ -191,7 +194,17 @@ Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group`
 <label><input type="checkbox" bind:group={fillings} value="Haricots" />Haricots</label>
 <label><input type="checkbox" bind:group={fillings} value="Fromage" />Fromage</label>
 <label><input type="checkbox" bind:group={fillings} value="Guacamole (extra)" />Guacamole (extra)</label>
+
+<p>Tortilla : {tortilla}</p>
+<p>Garniture : {fillings.join(', ') || 'Aucune'}</p>
+
+<style>
+	label {
+		display: block;
+	}
+</style>
 ```
+<!-- codeblock:end -->
 
 > [!NOTE] `bind:group` ne fonctionne que si les inputs sont dans le même composant Svelte.
 
