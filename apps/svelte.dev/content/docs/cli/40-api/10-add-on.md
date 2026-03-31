@@ -14,17 +14,15 @@ La manière la plus simple de créer un add-on est d'utiliser le template d'add-
 
 ```sh
 npx sv create --template addon my-addon
-cd my-addon
 ```
 
 ## Structure de l'add-on [!VO]Add-on structure
 
 Un add-on ressemble généralement à ceci :
 
-_survolez les mots-clés dans le code pour obtenir plus de contexte_
-
 ```js
-import { parse, svelte } from '@sveltejs/sv-utils';
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
 import { defineAddon, defineAddonOptions } from 'sv';
 
 // Définir des options qui seront présentées à l'utilisateur (ou passées en arguments)
@@ -38,6 +36,8 @@ const options = defineAddonOptions()
 // la définition de votre add-on, le point d'entrée
 export default defineAddon({
 	id: 'le-nom-de-l-add-on',
+	// shortDescription: 'does X',   // optional: ligne affichée dans les prompts
+	// homepage: 'https://...',      // optional: lien vers la doc, ou le repo
 
 	options,
 
@@ -47,20 +47,24 @@ export default defineAddon({
 	},
 
 	// exécution de l'add-on
-	run: ({ kit, cancel, sv, options }) => {
-		if (!kit) return cancel('SvelteKit est requis');
+	run: ({ isKit, cancel, sv, options, directory }) => {
+		if (!isKit) return cancel('SvelteKit est requis');
 
 		// Ajoute "Bonjour [who] !" à la page racine
-		sv.file(kit.routesDirectory + '/+page.svelte', (content) => {
-			const { ast, generateCode } = parse.svelte(content);
-
-			svelte.addFragment(ast, `<p>Bonjour ${options.who} !</p>`);
-
-			return generateCode();
-		});
+		sv.file(
+			directory.routes + '/+page.svelte',
+			transforms.svelte(({ ast, svelte }) => {
+				svelte.addFragment(ast, `<p>Bonjour ${options.who} !</p>`);
+			})
+		);
 	}
 });
 ```
+
+> `sv` travaille sur votre système de fichiers — `sv.file()` résoud le path, lit le fichier,
+> applique la fonction d'édition, et écrit le résultat. `@sveltejs/sv-utils` travaille sur le
+> contenu — `transforms.svelte()` renvoie une fonction curry qui gère le parsing, vous fournit l'AST
+> et des utilitaires, et re-sérialise. Voir [sv-utils](/docs/cli/sv-utils) pour l'API complète.
 
 ## Développement avec le protocole `file:` [!VO]Development with `file:` protocol
 
@@ -79,8 +83,8 @@ Ceci vous permet d'itérer rapidement sans publier sur npm.
 Le module `sv/testing` fournit des utilitaires pour tester votre add-on :
 
 ```js
-import { test, expect } from 'vitest';
 import { setupTest } from 'sv/testing';
+import { test, expect } from 'vitest';
 import addon from './index.js';
 
 test("ajoute un message d'accueil", async () => {
@@ -96,11 +100,21 @@ test("ajoute un message d'accueil", async () => {
 });
 ```
 
-## Publier sur npm [!VO]Publishing to npm
+## Compiler et publier [!VO]Building and publishing
+
+### Bundling
+
+Les add-on communautaires sont compilés avec [tsdown](https://tsdown.dev/) en un seul fichier. Tout
+est compilé, à l'exception de `sv` (qui est une dépendance-paire, fournie lors de l'exécution).
+
+```sh
+npm run build
+```
 
 ### Structure de paquet [!VO]Package structure
 
-Votre add-on doit avoir `sv` comme dépendance dans votre `package.json` :
+Votre add-on doit avoir `sv` comme dépendance-paire et **aucune** dépendance dans votre
+`package.json` :
 
 ```json
 {
@@ -108,14 +122,24 @@ Votre add-on doit avoir `sv` comme dépendance dans votre `package.json` :
 	"version": "1.0.0",
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js"
+		".": "./src/index.js"
 	},
-	"dependencies": {
-		"sv": "^0.11.0"
+	"publishConfig": {
+		"access": "public",
+		"exports": {
+			".": { "default": "./dist/index.js" }
+		}
+	},
+	"peerDependencies": {
+		"sv": "^0.13.0"
 	},
 	"keywords": ["sv-add"]
 }
 ```
+
+- `exports` pointe vers `./src/index.js` pour le développement local avec le protocole `file:`.
+- `publishConfig.exports` surcharge les exports lors de la publication, pointant vers le
+`./dist/index.js` compilé.
 
 > [!NOTE]
 > Ajoutez le mot-clé `sv-add` afin que les utilisateurs et utilisatrices puissent trouver votre
@@ -130,7 +154,7 @@ Votre paquet peut exporter l'add-on de deux manières :
    ```json
    {
    	"exports": {
-   		".": "./dist/index.js"
+   		".": "./src/index.js"
    	}
    }
    ```
@@ -139,21 +163,42 @@ Votre paquet peut exporter l'add-on de deux manières :
    ```json
    {
    	"exports": {
-   		".": "./dist/main.js",
-   		"./sv": "./dist/addon.js"
+   		".": "./src/main.js",
+   		"./sv": "./src/addon.js"
    	}
    }
    ```
 
-### Conventions de nommage [!VO]Naming conventions
+### Publier [!VO]Publishing
 
-- **Paquets scopés**: Utilisez `@your-org/sv` en tant que nom du paquet. Les utilisateurs et
-utilisatrices peuvent alors l'installer avec uniquement `npx sv add @your-org`.
-- **Paquets classiques**: N'importe quel nom fonctionne. Le paquet s'installera avec `npx sv add
-your-package-name`.
+Les add-ons communautaires doivent être des paquets scopés (par ex. `@votre-org/sv`). Les
+utilisateurs et utilisatrices les installent avec `npx sv add @votre-org`.
+
+```sh
+npm login
+npm publish
+```
+
+> `prepublishOnly` lance la compilation automatiquement avant la publication.
+
+## Prochaines étapes [!VO]Next steps
+
+Vous pouvez de manière optionnelle afficher des indications à afficher lors de l'exécution de votre
+add-on :
+
+```js
+// @noErrors
+export default defineAddon({
+	// ...
+	nextSteps: ({ options }) => [
+		`Lancez ${color.command('npm run dev')} pour commencer le développement`,
+		`Retrouvez la documentation sur https://...`
+	]
+});
+```
 
 ## Compatibilité de version [!VO]Version compatibility
 
-Votre add-on doit préciser la version minimale de `sv` requises dans le `package.json`. Si la
+Votre add-on doit préciser la version minimale de `sv` requises dans vos `peerDependencies`. Si la
 version de `sv` d'un utilisateur ou d'un utilisatrice a une majeure différente de celle pour
 laquelle votre add-on a été conçu, ils et elles verront un avertissement de compatibilité.

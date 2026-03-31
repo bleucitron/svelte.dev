@@ -74,7 +74,7 @@ Empêche l'installation de dépendances.
 > Les mainteneurs de Svvelte ne vérifient pas le code des add-ons communautaires.
 
 Vous pouvez trouver des [add-ons communautaires sur
-npm](https://www.npmjs.com/search?q=keywords%3Asv-add) en cherchant `keywords:sv-add`.
+npm](https://www.npmx.dev/search?q=keyword:sv-add) en cherchant le mot-clé `sv-add`.
 
 ### Comment installer un add-on communautaire [!VO]How to install a community add-on
 

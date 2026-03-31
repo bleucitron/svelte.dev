@@ -11,5 +11,239 @@ Le paquet `@sveltejs/sv-utils` fournit des utilitaires pour parser, transformer,
 dans les add-ons.
 
 ```sh
-npm install @sveltejs/sv-utils
+npm install -D @sveltejs/sv-utils
 ```
+
+## Architecture
+
+Le CLI de Svelte est découpé en deux paquets ayant une frontière bien définie :
+
+- **`sv`** = **où et quand** opérer. Cela inclut les paths, la détection de workspace, le suivi des
+	dépendances, et l'I/O de fichiers. Le moteur orchestre l'exécution de l'add-on.
+- **`@sveltejs/sv-utils`** = **quoi** faire sur le contenu. Ce paquet fournit des parsers, de
+l'outillage pour le langage, et des transformations typées. Tous les utilitaires fournis ici sont
+purs — pas de système de fichier, pas de conscience du workspace.
+
+Cette séparation implique que les transformations sont testables sans workspace et sont composables
+entre add-ons.
+
+## Transformations [!VO]Transforms
+
+Les transformations sont des fonctions curry conscientes du parser permettant de transformer `string
+-> string`. Appelez une transformation avec votre callback pour obtenir une fonction qui se connecte
+directement à `sv.file()`. Le choix du parser est inclus dans le choix de la transformation — vous
+ne pouvez pas parser accidentellement une configuration Vite en tant que configuration Svelte car
+vous n'appelez jamais vous-même un parser.
+
+Chaque transformation injecte les utilitaires pertinents dans le callback, de sorte que vous n'avez
+besoin que d'un import :
+
+```js
+import { transforms } from '@sveltejs/sv-utils';
+```
+
+### `transforms.script`
+
+Transforme un fichier JavaScript/TypeScript. Le callback reçoit `{ ast, comments, content, js }`.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	files.viteConfig,
+	transforms.script(({ ast, js }) => {
+		js.imports.addDefault(ast, { as: 'foo', from: 'foo' });
+		js.vite.addPlugin(ast, { code: 'foo()' });
+	})
+);
+```
+
+### `transforms.svelte`
+
+Transforme un composant Svelte. Le callback reçoit `{ ast, content, svelte, js }`.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	layoutPath,
+	transforms.svelte(({ ast, svelte }) => {
+		svelte.addFragment(ast, '<Foo />');
+	})
+);
+```
+
+### `transforms.svelteScript`
+
+Transforme un composant Svelte avec un bloc `<script>` garanti. Passez `{ language }` en tant que
+premier argument. Le callback reçoit `{ ast, content, svelte, js }` où `ast.instance` est toujours
+non nul.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	layoutPath,
+	transforms.svelteScript({ language }, ({ ast, svelte, js }) => {
+		js.imports.addDefault(ast.instance.content, { as: 'Foo', from: './Foo.svelte' });
+		svelte.addFragment(ast, '<Foo />');
+	})
+);
+```
+
+### `transforms.css`
+
+Transforme une fichier CSS. Le callback reçoit `{ ast, content, css }`.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	files.stylesheet,
+	transforms.css(({ ast, css }) => {
+		css.addAtRule(ast, { name: 'import', params: "'tailwindcss'" });
+	})
+);
+```
+
+### `transforms.json`
+
+Transforme un fichier JSON. Mute l'objet `data` directement. Le callback reçoit `{ data, content,
+json }`.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	files.tsconfig,
+	transforms.json(({ data }) => {
+		data.compilerOptions ??= {};
+		data.compilerOptions.strict = true;
+	})
+);
+```
+
+### `transforms.yaml` / `transforms.toml`
+
+Similaire à `transforms.json`, pour les fichiers YAML et TOML, respectivement. Le callback reçoit `{
+data, content }`.
+
+### `transforms.text`
+
+Transforme un fichier texte brut (`.env`, `.gitignore`, etc.). Aucun parser — une string en entrée,
+une string en sortie. Le callback reçoit `{ content, text }`.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	'.env',
+	transforms.text(({ content }) => {
+		return content + '\nDATABASE_URL="file:local.db"';
+	})
+);
+```
+
+### Annuler une transformation [!VO]Aborting a transform
+
+Renvoyez `false` depuis n'importe quel callback pour annuler la transformation — le contenu original
+est renvoyé inchangé.
+
+```js
+// @noErrors
+import { transforms } from '@sveltejs/sv-utils';
+
+sv.file(
+	files.eslintConfig,
+	transforms.script(({ ast, js }) => {
+		const { value: existing } = js.exports.createDefault(ast, { fallback: myConfig });
+		if (existing !== myConfig) {
+			// la configuration existe déjà, on n'y touche pas
+			return false;
+		}
+		// ... on continue de modifier l'ast
+	})
+);
+```
+
+### Usage standalone & tests [!VO]Standalone usage & testing
+
+Les transformations sont des fonctions curry — appelez-les avec un callback, puis appliquez-les sur
+votre contenu :
+
+```js
+import { transforms } from '@sveltejs/sv-utils';
+
+const result = transforms.script(({ ast, js }) => {
+	js.imports.addDefault(ast, { as: 'foo', from: 'foo' });
+})('export default {}');
+```
+
+### Composabilité [!VO]Composability
+
+Pour les cas nécessitant de mixer des transformations et des éditions brutes, utilisez `sv.file`
+avec un callback de contenu, puis invoquer la transformation curryfiée manuellement :
+
+```js
+// @noErrors
+sv.file(path, (content) => {
+	// curryfication
+	content = transforms.script(({ ast, js }) => {
+		js.imports.addDefault(ast, { as: 'foo', from: 'bar' });
+	})(content);
+
+	// manipulation brute de string
+	content = content.replace('foo', 'baz');
+
+	return content;
+});
+```
+
+Les add-ons peuvent également exporter des fonctions de transformations réutilisables :
+
+```js
+// @errors: 7006
+import { transforms } from '@sveltejs/sv-utils';
+
+// ré-utilisable — exportez-la depuis votre paquet
+export const addFooImport = transforms.svelte(({ ast, svelte, js }) => {
+	svelte.ensureScript(ast, { language });
+	js.imports.addDefault(ast.instance.content, { as: 'Foo', from: './Foo.svelte' });
+});
+```
+
+## Parsers (bas-niveau) [!VO]Parsers (low-level)
+
+Pour les cas où les transformations ne sont pas utilisables (par ex. parsing conditionnel, gestion
+d'erreur autour du parser), le namespace `parse` reste disponible :
+
+```js
+// @noErrors
+import { parse } from '@sveltejs/sv-utils';
+
+const { ast, generateCode } = parse.script(content);
+const { ast, generateCode } = parse.svelte(content);
+const { ast, generateCode } = parse.css(content);
+const { data, generateCode } = parse.json(content);
+const { data, generateCode } = parse.yaml(content);
+const { data, generateCode } = parse.toml(content);
+const { ast, generateCode } = parse.html(content);
+```
+
+## Outillage de langage [!VO]Language tooling
+
+Les utilitaires de namespace pour la manipulation d'AST :
+
+- **`js.*`** - imports, exports, objets, tableaux, variables, fonctions, utilitaires de
+configuration Vite, utilitaires SvelteKit
+- **`css.*`** - règles, déclarations, at-rules, imports
+- **`svelte.*`** - ensureScript, addSlot, addFragment
+- **`json.*`** - arrayUpsert, packageScriptsUpsert
+- **`html.*`** - manipulation d'attributs
+- **`text.*`** - insertion de lignes dans les fichiers bruts (.env, .gitignore)
