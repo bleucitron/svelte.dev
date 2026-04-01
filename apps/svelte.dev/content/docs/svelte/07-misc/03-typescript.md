@@ -53,6 +53,10 @@ préprocesseur de `script`.
 Pour utiliser les fonctionnalités TypeScript _non restreintes au type_ au sein de vos composants,
 vous aurez besoin d'ajouter un préprocesseur qui va transformer TypeScript en JavaScript.
 
+### Using Vite
+
+If you're using SvelteKit, or Vite _without_ SvelteKit, you can use `vitePreprocess` from `@sveltejs/vite-plugin-svelte` in your config file:
+
 ```ts
 /// file: svelte.config.js
 // @noErrors
@@ -66,38 +70,13 @@ const config = {
 export default config;
 ```
 
-### Utiliser SvelteKit ou Vite [!VO]Using SvelteKit or Vite
+### Using other build tools
 
-La manière la plus simple de commencer est de pré-construire un nouveau projet SvelteKit avec `npx
-sv create`, de suivre les instructions et de choisir l'option TypeScript.
-
-```ts
-/// file: svelte.config.js
-// @noErrors
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-
-const config = {
-	preprocess: vitePreprocess()
-};
-
-export default config;
-```
-
-Si vous n'avez pas besoin ou ne souhaitez pas profiter de toutes les fonctionnalités que SvelteKit a
-à offrir, vous pouvez également pré-construire un projet Svelte grâce à Vite en lançant `npm create
-vite@latest` et en choisissant l'option `svelte-ts`.
-
-Dans les deux cas, un fichier `svelte.config.ts` avec l'option `vitePreprocess` sera ajouté à votre
-projet. Vite/SvelteKit viendra lire ce fichier de configuration.
-
-### Autres outils de build [!VO]Other build tools
-
-Si vous utilisez plutôt des outils comme Rollup ou Webpack, installez leurs plugins Svelte
-respectifs. Pour Rollup il s'agit de
-[rollup-plugin-svelte](https://github.com/sveltejs/rollup-plugin-svelte), et pour Webpack il s'agit
-de [svelte-loader](https://github.com/sveltejs/svelte-loader). Dans les deux cas vous aurez besoin
-d'installer `typescript` et `svelte-preprocess` et d'ajouter le préprocesseur à la configuration de
-plugin (référrez-vous aux READMEs respectifs pour plus d'infos).
+Si vous utilisez plutôt des outils comme Rollup (via
+[rollup-plugin-svelte](https://github.com/sveltejs/rollup-plugin-svelte)) ou Webpack (via
+[svelte-loader](https://github.com/sveltejs/svelte-loader)), installez `typescript` et
+`svelte-preprocess` et ajoutez le préprocesseur à la configuration de plugin. Consultez les fichiers
+READMEs des plugins concernés pour plus d'infos.
 
 > [!NOTE] Si vous commencez un nouveau projet, nous recommandons plutôt d'utiliser SvelteKit ou
 > Vite.
@@ -115,7 +94,7 @@ tant que fonctions
 - Mettez [`isolatedModules`](https://www.typescriptlang.org/tsconfig/#isolatedModules) à `true` pour
 	que chaque fichier soit considéré en isolation. TypeScript a quelques fonctionnalités qui
 nécessitent une analyse croisée de fichiers ainsi qu'une compilation, ce que le compilateur de
-Svelte et des outils comme Vite ne font pas
+Svelte et des outils comme Vite ne font pas.
 
 ## Typer les `$props` [!VO]Typing `$props`
 
