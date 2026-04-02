@@ -190,6 +190,12 @@ L'argument et la valeur de retour sont tous deux sérialisés avec
 également des types personnalisés que vous pouvez définir dans votre [transport
 hook](hooks#Universal-hooks-transport)) en plus du JSON.
 
+> [!NOTE] Pour les arguments de `query` et `prerender` (mais pas leurs valeurs de retour), les
+> objets, maps et sets sont triés de sorte que les occurrences ayant les mêmes éléments soient
+> associées à une même clé de cache. Par exemple, `getPosts({ limit: 10, offset: 10 })` et
+> `getPosts({ offset: 10, limit: 10 })` seront associés à la même clé. Si l'ordre a de l'importance
+> pour vous, vous devrez utiliser un tableau.
+
 ### Mettre les queries à jour [!VO]Refreshing queries
 
 Toute query peut être rafraîchie via sa méthode `refresh`, qui récupère la valeur la plus récente
@@ -356,7 +362,9 @@ Un formulaire est composé d'un ensemble de _champs_, qui sont définis par le s
 d'un `createPost`, nous avons deux champs, `title` et `content`, qui sont tous deux des chaînes de
 caractères. Pour récupérer les attributs d'un champ, exécutez sa méthode `as(...)`, en précisant
 quel [type
-d'input](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/input) utiliser :
+d'input](https://developer.mozilla.org/fr/docs/Web/HTML/Reference/Elements/input) utiliser. Pour la
+plupart des types d'inputs, vous pouvez également passer un deuxième argument — `.as(type, value)` —
+pour contrôler la valeur renvoyée :
 
 ```svelte
 <form {...createPost}>
@@ -380,9 +388,11 @@ exemple à la suite de l'échec d'une soumission, permettant de sauvegarder l'ut
 l'utilisatrice sans avoir besoin de tout ré-écrire), et de définir l'état
 [`aria-invalid`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-invalid)
 
-Les champs peuvent être imbriqués dans des objets et des tableaux, et leurs valeurs peuvent être des
-chaînes de caractères, des nombres, des booléens ou des objets `File`. Par exemple, si votre schéma
-ressemble à ceci...
+Fournir un deuxième argument à `.as(...)` est utile lorsque vous créez un formulaire à partir de
+données existantes, comme un formulaire d'édition, ou plusieurs instances du formulaire avec
+[`for(...)`](#form-Multiple-instances-of-a-form). Les inputs `radio`, `submit`, et `hidden` ont
+toujours besoin de cette valeur, et les inputs `checkbox` en ont besoin lorsqu'ils représentent une
+option parmi d'autres. Les inputs `file` ne peuvent pas être remplis de cette manière.
 
 > [!NOTE] L'attribut généré `name` utilise la notation d'objet JS (par ex. `nested.array[0].value`).
 > Les clés exprimés en chaînes de caractères qui nécessitent des guillemets tels que
@@ -390,6 +400,10 @@ ressemble à ceci...
 > type nombre et de type booléen (pour les checkbox) sont préfixés par `b:` et `n:`, respectivement,
 > pour signaler à SvelteKit qu'il doit transformer les valeurs depuis des chaînes de caractères
 > avant leur validation.
+
+Les champs peuvent être imbriqués dans des objets et des tableaux, et leurs valeurs peuvent être des
+chaînes de caractères, des nombres, des booléens ou des objets `File`. Par exemple, si votre schéma
+ressemble à ceci...
 
 ```js
 /// file: data.remote.js
@@ -920,6 +934,9 @@ La surcharge sera appliquée immédiatement, et annulée lorsque la soumission s
 Certains formulaires peuvent être répétés au sein d'une liste. Dans ce cas, vous pouvez créer des
 instances séparées d'une fonction de formulaire via `for(id)` pour les garder en isolation.
 
+Lorsque chaque instance devrait afficher des valeurs différentes, passez-les en tant que deuxième
+argument à `.as(...)` :
+
 ```svelte
 <!--- file: src/routes/todos/+page.svelte --->
 <script>
@@ -931,7 +948,7 @@ instances séparées d'une fonction de formulaire via `for(id)` pour les garder 
 {#each await getTodos() as todo}
 	{@const modify = modifyTodo.for(todo.id)}
 	<form {...modify}>
-		<!-- -->
+		<input {...modify.fields.description.as('text', todo.description)} />
 		<button disabled={!!modify.pending}>enregistrer les changements</button>
 	</form>
 {/each}

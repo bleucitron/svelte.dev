@@ -51,12 +51,14 @@ différents à l'aide d'une seule commande, parmi lesquelles :
 - eslint (linting)
 - vitest (tests unitaires)
 - playwright (tests e2e)
-- lucia (auth)
+- better-auth (auth)
 - tailwind (CSS)
 - drizzle (DB)
 - paraglide (i18n)
 - mdsvex (markdown)
 - storybook (atelier frontend)
+- adapters (hosting)
+- mcp (LLM tooling)
 
 ## Packages
 
