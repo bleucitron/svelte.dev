@@ -731,62 +731,6 @@ bancaire) soient renvoyés au client en utilisant un nom commençant par un tire
 Dans cet exemple, si les données ne sont pas validées, seul le premier `<input>` sera rempli lorsque
 la page sera rechargée.
 
-### Mutations single-flight [!VO]Single-flight mutations
-
-Par défaut, toutes les queries utilisées sur la page (en plus de toutes fonction `load`) sont
-automatiquement mises à jour à la suite d'une soumission de formulaire. Ceci assure que tout soit à
-jour, mais est également inefficace : beaucoup de queries seront inchangées, et cela requiert un
-deuxième aller-retour vers le serveur pour obtenir les données à jour.
-
-À la place, nous pouvons préciser quelles queries devraient être mises à jour en réponse à une
-soumission particulière de formulaire. On appelle cela une _mutation single-flight_ (mutation sur un
-seul aller-retour), et il y a deux manières de faire. La première est de rafraîchir la query sur le
-serveur, dans le gestionnaire de formulaire :
-
-```js
-import * as v from 'valibot';
-import { error, redirect } from '@sveltejs/kit';
-import { query, form } from '$app/server';
-const slug = '';
-const post = { id: '' };
-/** @type {any} */
-const externalApi = '';
-// ---cut---
-export const getPosts = query(async () => { /* ... */ });
-
-export const getPost = query(v.string(), async (slug) => { /* ... */ });
-
-export const createPost = form(
-	v.object({/* ... */}),
-	async (data) => {
-		// la logique du formulaire se place ici...
-
-		// Met à jour `getPosts()` sur le serveur, et
-		// renvoie les données au client avec le résultat
-		// de `createPost`
-		+++await getPosts().refresh();+++
-
-		// Redirige vers la page nouvellement créée
-		redirect(303, `/blog/${slug}`);
-	}
-);
-
-export const updatePost = form(
-	v.object({/* ... */}),
-	async (data) => {
-		// la logique de formulaire s'écrit ici...
-		const result = externalApi.update(post);
-
-		// L'API nous donne déjà l'article mis à jour,
-		// il n'y donc pas besoin de le rafraîchir, nous pouvons le définir directement
-		+++await getPost(post.id).set(result);+++
-	}
-);
-```
-
-La seconde est de conduire la mutation single-flight depuis le client, ce que nous verrons dans la
-section sur [`enhance`](#form-enhance).
-
 ### Renvois et redirections [!VO]Returns and redirects
 
 L'exemple ci-dessus utilise [`redirect(...)`](@sveltejs-kit#redirect), qui redirige l'utilisateur ou
@@ -893,42 +837,6 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 
 Le callback reçoit l'élément `form`, la `data` qu'il contient, et une fonction `submit`.
 
-Pour activer les [mutations single-flight](#form-Single-flight-mutations) depuis le client, utilisez
-`submit().updates(...})`. Par exemple, si la query `getPosts()` était utilisée sur cette page, nous
-pourrions la mettre à jour de cette manière :
-
-```ts
-import type { RemoteQuery, RemoteQueryOverride } from '@sveltejs/kit';
-interface Post {}
-declare function submit(): Promise<any> & {
-	updates(...queries: Array<RemoteQuery<any> | RemoteQueryOverride>): Promise<any>;
-}
-
-declare function getPosts(): RemoteQuery<Post[]>;
-// ---cut---
-await submit().updates(getPosts());
-```
-
-Nous pouvons aussi _surcharger_ les données courantes pendant que la soumission est en cours de
-traitement :
-
-```ts
-import type { RemoteQuery, RemoteQueryOverride } from '@sveltejs/kit';
-interface Post {}
-declare function submit(): Promise<any> & {
-	updates(...queries: Array<RemoteQuery<any> | RemoteQueryOverride>): Promise<any>;
-}
-
-declare function getPosts(): RemoteQuery<Post[]>;
-declare const newPost: Post;
-// ---cut---
-await submit().updates(
-	getPosts().withOverride((posts) => [newPost, ...posts])
-);
-```
-
-La surcharge sera appliquée immédiatement, et annulée lorsque la soumission se termine (ou échoue).
-
 ### Instances multiples de formulaire [!VO]Multiple instances of a form
 
 Certains formulaires peuvent être répétés au sein d'une liste. Dans ce cas, vous pouvez créer des
@@ -954,7 +862,7 @@ argument à `.as(...)` :
 {/each}
 ```
 
-### Multiple submit buttons
+### Plusieurs boutons de soumission [!VO]Multiple submit buttons
 
 Un `<form>` peut avoir plusieurs boutons de soumission. Par exemple, vous pourriez avoir un unique
 formulaire vous permettant de vous connecter ou de vous inscrire selon le bouton sur lequel vous
@@ -1082,80 +990,158 @@ d'évènement :
 
 > [!NOTE] Les commandes ne peuvent pas être appelées lors du rendu.
 
-### Mettre à jour les queries [!VO]Updating queries
+## Mutations single-flight [!VO]Single-flight mutations
 
-Pour mettre à jour `getLikes(item.id)`, ou toute autre query, nous avons besoin de préciser à
-SvelteKit _quelles_ queries nécessitent d'être rafraîchies (au contraire de `form`, qui invalide
-tout par défaut, pour se rapprocher du comportement natif d'une soumission de formulaire).
+L'objectif des fonctions distantes [`form`](#form) et [`command`] est de *muter des données*. Dans
+plusieurs cas, la mutation de données invalide d'autres données. Par défaut, `form` gère ceci en
+invalidant automatiquement toutes les queries et fonctions `load` à la suite d'une soumission de
+formulaire réussie, pour simuler ce qu'il se passerait avec le rechargement classique de la page.
+`command`, de son côté, ne fait rien de particulier. Typiquement, aucune de ces options n'est idéale
+— tout invalider est probablement surdimensionné, car il est peu probable qu'une soumission de
+formulaire ait changé *tout* ce qui est visible sur votre page. Pour ce qui est de `command`, ne
+rien faire n'est pas beaucoup plus utile, car cela laisse des données périmées à l'écran. Dans les
+deux cas, il est courant d'avoir à effectuer deux aller-retours vers le serveur : un pour réaliser
+la mutation, et un autre dans la foulée permettant de re-requêter les données des queries qui ont
+besoin d'être mises à jour.
 
-Nous faisons cela soit au sein de la commande elle-même...
+SvelteKit solutionne ces deux problèmes avec les *mutations single-flight* : votre soumission de
+`form` ou votre invocation de `command` peuvent rafraîchir des queries et fournir leurs résultats en
+retour au client au cours d'une seule requête.
+
+### Mises à jour pilotées depuis le serveur [!VO]Server-driven refreshes
+
+Dans la plupart des situations, le gestionnaire sur le serveur sait quelles sont les données du
+client ayant besoin d'être mises à jour, en fonction de ses arguments :
 
 ```js
-/// file: likes.remote.js
-// @filename: ambient.d.ts
-declare module '$lib/server/database' {
-	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
-}
-// @filename: index.js
-// ---cut---
 import * as v from 'valibot';
-import { query, command } from '$app/server';
-import * as db from '$lib/server/database';
+import { error, redirect } from '@sveltejs/kit';
+import { query, form } from '$app/server';
+const slug = '';
+const post = { id: '' };
+/** @type {any} */
+const externalApi = '';
 // ---cut---
-export const getLikes = query(v.string(), async (id) => { /* ... */ });
+export const getPosts = query(async () => { /* ... */ });
 
-export const addLike = command(v.string(), async (id) => {
-	await db.sql`
-		UPDATE item
-		SET likes = likes + 1
-		WHERE id = ${id}
-	`;
+export const getPost = query(v.string(), async (slug) => { /* ... */ });
 
-	+++getLikes(id).refresh();+++
-	// Comme au sein des fonctions de formulaire, nous pouvons aussi faire
-	// getLikes(id).set(...)
-	// dans le cas où vous avez déjà le résultat
-});
+export const createPost = form(
+	v.object({/* ... */}),
+	async (data) => {
+		// la logique de formulaire se trouve ici...
+
+		// Met à jour `getPosts()` sur le serveur, et renvoie
+		// les données avec le résultats de `createPost`
+		// La promise de `refresh` peut ne pas être gérée
+		// car le framework l'attend pour nous avant de servir la réponse
+		+++void getPosts().refresh();+++
+
+		// Redirige vers la page nouvellement créée
+		redirect(303, `/blog/${slug}`);
+	}
+);
+
+export const updatePost = form(
+	v.object({ id: v.string() }),
+	async (post) => {
+		// la logique de formulaire se trouve ici...
+		const result = externalApi.update(post);
+
+		// L'API nous donne déjà l'article mis à jour,
+		// il n'y a pas besoin de le mettre à jour,
+		// nous pouvons le définir directement
+		+++getPost(post.id).set(result);+++
+	}
+);
 ```
 
-... soit lorsque nous l'exécutons :
+Puisque les queries sont associées à des clés en fonction de leurs arguments, `await
+getPost(post.id).set(result)` sur le serveur sait retrouver le `getPost(id)` correspondant sur le
+client pour le mettre à jour. C'est le même fonctionnement pour `getPosts().refresh()` — il sait
+retrouver `getPosts()` sans argument sur le client.
+
+### Mises à jour pilotées par le client [!VO]Client-requested refreshes
+
+Malheureusement, la vie n'est pas toujours aussi simple que l'exemple précédent. Le serveur connaît
+toujours quelles _fonctions_ de type "query" mettre à jour, mais il ne sait pas quelles _instances_
+spécifiques mettre à jour. Par exemple, si `getPosts({ filter: 'author:santa' })` est affiché sur le
+client, appeler `getPosts().refresh()` sur le serveur ne la mettra pas à jour. Vous devrez plutôt
+appeler `getPosts({ filter: 'author:santa' }).refresh()` — mais comment pourriez-vous savoir quelles
+combinaisons spécifiques de filtres sont actuellement affichées sur le client, en particulier si
+votre argument de query est plus compliqué qu'un objet avec une seule clé ?
+
+SvelteKit résout ce problème en permettant au client de _requêter_ des mises-à-jour de données
+spécifiques au serveur en utilisant `submit().updates` (pour `form`) ou `myCommand().updates` (pour
+`command`) :
 
 ```ts
-import { RemoteCommand, RemoteQueryFunction } from '@sveltejs/kit';
-
-interface Item { id: string }
-
-declare const addLike: RemoteCommand<string, void>;
-declare const getLikes: RemoteQueryFunction<string, number>;
-declare function showToast(message: string): void;
-declare const item: Item;
-// ---cut---
-try {
-	await addLike(item.id).+++updates(getLikes(item.id))+++;
-} catch (error) {
-	showToast('Quelque chose s\'est mal passé !');
+import type { RemoteQueryUpdate, RemoteQuery } from '@sveltejs/kit';
+interface Post {}
+declare function submit(): Promise<any> & {
+	updates(...updates: RemoteQueryUpdate[]): Promise<any>;
 }
+
+declare function getPosts(args: { filter: string }): RemoteQuery<Post[]>;
+declare const newPost: Post;
+// ---cut---
+await submit().updates(
+	// pour requêter toutes les instances actives de getPosts
+	getPosts,
+	// pour requêter une instance spécifique
+	getPosts({ filter: 'author:santa' }),
+	// pour requêter une instance spécifique avec une surcharge optimiste
+	getPosts({ filter: 'author:santa' }).withOverride((posts) => [newPost, ...posts])
+);
 ```
 
-Comme précédemment, nous pouvons utiliser `withOverride` pour faire des mises à jour optimistes :
+Cela ne suffit pas d'uniquement requêter les mises-à-jour depuis le client — vous devez également
+les accepter depuis le serveur :
+
+```js
+import * as v from 'valibot';
+import { error, redirect } from '@sveltejs/kit';
+const slug = '';
+const post = { id: '' };
+/** @type {any} */
+const externalApi = '';
+// ---cut---
+import { query, form, requested } from '$app/server';
+
+export const getPosts = query(v.object({ filter: v.string() }), async ({ filter }) => { /* ... */ });
+
+export const createPost = form(
+	v.object({/* ... */}),
+	async (data) => {
+		// la logique de formulaire est ici...
+
+		+++for (const arg of requested(getPosts, 1)) {+++
+		+++	void getPosts(arg).refresh();+++
+		+++}+++
+
+		// Redirige vers la page nouvellement créée
+		redirect(303, `/blog/${slug}`);
+	}
+);
+```
+
+`requested` vous donne accès aux arguments de query pour la query fournie. Il renvoie les arguments
+de la query *parsés* — lorsque ces arguments sont renvoyés à la query dans
+`getPosts(arg).refresh()`, ils ne seront pas de nouveau parsés. Si le parsing d'un argument échoue,
+cette query renverra une erreur, mais la commande n'échouera pas. Le deuxième paramètre de
+`requested`, `limit`, est le nombre maximum d'éléments qu'elle va renvoyer. Toute demande de
+mise-à-jour excédant cette limite échouera.
+
+De plus, `requested` permet un raccourci lorsque vous voulez uniquement mettre à jour les instances
+de la query demandée :
 
 ```ts
-import { RemoteCommand, RemoteQueryFunction } from '@sveltejs/kit';
-
-interface Item { id: string }
-
-declare const addLike: RemoteCommand<string, void>;
-declare const getLikes: RemoteQueryFunction<string, number>;
-declare function showToast(message: string): void;
-declare const item: Item;
+import type { RemoteQueryFunction } from '@sveltejs/kit';
+import { requested } from '$app/server';
+declare const getPosts: RemoteQueryFunction<any, any>;
 // ---cut---
-try {
-	await addLike(item.id).updates(
-		getLikes(item.id).+++withOverride((n) => n + 1)+++
-	);
-} catch (error) {
-	showToast('Quelque chose s\'est mal passé !');
-}
+// ceci est équivalent à boucler sur son résultat puis appeler `void getPosts(arg).refresh()`.
+await requested(getPosts, 1).refreshAll();
 ```
 
 ## prerender

@@ -15,5 +15,5 @@ npx sv add eslint
 
 - les paquets pertinents installés, incluant `eslint-plugin-svelte`
 - un fichier `eslint.config.js`
-- votre fichier `.vscode/settings.json` mis à jour
+- votre fichier `.vscode/extensions.json` mis à jour
 - configuré pour fonctionner avec TypeScript et `prettier` si vous utilisez ces paquets
