@@ -43,3 +43,9 @@ prioritaires, même sur les propriétés `!important` :
 <div style="color: blue;" style:color="red">Ceci sera rouge</div>
 <div style:color="red" style="color: blue !important">Ceci sera toujours rouge</div>
 ```
+
+Vous pouvez définir des propriétés CSS personnalisées :
+
+```svelte
+<div style:--columns={columns}>...</div>
+```

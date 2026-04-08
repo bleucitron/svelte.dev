@@ -472,12 +472,21 @@ Dans le cas d'inputs `radio` et `checkbox` qui appartiennent tous au même champ
 être précisée en tant que second argument de `.as(...)` :
 
 ```js
+/// file: constants.js
+export const operatingSystems = /** @type {const} */ (['windows', 'mac', 'linux']);
+export const languages = /** @type {const} */ (['html', 'css', 'js']);
+```
+
+```js
 /// file: data.remote.js
+// @filename: constants.js
+export const operatingSystems = /** @type {const} */ (['windows', 'mac', 'linux']);
+export const languages = /** @type {const} */ (['html', 'css', 'js']);
+// @filename: index.js
 import * as v from 'valibot';
 import { form } from '$app/server';
 // ---cut---
-export const operatingSystems = /** @type {const} */ (['windows', 'mac', 'linux']);
-export const languages = /** @type {const} */ (['html', 'css', 'js']);
+import { operatingSystems, languages } from './constants';
 
 export const survey = form(
 	v.object({
@@ -820,10 +829,13 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 
 <form {...createPost.enhance(async ({ form, data, submit }) => {
 	try {
-		await submit();
-		form.reset();
+		if (await submit()) {
+			form.reset();
 
-		showToast('Publié avec succès !');
+			showToast('Publié avec succès !');
+		} else {
+			showToast('Invalid data!');
+		}
 	} catch (error) {
 		showToast('Oh non ! Quelque chose s\'est mal passé !');
 	}

@@ -151,7 +151,7 @@ est renvoyé inchangé.
 import { transforms } from '@sveltejs/sv-utils';
 
 sv.file(
-	file.eslintConfig,
+	'eslint.config.js',
 	transforms.script(({ ast, js }) => {
 		const { value: existing } = js.exports.createDefault(ast, { fallback: myConfig });
 		if (existing !== myConfig) {
@@ -248,3 +248,19 @@ configuration Vite, utilitaires SvelteKit
 - **`json.*`** - arrayUpsert, packageScriptsUpsert
 - **`html.*`** - manipulation d'attributs
 - **`text.*`** - insertion de lignes dans les fichiers bruts (.env, .gitignore)
+
+## Utilitaires de gestion de paquets [!VO]Package manager helpers
+
+### `pnpm.onlyBuiltDependencies`
+
+Renvoie une transformation pour le fichier `pnpm-workspace.yaml` ajoutant des paquets à la liste
+`onlyBuiltDependencies`. À utiliser avec `sv.file` lorsque le projet utilise pnpm.
+
+```js
+// @noErrors
+import { pnpm } from '@sveltejs/sv-utils';
+
+if (packageManager === 'pnpm') {
+	sv.file(file.findUp('pnpm-workspace.yaml'), pnpm.onlyBuiltDependencies('my-native-dep'));
+}
+```
