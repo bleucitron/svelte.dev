@@ -52,7 +52,6 @@ Empêche l'installation de dépendances.
 ## Add-ons officiels [!VO]Official add-ons
 
 - [`better-auth`](better-auth)
-- [`devtools-json`](devtools-json)
 - [`drizzle`](drizzle)
 - [`eslint`](eslint)
 - [`mcp`](mcp)
