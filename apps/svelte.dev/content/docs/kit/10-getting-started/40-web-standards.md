@@ -24,12 +24,12 @@ données depuis le réseau. Cette méthode est disponible dans les [hooks](hooks
 serveur](routing#server) ainsi que dans le navigateur.
 
 > [!NOTE] Une version spéciale de `fetch` est disponible dans les fonctions [`load`](load), les
-> [hooks de serveur](hooks#Server-hooks) et les [routes d'API](routing#server) pour invoquer les
-> endpoints directement lors du rendu côté serveur, sans faire d'appel HTTP, tout en préservant les
-> données d'authentification. (Pour faire des appels authentifiés dans du code serveur en dehors de
-> `load`, vous devez passer explicitement `cookie` et/ou les headers d'`authorization`.) Cette
-> méthode vous permet aussi de faire des requêtes relatives, alors que le `fetch` serveur classique
-> requiert normalement une URL complète.
+> [hooks de serveur](hooks#Server-hooks), les [routes d'API](routing#server) et les [fonctions
+> distantes](remote-functions) pour invoquer les endpoints directement lors du rendu côté serveur,
+> sans faire d'appel HTTP, tout en préservant les données d'authentification. (Pour faire des appels
+> authentifiés dans du code serveur en dehors de `load`, vous devez passer explicitement `cookie`
+> et/ou les headers d'`authorization`.) Cette méthode vous permet aussi de faire des requêtes
+> relatives, alors que le `fetch` serveur classique requiert normalement une URL complète.
 
 En plus de `fetch` lui-même, l'[API
 Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) inclut les interfaces suivantes :

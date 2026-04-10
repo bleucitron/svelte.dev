@@ -17,7 +17,7 @@ Renvoie les plugins Vite de SvelteKit.
 <div class="ts-block">
 
 ```dts
-function sveltekit(): Promise<import('vite').Plugin[]>;
+function sveltekit(): Promise<Plugin[]>;
 ```
 
 </div>
