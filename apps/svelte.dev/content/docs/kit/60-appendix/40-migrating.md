@@ -100,7 +100,7 @@ donc le dossier [`src/lib`]($lib) à la place.
 Les routes sont désormais constituées exclusivement du nom du dossier pour supprimer toute
 ambiguïté, les noms de dossier menant à un fichier `+page.svelte` correspondent à la route. Voir la
 [documentation sur le routing](routing) pour un aperçu de son fonctionnement. Les exemples suivants
-permettent une comparaison avant/après :
+permettent une comparaison entre l'ancienne structure de routing et la nouvelle :
 
 | Avant                     | Après                     |
 | ------------------------- | ------------------------- |

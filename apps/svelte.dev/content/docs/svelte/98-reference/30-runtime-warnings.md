@@ -161,6 +161,15 @@ choses une seule fois (par exemple au sein d'un gestionnaire d'évènement), vou
 [`$state.snapshot`](/docs/svelte/$state#$state.snapshot) pour prendre un
 instantané de la valeur courante.
 
+### derived_inert
+
+```
+Reading a derived belonging to a now-destroyed effect may result in stale values
+```
+
+Une valeur `$derived` créée dans un effet s'arrêtera de se mettre à jour lorsque l'effet est
+détruit. Vous devriez créer le `$derived` en dehors de l'effet, ou dans un `$effect.root`.
+
 ### event_handler_invalid
 
 ```

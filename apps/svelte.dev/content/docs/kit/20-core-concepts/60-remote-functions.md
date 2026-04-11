@@ -196,6 +196,67 @@ hook](hooks#Universal-hooks-transport)) en plus du JSON.
 > `getPosts({ offset: 10, limit: 10 })` seront associés à la même clé. Si l'ordre a de l'importance
 > pour vous, vous devrez utiliser un tableau.
 
+### Déduplication [!VO]Deduplication
+
+Lorsque vous appelez une fonction query, SvelteKit sérialise l'argument avec lequel vous l'appelez
+et s'en sert en tant que clé de cache. Sur le serveur, cette clé est utilisée pour créer un cache
+scopé à la requête pour que plusieurs invocations de la même requête ne provoquent qu'une seule fois
+le travail à faire. Sur le client, SvelteKit fait quelque chose de similaire : plusieurs invocations
+identiques d'une même query pointent toutes vers la même instance.
+
+Pour éviter les fuites de mémoire, l'instance est gardée en cache aussi longtemps qu'elle reste
+utilisée sur la page dans un _contexte réactif_, ce qui signifie qu'elle doit être créée dans un
+[`$derived`](../svelte/$derived), un [`$effect`](../svelte/$effect) ou un template de composant. En
+pratique, il est probable que vous rencontriez cette limitation dans des fonctions `load`
+universelles, les gestionnaires d'évènement, ou lorsque vous essayez d'accéder aux données d'une
+query lors de l'initialisation d'un module.
+
+Pour illustrer :
+
+```svelte
+<script>
+  import { getData } from './data.remote.js';
+
+	// cette instance est "ancrée" au contexte réactif de ce composant
+	const data = getData();
+</script>
+
+<!--
+	Attendre `data` dans un contexte non réactif est valide, car `data` est ancrée
+	et sera nettoyée lors du démontage de ce composant.
+-->
+<button onclick={async () => console.log(await data)}>
+	cliquez-moi !
+</button>
+
+<!--
+	Ceci va en revanche jeter une exception, car `getData` n'est ancrée à aucun contexte réactif.
+-->
+<button onclick={async () => console.log(await getData())}>
+	ne cliquez pas sur moi !
+</button>
+```
+
+Cette limitation ne s'applique que lors de l'accès aux _données_ de la query en l'attendant avec
+`await` ou lorsque vous essayez d'accéder à ses propriétés. Si vous n'avez besoin qu'un accès
+ponctuel aux données de la query, vous pouvez appeler `query.run` :
+
+```svelte
+<script>
+  import { getData } from './data.remote.js';
+</script>
+
+<!-- Ceci contourne le cache et exécute la query directement, renvoyant une bonne vieille Promise<T>
+-->
+<button onclick={async () => console.log(await getData().run())}>
+	cliquez-moi !
+</button>
+```
+
+Vous pouvez toujours également appeler [`refresh`](#query-Refreshing-queries) et `set` dans des
+contextes non-réactifs. Si la query n'a pas de gestionnaire actif, elles vont toutes deux ne rien
+faire.
+
 ### Mettre les queries à jour [!VO]Refreshing queries
 
 Toute query peut être rafraîchie via sa méthode `refresh`, qui récupère la valeur la plus récente
