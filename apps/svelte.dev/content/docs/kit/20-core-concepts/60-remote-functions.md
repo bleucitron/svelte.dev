@@ -18,7 +18,8 @@ elles vous permettent de charger et de manipuler les données directement au sei
 
 Cette fonctionnalité est actuellement expérimentale, ce qui signifie qu'elle contient très
 certainement des bugs, et peut être modifiée à tout moment. Vous devez l'activer en ajoutant
-l'option `kit.experimental.remoteFunctions` dans votre fichier `svelte.config.js`, et de manière
+les options `compilerOptions.experimental.async` et `kit.experimental.remoteFunctions` dans votre
+fichier `svelte.config.js`.
 optionnelle en ajoutant l'option `kit.experimental.remoteFunctions` dans votre `svelte.config.js` :
 
 ```js
