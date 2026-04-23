@@ -2560,7 +2560,7 @@ type RemoteForm<
 					...updates: RemoteQueryUpdate[]
 				) => Promise<boolean>;
 			};
-		}) => void
+		}) => MaybePromise<void>
 	): {
 		method: 'POST';
 		action: string;
