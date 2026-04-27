@@ -2821,10 +2821,23 @@ type RemoteQuery<T> = RemoteResource<T> & {
 La valeur de retour d'une fonction distante `query`. Voir la [section sur les fonctions
 distantes](/docs/kit/remote-functions#query) pour lire la documentation complète.
 
+Le paramètre générique `Validated` représente le type de l'argument *après* sa validation et
+(potentielle transformation) par le schéma — il s'agit du type que la fonction d'implémentation de
+la query reçoit sur le serveur, et le type renvoyé par
+[`requested`](/docs/kit/$app-server#requested). Pour les queries déclarées avec un
+[Standard Schema](https://standardschema.dev/), il diffère de l'`Input` lorsque le schéma contient
+une transformation (par ex. `v.pipe(v.number(), v.transform(String))` a `Input = number` mais
+`Validated = string`). Pour les validateurs `'unchecked'` et les queries sans arguments, il vaut
+par défaut `Input`.
+
 <div class="ts-block">
 
 ```dts
-type RemoteQueryFunction<Input, Output> = (
+type RemoteQueryFunction<
+	Input,
+	Output,
+	_Validated = Input
+> = (
 	arg: undefined extends Input ? Input | void : Input
 ) => RemoteQuery<Output>;
 ```
@@ -3204,21 +3217,41 @@ type RequestHandler<
 
 </div>
 
+## RequestedEntry
+
+A single entry yielded by [`requested`](/docs/kit/$app-server#requested).
+`arg` is the validated argument (the input *after* the query's schema validated and
+transformed it, if applicable); `query` is a `RemoteQuery` bound to the client's
+original cache key, so `refresh()` / `set()` will update the correct client entry.
+
+<div class="ts-block">
+
+```dts
+type RequestedEntry<Validated, Output> = {
+	arg: Validated;
+	query: RemoteQuery<Output>;
+};
+```
+
+</div>
+
 ## RequestedResult
 
 <div class="ts-block">
 
 ```dts
-type RequestedResult<T> = Iterable<T> &
-	AsyncIterable<T> & {
+type RequestedResult<Validated, Output> = Iterable<
+	RequestedEntry<Validated, Output>
+> &
+	AsyncIterable<RequestedEntry<Validated, Output>> & {
 		/**
 		 * Appelle `refresh` sur toutes les queries sélectionnées par cette invocation de `requested`.
 		 * Est identique à :
 		 * ```ts
 		 * import { requested } from '$app/server';
 		 *
-		 * for await (const arg of requested(query, ...) {
-		 *   void query(arg).refresh();
+		 * for await (const { query } of requested(getPost, ...)) {
+		 *   void query.refresh();
 		 * }
 		 * ```
 		 */

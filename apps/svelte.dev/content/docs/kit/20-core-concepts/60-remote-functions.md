@@ -1189,8 +1189,8 @@ export const createPost = form(
 	async (data) => {
 		// la logique de formulaire est ici...
 
-		+++for (const arg of requested(getPosts, 1)) {+++
-		+++	void getPosts(arg).refresh();+++
+		+++for (const { query } of requested(getPosts, 1)) {+++
+		+++	void query.refresh();+++
 		+++}+++
 
 		// Redirige vers la page nouvellement créée
@@ -1199,12 +1199,21 @@ export const createPost = form(
 );
 ```
 
-`requested` vous donne accès aux arguments de query pour la query fournie. Il renvoie les arguments
-de la query *parsés* — lorsque ces arguments sont renvoyés à la query dans
-`getPosts(arg).refresh()`, ils ne seront pas de nouveau parsés. Si le parsing d'un argument échoue,
-cette query renverra une erreur, mais la commande n'échouera pas. Le deuxième paramètre de
-`requested`, `limit`, est le nombre maximum d'éléments qu'elle va renvoyer. Toute demande de
-mise-à-jour excédant cette limite échouera.
+`requested` vous donne accès aux queries dont le client a demandé la mise à jour. Chaque entrée est
+un objet `{ arg, query }` : `arg` est la valeur que la fonction d'implémentation de la query a reçu
+— c-à-d l'argument *après* qu'il a été validé et (lorsqu'applicable) transformé par le schéma — et
+`query` est une `RemoteQuery` déjà liée à la clé de cache originelle du client, de sorte que appeler
+`query.refresh(...)` / `query.set(...)` mette à jour l'instance correcte sur le client. Si le
+parsing d'un argument échoue, cette query renverra une erreur, mais la commande entière n'échouera
+pas. Le deuxième paramètre de `requested`, `limit`, est le nombre d'éléments maximum qu'elle
+renverra. Toute requête de mise à jour au-delà de cette limite échouera.
+
+> [!NOTE] `limit` est requis car la liste des requêtes de mise à jour est contrôllée par le client —
+chaque entrée amène le serveur à valider un argument et généralement à re-requêter des données, de
+sorte qu'une liste non liée est une risque de Déni-de-service. Choisissez une limite qui reflète le
+cas le pire que vous souhaitez gérer par requête. Vous _pouvez_ fournir `Infinity` si vous avez
+décidé explicitement d'accepter n'importe quel nombre de mises à jour, mais ceci n'est pas
+recommandé.
 
 De plus, `requested` permet un raccourci lorsque vous voulez uniquement mettre à jour les instances
 de la query demandée :
@@ -1214,9 +1223,21 @@ import type { RemoteQueryFunction } from '@sveltejs/kit';
 import { requested } from '$app/server';
 declare const getPosts: RemoteQueryFunction<any, any>;
 // ---cut---
-// ceci est équivalent à boucler sur son résultat puis appeler `void getPosts(arg).refresh()`.
+// ceci est équivalent à boucler sur son résultat puis appeler `void query(arg).refresh()`.
 await requested(getPosts, 1).refreshAll();
 ```
+
+> [!NOTE] Pourquoi la commande doit nommer chaque query qu'elle souhaite mettre à jour ? Il y a deux
+> raisons :
+>
+> - **La taille de bundle.** Si une commande pouvait implicitement rafraîchir *n'importe* quelle
+>   query de cette application, SvelteKit devrait inclure le code de chaque query dans le bundle
+>   serveur de la commande, car il ne peut pas savoir à l'avance lesquelles seront exécutées.
+> - **Déni-de-service.** Tout utilisateur ou utilisatrice malveillante peut inspecter leur onglet
+>   réseau pour découvrir quelles sont les requêtes utilisées par votre application, puis envoyer
+>   une commande POST avec une liste fournie par le client contenant des milliers de mises-à-jour.
+>   La seule défense possible est la déclaration par le gestionnaire du serveur des queries qu'il
+>   souhaite mettre à jour — et dans quelle quantités (d'où la `limit` requise).
 
 ## prerender
 

@@ -271,7 +271,8 @@ function query<Schema extends StandardSchemaV1, Output>(
 	) => MaybePromise<Output>
 ): RemoteQueryFunction<
 	StandardSchemaV1.InferInput<Schema>,
-	Output
+	Output,
+	StandardSchemaV1.InferOutput<Schema>
 >;
 ```
 
@@ -310,8 +311,13 @@ function read(asset: string): Response;
 
 ## requested
 
-Dans le contexte d'une requête distante via `command` ou `form`, renvoie un itérable contenant les
-arguments validés des mises-à-jour demandées par le client, jusqu'à la limite fournie.
+Dans le contexte d'une requête distante via `command` ou `form`, renvoie un itérable d'entrées `{
+arg, query }` pour les mises-à-jour demandées par le client, jusqu'à la limite fournie. Chaque
+`query` est une `RemoteQuery` liée à la clé de cache originale côté client, afin que les appels
+`refresh()` / `set()` se propagent correctement même lorsque le schéma de la query transforme les
+entrées. `arg` est l'argument *validé*, c-à-d la valeur après que le schéma ait tourné (donc
+`InferOutput<Schema>` pour les queries déclarées avec un Standard Schema).
+
 Les arguments échouant la validation ou dépassent la limite sont enregistrés comme des échecs dans
 la réponse au client.
 
@@ -319,9 +325,8 @@ la réponse au client.
 import { requested } from '$app/server';
 
 for (const arg of requested(getPost, 5)) {
-	// il n'y a pas de risque à ne pas attendre cette promesse — SvelteKit
-	// va l'attendre pour nous et gérer les éventuelles erreurs
-	// en les renvoyant au client.
+	// `arg` est l'argument validé ; `query` est liée à la clé de cache du client.
+	// Vous pouvez ignorer cette promesse — SvelteKit l'attendra et relaiera toute erreur au client.
 	void getPost(arg).refresh();
 }
 ```
@@ -338,10 +343,10 @@ await requested(getPost, 5).refreshAll();
 <div class="ts-block">
 
 ```dts
-function requested<Input, Output>(
-	query: RemoteQueryFunction<Input, Output>,
-	limit?: number
-): RequestedResult<Input>;
+function requested<Input, Output, Validated = Input>(
+	query: RemoteQueryFunction<Input, Output, Validated>,
+	limit: number
+): RequestedResult<Validated, Output>;
 ```
 
 </div>
@@ -390,7 +395,8 @@ namespace query {
 		>
 	): RemoteQueryFunction<
 		StandardSchemaV1.InferInput<Schema>,
-		Output
+		Output,
+		StandardSchemaV1.InferOutput<Schema>
 	>;
 }
 ```
