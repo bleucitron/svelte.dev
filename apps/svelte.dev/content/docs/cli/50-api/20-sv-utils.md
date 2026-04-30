@@ -251,16 +251,22 @@ configuration Vite, utilitaires SvelteKit
 
 ## Utilitaires de gestion de paquets [!VO]Package manager helpers
 
-### `pnpm.onlyBuiltDependencies`
+### `pnpm.allowBuilds`
 
-Renvoie une transformation pour le fichier `pnpm-workspace.yaml` ajoutant des paquets à la liste
-`onlyBuiltDependencies`. À utiliser avec `sv.file` lorsque le projet utilise pnpm.
+Renvoie une transformation pour `pnpm-workspace.yaml` qui ajoute des paquets à la config "allow
+builds". À utiliser avec `sv.files` lorsque le projet utilise pnpm.
+
+L'utilitaire détecte la version de pnpm actuellement installée via `pnpm --version` :
+
+- pnpm `>= 11`: écrit dans la map unifiée `allowBuilds` (`{ pkg: true }`), en migrant toute liste
+`onlyBuiltDependencies` vers la map.
+- pnpm `< 11`: écrit dans la liste `onlyBuiltDependencies` legacy.
 
 ```js
 // @noErrors
 import { pnpm } from '@sveltejs/sv-utils';
 
 if (packageManager === 'pnpm') {
-	sv.file(file.findUp('pnpm-workspace.yaml'), pnpm.onlyBuiltDependencies('my-native-dep'));
+	sv.file(file.findUp('pnpm-workspace.yaml'), pnpm.allowBuilds('my-native-dep'));
 }
 ```

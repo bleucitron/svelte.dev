@@ -201,6 +201,9 @@ Pour prendre un instantané statique d'un Proxy profondément réactif `$state`,
 Ceci est pratique lorsque vous souhaitez passer un état à une librairie externe ou à une API qui
 ne s'attend pas à recevoir un proxy, comme dans le cas de `structuredClone`.
 
+Si une valeur a une méthode `toJSON`, le snapshot va cloner la valeur renvoyée depuis `toJSON`
+plutôt que l'objet original.
+
 ## `$state.eager`
 
 Lorsque un état est mis à jour, il peut ne pas être reflété dans l'interface immédiatement s'il est
