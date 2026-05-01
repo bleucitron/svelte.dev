@@ -42,6 +42,7 @@ Si vous n'avez aucune logique purement serveur (c-à-d des fichiers `+page.serve
 
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 

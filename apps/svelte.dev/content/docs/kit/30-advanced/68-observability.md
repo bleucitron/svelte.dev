@@ -99,6 +99,7 @@ cours d'exécution localement :
 - Créez le fichier `src/instrumentation.server.js` avec le code suivant :
 
 ```js
+// @errors: 2307
 /// file: src/instrumentation.server.js
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';

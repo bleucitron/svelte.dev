@@ -625,7 +625,14 @@ ou des erreurs respectant le format du schéma standard (pour les erreurs relati
 spécifiques). Utilisez le paramètre `issue` pour créer de telles erreurs de manière typée :
 
 ```js
+// @errors: 18046
 /// file: src/routes/shop/data.remote.js
+// @filename: ambient.d.ts
+declare module '$lib/server/database' {
+	export function buy(qty: number): Promise<void>
+}
+// @filename: index.js
+// ---cut---
 import * as v from 'valibot';
 import { invalid } from '@sveltejs/kit';
 import { form } from '$app/server';
@@ -1378,7 +1385,7 @@ message en implémentant le hook serveur
 [`App.Error`](errors#Type-safety) (qui est défini par défaut à `{ message: string }`) :
 
 ```js
-/// file: src/hooks.server.ts
+/// file: src/hooks.server.js
 /** @type {import('@sveltejs/kit').HandleValidationError} */
 export function handleValidationError({ event, issues }) {
 	return {
@@ -1410,13 +1417,25 @@ abstractions pour interagir avec des cookies, par exemple :
 
 ```ts
 /// file: user.remote.ts
+// @filename: ambient.d.ts
+interface User {
+	name: string;
+	avatar: string;
+}
+
+declare module '$lib/server/database' {
+	export function findUser(sessionId: string | undefined): Promise<User | null>;
+}
+
+// @filename: index.js
+// ---cut---
 import { getRequestEvent, query } from '$app/server';
 import { findUser } from '$lib/server/database';
 
 export const getProfile = query(async () => {
 	const user = await getUser();
 
-	return {
+	return user && {
 		name: user.name,
 		avatar: user.avatar
 	};

@@ -109,12 +109,13 @@ fonction de la langue de la page courante. Vous pouvez faire cela avec le [hook
 
 ```js
 /// file: src/hooks.server.js
-/**
- * @param {import('@sveltejs/kit').RequestEvent} event
- */
-function get_lang(event) {
+// @filename: utils.ts
+export function get_lang(event: import('@sveltejs/kit').RequestEvent) {
 	return 'en';
 }
+
+// @filename: hooks.server.js
+import { get_lang } from './utils';
 // ---cut---
 /** @type {import('@sveltejs/kit').Handle} */
 export function handle({ event, resolve }) {

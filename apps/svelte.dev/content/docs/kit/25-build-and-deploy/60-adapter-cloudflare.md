@@ -28,6 +28,7 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-cloudflare`, puis ajoute
 `svelte.config.js` :
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-cloudflare';
 

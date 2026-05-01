@@ -51,6 +51,21 @@ Vous pouvez maintenant écrire vos tests unitaires dans des fichiers `.js/.ts` :
 
 ```js
 /// file: multiplier.svelte.test.js
+// @filename: multiplier.svelte.ts
+export function multiplier(initial: number, k: number) {
+	let count = $state(initial);
+
+	return {
+		get value() {
+			return count * k;
+		},
+		set: (c: number) => {
+			count = c;
+		}
+	};
+}
+// @filename: multiplier.svelte.test.js
+// ---cut---
 import { flushSync } from 'svelte';
 import { expect, test } from 'vitest';
 import { multiplier } from './multiplier.svelte.js';
@@ -94,6 +109,16 @@ utiliser des runes au sein de vos tests tant que leur nom de fichier inclut `.sv
 
 ```js
 /// file: multiplier.svelte.test.js
+// @filename: multiplier.svelte.ts
+export function multiplier(getCount: () => number, k: number) {
+	return {
+		get value() {
+			return getCount() * k;
+		}
+	};
+}
+// @filename: multiplier.svelte.test.js
+// ---cut---
 import { flushSync } from 'svelte';
 import { expect, test } from 'vitest';
 import { multiplier } from './multiplier.svelte.js';
@@ -129,6 +154,10 @@ Si le code testé utilise des effets, vous aurez besoin de placer le test dans u
 
 ```js
 /// file: logger.svelte.test.js
+// @filename: logger.svelte.ts
+export function logger(fn: () => void) {}
+// @filename: logger.svelte.test.js
+// ---cut---
 import { flushSync } from 'svelte';
 import { expect, test } from 'vitest';
 import { logger } from './logger.svelte.js';
@@ -237,7 +266,7 @@ test('Component', () => {
 
 	// Clic sur le bouton, puis synchronisation des changements pour définir les attentes de manière
 	// synchrone
-	document.body.querySelector('button').click();
+	document.body.querySelector('button')?.click();
 	flushSync();
 
 	expect(document.body.innerHTML).toBe('<button>1</button>');
@@ -254,6 +283,7 @@ aider à industrialiser l'écriture de vos tests. Le test ci-dessus peut ainsi �
 ceci :
 
 ```js
+// @errors: 2339
 /// file: component.test.js
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';

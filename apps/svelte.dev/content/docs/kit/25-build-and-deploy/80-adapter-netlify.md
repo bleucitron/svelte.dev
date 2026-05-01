@@ -15,6 +15,7 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-netlify`, puis ajoutez-l
 `svelte.config.js` :
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-netlify';
 
@@ -72,6 +73,7 @@ site. Si l'option est définie à `false` (par défaut), le site sera déployé 
 basées sur Node.
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-netlify';
 

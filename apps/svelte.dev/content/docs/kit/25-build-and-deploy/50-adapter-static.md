@@ -17,6 +17,7 @@ Installez l'adaptateur avec `npm i -D @sveltejs/adapter-static`, puis ajoutez-le
 `svelte.config.js` :
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
@@ -70,6 +71,7 @@ Sur ces plateformes, vous devriez omettre les options d'adaptateur afin que l'ad
 `adapter-static` puisse fournir la configuration optimale :
 
 ```js
+// @errors: 2307
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
@@ -138,7 +140,7 @@ Vous allez également avoir besoin de générer une page `404.html` de secours p
 Voici une configuration possible pour Github Pages :
 
 ```js
-// @errors: 2322
+// @errors: 2307 2322
 /// file: svelte.config.js
 import adapter from '@sveltejs/adapter-static';
 
