@@ -210,12 +210,7 @@ serveur pour le mode production. En mode dev, vous pouvez ajouter des middleware
 un plugin Vite. Par exemple :
 
 ```js
-// @errors: 2322
-// @filename: ambient.d.ts
-declare module '@sveltejs/kit/vite'; // TODO this feels unnecessary, why can't it 'see' the declarations?
-
-// @filename: index.js
-// ---cut---
+/// file: vite.config.js
 import { sveltekit } from '@sveltejs/kit/vite';
 
 /** @type {import('vite').Plugin} */

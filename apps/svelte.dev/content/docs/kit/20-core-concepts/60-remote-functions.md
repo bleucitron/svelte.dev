@@ -332,6 +332,65 @@ export const getWeather = query.batch(v.string(), async (cityIds) => {
 {/if}
 ```
 
+## query.live
+
+`query.live` sert à accéder à des données en temps réel depuis le serveur. Elle fonctionne de la
+même manière que `query`, mais son callback — typiquement une [fonction
+génératrice](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/function*)
+asynchrone — renvoie un `AsyncIterable` :
+
+```js
+import { query } from '$app/server';
+
+export const getTime = query.live(async function* () {
+	while (true) {
+		yield new Date();
+		await new Promise((f) => setTimeout(f, 1000));
+	}
+});
+```
+
+Lors du rendu côté serveur, `await getTime()` renvoie la première valeur fournie par le générateur
+puis ferme l'itérateur. La valeur initiale est sérialisée et réutilisée lors de l'hydratation.
+
+Sur le client, la query restera connectée tant qu'elle sera activement utilisée dans un composant.
+Plusieurs instances partagent une même connexion. Lorsqu'il n'y a plus d'utilisations actives, le
+flux se déconnecte et l'itération côté serveur s'arrête.
+
+Les queries temps réel (_live queries_) exposent une propriété `connected` et une méthode
+`reconnect()` :
+
+```svelte
+<script>
+	import { getTime } from './time.remote.js';
+
+	const time = getTime();
+</script>
+
+<p>{await time}</p>
+<p>connectée : {time.connected}</p>
+<button onclick={() => time.reconnect()}>Reconnection</button>
+```
+
+Si la connexion s'arrête, `connected` devient `false`. SvelteKit essaiera de se reconnecter
+passivement, avec un délai exponentiel, et activement si `navigator.onLine` passe de `false` à
+`true`.
+
+À la différence de `query`, les live queries ne possèdent pas de méthode `.resfresh()`, car elles se
+mettent à jour toutes seules.
+
+Comme avec `query` et `query.batch`, exécutez `.run()` en dehors du rendu lorsque vous avez besoin
+d'un accès impératif. Pour les lives queries, `run()` renvoie une instance de
+`Promise<AsyncGenerator<T>>`.
+
+As with `query` and `query.batch`, call `.run()` outside render when you need imperative access. For
+live queries, `run()` returns a `Promise<AsyncGenerator<T>>`.
+
+> [!NOTE] Il est essentiel que vous ne cachiez pas les réponses des live queries dans un service
+> worker, puisque la réponse clonée continuerait à être streamée bien après la fermeture de la page.
+> Assurez-vous que votre logique de cache exclue toute réponse avec une en-tête `Cache-Control`
+> incluant `no-store`.
+
 ## form
 
 La fonction `form` facilite l'écriture de données sur le serveur. Elle prend un callback qui reçoit
@@ -1142,6 +1201,34 @@ getPost(post.id).set(result)` sur le serveur sait retrouver le `getPost(id)` cor
 client pour le mettre à jour. C'est le même fonctionnement pour `getPosts().refresh()` — il sait
 retrouver `getPosts()` sans argument sur le client.
 
+### Reconnecter les queries live dans les mutations [!VO]Reconnecting live queries in mutations
+
+Les mutations "single-flight" peuvent également se reconnecter aux instances de `query.live`. Dans
+un gestionnaire `form`/`command`, appelez `.reconnect()` sur la ressource de la query live à
+laquelle vous souhaitez vous reconnecter :
+
+```js
+import * as v from 'valibot';
+import { form, query } from '$app/server';
+
+export const getNotifications = query.live(v.string(), async function* (userId) {
+	while (true) {
+		yield await db.notifications(userId);
+		await wait(1000);
+	}
+});
+
+export const markAllRead = form(v.object({ userId: v.string() }), async ({ userId }) => {
+	// logique de mutation...
+	+++getNotifications(userId).reconnect();+++
+});
+```
+
+Ceci prévoit une reconnection des instances client actives correspondantes et les applique en tant
+que partie de la réponse à la mutation (c-à-d dans le même trajet que le résultat du formulaire/de
+la commande). Vous pourriez avoir besoin de ceci si, par exemple, la commande modifie un cookie que
+la query live a besoin de réinitialiser pour le capturer.
+
 ### Mises à jour pilotées par le client [!VO]Client-requested refreshes
 
 Malheureusement, la vie n'est pas toujours aussi simple que l'exemple précédent. Le serveur connaît
@@ -1416,7 +1503,7 @@ Dans une fonction `query`, `form` ou `command`, vous pouvez utiliser
 abstractions pour interagir avec des cookies, par exemple :
 
 ```ts
-/// file: user.remote.ts
+/// file: user.remote.js
 // @filename: ambient.d.ts
 interface User {
 	name: string;

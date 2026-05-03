@@ -106,7 +106,7 @@ générées. C'est en général `200.html`, mais peut varier en fonction de votr
 déploiement. Vous devriez éviter `index.html` lorsque c'est possible pour éviter de rentrer en
 conflit avec une éventuelle page d'accueil pré-rendue.
 
-> Cette option a un impact significatif sur les performances et le référencement de votre
+> [!NOTE] Cette option a un impact significatif sur les performances et le référencement de votre
 > application. Elle n'est recommandée que dans certaines circonstances telles que l'embarquement du
 > site dans une application mobile. Voir la section sur les [SPA](single-page-apps) pour plus de
 > détails et en apprendre plus sur les alternatives.

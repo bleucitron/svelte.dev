@@ -36,7 +36,7 @@ documentation complète.
 
 ```dts
 function command<Output>(
-	fn: () => Output
+	fn: () => MaybePromise<Output>
 ): RemoteCommand<void, Output>;
 ```
 
@@ -47,7 +47,7 @@ function command<Output>(
 ```dts
 function command<Input, Output>(
 	validate: 'unchecked',
-	fn: (arg: Input) => Output
+	fn: (arg: Input) => MaybePromise<Output>
 ): RemoteCommand<Input, Output>;
 ```
 
@@ -58,7 +58,9 @@ function command<Input, Output>(
 ```dts
 function command<Schema extends StandardSchemaV1, Output>(
 	validate: Schema,
-	fn: (arg: StandardSchemaV1.InferOutput<Schema>) => Output
+	fn: (
+		arg: StandardSchemaV1.InferOutput<Schema>
+	) => MaybePromise<Output>
 ): RemoteCommand<
 	StandardSchemaV1.InferInput<Schema>,
 	Output
@@ -340,13 +342,29 @@ import { requested } from '$app/server';
 await requested(getPost, 5).refreshAll();
 ```
 
+Fonctionne également avec `query.batch` — les mises-à-jour pour les entrées individuelles sont
+rassemblées dans un seul appel groupé.
+
+Vaut aussi pour les queries de temps réel (*live queries*), mais avec `reconnect` et `reconnectAll`.
+
 <div class="ts-block">
 
 ```dts
 function requested<Input, Output, Validated = Input>(
 	query: RemoteQueryFunction<Input, Output, Validated>,
 	limit: number
-): RequestedResult<Validated, Output>;
+): QueryRequestedResult<Validated, Output>;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function requested<Input, Output, Validated = Input>(
+	query: RemoteLiveQueryFunction<Input, Output, Validated>,
+	limit: number
+): LiveQueryRequestedResult<Validated, Output>;
 ```
 
 </div>
@@ -361,10 +379,10 @@ function requested<Input, Output, Validated = Input>(
 namespace query {
 	/**
 	 * Crée une fonction de requête groupée qui collecte plusieurs appels et les exécute dans une
-	 * seule requête
+	 * seule requête.
 	 *
 	 * Voir [Fonctions distantes](https://svelte.dev/docs/kit/remote-functions#query.batch) pour plus
-	 * d'infos
+	 * d'infos.
 	 *
 	 * @since 2.35
 	 */
@@ -376,10 +394,10 @@ namespace query {
 	): RemoteQueryFunction<Input, Output>;
 	/**
 	 * Crée une fonction de requête groupée qui collecte plusieurs appels et les exécute dans une
-	 * seule requête
+	 * seule requête.
 	 *
 	 * Voir [Fonctions distantes](https://svelte.dev/docs/kit/remote-functions#query.batch) pour plus
-	 * d'infos
+	 * d'infos.
 	 *
 	 * @since 2.35
 	 */
@@ -394,6 +412,37 @@ namespace query {
 			) => Output
 		>
 	): RemoteQueryFunction<
+		StandardSchemaV1.InferInput<Schema>,
+		Output,
+		StandardSchemaV1.InferOutput<Schema>
+	>;
+	/**
+	 * Crée une live query distante. Lorsqu'appelée depuis le navigateur, la fonction sera exécutée
+	 * sur le serveur via un appel `fetch` de streaming.
+	 *
+	 * Voir [Fonctions distantes](https://svelte.dev/docs/kit/remote-functions#query.live) pour plus
+	 * d'infos.
+	 *
+	 * */
+	function live<Output>(
+		fn: (
+			arg: void
+		) => RemoteLiveQueryUserFunctionReturnType<Output>
+	): RemoteLiveQueryFunction<void, Output>;
+
+	function live<Input, Output>(
+		validate: 'unchecked',
+		fn: (
+			arg: Input
+		) => RemoteLiveQueryUserFunctionReturnType<Output>
+	): RemoteLiveQueryFunction<Input, Output>;
+
+	function live<Schema extends StandardSchemaV1, Output>(
+		schema: Schema,
+		fn: (
+			arg: StandardSchemaV1.InferOutput<Schema>
+		) => RemoteLiveQueryUserFunctionReturnType<Output>
+	): RemoteLiveQueryFunction<
 		StandardSchemaV1.InferInput<Schema>,
 		Output,
 		StandardSchemaV1.InferOutput<Schema>
