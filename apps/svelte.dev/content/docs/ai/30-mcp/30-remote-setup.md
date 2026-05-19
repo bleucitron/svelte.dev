@@ -17,7 +17,7 @@ claude mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
 
 Vous pouvez choisir votre `scope` (doit être `user`, `project` ou `local`) et `name` favoris.
 
-If you prefer you can also install the `svelte` plugin in [the Svelte Claude Code Marketplace](plugin) that will give you both the remote server and useful [skills](skills).
+If you prefer you can also install the `svelte` plugin in [the Svelte Claude Code Marketplace](claude-plugin) that will give you both the remote server and useful [skills](skills).
 
 ## Claude Desktop
 
@@ -108,10 +108,12 @@ opencode mcp add
 
 ## Cursor
 
+Vous pouvez automatiquement configurer le serveur MCP en utilisant le [plugin Cursor](cursor-plugin)
+(recommandé). Si vous préférez configurer le serveur MCP manuellement, vous pouvez :
+
 - Ouvrez la palette de commande
 - Sélectionnez "View: Open MCP Settings"
 - Cliquez sur "Add custom MCP"
-
 
 Cela ouvrira un fichier contenant vos serveurs MCP, à l'intérieur duquel vous pouvez ajouter la
 configuration suivante :

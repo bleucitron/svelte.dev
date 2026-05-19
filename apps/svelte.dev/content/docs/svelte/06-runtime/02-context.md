@@ -176,6 +176,9 @@ vous "casserez le lien" — en d'autres termes, plutôt que ceci...
 
 Svelte vous avertira si vous vous trompez.
 
+De même, pour passer des valeurs primitives à travers le contexte, utilisez des fonctions comme
+décrit dans [Passer de l'état à des fonctions]($state#Passing-state-into-functions).
+
 ## Component testing
 
 Lorsque vous écrivez des [tests de
