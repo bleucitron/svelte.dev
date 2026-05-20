@@ -955,10 +955,10 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 
 <h1>Créer un nouvel article</h1>
 
-<form {...createPost.enhance(async ({ form, data, submit }) => {
+<form {...createPost.enhance(async (form) => {
 	try {
-		if (await submit()) {
-			form.reset();
+		if (await form.submit()) {
+			form.element.reset();
 
 			showToast('Publié avec succès !');
 		} else {
@@ -973,9 +973,11 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 ```
 
 > Lorsque vous utilisez `enhance`, le `<form>` n'est pas automatiquement réinitialisé — vous devez
-> appeler `form.reset()` si vous souhaitez nettoyer les inputs.
+> appeler `form.element.reset()` si vous souhaitez nettoyer les inputs.
 
-Le callback reçoit l'élément `form`, la `data` qu'il contient, et une fonction `submit`.
+Le callback reçoit une copie de l'instance de formulaire. Elle possède les mêmes propriétés et
+méthodes à l'exception de `enhance`, et `form.submit()` effectue la soumission directement sans
+ré-exécuter le callback `enhance`. Au sein du callback, `form.element` est toujours définie.
 
 ### Instances multiples de formulaire [!VO]Multiple instances of a form
 

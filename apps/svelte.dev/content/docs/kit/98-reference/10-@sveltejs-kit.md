@@ -2623,17 +2623,24 @@ type RemoteForm<
 	method: 'POST';
 	/** L'URL à laquelle envoyer le formulaire. */
 	action: string;
+	/** L'élément `<form>` auquel cette instance est actuellement attaché, s'il existe. */
+	get element(): HTMLFormElement | null;
+	/** Soumet programmatiquement le formulaire actuellement attaché */
+	submit(): Promise<boolean> & {
+		updates: (
+			...updates: RemoteQueryUpdate[]
+		) => Promise<boolean>;
+	};
 	/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
 	enhance(
-		callback: (opts: {
-			form: HTMLFormElement;
-			data: Input;
-			submit: () => Promise<boolean> & {
-				updates: (
-					...updates: RemoteQueryUpdate[]
-				) => Promise<boolean>;
-			};
-		}) => MaybePromise<void>
+		callback: (
+			form: Omit<
+				RemoteForm<Input, Output>,
+				'enhance' | 'element'
+			> & {
+				readonly element: HTMLFormElement;
+			}
+		) => MaybePromise<void>
 	): {
 		method: 'POST';
 		action: string;
@@ -2918,9 +2925,9 @@ type RemoteQuery<T> = RemoteResource<T> & {
 	 *   const todos = getTodos();
 	 * </script>
 	 *
-	 * <form {...addTodo.enhance(async ({ data, submit }) => {
-	 *   await submit().updates(
-	 *     todos.withOverride((todos) => [...todos, { text: data.get('text') }])
+	 * <form {...addTodo.enhance(async (form) => {
+	 *   await form.submit().updates(
+	 *     todos.withOverride((todos) => [...todos, { text: form.fields.text.value() }])
 	 *   );
 	 * })}>
 	 *   <input type="text" name="text" />
