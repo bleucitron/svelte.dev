@@ -96,7 +96,7 @@ peut engendrer des problèmes d'usage pour les personnes non-voyantes comme mal-
 ### a11y_click_events_have_key_events
 
 ```
-Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+Visible, non-interactive element `<%element%>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
 ```
 
 S'assure que les éléments visibles et non interactifs qui possèdent un gestionnaire d'évènement
