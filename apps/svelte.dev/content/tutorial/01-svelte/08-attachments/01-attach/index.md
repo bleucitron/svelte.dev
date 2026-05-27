@@ -1,20 +1,26 @@
 ---
-title: The attach tag
+title: La balise attach
 tags: attachments
 ---
 
-Attachments are essentially element-level lifecycle functions. They're useful for things like:
+Les attachements sont essentiellement des fonctions de cycle agissant au niveau de l'élément. Ils
+sont utiles pour des choses comme :
 
-- interfacing with third-party libraries
-- lazy-loaded images
-- tooltips
-- adding custom event handlers
+- s'interfacer avec des librairies tierces
+- charger des images en différé ("lazy-loading")
+- afficher des tooltips
+- ajouter des gestionnaires d'évènements personnalisés
 
-In this app, you can scribble on the `<canvas>`, and change colours and brush size via the menu. But if you open the menu and cycle through the options with the Tab key, you'll soon find that the focus isn't _trapped_ inside the modal.
+Dans cette application, vous pouvez gribouiller sur le `<canvas>`, et changer les couleurs et la
+taille du pinceau via le menu. Mais si vous ouvrez le menu et parcourez les options avec la touche
+Tab, vous constaterez que le focus n'est pas _piégé_ au sein de la modale.
 
-> [!NOTE] Safari only focuses text fields and pop-up menus with the Tab key by default. To follow this exercise in Safari, use Option + Tab or enable Tab to highlight in Safari's advanced settings.
+> [!NOTE] Safari ne fournit le focus avec la touche Tab qu'aux champs textes et aux menus pop-up, et
+> ce par défaut. Pour suivre cet exercice dans Safari, utilisez Option + Tab ou activer l'option
+> permettant d'utiliser Tab pour focaliser dans les options avancées de Safari.
 
-We can fix that with an attachment. Import `trapFocus` from `attachments.svelte.js`...
+Nous pouvons corriger cela avec un attachement. Importer `trapFocus` depuis
+`attachments.svelte.js`...
 
 ```svelte
 /// file: App.svelte
@@ -30,16 +36,20 @@ We can fix that with an attachment. Import `trapFocus` from `attachments.svelte.
 </script>
 ```
 
-...then add it to the menu with the `{@attach}` tag:
+... puis ajoutez-le au menu avec la balise `{@attach}` :
 
 ```svelte
 /// file: App.svelte
 <div class="menu" +++{@attach trapFocus}+++>
 ```
 
-Let's take a look at the `trapFocus` function in `attachments.svelte.js`. An attachment function is called with a `node` — the `<div class="menu">` in our case — when the node is mounted to the DOM. Attachments run inside an [effect](effects), so they re-run whenever any state read inside the function changes.
+Jetons un coup d'oeil à la fonction `trapFocus` dans le fichie `attachments.svelte.js`. Une fonction
+d'attachement est exécutée avec un `node` — l'élément `<div class="menu">` dans notre cas — lorsque
+le noeud est monté dans le DOM. Les attachements sont exécutés dans des [effets](effects), et sont
+donc ré-exécutés à chaque fois qu'un état lu dans la fonction est mis à jour.
 
-First, we need to add an event listener that intercepts Tab key presses:
+D'abord, nous avons besoin d'ajouter un gestionnaire d'évènement qui intercepte les utilisations de
+la touche Tab :
 
 ```js
 /// file: attachments.svelte.js
@@ -47,9 +57,15 @@ focusable()[0]?.focus();
 +++const off = on(node, 'keydown', handleKeydown);+++
 ```
 
-> [!NOTE] [`on`](/docs/svelte/svelte-events#on) is a wrapper around `addEventListener` that uses <a href="/docs/svelte/basic-markup#Events-Event-delegation">event delegation</a>. It returns a function that removes the handler.
+> [!NOTE] [`on`](/docs/svelte/svelte-events#on) est une surcouche par-dessus `addEventListener` qui
+> utilise la <a href="/docs/svelte/basic-markup#Events-Event-delegation">délégation
+> d'évènements</a>. Elle renvoie une fonction qui supprime ce gestionnaire.
 
-Second, we need to do some cleanup when the node is unmounted — removing the event listener, and restoring focus to where it was before the element mounted. As with effects, an attachment can return a teardown function, which runs immediately before the attachment re-runs or after the element is removed from the DOM:
+Puis, nous devons faire un peu de nettoyage lorsque le noeud est démonté — supprimer le gestionnaire
+d'évènements, et rétablir le focus à l'endroit où il se trouvait avant le montage de l'élément.
+Comme pour les effets, un attachement peut renvoyer une fonction de nettoyage, qui sera exécutée
+immédiatement avant que l'attachement ne soit ré-exécuté, ou après que l'élément ne soit supprimé du
+DOM :
 
 ```js
 /// file: attachments.svelte.js
@@ -62,4 +78,5 @@ const off = on(node, 'keydown', handleKeydown);
 };+++
 ```
 
-Now, when you open the menu, you can cycle through the options with the Tab key.
+Désormais, lorsque vous ouvrez le menu, vous pouvez parcourir en boucle les options avec la touche
+Tab.
