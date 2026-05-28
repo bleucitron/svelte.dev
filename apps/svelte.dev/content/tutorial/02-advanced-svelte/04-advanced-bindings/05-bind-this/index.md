@@ -25,7 +25,7 @@ La rune `$effect` de cet exercice essaye de créer un contexte de canvas, mais `
 
 ```svelte
 /// file: App.svelte
-<canvas +++bind:this={canvas}+++ width={32} height={32}></canvas>
+<canvas +++bind:this={canvas}+++></canvas>
 ```
 
 Notez que la valeur de `canvas` restera `undefined` tant que le composant n'a pas été monté — en

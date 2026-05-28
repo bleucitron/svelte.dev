@@ -1,19 +1,23 @@
 <script>
-	import { navigating } from '$app/state';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 
 	let { children } = $props();
 
 	let previous = $state();
 	let start = $state();
-	let end = $state();
+	let duration = $state();
 
-	$effect(() => {
-		if (navigating.to) {
+	beforeNavigate(({ from, to }) => {
+		if (from && to?.url) {
 			start = Date.now();
-			end = null;
-			previous = { ...navigating };
-		} else {
-			end = Date.now();
+			duration = null;
+			previous = { from, to };
+		}
+	});
+
+	afterNavigate(() => {
+		if (previous) {
+			duration = Date.now() - start;
 		}
 	});
 </script>
@@ -26,7 +30,7 @@
 
 {@render children()}
 
-{#if previous && end}
+{#if previous && duration !== null}
 	<p>la navigation de {previous.from.url.pathname} à {previous.to.url.pathname} a mis <strong>{end -
 		start} ms</strong></p>
 {/if}
