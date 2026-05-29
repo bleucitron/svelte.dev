@@ -109,6 +109,14 @@ Effect cannot be created inside a `$derived` value that was not itself created i
 `%rune%` can only be used inside an effect (e.g. during component initialisation)
 ```
 
+Les effets peuvent uniquement être créés lorsque un effet parent est en cours. Ceci signifie qu'ils
+ne peuvent pas, par exemple, être créés au sein d'un gestionnaire d'évènement ou après une
+expression `await` (à moins que le `await` ne se produise directement au sein de la balise
+`<script>` d'un composant, et non au sein d'une fonction asynchrone).
+
+Dans de très rares cas, il est approprié d'utiliser [`$effect.root`]($effect#$effect.root) afin de
+créer des effets en dehors du cycle de vie normal d'un composant.
+
 ### effect_pending_outside_reaction
 
 ```

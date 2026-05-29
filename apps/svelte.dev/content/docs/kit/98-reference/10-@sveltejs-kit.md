@@ -2830,21 +2830,15 @@ path: Array<string | number>;
 <div class="ts-block">
 
 ```dts
-type RemoteLiveQuery<T> = RemoteResource<T> & {
-	/**
-	 * Renvoie un itérateur asynchrone avec des mises à jour en temps réel.
-	 * Contrairement au fait d'attendre une ressource directement avec `await`, ceci peut uniquement
-	 * être utilisé _en dehors_ du rendu (c-à-d dans les fonctions `load`, les gestionnaires
-	 * d'évènement, et ainsi de suite)
-	 */
-	run(): AsyncGenerator<T>;
-	/** `true` si le flux de direct est actuellement connecté */
-	readonly connected: boolean;
-	/** `true` lorsque l'itérateur de flux de direct actuel a terminé */
-	readonly done: boolean;
-	/** Reconnecte le flux de direct immédiatement. */
-	reconnect(): Promise<void>;
-};
+type RemoteLiveQuery<T> = RemoteResource<T> &
+	AsyncIterable<T> & {
+		/** `true` si le flux live est actuellement connecté. */
+		readonly connected: boolean;
+		/** `true` une fois que l'itérateur du flux live actuel est épuisé. */
+		readonly done: boolean;
+		/** Reconnecte le flux live immédiatement. */
+		reconnect(): Promise<void>;
+	};
 ```
 
 </div>
@@ -2894,13 +2888,6 @@ type RemotePrerenderFunction<Input, Output> = (
 ```dts
 type RemoteQuery<T> = RemoteResource<T> & {
 	/**
-	 * Renvoie une promesse brute avec son résultat.
-	 * À la différence d'attendre la ressource directement, cette méthode ne peut être utilisée qu'_en
-	 * dehors_ du rendu (c-à-d dans les fonctions load, les gestionnaires d'évènements etc.)
-	 */
-	run(): Promise<T>;
-	/**
-	 * Sur le client, cette fonction va mettre à jour la valeur de la query sans la re-requêter.
 	 *
 	 * Sur le serveur, cette fonction peut être appelée dans le contexte d'une `command` ou d'un `form`
 	 * et les données fournies vont accompagner la réponse de l'action renvoyée au client.

@@ -5,6 +5,9 @@ title: {@const ...}
 
 La balise `{@const ...}` définit une constante locale.
 
+> [!NOTE] `{@const x = y}` est une syntaxe dépréciée — utilisez plutôt [`{const x =
+> $derived(y)}`](declaration-tags)
+
 ```svelte
 {#each boxes as box}
 	{@const area = box.width * box.height}

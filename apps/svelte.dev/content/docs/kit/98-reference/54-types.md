@@ -11,11 +11,13 @@ typer l'objet `params`. Par exemple, ce endpoint attend les paramètres `foo`, `
 ```js
 /// file: src/routes/[foo]/[bar]/[baz]/+server.js
 // @errors: 2355 2322 1360
-/** @type {import('@sveltejs/kit').RequestHandler<{
-    foo: string;
-    bar: string;
-    baz: string
-  }>} */
+/**
+ * @type {import('@sveltejs/kit').RequestHandler<{
+ *   foo: string;
+ *   bar: string;
+ *   baz: string
+ * }>}
+ */
 export async function GET({ params }) {
 	// ...
 }

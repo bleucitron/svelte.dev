@@ -344,7 +344,14 @@ namespace AST {
 		};
 	}
 
+	/** A `{let ...}` or `{const ...}` tag */
+	export interface DeclarationTag extends BaseNode {
+		type: 'DeclarationTag';
+		declaration: VariableDeclaration;
+	}
+
 	/** Une balise `{@debug ...}` */
+	/** A `{@debug ...}` tag */
 	export interface DebugTag extends BaseNode {
 		type: 'DebugTag';
 		identifiers: Identifier[];
@@ -675,6 +682,7 @@ namespace AST {
 	export type Tag =
 		| AST.AttachTag
 		| AST.ConstTag
+		| AST.DeclarationTag
 		| AST.DebugTag
 		| AST.ExpressionTag
 		| AST.HtmlTag

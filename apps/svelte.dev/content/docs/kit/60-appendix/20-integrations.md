@@ -14,12 +14,12 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: [
-    vitePreprocess({
-      style: true,      // valeur par défaut
-      script: false     // valeur par défaut
-    })
-  ]
+	preprocess: [
+		vitePreprocess({
+			style: true,      // valeur par défaut
+			script: false     // valeur par défaut
+		})
+	]
 };
 
 export default config;

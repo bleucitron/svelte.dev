@@ -174,10 +174,11 @@ remplir l'attribut `srcset`.
 La plus petite image générée automatiquement aura une largeur de 540px. Si vous souhaitez des images
 plus petites, ou si vous voulez préciser des largeurs personnalisées, vous pouvez le faire en
 utilisant le paramètre de requête `w` :
+
 ```svelte
 <enhanced:img
-  src="./image.png?w=1280;640;400"
-  sizes="(min-width:1920px) 1280px, (min-width:1080px) 640px, (min-width:768px) 400px"
+	src="./image.png?w=1280;640;400"
+	sizes="(min-width:1920px) 1280px, (min-width:1080px) 640px, (min-width:768px) 400px"
 />
 ```
 

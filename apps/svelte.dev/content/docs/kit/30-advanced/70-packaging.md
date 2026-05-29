@@ -221,10 +221,10 @@ tableau :
 ```json
 /// file: package.json
 {
-    "sideEffects": [
-    	"**/*.css",
-    	"./dist/sideEffectfulFile.js"
-    ]
+	"sideEffects": [
+		"**/*.css",
+		"./dist/sideEffectfulFile.js"
+	]
 }
 ```
 

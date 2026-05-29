@@ -8,7 +8,7 @@ interminable liste de blocs `{#if ...}`...
 ```svelte
 /// file: App.svelte
 {#if selected === 'h1'}
-	<h1>Je suis un élément <code>&lt;h1&gt;</code></h1>
+	<h1>Je suis un élément <code>&amp;lt;h1&amp;gt;</code></h1>
 {:else}
 	<p>TODO autres</p>
 {/if}
@@ -19,7 +19,7 @@ interminable liste de blocs `{#if ...}`...
 ```svelte
 /// file: App.svelte
 +++<svelte:element this={selected}>
-	Je suis un élément <code>&lt;{selected}&gt;</code>
+	Je suis un élément <code>&amp;lt;{selected}&amp;gt;</code>
 </svelte:element>+++
 ```
 

@@ -205,58 +205,30 @@ scopé à la requête pour que plusieurs invocations de la même requête ne pro
 le travail à faire. Sur le client, SvelteKit fait quelque chose de similaire : plusieurs invocations
 identiques d'une même query pointent toutes vers la même instance.
 
-Pour éviter les fuites de mémoire, l'instance est gardée en cache aussi longtemps qu'elle reste
-utilisée sur la page dans un _contexte réactif_, ce qui signifie qu'elle doit être créée dans un
-[`$derived`](../svelte/$derived), un [`$effect`](../svelte/$effect) ou un template de composant. En
-pratique, il est probable que vous rencontriez cette limitation dans des fonctions `load`
-universelles, les gestionnaires d'évènement, ou lorsque vous essayez d'accéder aux données d'une
-query lors de l'initialisation d'un module.
-
-Pour illustrer :
+Vous pouvez `await` une query dans n'importe quel contexte — composants, gestionnaires d'évènements,
+fonctions `load` universelles, callbacks asynchrones — et SvelteKit va dédupliquer en se servant de
+tout ce qui consomme la même query.
+Par exemple:
 
 ```svelte
 <script>
-  import { getData } from './data.remote.js';
+	import { getData } from './data.remote.js';
 
-	// cette instance est "ancrée" au contexte réactif de ce composant
-	const data = getData();
+  // attendue au sein du template de composants — remplit le cache
+  const data = getData();
 </script>
 
-<!--
-	Attendre `data` dans un contexte non réactif est valide, car `data` est ancrée
-	et sera nettoyée lors du démontage de ce composant.
--->
-<button onclick={async () => console.log(await data)}>
-	cliquez-moi !
-</button>
+<p>{await data}</p>
 
-<!--
-	Ceci va en revanche jeter une exception, car `getData` n'est ancrée à aucun contexte réactif.
--->
+<!-- ceci déduplique en se servant de l'usage "dans le composant" juste au-dessus ; aucune requête supplémentaire n'est effectuée -->
 <button onclick={async () => console.log(await getData())}>
-	ne cliquez pas sur moi !
+	cliquez-moi dessus !
 </button>
 ```
 
-Cette limitation ne s'applique que lors de l'accès aux _données_ de la query en l'attendant avec
-`await` ou lorsque vous essayez d'accéder à ses propriétés. Si vous n'avez besoin qu'un accès
-ponctuel aux données de la query, vous pouvez appeler `query.run` :
-
-```svelte
-<script>
-  import { getData } from './data.remote.js';
-</script>
-
-<!-- Ceci contourne le cache et exécute la query directement, renvoyant une bonne vieille Promise<T>
--->
-<button onclick={async () => console.log(await getData().run())}>
-	cliquez-moi !
-</button>
-```
-
-Vous pouvez toujours également appeler [`refresh`](#query-Refreshing-queries) et `set` dans des
-contextes non-réactifs. Si la query n'a pas de gestionnaire actif, elles vont toutes deux ne rien
-faire.
+Le cache est partagé tant que la query est activement utilisée — rendue dans un composant,
+actuellement attendue, ou autrement référencée. Dès que plus rien ne se sert de la query, la valeur
+cachée est libérée.
 
 ### Mettre les queries à jour [!VO]Refreshing queries
 
@@ -376,15 +348,41 @@ Si la connexion s'arrête, `connected` devient `false`. SvelteKit essaiera de se
 passivement, avec un délai exponentiel, et activement si `navigator.onLine` passe de `false` à
 `true`.
 
-À la différence de `query`, les live queries ne possèdent pas de méthode `.resfresh()`, car elles se
+À la différence de `query`, les live queries ne possèdent pas de méthode `.refresh()`, car elles se
 mettent à jour toutes seules.
 
-Comme avec `query` et `query.batch`, exécutez `.run()` en dehors du rendu lorsque vous avez besoin
-d'un accès impératif. Pour les lives queries, `run()` renvoie une instance de
-`Promise<AsyncGenerator<T>>`.
+Si vous avez besoin d'un accès direct et impératif au flux sous-jacent de valeurs (plutôt qu'à la
+propriété réactive `current`), les instances de query live sont elles-mêmes itérables de [manière
+asynchrone](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Statements/for-await...of).
+Vous pouvez utilisez `for await` directement sur l'instance :
 
-As with `query` and `query.batch`, call `.run()` outside render when you need imperative access. For
-live queries, `run()` returns a `Promise<AsyncGenerator<T>>`.
+```js
+// @filename: time.remote.ts
+import { RemoteLiveQueryFunction } from '@sveltejs/kit';
+export declare const getTime: RemoteLiveQueryFunction<undefined, Date>;
+// @errors: 2304
+// @filename: index.js
+import { getTime } from './time.remote.js';
+// ---cut---
+async function logTimes() {
+	for await (const value of getTime()) {
+		console.log(value);
+		if (someCondition) break;
+	}
+}
+```
+
+Plusieurs consommateurs de la même query live (qu'il soit réactif — via `await` ou `current` — ou
+que ce soit une boucle `for await` impérative) partagent une même connexion sous-jacente unique. La
+première valeur fournie à un itérateur `for await` est la valeur la plus récemment reçue, si une
+telle valeur est disponible, correspondant à la sémantique d'attendre une ressource directement. Les
+envois suivants sont déclenchés lorsqu'une nouvelle valeur arrive du serveur. Si des valeurs
+arrivent plus vite que le consommateur ne draine l'itérateur, seule la valeur en attente la plus
+récente est gardée — les flux live ne sont pas des logs d'évènements.
+
+De la même manière, sur le serveur, `for await` partage une itération requête par requête du
+générator sous-jacent, de sorte que les consommateurs concurrents au sein de la même requête
+n'exécutent pas le générateur défini par l'utilisateur ou utilisatrice plusieurs fois.
 
 > [!NOTE] Il est essentiel que vous ne cachiez pas les réponses des live queries dans un service
 > worker, puisque la réponse clonée continuerait à être streamée bien après la fermeture de la page.
