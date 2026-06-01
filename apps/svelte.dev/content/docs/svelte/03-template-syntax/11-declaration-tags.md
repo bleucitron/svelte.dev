@@ -22,6 +22,8 @@ ou `let` :
 ```
 <!-- codeblock:end -->
 
+> [!NOTE] Les balises de déclaration sont disponibles depuis la version 5.56 de Svelte.
+
 > [!NOTE] La syntaxe [`{@const ...}`](@const) est considérée comme dépréciée — utilisez plutôt les
 > balises de déclaration
 
