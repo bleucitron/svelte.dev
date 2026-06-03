@@ -119,7 +119,7 @@ Dans le cas où vous souhaitez uniquement afficher quelque chose `n` fois, vous 
 	.chess-board {
 		display: grid;
 		grid-template-columns: repeat(8, 1fr);
-		rows: repeat(8, 1fr);
+		grid-template-rows: repeat(8, 1fr);
 		border: 1px solid black;
 		aspect-ratio: 1;
 
