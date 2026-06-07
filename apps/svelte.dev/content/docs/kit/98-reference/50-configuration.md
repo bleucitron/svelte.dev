@@ -29,6 +29,45 @@ const config = {
 export default config;
 ```
 
+Depuis la version 2.62.0, vous pouvez également fournir votre configuration au plugin `sveltekit`
+dans votre configuration Vite, en même temps que vos options pour le compilateur Svelte :
+
+```js
+/// file: vite.config.js
+// @filename: ambient.d.ts
+declare module '@sveltejs/adapter-auto' {
+	const plugin: () => import('@sveltejs/kit').Adapter;
+	export default plugin;
+}
+
+// @filename: index.js
+// ---cut---
+import adapter from '@sveltejs/adapter-auto';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			compilerOptions: {
+				experimental: {
+					async: true
+				}
+			},
+			adapter: adapter(),
+			experimental: {
+				remoteFunctions: true
+			}
+		})
+	]
+});
+```
+
+> [!NOTE] Le namespace `kit` est au même niveau que les autres entrées de niveau racine ; c'est la
+> seule différence avec la structure du fichier `svelte.config.js`.
+
+Si la configuration est définie via le plugin, le fichier `svelte.config.js` est ignoré.
+
 ## Config
 
 Une extension des [options de
@@ -451,6 +490,27 @@ tout moment.
 
 <div class="ts-block-property-children">
 
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+explicitEnvironmentVariables?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v2.62.0
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non activer les variables d'environnement explicites utilisant `src/env.js` ou
+`src/env.ts`.
+
+</div>
+</div>
 <div class="ts-block-property">
 
 ```ts

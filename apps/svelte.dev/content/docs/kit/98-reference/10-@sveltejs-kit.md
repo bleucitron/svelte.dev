@@ -763,7 +763,7 @@ generateEnvModule: () => void;
 <div class="ts-block-property-details">
 
 Génère un module exposant les variables d'environnement de compilation en tant que
-`$env/dynamic/public`.
+`$env/dynamic/public` si l'application s'en sert.
 
 </div>
 </div>
@@ -1223,6 +1223,94 @@ platform?(details: { config: any; prerender: PrerenderOption }): MaybePromise<Ap
 
 Une fonction exécutée avec la `config` de la route courante ainsi que l'options `prerender` et
 renvoie un objet `App.Platform`
+
+</div>
+</div></div>
+
+## EnvVarConfig
+
+Les [variables d'environnement](/docs/kit/environment-variables) peuvent être configurées en
+exportant un objet `variables` depuis `src/env`, en utilisant
+[`defineEnvVars`](/docs/kit/@sveltejs-kit-hooks#defineEnvVars).
+
+<div class="ts-block">
+
+```dts
+interface EnvVarConfig<T> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+public?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non la variable d'environnement est rendue accessible au code côté client.
+- si `true`, elle peut être importée depuis `$app/env/public`
+- si `false`, elle peut être importée depuis `$app/env/private`, qui est un [module réservé au
+serveur](/docs/kit/server-only-modules)
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+static?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">default</span> `false`
+
+</div>
+
+Si la valeur est déterminée au moment de la compilation, ou lorsque l'application est exécutée.
+- si `true`, la valeur de compilation est inlinée dans le bundle. Cela permet des optimisations
+comme l'élimination de code mort
+- si `false`, la valeur est lue depuis l'environnement lorsque l'application démarre
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+schema?: StandardSchemaV1<string | undefined, T>;
+```
+
+<div class="ts-block-property-details">
+
+Un validateur de [Standard Schema](https://standardschema.dev/) appliqué à la valeur lorsque
+l'application démarre.
+Le validateur peut renvoyer n'importe quelle valeur — pas nécessairement une chaîne de caractères —
+mais les valeurs publiques non statiques doivent être sérialisables par
+[devalue](https://github.com/sveltejs/devalue) afin qu'elles puissent être envoyées au navigateur.
+
+Si aucun validateur n'est précisé, la valeur doit être une chaîne de caractères non vide.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+description?: string;
+```
+
+<div class="ts-block-property-details">
+
+Une description de la variable qui sera utilisée en tant que documentation lors du survol.
 
 </div>
 </div></div>

@@ -7,8 +7,26 @@ title: @sveltejs/kit/hooks
 
 ```js
 // @noErrors
-import { sequence } from '@sveltejs/kit/hooks';
+import { defineEnvVars, sequence } from '@sveltejs/kit/hooks';
 ```
+
+## defineEnvVars
+
+Un utilitaire permettant de définir des [variables
+d'environnement](/docs/kit/environment-variables), qui sont rendues disponibles via
+`$app/env/public` et `$app/env/private`.
+
+<div class="ts-block">
+
+```dts
+function defineEnvVars<
+	T extends Record<string, EnvVarConfig<any>>
+>(variables: T): T;
+```
+
+</div>
+
+
 
 ## sequence
 

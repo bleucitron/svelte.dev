@@ -39,7 +39,7 @@ Vous pouvez personnaliser le comportement en spécifiant l'une des valeurs suiva
 
 - `"hover"` (valeur par défaut sur desktop, `"tap"` sur mobile)
 - `"tap"` — commence le préchargement uniquement au "tap"
-- `"off"` — désactive le préchargement
+- `"false"` — désactive le préchargement
 
 Utiliser `data-sveltekit-preload-data` peut parfois entraîner des faux positifs — par ex. charger
 des données en anticipation d'une navigation qui ne se produit jamais — ce qui peut être
@@ -52,7 +52,7 @@ peut avoir les valeurs suivantes :
   viewport
 - `"hover"` (valeur par défaut) comme plus haut
 - `"tap"` — comme plus haut
-- `"off"` — comme plus haut
+- `"false"` — comme plus haut
 
 Vous pouvez aussi initier le préchargement programmatiquement avec `preloadCode` et `preloadData`
 importés depuis `$app/navigation` :

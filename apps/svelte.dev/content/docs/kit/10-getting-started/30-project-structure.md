@@ -64,9 +64,11 @@ composants qui ne seraient utilisés que pour une route spécifique
 	relatif à [`paths.base`](configuration#paths)
 	- `%sveltekit.nonce` — une règle [CSP](configuration#csp) nonce pour les liens et scripts
 	manuellement inclus, s'il y en a
-	- `%sveltekit.env.[NAME]%` — ceci sera remplacé au moment du rendu par la variable d'environnement
-		`[NAME]`, dont le nom doit être préfixé par [`publicPrefix`](configuration#env) (en général
-	`PUBLIC_`). Ce placeholder sera remplacé par `''` si aucune variable d'environnement ne correspond
+	- `%sveltekit.env.[NAME]%` — ceci sera remplacé au moment du rendu par la variable
+	d'environnement `[NAME]`, dont le nom doit être préfixé par [`publicPrefix`](configuration#env)
+	(en général `PUBLIC_`), ou être défini en tant que variable publique dans `src/env` si vous
+	utilisez [`experimental.explicitEnvironmentVariables`](environment-variables). Ce placeholder
+	sera remplacé par `''` si aucune variable d'environnement ne correspond
 	- `%sveltekit.version%` — la version de l'application, qui peut être spécifiée avec la configuration
 - `error.html` est la page qui est affichée lorsque tout le reste s'est effondré. Elle peut contenir
 	les placeholders suivants :

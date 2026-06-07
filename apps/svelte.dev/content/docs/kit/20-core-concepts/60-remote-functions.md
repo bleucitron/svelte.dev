@@ -1196,8 +1196,8 @@ export const updatePost = form(
 );
 ```
 
-Puisque les queries sont associées à des clés en fonction de leurs arguments, `await
-getPost(post.id).set(result)` sur le serveur sait retrouver le `getPost(id)` correspondant sur le
+Puisque les queries sont associées à des clés en fonction de leurs arguments,
+`getPost(post.id).set(result)` sur le serveur sait retrouver le `getPost(id)` correspondant sur le
 client pour le mettre à jour. C'est le même fonctionnement pour `getPosts().refresh()` — il sait
 retrouver `getPosts()` sans argument sur le client.
 

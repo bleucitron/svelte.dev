@@ -13,11 +13,15 @@ import { sveltekit } from '@sveltejs/kit/vite';
 ## sveltekit
 
 Renvoie les plugins Vite de SvelteKit.
+Depuis la version 2.62.0, vous pouvez directement fournir une [configuration](configuration), et
+dans ce cas, `svelte.config.js` est ignoré.
 
 <div class="ts-block">
 
 ```dts
-function sveltekit(): Promise<Plugin[]>;
+function sveltekit(
+	config?: KitConfig & Omit<SvelteConfig, 'onwarn'>
+): Promise<Plugin[]>;
 ```
 
 </div>
