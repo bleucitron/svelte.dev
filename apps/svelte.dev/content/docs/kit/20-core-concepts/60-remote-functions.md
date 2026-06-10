@@ -970,7 +970,7 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 </form>
 ```
 
-> Lorsque vous utilisez `enhance`, le `<form>` n'est pas automatiquement réinitialisé — vous devez
+> [!NOTE] Lorsque vous utilisez `enhance`, le `<form>` n'est pas automatiquement réinitialisé — vous devez
 > appeler `form.element.reset()` si vous souhaitez nettoyer les inputs.
 
 Le callback reçoit une copie de l'instance de formulaire. Elle possède les mêmes propriétés et

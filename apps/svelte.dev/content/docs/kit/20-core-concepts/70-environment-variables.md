@@ -26,7 +26,7 @@ application via les modules suivants :
 
 ## Variables d'environnement explicites [!VO]Explicit environment variables
 
-Depuis SvelteKit 2.62, vous pouvez activer les variables d'environnement _explicites_, ce qui vous
+Depuis SvelteKit 2.63, vous pouvez activer les variables d'environnement _explicites_, ce qui vous
 permet plutôt d'importer vos variables d'environnement depuis ces modules :
 
 - [`$app/env/private`]($app-env-private)
