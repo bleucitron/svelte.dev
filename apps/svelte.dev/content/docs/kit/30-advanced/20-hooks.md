@@ -47,6 +47,15 @@ export async function handle({ event, resolve }) {
 > [!NOTE] Les requêtes demandant des assets statiques — incluant les pages déjà prérendues — ne sont
 > _pas_ gérées par SvelteKit.
 
+Si le hook `handle` est exécutée en tant que partie d'une requête de fonction distante initiée par
+le client, `route`, `params` et `url` sont relatifs à la page depuis laquelle la fonction distante a
+été appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction distante. Ne les
+utilisez jamais pour déterminer si oui ou non un utilisateur ou utilisatrice est autorisée à accéder
+à certaines données, puisque ces valeurs font partie de la requête et peuvent donc être manipulées.
+les queries ne sont de plus pas ré-exécutées lorsque l'utilisateur ou l'utilisatrice navigue (à
+moins que l'argument de la query ait changé suite à une navigation), vous devriez donc être
+conscient•e de la façon dont vous utilisez ces valeurs.
+
 Si non implémentée, cette fonction vaut par défaut `({ event, resolve }) => resolve(event)`.
 
 Durant le prérendu, Svelte parcourt vos pages à la recherche de liens et rend chaque route qu'il

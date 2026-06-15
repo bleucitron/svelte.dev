@@ -158,7 +158,7 @@ import { defineEnvVars } from '@sveltejs/kit/hooks';
 export const variables = defineEnvVars({
 	GOOGLE_ANALYTICS_ID: {
 		public: true,
-		+++validate: v.pipe(v.string(), v.regex(/G-[A-Z0-9]+/))+++
+		+++schema: v.pipe(v.string(), v.regex(/G-[A-Z0-9]+/))+++
 	}
 });
 ```
@@ -169,7 +169,7 @@ Vous pouvez utiliser le validateurs pour rendre des valeurs optionnelles, ou les
 transformer une string en booléen, ou parser du JSON) — voir la documentation de votre librairie de
 validation pour en savoir plus.
 
-### Variables statique [!VO]Static variables
+### Variables statiques [!VO]Static variables
 
 Si une variable est configurée avec `static: true`, elle sera inlinée dans le code applicatif,
 permettant des optimisations telles que l'élimination de code mort :
@@ -185,7 +185,7 @@ export const variables = defineEnvVars({
 		+++static: true,+++
 
 		// transforme la valeur en true/false
-		validate: v.pipe(
+		schema: v.pipe(
 			v.optional(v.string(), ''),
 			v.transform((str) => str !== '')
 		)

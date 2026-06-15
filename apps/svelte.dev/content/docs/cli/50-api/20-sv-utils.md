@@ -249,6 +249,63 @@ configuration Vite, utilitaires SvelteKit
 - **`html.*`** - manipulation d'attributs
 - **`text.*`** - insertion de lignes dans les fichiers bruts (.env, .gitignore)
 
+## Configuration de Svelte [!VO]Svelte config
+
+La configuration de Svelte/kit peut se définir à deux endroits : directement fournie au plugin
+`sveltekit()` dans le fichier `vite.config.{js,ts}`, ou en tant qu'export par défaut dans un fichier
+séparé `svelte.config.{js,ts}`. Les projets créés par `sv` gardent leur configuration dans le
+fichier `vite.config.js` et ne fournissent pas de `svelte.config.js`.
+
+`svelteConfig` permet au add-ons de lire et de modifier cette configuration peu importe sa position
+— l'argument `sveltekit()` dans `vite.config.{js,ts}`, ou l'export par défaut
+`svelte.config.{js,ts}` — sans avoir besoin de la connaître.
+
+### `svelteConfig.edit`
+
+Vous gérez les options par nom, et l'utilitaire les écrit chacune au bon endroit, de sorte que vous
+n'avez pas besoin de gérer l'imbrication de `kit` vous-même. Les options se trouvant au niveau de
+Svelte (`compilerOptions`, `preprocess`, `extensions`, `vitePlugin`) se trouvent dans l'objet de
+configuration ; tout le reste (`adapter`, `alias`, `files`, `typescript`, …) est une option de
+SvelteKit, ce qui implique qu'elles sont aplaties dans l'argument de `sveltekit()` dans une
+configuration Vite, ou imbriqués sous `kit` dans un `svelte.config`.
+
+```js
+// @noErrors
+import { svelteConfig } from '@sveltejs/sv-utils';
+
+// dans le `run({ sv, cwd })` d'un add-on
+svelteConfig.edit({ sv, cwd }, ({ ast, property, override, js }) => {
+	// l'option du niveau svelte — récupère ou crée sa valeur, puis la mute sur place :
+	js.array.append(property('extensions', { fallback: js.array.create() }), '.svx');
+
+	// l'option kit — positionnée automatiquement, pas de gestion de l'étage `kit` :
+	js.imports.addDefault(ast, { from: '@sveltejs/adapter-node', as: 'adapter' });
+	override({
+		adapter: js.functions.createCall({ name: 'adapter', args: [], useIdentifiers: true })
+	});
+});
+```
+
+- **`property(name, { fallback })`** — récupère ou crée la valeur d'une option pour ensuite la muter
+sur place (tableaux, objets imbriqués).
+- **`override(props, { dropLeadingComments })`** — définit ou remplace des options
+`dropLeadingComments` supprime un commentaire considéré comme devenu inutile (par ex. la note sur
+adapter-auto lorsque vous changez d'adaptateur).
+
+Cette méthode écrit dans `sv.file`, de sorte que la modification est suivi comme n'importe quelle
+autre. Si le projet n'a aucun fichier de configuration, un `svelte.config.js` est créé.
+
+### `svelteConfig.find` / `svelteConfig.read`
+
+Les blocs de construction de plus bas niveau, les deux lisant des fichiers potentiels au travers
+d'un `read(path)` injecté (renvoie le contenu du fichier ou `null`) de sorte que la détection reste
+statique — la configuration n'est jamais exécutée :
+
+- **`svelteConfig.find(read)`** — renvoie `{ path, kind }` ou `null` (`kind` vaut `'vite'` ou
+`'svelte'`; `svelte.config` gagne lorsque les deux sont présents).
+- **`svelteConfig.read(read)`** — localise et parse en une passe, renvoyant `{ location, config, kit
+}` (les expressions de l'objet) ou `null`.
+
 ## Utilitaires de gestion de paquets [!VO]Package manager helpers
 
 ### `pnpm.allowBuilds`

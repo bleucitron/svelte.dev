@@ -230,6 +230,32 @@ les types qui sont disponibles sans avoir besoin de les importer explicitement.
 Le namespace `App` fait toujours partie de ce fichier. Ce namespace contient différents types qui
 influencent la forme de certaines fonctionnalités de SvelteKit avec lesquelles vous interagissez.
 
+Il est possible de dire à SvelteKit comment typer les objets au sein de votre application en
+déclarant le namespace `App`. Par défaut, un nouveau projet aura un fichier appelé `src/app.d.ts` et
+contenant ce qui suit :
+
+```ts
+declare global {
+	namespace App {
+		// interface Error {}
+		// interface Locals {}
+		// interface PageData {}
+		// interface PageState {}
+		// interface Platform {}
+	}
+}
+
+export {};
+```
+
+La ligne `export {}` existe car sinon, le fichier serait considéré comme un _module ambiant_, ce qui
+empêcherait d'y ajouter des déclarations d'`import`.
+Si vous avez besoin d'ajouter des déclaration ambiantes `declare module`, faites-le dans un fichier
+distinct comme par exemple `src/ambient.d.ts`.
+
+En remplissant ces interfaces, vous obtiendrez du typage lorsque vous utiliserez `event.locals`,
+`event.platform`, et les `data` venant des fonctions `load`.
+
 ## Error
 
 Définit la forme commune des erreurs prévues et imprévues. Les erreurs prévues sont jetées en

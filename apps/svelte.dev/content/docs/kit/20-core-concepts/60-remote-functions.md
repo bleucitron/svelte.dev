@@ -1542,11 +1542,12 @@ Notez que certaines propriétés de `RequestEvent` sont différentes au sein des
 - vous ne pouvez pas définir d'en-têtes (si ce n'est écrire dans des cookies, et uniquement dans des
 fonctions `form` et `command`)
 - `route`, `params` et `url` sont relatives à la page depuis laquelle la fonction distante a été
-appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction distante. Les queries ne
-sont pas ré-exécutées lorsque l'utilisateur ou l'utilisatrice navigue (à moins que l'argument de la
-query ait changé suite à une navigation), vous devriez donc être conscient•e de la façon dont vous
-utilisez ces valeurs. En particulier, ne les utilisez jamais pour déterminer si oui ou non une
-personne est autorisée à accéder à certaines données.
+appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction distante. Ne les utilisez
+jamais pour déterminer si oui ou non un utilisateur ou utilisatrice est autorisée à accéder à
+certaines données, puisque ces valeurs font partie de la requête et peuvent donc être manipulées.
+Les queries ne sont de plus pas ré-exécutées lorsque l'utilisateur ou l'utilisatrice navigue (à
+moins que l'argument de la query ait changé suite à une navigation), vous devriez donc être
+conscient•e de la façon dont vous utilisez ces valeurs.
 
 ## Redirections [!VO]Redirects
 

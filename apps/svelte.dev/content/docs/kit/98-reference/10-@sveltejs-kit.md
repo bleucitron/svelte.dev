@@ -3192,6 +3192,12 @@ params: Params;
 Les paramètres de la route courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
 string }`.
 
+Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
+page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
+crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
+ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
+requête et peuvent donc être manipulées.
+
 </div>
 </div>
 
@@ -3241,6 +3247,12 @@ id: RouteId;
 
 L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
 `/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
+
+Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
+page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
+crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
+ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
+requête et peuvent donc être manipulées.
 
 </div>
 </div></div>
@@ -3294,6 +3306,11 @@ url: URL;
 
 L'URL requêtée.
 
+Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
+page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
+crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
+ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
+requête et peuvent donc être manipulées.
 </div>
 </div>
 
