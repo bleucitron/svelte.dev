@@ -763,7 +763,7 @@ generateEnvModule: () => void;
 <div class="ts-block-property-details">
 
 Génère un module exposant les variables d'environnement de compilation en tant que
-`$env/dynamic/public` si l'application s'en sert.
+`$env/dynamic/public` ou `$app/env/public` si l'application s'en sert.
 
 </div>
 </div>
@@ -4274,7 +4274,10 @@ namespace Csp {
 		| 'unsafe-eval'
 		| 'unsafe-hashes'
 		| 'unsafe-inline'
+		| 'unsafe-allow-redirects'
+		| 'unsafe-webtransport-hashes'
 		| 'wasm-unsafe-eval'
+		| 'trusted-types-eval'
 		| 'none';
 	type CryptoSource =
 		`${'nonce' | 'sha256' | 'sha384' | 'sha512'}-${string}`;
@@ -4292,10 +4295,13 @@ namespace Csp {
 	type SchemeSource =
 		| 'http:'
 		| 'https:'
+		| 'ws:'
+		| 'wss:'
 		| 'data:'
 		| 'mediastream:'
 		| 'blob:'
-		| 'filesystem:';
+		| 'filesystem:'
+		| (`${string}:` & {});
 	type Source =
 		| HostSource
 		| SchemeSource

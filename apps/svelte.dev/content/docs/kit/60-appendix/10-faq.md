@@ -160,15 +160,15 @@ Enfin, vous pouvez également envisager d'utiliser un block `{#await}` :
 <script>
 	import { browser } from '$app/environment';
 
-	const ComponentConstructor = browser ?
-		import('some-browser-only-library').then((module) => module.Component) :
-		new Promise(() => {});
+	const promise = browser
+		? import('./BrowserComponent.svelte')
+		: import('./ServerComponent.svelte');
 </script>
 
-{#await ComponentConstructor}
+{#await promise}
 	<p>Chargement...</p>
-{:then component}
-	<svelte:component this={component} />
+{:then module}
+	<module.default />
 {:catch error}
 	<p>Quelque chose s'est mal passé : {error.message}</p>
 {/await}

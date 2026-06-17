@@ -163,7 +163,24 @@ export const variables = defineEnvVars({
 });
 ```
 
-Si une valeur est invalide, l'application échouera à se lancer (ou à compiler).
+Si une valeur est invalide, l'application échouera à se lancer (ou à compiler). Pour en désactiver
+une, utilisez l'export [`building`]($app-env#building) de `$app/env` en combinaison avec un
+validateur qui accepte une valeur optionnelle :
+
+
+```ts
+/// file: src/env.ts
+import { defineEnvVars } from '@sveltejs/kit/hooks';
++++import { building } from '$app/env'+++
+import * as v from 'valibot';
+
+export const variables = defineEnvVars({
+	SECRET: {
+		// optionnel lors de la compilation, mais requis au démarrage de l'application
+		+++schema: building ? v.optional(v.string()) : v.string()+++
+	}
+});
+```
 
 Vous pouvez utiliser le validateurs pour rendre des valeurs optionnelles, ou les transformer (comme
 transformer une string en booléen, ou parser du JSON) — voir la documentation de votre librairie de

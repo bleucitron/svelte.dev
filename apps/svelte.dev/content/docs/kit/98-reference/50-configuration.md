@@ -66,6 +66,11 @@ export default defineConfig({
 > [!NOTE] Le namespace `kit` est au même niveau que les autres entrées de niveau racine ; c'est la
 > seule différence avec la structure du fichier `svelte.config.js`.
 
+Toute option n'appartenant pas à SvelteKit est relayée via
+[`vite-plugin-svelte`](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md),
+afin que vous puissiez également définir ici des options comme `inspector`. Le namespace
+`experimental` est partagée — SvelteKit y lit ses propres options et relaie les autres.
+
 Si la configuration est définie via le plugin, le fichier `svelte.config.js` est ignoré.
 
 ## Config

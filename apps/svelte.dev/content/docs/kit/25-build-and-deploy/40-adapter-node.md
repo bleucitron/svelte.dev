@@ -382,3 +382,14 @@ app.listen(3000, () => {
 	console.log('écoute sur le port 3000');
 });
 ```
+
+> [!NOTE] Lorsque vous utilisez `handler.js` sur un serveur personnalisé, seules les variables
+> d'environnement lues par le "handler" lui-même sont ont de l'impact : `ORIGIN`,
+> `PROTOCOL_HEADER`, `HOST_HEADER`, `PORT_HEADER`, `ADDRESS_HEADER`, `XFF_DEPTH`, et
+> `BODY_SIZE_LIMIT`.
+>
+> Les variables de cycle de vie du serveur (`PORT`, `HOST`, `SOCKET_PATH`, `SHUTDOWN_TIMEOUT`,
+> `IDLE_TIMEOUT`, `KEEP_ALIVE_TIMEOUT`, `HEADERS_TIMEOUT`, `LISTEN_PID`, `LISTEN_FDS`) sont
+> seulement remplies par le serveur par défaut `node build`. Implémentez-les vous-même sur un
+> serveur personnalisé si vous avez besoin du même comportement — par exemple, le snippet ci-dessus
+> écoute sur un port `3000` défini en dur, indépendamment du `PORT`.
