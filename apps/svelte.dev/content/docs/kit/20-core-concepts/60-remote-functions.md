@@ -509,7 +509,9 @@ l'utilisatrice sans avoir besoin de tout ré-écrire), et de définir l'état
 
 Fournir un deuxième argument à `.as(...)` est utile lorsque vous créez un formulaire à partir de
 données existantes, comme un formulaire d'édition, ou plusieurs instances du formulaire avec
-[`for(...)`](#form-Multiple-instances-of-a-form). Les inputs `radio`, `submit`, et `hidden` ont
+[`for(...)`](#form-Multiple-instances-of-a-form). De même qu'il définit la valeur de l'élément
+lorsque celui-ci est rendu, il contrôle également la valeur de l'élément lorsque le formulaire est
+réinitialisé. Les inputs `radio`, `submit`, et `hidden` ont
 toujours besoin de cette valeur, et les inputs `checkbox` en ont besoin lorsqu'ils représentent une
 option parmi d'autres. Les inputs `file` ne peuvent pas être remplis de cette manière.
 
@@ -818,8 +820,10 @@ avec le formulaire, la valeur est automatiquement mise à jour :
 
 De plus, `createPost.fields` renvoie un objet `{ title, content }`.
 
-Vous pouvez mettre à jour un champ (ou une collection de champs) via la méthode `set(...)` :
-
+La `value()` d'un champ ne reflète _pas_ les valeurs par défaut fournies en second argument à `as`
+(comme dans `fields.title.as('text', '...')`) avant que le champ n'ait été modifié ou soumis. Vous
+pouvez mettre à jour programmatiquement un champ (ou une collection de champs) via la méthode
+`set(...)` :
 
 ```svelte
 <script>

@@ -1898,6 +1898,26 @@ interface NavigationBase {/*…*/}
 <div class="ts-block-property">
 
 ```dts
+type: NavigationType;
+```
+
+<div class="ts-block-property-details">
+
+Le type de navigation :
+- `enter`: L'application a été hydratée/démarrée
+- `form`: L'utilisateur ou utilisatrice a soumis un `<form method="GET">`
+- `goto`: La navigation a été déclenchée par un appel `goto(...)` ou une redirection
+- `leave`: L'application est en train d'être quittée à cause de la fermeture de l'onglet ou d'une
+navigation vers un document différent
+- `link`: La navigation a été déclenchée par un clic sur un lien
+- `popstate`: La navigation a été déclenchée par une navigation "précédent"/"suivant"
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
 from: NavigationTarget | null;
 ```
 
@@ -1952,6 +1972,8 @@ résolue.
 
 ## NavigationEnter
 
+La navigation qui se produit lorsque l'app démarre/s'hydrate
+
 <div class="ts-block">
 
 ```dts
@@ -1964,12 +1986,7 @@ interface NavigationEnter extends NavigationBase {/*…*/}
 type: 'enter';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `enter`: L'application a été hydratée/démarrée
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2077,6 +2094,8 @@ type NavigationExternal = NavigationGoto | NavigationLeave;
 
 ## NavigationFormSubmit
 
+Une navigation déclenchée par un `<form method="GET">`
+
 <div class="ts-block">
 
 ```dts
@@ -2089,12 +2108,7 @@ interface NavigationFormSubmit extends NavigationBase {/*…*/}
 type: 'form';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `form` : l'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2126,6 +2140,8 @@ arrière/en avant
 
 ## NavigationGoto
 
+Une navigation déclenchée par un appel `goto(...)` ou une redirection
+
 <div class="ts-block">
 
 ```dts
@@ -2138,12 +2154,7 @@ interface NavigationGoto extends NavigationBase {/*…*/}
 type: 'goto';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `goto`: La navigation a été déclenchée par un à `goto(...)` ou par une redirection
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2162,6 +2173,9 @@ avancer
 
 ## NavigationLeave
 
+Une navigation déclenchée par la fermeture de l'onglet, ou par une navigation vers un document
+différent
+
 <div class="ts-block">
 
 ```dts
@@ -2174,13 +2188,7 @@ interface NavigationLeave extends NavigationBase {/*…*/}
 type: 'leave';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `leave`: L'application est en train d'être fermée soit parce que l'onglet est en train d'être
-fermé, soit parce qu'une navigation vers un document différent est en train de se produire
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2199,6 +2207,8 @@ avancer
 
 ## NavigationLink
 
+Une navigation déclenchée par un click sur un lien
+
 <div class="ts-block">
 
 ```dts
@@ -2211,12 +2221,7 @@ interface NavigationLink extends NavigationBase {/*…*/}
 type: 'link';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `link` : la navigation a été déclenchée par un clic sur un lien
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2248,6 +2253,8 @@ arrière/en avant
 
 ## NavigationPopState
 
+Une navigation déclenchée par une navigation "précédent"/"suivant"
+
 <div class="ts-block">
 
 ```dts
@@ -2260,12 +2267,7 @@ interface NavigationPopState extends NavigationBase {/*…*/}
 type: 'popstate';
 ```
 
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `popstate` : la navigation a été déclenchée par une navigation précédent/suivant
-
-</div>
+<div class="ts-block-property-details"></div>
 </div>
 
 <div class="ts-block-property">
@@ -2390,10 +2392,10 @@ après la fin de la navigation.
 
 - `enter`: L'application a été hydratée/relancée
 - `form`: L'utilisateur ou l'utilisatrice a soumis un `<form method="GET">` avec une méthode GET
+- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
 - `leave`: L'utilisateur ou l'utilisatrice en train de quitter l'application en fermant l'onglet ou
 en utilisant les boutons précédent/suivant du navigateur pour aller sur un document différent
 - `link` : La navigation a été déclenchée par un clic sur un lien
-- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
 - `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
 navigateur
 
@@ -2881,7 +2883,7 @@ interface RemoteFormInput {/*…*/}
 <div class="ts-block-property">
 
 ```dts
-[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput>;
+[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput> | undefined;
 ```
 
 <div class="ts-block-property-details"></div>
@@ -4860,6 +4862,37 @@ type PrerenderHttpErrorHandlerValue =
 	| 'warn'
 	| 'ignore'
 	| PrerenderHttpErrorHandler;
+```
+
+</div>
+
+## PrerenderInvalidUrlHandler
+
+<div class="ts-block">
+
+```dts
+interface PrerenderInvalidUrlHandler {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+(details: { href: string; referrer: string | null; message: string }): void;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## PrerenderInvalidUrlHandlerValue
+
+<div class="ts-block">
+
+```dts
+type PrerenderInvalidUrlHandlerValue =
+	| 'fail'
+	| 'warn'
+	| 'ignore'
+	| PrerenderInvalidUrlHandler;
 ```
 
 </div>

@@ -55,11 +55,13 @@ parties de cette documentation traitant des fichiers `server`.
 ## MPA [!VO]Multi-page app
 
 SvelteKit n'est généralement pas utilisé pour construire des [applications multi-pages au sens
-traditionnel](glossary#MPA). Toutefois, SvelteKit vous permet de supprimer tout le code JavaScript
-d'une page avec [`csr = false`](page-options#csr), ce qui déclenchera le rendu des pages suivantes
-sur le serveur, ou bien vous pouvez utiliser
-[`data-sveltekit-reload`](link-options#data-sveltekit-reload) pour faire le rendu de liens
-spécifiques sur le serveur.
+traditionnel](glossary#MPA). Toutefois, vous pouvez utiliser
+[`data-sveltekit-reload`](link-options#data-sveltekit-reload) pour rendre tous les liens sur le
+serveur avec `<body data-sveltekit-reload>` ou uniquement des liens spécifiques en plaçant cet
+attribut à un endroit plus précis. Ceci ne supprime pas le routeur côté client, mais si vous n'avez
+pas besoin de JavaScript sur une page vous pouvez supprimer tout le JavaScript de la page avec [`csr
+= false`](page-options#csr), ce qui permettra également le rendu de tous les liens sur le serveur
+lors d'un clic sur le lien.
 
 ## Backend séparé [!VO]Separate backend
 
