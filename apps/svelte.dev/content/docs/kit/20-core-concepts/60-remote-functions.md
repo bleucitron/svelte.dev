@@ -52,8 +52,12 @@ externes peuvent également en fournir.
 
 ## query
 
-La fonction `query` vous permet de lire des données dynamiques depuis le serveur (pour les données
-_statiques_, envisagez plutôt l'utilisation de [`prerender`](#prerender)) :
+La fonction `query` vous permet de lire des données dynamiques depuis le serveur.
+
+> [!NOTE] Pour des données _statiques_, envisagez plutôt les fonctions [`prerender`](#prerender).
+> Les queries ne peuvent pas être utilisées lorsque la page entière est pré-rendue (ce qui veut dire
+> que [`export const prerender = true`](page-options#prerender) est appliquée à la page ou à un
+> layout parent), comme lorsque vous utilisez [`adapter-static`](adapter-static).
 
 ```js
 /// file: src/routes/blog/data.remote.js
@@ -1374,9 +1378,6 @@ Dans le navigateur, les données pré-rendues sont sauvegardées en utilisant l'
 [`Cache`](https://developer.mozilla.org/fr/docs/Web/API/Cache). Ce cache survit aux rechargements de
 page, et sera nettoyé lorsque l'utilisateur ou l'utilisatrice visitera pour la première fois une
 nouveau déploiement de votre application.
-
-> [!NOTE] Lorsque la page entière a `export const prerender = true`, vous ne pouvez pas utiliser de
-> queries, puisqu'elles sont dynamiques.
 
 ### Arguments de prerender [!VO]Prerender arguments
 

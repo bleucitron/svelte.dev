@@ -59,16 +59,20 @@ Alternatively, create or edit `~/.copilot/mcp-config.json` and add the following
 }
 ```
 
-## Gemini CLI
+## Antigravity CLI
 
-Pour inclure la version distante du MCP dans le CLI de Gemini, lancer simplement la commande
-suivante :
+Pour utiliser la version distante du MCP dans le CLI d'Antigravity, créez ou modifiez le fichier
+`~/.gemini/config/mcp_config.json` et ajoutez-y la configuration suivante :
 
-```bash
-gemini mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
+```json
+{
+	"mcpServers": {
+		"svelte": {
+			"url": "https://mcp.svelte.dev/mcp"
+		}
+	}
+}
 ```
-
-Le `[scope]` doit être `user` ou `project`.
 
 ## OpenCode
 

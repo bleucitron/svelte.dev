@@ -317,15 +317,18 @@ function read(asset: string): Response;
 
 ## requested
 
-Dans le contexte d'une requête distante via `command` ou `form`, renvoie un itérable d'entrées `{
-arg, query }` pour les mises-à-jour demandées par le client, jusqu'à la limite fournie. Chaque
-`query` est une `RemoteQuery` liée à la clé de cache originale côté client, afin que les appels
-`refresh()` / `set()` se propagent correctement même lorsque le schéma de la query transforme les
-entrées. `arg` est l'argument *validé*, c-à-d la valeur après que le schéma ait tourné (donc
-`InferOutput<Schema>` pour les queries déclarées avec un Standard Schema).
+Au sein du callback d'une fonction distante `command` ou `form`, renvoie un itérable d'entrées `{
+arg, query }` pour les instances de la query dont le client a demandée la mise à jour, jusqu'à la
+limite fournie. Chaque `query` est une `RemoteQuery` liée à la clé de cache originale côté client,
+afin que les appels `refresh()` / `set()` se propagent correctement même lorsque le schéma de la
+query transforme les entrées. `arg` est l'argument *validé*, c-à-d la valeur après que le schéma ait
+tourné (donc `InferOutput<Schema>` pour les queries déclarées avec un Standard Schema).
 
 Les arguments échouant la validation ou dépassent la limite sont enregistrés comme des échecs dans
 la réponse au client.
+Voir le chapitre [Mises à jour demandées par le
+client](/docs/kit/remote-functions#Single-flight-mutations-Client-requested-refreshes) pour son
+usage au sein d'une fonction distante `command` ou `form`.
 
 ```ts
 import { requested } from '$app/server';

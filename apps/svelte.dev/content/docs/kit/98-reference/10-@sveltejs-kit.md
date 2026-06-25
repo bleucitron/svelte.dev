@@ -2723,14 +2723,7 @@ type RemoteForm<
 	};
 	/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
 	enhance(
-		callback: (
-			form: Omit<
-				RemoteForm<Input, Output>,
-				'enhance' | 'element'
-			> & {
-				readonly element: HTMLFormElement;
-			}
-		) => MaybePromise<void>
+		callback: RemoteFormEnhanceCallback<Input, Output>
 	): {
 		method: 'POST';
 		action: string;
@@ -2770,6 +2763,47 @@ type RemoteForm<
 	get pending(): number;
 	/** Accédez aux champs de formulaire en utilisant la notation objet */
 	fields: RemoteFormFieldsRoot<Input>;
+};
+```
+
+</div>
+
+## RemoteFormEnhanceCallback
+
+Le callback fourni à la méthode `enhance` d'une fonction distante. Voir le chapitre [Fonctions
+	distantes](/docs/kit/remote-functions#form) pour la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceCallback<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = (
+	form: RemoteFormEnhanceInstance<Input, Output>
+) => MaybePromise<void>;
+```
+
+</div>
+
+## RemoteFormEnhanceInstance
+
+L'instance de formulaire telle que reçue dans callback `enhance`. Voir le chapitre [Fonctions
+	distantes](/docs/kit/remote-functions#form) pour la documentation complète.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceInstance<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = Omit<
+	RemoteForm<Input, Output>,
+	'enhance' | 'element'
+> & {
+	readonly element: HTMLFormElement;
 };
 ```
 

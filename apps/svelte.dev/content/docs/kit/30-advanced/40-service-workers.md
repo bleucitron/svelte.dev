@@ -12,18 +12,6 @@ les service workers pour accélérer la navigation en pré-cachant vos JS et CSS
 Dans SvelteKit, si vous avez un fichier `src/service-worker.js` (ou `src/service-worker/index.js`),
 celui-ci sera compilé et automatiquement activé.
 
-Vous pouvez [désactiver l'activation automatique](configuration#serviceWorker) si vous avez besoin
-d'activer le service worker selon votre propre logique ou si vous souhaitez utiliser une autre
-solution. L'activation par défaut ressemble à quelque chose comme ça :
-
-```js
-if ('serviceWorker' in navigator) {
-	addEventListener('load', function () {
-		navigator.serviceWorker.register('./path/to/service-worker.js');
-	});
-}
-```
-
 ## Au sein du service worker [!VO]Inside the service worker
 
 Au sein du service worker vous avez accès au [module `$service-worker`]($service-worker), qui
@@ -67,7 +55,6 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-	// Create a new cache and add all files to it
 	// Crée un nouveau cache et y ajoute tous les fichiers
 	async function addFilesToCache() {
 		const cache = await caches.open(CACHE);
@@ -144,23 +131,27 @@ self.addEventListener('fetch', (event) => {
 > vont vider le cache s'il remplit trop, vous devriez également faire attention lorsque vous mettez
 > en cache des assets de grande taille comme des fichiers vidéo.
 
-## Lors du développement [!VO]During development
+> [!NOTE] `build` et `prerendered` sont des tableaux vides lors du développement.
 
-Le service worker est compilé pour la production, mais pas lors du développement. Pour cette raison,
-seuls les navigateurs supportant les [modules au sein des service
-workers](https://web.dev/es-modules-in-sw) seront capables de les utiliser lors du développement. Si
-vous activez manuellement votre service worker, vous aurez besoin de fournir l'option `{ type:
-'module' }` en mode développement :
+## Activation manuelle [!VO]Manual registration
+
+Vous pouvez [désactiver l'activation automatique](configuration#serviceWorker) si vous avez besoin
+de définir le service worker avec votre propre logique. La définition par défaut ressemble à quelque
+chose comme ça :
 
 ```js
 import { dev } from '$app/environment';
 
-navigator.serviceWorker.register('/service-worker.js', {
-	type: dev ? 'module' : 'classic'
-});
+if ('serviceWorker' in navigator) {
+	addEventListener('load', function () {
+		navigator.serviceWorker.register('./path/to/service-worker.js', {
+			type: dev ? 'module' : 'classic'
+		});
+	});
+}
 ```
 
-> [!NOTE] `build` et `prerendered` sont des tableaux vides lors du développement.
+> [!NOTE] Le service worker est compilé pour la production, mais pas lors du développement.
 
 ## Autres solutions [!VO]Other solutions
 
