@@ -26,13 +26,13 @@ Chemin vers la racine de votre projet Svelte(Kit).
 
 ### `--no-git-check`
 
-Même si certains fichiers sont sales, aucun prompt ne sera affiché.
+Ne pas avertir des changements non enregistrés.
 
 ### `--no-download-check`
 
-Ignore toutes les demandes de confirmation de téléchargement.
+Ne pas avertir à propos des téléchargements d'add-ons communautaires.
 
-> [!IMPORTANT] Les mainteneurs de Svelte ne vérifient pas le code des add-ons communautaires.
+> [!NOTE] Les mainteneurs de Svelte ne vérifient pas le code des add-ons communautaires !
 > Utiliser avec précaution.
 
 ### `--install <package-manager>`
@@ -47,7 +47,7 @@ Installe les dépendances avec le gestionnaire de paquets spécifié :
 
 ### `--no-install`
 
-Empêche l'installation de dépendances.
+Ne demande pas d'installer des dépendances.
 
 ## Add-ons officiels [!VO]Official add-ons
 

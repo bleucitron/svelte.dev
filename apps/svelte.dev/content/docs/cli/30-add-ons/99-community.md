@@ -181,7 +181,7 @@ Votre add-on doit avoir `sv` comme dépendance-paire et **aucune** dépendance d
 		// la version minimum requise pour exécuter cet add-on
 		"sv": "^0.13.0"
 	},
-	// Ajoutez le mot-clé "sv-add" afin que les gens puissent trouver votre add-on
+	// Ajoutez le mot-clé "sv-add" afin que les gens puissent trouver votre add-on avec https://www.npmx.dev/search?q=keyword:sv-add
 	"keywords": ["sv-add", "svelte", "sveltekit"]
 }
 ```
