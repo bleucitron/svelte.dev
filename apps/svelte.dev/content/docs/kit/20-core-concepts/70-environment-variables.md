@@ -188,8 +188,9 @@ validation pour en savoir plus.
 
 ### Variables statiques [!VO]Static variables
 
-Si une variable est configurée avec `static: true`, elle sera inlinée dans le code applicatif,
-permettant des optimisations telles que l'élimination de code mort :
+Par défaut, les variables sont dynamiques. Si une variable est configurée avec `static: true`, elle
+sera inlinée dans le code applicatif, permettant des optimisations telles que l'élimination de code
+mort :
 
 ```ts
 /// file: src/env.ts

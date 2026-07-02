@@ -2761,6 +2761,8 @@ type RemoteForm<
 	get result(): Output | undefined;
 	/** Le nombre de soumissions en cours */
 	get pending(): number;
+	/** Vaut `true` si le formulaire a été soumis au moins une fois */
+	get submitted(): boolean;
 	/** Accédez aux champs de formulaire en utilisant la notation objet */
 	fields: RemoteFormFieldsRoot<Input>;
 };

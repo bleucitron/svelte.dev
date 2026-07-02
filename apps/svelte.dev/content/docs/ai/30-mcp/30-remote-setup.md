@@ -17,7 +17,9 @@ claude mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
 
 Vous pouvez choisir votre `scope` (doit être `user`, `project` ou `local`) et `name` favoris.
 
-If you prefer you can also install the `svelte` plugin in [the Svelte Claude Code Marketplace](claude-plugin) that will give you both the remote server and useful [skills](skills).
+Si vous préférez, vous pouvez également installer le plugin `svelte` depuis la [boutique Svelte sur
+Claude Code](claude-plugin), qui vous donnera accès au serveur distant ainsi qu'à des
+[skills](skills) utiles.
 
 ## Claude Desktop
 
@@ -29,9 +31,12 @@ If you prefer you can also install the `svelte` plugin in [the Svelte Claude Cod
 
 ## Codex CLI
 
-Ajoutez la configuration suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
+Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Codex](codex-plugin)
+(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration
+suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
 `~/.codex/config.toml`, mais référez-vous à la [documentation de
 configuration](https://github.com/openai/codex/blob/main/docs/config.md) pour plus de détails) :
+
 
 ```toml
 experimental_use_rmcp_client = true
@@ -41,13 +46,16 @@ url = "https://mcp.svelte.dev/mcp"
 
 ## Copilot CLI
 
-Use the Copilot CLI to interactively add the MCP server:
+Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Copilot](copilot-plugin)
+(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration,
+utilisez le CLI de Copilot pour ajouter le serveur MCP de manière interactive :
 
 ```bash
 /mcp add
 ```
 
-Alternatively, create or edit `~/.copilot/mcp-config.json` and add the following configuration:
+Vous pouvez également créer ou modifier le fichier `~/.copilot/mcp-config.json` et y ajouter la
+configuration suivante :
 
 ```json
 {

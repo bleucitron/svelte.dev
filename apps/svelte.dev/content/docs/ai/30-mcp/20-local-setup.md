@@ -42,7 +42,9 @@ un fichier `claude_desktop_config.json`. Modifiez le fichier pour inclure la con
 
 ## Codex CLI
 
-Ajoutez la configuration suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
+Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Codex](codex-plugin)
+(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration
+suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
 `~/.codex/config.toml`, mais référez-vous à la [documentation de
 configuration](https://github.com/openai/codex/blob/main/docs/config.md) pour plus de détails) :
 
@@ -54,13 +56,16 @@ args = ["-y", "@sveltejs/mcp"]
 
 ## Copilot CLI
 
-Use the Copilot CLI to interactively add the MCP server:
+Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Copilot](copilot-plugin)
+(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration,
+utilisez le CLI de Copilot pour ajouter le serveur MCP de manière interactive :
 
 ```bash
 /mcp add
 ```
 
-Alternatively, create or edit `~/.copilot/mcp-config.json` and add the following configuration:
+Vous pouvez également créer ou modifier le fichier `~/.copilot/mcp-config.json` et y ajouter la
+configuration suivante :
 
 ```json
 {
@@ -161,8 +166,6 @@ Installez l'extension [Svelte MCP Server extension](https://zed.dev/extensions/s
 - Dans les paramètres, cherchez l'option `Model Context Protocol (MCP) Servers`
 - Cliquez sur "Add Server"
 - Sélectionnez "Add Custom Server"
-
-
 
 Cela ouvrira une popup avec la configuration du serveur MCP où vous pourrez ajouter la configuration
 suivante :

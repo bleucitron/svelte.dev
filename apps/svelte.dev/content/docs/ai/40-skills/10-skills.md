@@ -7,9 +7,10 @@ Il s'agit de la liste des "skills" fournis par le paquet du MCP de Svelte. Les "
 ensembles d'instructions que les agents IA peuvent charger à la demande pour les aider sur des
 tâches précises.
 
-Les skills sont disponibles à la fois dans le plugin Claude Code (installé via la marketplace) et
-dans le plugin OpenCode (`@sveltejs/opencode`). Ils peuvent également être installés manuellement
-dans votre dossier `.claude/skills` ou `.opencode/skills`.
+Les skills sont disponibles dans le plugin Claude Code (installé via la marketplace), le plugin CLI
+de Codex, le plugin CLI de Github Copilot, et le plugin OpenCode (`@sveltejs/opencode`). Ils peuvent
+également être installés manuellement dans votre dossier `.claude/skills`, `.copilot/skills` ou
+`.opencode/skills`.
 
 Vous pouvez télécharger les derniers skills depuis la [page des
 releases](https://github.com/sveltejs/ai-tools/releases) du repo, ou les trouver dans le dossier

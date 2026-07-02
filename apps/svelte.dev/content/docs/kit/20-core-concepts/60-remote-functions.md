@@ -754,6 +754,9 @@ l'attribut `aria-invalid` (renvoyé depuis `as(...)`) sera défini comme `true` 
 </form>
 ```
 
+Si le `title` est valide, ou n'a pas encore été validé, `createPost.fields.title.issues()` renverra
+`undefined`.
+
 Vous n'avez pas besoin d'attendre la fin de la soumission du formulaire pour valider les données —
 vous pouvez appeler `validate()` programmatiquement, par exemple dans un callback `oninput` (qui va
 valider les données à chaque touche du clavier) ou dans un callback `onchange` :
@@ -805,6 +808,9 @@ particulier, vous pouvez utiliser la méthode `fields.allIssues()` :
 	<p>{issue.message}</p>
 {/each}
 ```
+
+Comme avec les champs individuels, `createPost.fields.allIssues()` renverra `undefined` si le
+formulaire est entièrement valide (ou n'a pas encore été validé).
 
 ### Récupérer/définir des inputs [!VO]Getting/setting inputs
 
