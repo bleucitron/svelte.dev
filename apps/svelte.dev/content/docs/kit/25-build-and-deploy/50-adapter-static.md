@@ -175,17 +175,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
 			# Si vous utilisez pnpm, ajoutez cette étape puis changez les commandes et les clés de cache
 			# plus bas pour utiliser pnpm
       # - name: Install pnpm
-      #   uses: pnpm/action-setup@v3
+      #   uses: pnpm/action-setup@v6
       #   with:
       #     version: 8
 
-      - name: Installer Node.js
-        uses: actions/setup-node@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
@@ -199,8 +199,8 @@ jobs:
         run: |
           npm run build
 
-      - name: Uploader les artéfacts
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v5
         with:
 					# ceci devrait correspondre à l'option `pages` dans les options de l'adaptateur
 					# adapter-static
@@ -221,7 +221,7 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 ```
 
 Si vous n'utilisez pas d'action Github pour déployer votre site (par exemple, vous envoyez le site
