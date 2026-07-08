@@ -7,7 +7,8 @@ title: [créez le votre]
 > Les add-ons communautaires sont actuellement **expérimentaux**. Leur API peut changer. Ne les
 > utilisez pas encore en production !
 
-Ce guide vous explique comment créer, tester, et publier des add-ons communautaires pour `sv`.
+Ce guide vous explique comment créer, tester, et publier des add-ons communautaires pour le CLI de
+Svelte.
 
 ## Démarrage rapide [!VO]Quick start
 
@@ -59,7 +60,7 @@ export default defineAddon({
 });
 ```
 
-Le CLI de Svelte est divisé en deux paquets avec un frontière claire :
+Le CLI est divisé en deux paquets avec un frontière claire :
 
 - [**`sv`**](sv) = **où et quand**. Ce paquet gère les paths, la détection de workspace, le suivi de
 dépendances, et l'I/O de fichier. Le moteur orchestre l'exécution de l'add-on.
@@ -186,59 +187,61 @@ Votre add-on doit avoir `sv` comme dépendance-paire et **aucune** dépendance d
 }
 ```
 
-### Conventions de nommage [!VO]Naming convention
+### Noms de paquets [!VO]packages names
 
-#### Noms de paquets [!VO]packages names
+Packages must be published under an npm org:
 
-Si vous appelez vos paquet `@my-org/sv`, les gens pourront l'installer juste en tapant le nom de
-votre organisation :
+```sh
+# ✓ BIEN
+npx sv add @my-org/sv
+npx sv add @my-org/core
+
+# ✗ PAS BIEN
+npx sv add my-lib
+```
+
+Si votre paquet est publié avec le scope `sv`, celui-ci peut être omis. Les exemples suivants sont
+tous résolus vers le même paquet :
 
 ```sh
 npx sv add @my-org
+npx sv add @my-org/sv
+npx sv add @my-org/sv@latest
 ```
 
-Il est également possible de publier avec un nom comme `@my-org/core`, les gens devront alors taper
-le nom complet du paquet :
-
-```sh
-npx sv add @my-org/core
-```
-
-Il est également possible de demander une version précise :
+Pour obtenir une version spécifique, ajoutez `@<version>` :
 
 ```sh
 npx sv add @my-org/sv@1.2.3
 ```
 
-Lorsqu'aucune version n'est demandée, `latest` est utilisé.
+### Points d'entrée [!VO]Entry points
 
-> [!NOTE]
-> Les paquets non scopés ne sont pas encore supportés
+Le CLI cherche d’abord `./sv`. S'il ne le trouve pas, il considère par défaut le point d'entrée `.`.
+Ceci signifie que vous avez deux options :
 
-#### Options d'export [!VO]export options
+1. **Export par défaut** (pour un paquet d'add-on dédié):
 
-`sv` essaye d'abord d'importer `your-package/sv`, puis utilise l'export par défaut s'il n'y arrive
-pas. Ceci signifie que vous avez deux options :
+```json
+{
+	"name": "@my-org/sveltekit-addon",
+	"exports": {
+		".": "./dist/addon.mjs"
+	}
+}
+```
 
-1. **L'export par défaut** (pour les paquets d'add-on dédiés) :
+2. **Export `./sv`** (pour les paquets qui exportent également d'autres fonctionnalités) :
 
-   ```json
-   {
-   	"exports": {
-   		".": "./src/index.js"
-   	}
-   }
-   ```
-
-2. **L'export `./sv`** (pour les paquets qui exportent également d'autres fonctionnalités):
-   ```json
-   {
-   	"exports": {
-   		".": "./src/main.js",
-   		"./sv": "./src/addon.js"
-   	}
-   }
-   ```
+```json
+{
+	"name": "@my-org/sveltekit-addon",
+	"exports": {
+		".": "./dist/main.mjs",
+		"./sv": "./dist/addon.mjs"
+	}
+}
+```
 
 ### Publier sur npm [!VO]Publish to npm
 
