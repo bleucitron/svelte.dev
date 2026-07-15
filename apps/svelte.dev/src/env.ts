@@ -1,3 +1,4 @@
+import { VERSION } from '@sveltejs/kit';
 import { defineEnvVars } from '@sveltejs/kit/hooks';
 import * as v from 'valibot';
 

@@ -153,6 +153,40 @@ if ('serviceWorker' in navigator) {
 
 > [!NOTE] Le service worker est compilé pour la production, mais pas lors du développement.
 
+## Mettre à jour le service worker [!VO]Updating the service worker
+
+Les navigateurs vérifient si un service worker à jour est disponible lorsqu'une navigation "de
+pleine page" se produit au sein de son scope, et après des évènements fonctionnels comme `push` et
+`sync`. Les clients côté client ne sont ni l'un ni l'autre, ce qui implique qu'une navigation au
+sein de votre application ne va en soi provoquer un nouveau déploiement de service worker.
+
+SvelteKit exécute
+[`registration.update()`](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update)
+uniquement en tant que partie de la gestion d'erreur — si un module de route échoue à se charger ou
+si une navigation résulte en un statut d'erreur, et que le [polling de
+version](configuration#version) détecte que l'application a été redéployée, le service worker sera
+mis à jour avant que SvelteKit ne déclenche une navigation complète pour se mettre à jour.
+
+Si vous souhaitez que les nouveaux déploiements soient pris en compte de manière plus agressive,
+vous pouvez déclencher vous-même une vérification des mises à jour — par exemple pour chaque
+navigation côté client, dans votre layout racine :
+
+```js
+import { afterNavigate } from '$app/navigation';
+
+afterNavigate(async () => {
+	if ('serviceWorker' in navigator) {
+		const registration = await navigator.serviceWorker.getRegistration();
+		await registration?.update();
+	}
+});
+```
+
+Ceci ne va pas faire en sorte que le nouveau service worker (s'il existe) se mette en place sur la
+page existante immédiatement — à la place, ce nouveau service worker sera installé en toile de fond,
+et il se mettra en place dès que le nombre d'onglets gérés par le service worker actuel tombera à
+zéro.
+
 ## Autres solutions [!VO]Other solutions
 
 L'implémentation du service worker de SvelteKit est conçue pour être simple d'usage et est

@@ -20,7 +20,6 @@ npx sv add paraglide
 - le plugin Vite pour paraglide
 - les hooks SvelteKit `reroute` et `handle`
 - les attributs `text-direction` et `lang` dans votre `app.html`
-- votre fichier `.gitignore` mis à jour
 - une page de démo optionnelle vous montrant comment vous servir de paraglide
 
 ## Options
