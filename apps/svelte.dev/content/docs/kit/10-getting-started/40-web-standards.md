@@ -24,7 +24,7 @@ données depuis le réseau. Cette méthode est disponible dans les [hooks](hooks
 serveur](routing#server) ainsi que dans le navigateur.
 
 > [!NOTE] Une version spéciale de `fetch` est disponible dans les fonctions [`load`](load), les
-> [hooks de serveur](hooks#Server-hooks), les [routes d'API](routing#server) et les [fonctions
+> [hooks de serveur](hooks), les [routes d'API](routing#server) et les [fonctions
 > distantes](remote-functions) pour invoquer les endpoints directement lors du rendu côté serveur,
 > sans faire d'appel HTTP, tout en préservant les données d'authentification. (Pour faire des appels
 > authentifiés dans du code serveur en dehors de `load`, vous devez passer explicitement `cookie`

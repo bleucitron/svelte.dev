@@ -213,7 +213,7 @@ intégrations.
 
 Sapper inclut par défaut `html-minifier`. SvelteKit ne l'inclut pas, mais vous pouvez l'ajouter en
 tant que dépendance de production et vous en servir au travers d'un
-[hook](hooks#Server-hooks-handle) :
+[hook](hooks#handle) :
 
 ```js
 // @filename: ambient.d.ts

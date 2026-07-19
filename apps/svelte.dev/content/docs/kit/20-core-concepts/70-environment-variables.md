@@ -57,14 +57,14 @@ export default {
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 
 export const variables = defineEnvVars({
 	// ...
 });
 ```
 
-Chaque valeur de l'objet passée à [`defineEnvVars`](@sveltejs-kit-hooks#defineEnvVars) est un objet
+Chaque valeur de l'objet passée à [`defineEnvVars`](@sveltejs-kit-env#defineEnvVars) est un objet
 [`EnvVarConfig`](@sveltejs-kit#EnvVarConfig) qui configure la variable d'environnement.
 
 > [!NOTE] `defineEnvVars` renvoie son argument inchangé — cette fonction n'existe que pour vous
@@ -77,7 +77,7 @@ révéler votre `API_KEY` :
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 
 export const variables = defineEnvVars({
 	+++API_KEY: {}+++
@@ -104,7 +104,7 @@ même parfois nécessaire. Pour ces variables, nous pouvons préciser `public: t
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 
 export const variables = defineEnvVars({
 	GOOGLE_ANALYTICS_ID: {
@@ -152,7 +152,7 @@ d'nvironnement est définie correctement :
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 +++import * as v from 'valibot';+++
 
 export const variables = defineEnvVars({
@@ -170,7 +170,7 @@ validateur qui accepte une valeur optionnelle :
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 +++import { building } from '$app/env'+++
 import * as v from 'valibot';
 
@@ -194,7 +194,7 @@ mort :
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 import * as v from 'valibot';
 
 export const variables = defineEnvVars({
@@ -239,7 +239,7 @@ Vous pouvez documenter le rôle d'une variable d'environnement en ajoutant une `
 
 ```ts
 /// file: src/env.ts
-import { defineEnvVars } from '@sveltejs/kit/hooks';
+import { defineEnvVars } from '@sveltejs/kit/env';
 
 export const variables = defineEnvVars({
 	CACHE_TTL_SECONDS: {

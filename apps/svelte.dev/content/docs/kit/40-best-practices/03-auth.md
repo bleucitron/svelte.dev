@@ -26,10 +26,10 @@ meilleure latence et une charge réduite sur votre base de données.
 
 ## Points d'intégrations [!VO]Integration points
 
-Les [cookies](@sveltejs-kit#Cookies) peuvent être vérifiés dans des [hooks de
-serveur](hooks#Server-hooks). Si les identifiants d'utilisateur ou utilisatrice correspondent à une
-entrée dans la base de données, les informations d'utilisateur peuvent être stockées dans le champ
-[`locals`](hooks#Server-hooks-locals).
+Les [cookies](@sveltejs-kit#Cookies) peuvent être vérifiés dans des [hooks de serveur](hooks). Si
+les identifiants d'utilisateur ou utilisatrice correspondent à une entrée dans la base de données,
+les informations d'utilisateur peuvent être stockées dans le champ
+[`locals`](hooks#handle-locals).
 
 ## Libraries [!VO]Libraries
 

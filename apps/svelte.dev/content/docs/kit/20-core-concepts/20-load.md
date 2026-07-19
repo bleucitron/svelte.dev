@@ -257,7 +257,7 @@ JSON plus des choses comme `BigInt`, `Date`, `Map`, `Set` et `RegExp`, ou des r�
 répétées/cycliques — afin qu'elles puissent être transportées sur le réseau. Vos données peuvent
 inclure des [promesses](#Streaming-with-promises), auquel cas elles seront streamées vers les
 navigateurs. Si vous avez besoin de sérialiser/désérialiser des types personnalisés, veuillez
-utiliser les [hooks de transport](hooks#Universal-hooks-transport).
+utiliser les [hooks de transport](hooks#transport).
 
 ### Quand utiliser quoi [!VO]When to use which
 
@@ -358,7 +358,7 @@ de gestion lorsqu'exécutée sur le serveur, sans le surcoût d'un appel HTTP.
 - Lors du rendu côté serveur, la réponse sera capturée et inlinée dans le HTML rendu en s'appuyant
 sur les méthodes `text`, `json` et `arrayBuffer` de l'objet `Response`. Notez que les en-têtes ne
 seront _pas_ sérialisées, à moins d'être explicitement incluses via
-[`filterSerializedResponseHeaders`](hooks#Server-hooks-handle).
+[`filterSerializedResponseHeaders`](hooks#handle).
 - Lors de l'hydratation, la réponse sera lue depuis le HTML, garantissant la consistance et
 empêchant une requête additionnelle — si vous voyez un avertissement dans votre console de
 navigateur lorsque vous utilisez le `fetch` natif du navigateur plutôt que le `fetch` de `load`,
@@ -412,7 +412,7 @@ Par exemple, si SvelteKit sert le domaine my.domain.com :
 Les autres cookies ne seront pas fournis lorsque `credentials: 'include'` est défini, car SvelteKit
 ne connaît pas les domaines auxquels chaque cookie appartient (le navigateur ne fournit pas cette
 information), et il ne serait donc pas sécurisé de les fournir. Utiliser le [hook
-`handleFetch`](hooks#Server-hooks-handleFetch) pour contourner le problème.
+`handleFetch`](hooks#handleFetch) pour contourner le problème.
 
 ## En-têtes [!VO]Headers
 
@@ -560,7 +560,7 @@ Appeler `error(...)` va lever une exception, ce qui vous permet de facilement ar
 depuis des fonctions utilitaires.
 
 Si une erreur [_imprévue_](errors#Unexpected-errors) est levée, SvelteKit va exécuter le hook
-[`handleError`](hooks#Shared-hooks-handleError) et la traiter comme une erreur 500 Internal Error.
+[`handleError`](hooks#handleError) et la traiter comme une erreur 500 Internal Error.
 
 > [!NOTE] [Dans SvelteKit
 > 1.x](migrating-to-sveltekit-2#redirect-and-error-are-no-longer-thrown-by-you), vous deviez `throw`

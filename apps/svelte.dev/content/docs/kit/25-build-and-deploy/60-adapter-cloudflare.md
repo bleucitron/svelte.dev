@@ -271,7 +271,7 @@ plaçant à la racine de votre projet.
 
 Cependant, ils n'auront aucun effet pour les réponses rendues dynamiquement par SvelteKit, qui
 devraient renvoyer des réponses d'en-tête ou de redirection personnalisées depuis vos [endpoints de
-serveur](routing#server) ou grâce au hook [`handle`](hooks#Server-hooks-handle).
+serveur](routing#server) ou grâce au hook [`handle`](hooks#handle).
 
 ## Résolution de problèmes [!VO]Troubleshooting
 

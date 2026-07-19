@@ -252,8 +252,8 @@ Lorsque les pages sont pré-rendues, l'en-tête de CSP est ajoutée via une bali
 > laisser la directive `style-src` non définie, soit ajouter `unsafe-inline`.
 
 Si ce niveau de configuration est insuffisant et vous souhaitez avoir des pré-requis plus
-dynamiques, vous pouvez utiliser le [hook `handle`](/docs/kit/hooks#Server-hooks-handle) pour créer
-votre propre CSP.
+dynamiques, vous pouvez utiliser le [hook `handle`](/docs/kit/hooks#handle) pour créer votre propre
+CSP.
 
 <div class="ts-block-property-children">
 
@@ -533,10 +533,9 @@ tracing?: {/*…*/}
 </div>
 
 Options permettant d'activer le suivi [OpenTelemetry](https://opentelemetry.io/) côté serveur pour
-les opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#Server-hooks-handle), les
-[fonctions `load`](/docs/kit/load), les [actions de
-formulaire](/docs/kit/hooks#Server-hooks-handle),
-et les [fonctions distantes](/docs/kit/remote-functions).
+les opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#handle), les
+[fonctions `load`](/docs/kit/load), les [actions de formulaire](/docs/kit/hooks#handle), et les
+[fonctions distantes](/docs/kit/remote-functions).
 
 <div class="ts-block-property-children"><div class="ts-block-property">
 
@@ -555,10 +554,9 @@ server?: boolean;
 </div>
 
 Active l'émission côté serveur de spans [OpenTelemetry](https://opentelemetry.io/) pour les
-opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#Server-hooks-handle), les
-[fonctions `load`](/docs/kit/load), les [actions de
-formulaire](/docs/kit/hooks#Server-hooks-handle), et les [fonctions
-distantes](/docs/kit/remote-functions).
+opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#handle), les
+[fonctions `load`](/docs/kit/load), les [actions de formulaire](/docs/kit/hooks#handle), et les
+[fonctions distantes](/docs/kit/remote-functions).
 
 </div>
 </div></div>

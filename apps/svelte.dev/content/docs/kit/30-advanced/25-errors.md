@@ -114,9 +114,9 @@ de serveur), tandis que l'erreur exposée aux utilisateurs et utilisatrices rest
 { "message": "Internal Error" }
 ```
 
-Les erreurs inattendues vont être passées au hook [`handleError`](hooks#Shared-hooks-handleError),
-où vous pouvez ajouter votre propre gestion d'erreur — par exemple, envoyer ces erreurs à un service
-de suivi d'erreur, ou renvoyer un objet d'erreur personnalisé qui va devenir `page.error`.
+Les erreurs inattendues vont être passées au hook [`handleError`](hooks#handleError), où vous pouvez
+ajouter votre propre gestion d'erreur — par exemple, envoyer ces erreurs à un service de suivi
+d'erreur, ou renvoyer un objet d'erreur personnalisé qui va devenir `page.error`.
 
 ## Afficher les erreurs [!VO]Rendering errors
 
@@ -145,9 +145,8 @@ d'erreur. Si une erreur se produit alors lors du rendu, la page [`+error.svelte`
 plus proche sera affichée, de la même manière que si l'erreur s'était produite dans une fonction
 `load`.
 
-L'erreur est d'abord passée à [`handleError`](hooks#Shared-hooks-handleError), vous permettant de la
-signaler et de la transformer, avant que l'objet ainsi construit ne soit fourni au composant
-`+error.svelte`.
+L'erreur est d'abord passée à [`handleError`](hooks#handleError), vous permettant de la signaler et
+de la transformer, avant que l'objet ainsi construit ne soit fourni au composant `+error.svelte`.
 
 > [!NOTE]
 > Puisque le rendu des erreurs se produit après que la page ait commencé son rendu, et que plusieurs

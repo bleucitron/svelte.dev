@@ -182,7 +182,7 @@ un serveur d'API externe, mais soyez conscient•e que vous aurez à gérer les
 telles qu'imposer des requêtes préliminaires, ce qui augmente la latence. Les requêtes vers un
 sous-domaine séparé peuvent également augmenter la latence à cause d'une recherche DNS
 additionnelle, de la mise en place du TLS, etc. Si vous souhaitez utiliser cette méthode, vous
-pourriez trouver la méthode [`handleFetch`](./hooks#Server-hooks-handleFetch) utile.
+pourriez trouver la méthode [`handleFetch`](./hooks#handleFetch) utile.
 
 Une autre approche est de définir un proxy pour contourner les galères de CORS. En production, vous
 pourriez ré-écrire un chemin comme `/api` vers le serveur d'API ; en local, utilisez l'option

@@ -100,7 +100,7 @@ prononciation adéquate. Par exemple, si votre contenu est en français, vous de
 
 Si votre contenu est disponible dans plusieurs langages, vous devriez définir l'attribut `lang` en
 fonction de la langue de la page courante. Vous pouvez faire cela avec le [hook
-`handle`](hooks#Server-hooks-handle) de SvelteKit :
+`handle`](hooks#handle) de SvelteKit :
 
 ```html
 /// file: src/app.html

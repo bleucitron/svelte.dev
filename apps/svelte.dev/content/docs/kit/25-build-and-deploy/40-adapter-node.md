@@ -190,7 +190,7 @@ streaming. La taille de body peut également être spécifiée avec un suffixe e
 mégabytes (`M`), ou gigabytes (`G`). Par exemple, `512K` ou `1M`. Cette valeur vaut par défaut
 512kb. Vous pouvez désactiver cette option avec une valeur de `Infinity` (`0` dans d'anciennes
 versions de l'adaptateur) et implémenter une vérification personnalisée dans la fonction
-[`handle`](hooks#Server-hooks-handle) si vous avez besoin de quelque chose de plus avancé.
+[`handle`](hooks#handle) si vous avez besoin de quelque chose de plus avancé.
 
 ### `SHUTDOWN_TIMEOUT`
 

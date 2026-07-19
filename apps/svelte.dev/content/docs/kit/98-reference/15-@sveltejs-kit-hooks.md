@@ -12,6 +12,12 @@ import { defineEnvVars, sequence } from '@sveltejs/kit/hooks';
 
 ## defineEnvVars
 
+<blockquote class="tag deprecated note">
+
+Importez plutôt `defineEnvVars` depuis `@sveltejs/kit/env`
+
+</blockquote>
+
 Un utilitaire permettant de définir des [variables
 d'environnement](/docs/kit/environment-variables), qui sont rendues disponibles via
 `$app/env/public` et `$app/env/private`.

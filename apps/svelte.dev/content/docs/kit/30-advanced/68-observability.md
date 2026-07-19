@@ -12,7 +12,7 @@ les performances ou trouver la source d'un bug vicieux. Pour vous aider dans cet
 peut émettre des spans [OpenTelemetry](https://opentelemetry.io) côté serveur dans les fonctions
 suivantes :
 
-- Le hook [`handle`](hooks#Server-hooks-handle) et les fonctions `handle` s'exécutant dans la
+- Le hook [`handle`](hooks#handle) et les fonctions `handle` s'exécutant dans la
 fonction [`sequence`](@sveltejs-kit-hooks#sequence) (celles-ci sont des enfant l'une de l'autre et
 du hook racine `handle`)
 - Les fonctions [`load`](load) de serveur et les fonctions `load` universelles lorsqu'elles sont

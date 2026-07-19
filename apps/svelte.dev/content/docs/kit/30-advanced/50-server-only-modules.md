@@ -12,7 +12,7 @@ exemple). SvelteKit fournit un moyen de vous protéger contre ça : les modules 
 
 Les modules [`$env/static/private`]($env-static-private) et
 [`$env/dynamic/private`]($env-dynamic-private) peuvent être uniquement importés dans des modules
-réservés au serveur, comme [`hooks.server.js`](hooks#Server-hooks) ou
+réservés au serveur, comme [`hooks.server.js`](hooks) ou
 [`+page.server.js`](routing#page-page.server.js).
 
 ## Utilitaires réservés au serveur [!VO]Server-only utilities

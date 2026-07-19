@@ -16,12 +16,9 @@ et sur le serveur
 Le code dans ces modules s'exécutera lors du démarrage de l'application, les rendant utile pour
 l'initialisation de clients de bases de données, parmi d'autres choses.
 
+## handle
 
-## Hooks de serveur [!VO]Server hooks
-
-Les hooks suivants peuvent être ajoutés au fichier `src/hooks.server.js` :
-
-### handle
+> [!NOTE] Peut être ajoutée dans le fichier `src/hooks.server.js`
 
 Cette fonction est exécutée à chaque fois que le serveur SvelteKit reçoit une
 [requête](web-standards#Fetch-APIs-Request) — que cela se produise lors de l'exécution de
@@ -62,48 +59,7 @@ Durant le prérendu, Svelte parcourt vos pages à la recherche de liens et rend 
 trouve. Le fait de rendre la route provoque l'exécution de la fonction `handle` (et de toute autre
 dépendance de route, comme `load`). Si vous avez besoin d'empêcher du code d'être exécuté lors de
 cette phase, vérifier en amont que l'application n'est pas en train d'être compilée (via
-[`building`]($app-environment#building).
-
-### locals
-
-Pour ajouter des données personnalisées à la requête, qui seront ensuite passées aux gestionnaires
-des fichiers `+server.js` et aux fonctions `load`, remplissez l'objet `event.locals`, comme montré
-ci-dessous.
-
-```js
-/// file: src/hooks.server.js
-// @filename: ambient.d.ts
-type User = {
-	name: string;
-}
-
-declare namespace App {
-	interface Locals {
-		user: User;
-	}
-}
-
-const getUserInformation: (cookie: string | void) => Promise<User>;
-
-// @filename: index.js
-// ---cut---
-/** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }) {
-	event.locals.user = await getUserInformation(event.cookies.get('sessionid'));
-
-	const response = await resolve(event);
-
-	// Notez que modifier les en-têtes de réponse n'est pas toujours sécurisé.
-	// Les objets de réponse peuvent avoir des en-têtes immutables (par ex.
-	// Response.redirect() renvoyé par un endpoint).
-	// Modifier les en-têtes immutables jette une erreur TypeError.
-	// Dans ce cas, clonez la réponse ou évitez de créer un objet de réponse
-	// ayant des en-têtes immutables.
-	response.headers.set('x-custom-header', 'potato');
-
-	return response;
-}
-```
+[`building`]($app-env#building).
 
 Vous pouvez définir plusieurs fonctions `handle` et les exécuter avec la [fonction utilitaire
 `sequence`](@sveltejs-kit-hooks).
@@ -153,7 +109,50 @@ traitée comme étant fatale, et SvelteKit répondra avec une représentation JS
 la page d'erreur de secours — qui peut être personnalisée via `src/error.html` — selon la valeur de
 l'en-tête `Accept`. Vous pouvez en apprendre plus à propos de la gestion des erreurs [here](errors).
 
-### handleFetch
+### locals
+
+Pour ajouter des données personnalisées à la requête, qui seront ensuite passées aux gestionnaires
+des fichiers `+server.js` et aux fonctions `load`, remplissez l'objet `event.locals`, comme montré
+ci-dessous.
+
+```js
+/// file: src/hooks.server.js
+// @filename: ambient.d.ts
+type User = {
+	name: string;
+}
+
+declare namespace App {
+	interface Locals {
+		user: User;
+	}
+}
+
+const getUserInformation: (cookie: string | void) => Promise<User>;
+
+// @filename: index.js
+// ---cut---
+/** @type {import('@sveltejs/kit').Handle} */
+export async function handle({ event, resolve }) {
+	event.locals.user = await getUserInformation(event.cookies.get('sessionid'));
+
+	const response = await resolve(event);
+
+	// Notez que modifier les en-têtes de réponse n'est pas toujours sécurisé.
+	// Les objets de réponse peuvent avoir des en-têtes immutables (par ex.
+	// Response.redirect() renvoyé par un endpoint).
+	// Modifier les en-têtes immutables jette une erreur TypeError.
+	// Dans ce cas, clonez la réponse ou évitez de créer un objet de réponse
+	// ayant des en-têtes immutables.
+	response.headers.set('x-custom-header', 'potato');
+
+	return response;
+}
+```
+
+## handleFetch
+
+> [!NOTE] Peut être ajoutée dans le fichier `src/hooks.server.js`
 
 Cette fonction vous permet de modifier (ou remplacer) le résultat d'un appel
 [`event.fetch`](load#Making-fetch-requests) se produisant sur le serveur (ou pendant le pré-rendu)
@@ -207,7 +206,9 @@ export async function handleFetch({ event, request, fetch }) {
 }
 ```
 
-### handleValidationError
+## handleValidationError
+
+> [!NOTE] Peut être ajoutée dans le fichier `src/hooks.server.js`
 
 Ce hook est appelé lorsqu'une fonction distante est appelée avec un argument qui ne correspond pas
 au [Standard Schema](https://standardschema.dev/) fourni. Il doit renvoyer un objet correspondant à
@@ -245,12 +246,9 @@ export function handleValidationError({ issues }) {
 Soyez conscient•e des informations que vous exposez ici, car la raison d'échec de validation la plus
 probable est que quelqu'un de mal intentionné envoie des requêtes mal formées à votre serveur.
 
-## Hooks partagés [!VO]Shared hooks
+## handleError
 
-Vous pouvez ajouter les hooks suivants aux fichiers `src/hooks.server.js` _et_ `src/hooks.client.js`
-:
-
-### handleError
+> [!NOTE] Peut être ajoutée aux fichiers `src/hooks.server.js` et `src/hooks.client.js`
 
 Si une [erreur imprévue](errors#Unexpected-errors) est levée lors du chargement, du rendu, ou de
 l'exécution d'un endpoint, cette fonction sera exécutée avec les arguments `error`, `event`,
@@ -360,7 +358,9 @@ Svelte, l'erreur fournie aura une propriété `frame` mettant en valeur la posit
 
 > [!NOTE] Assurez-vous que `handleError` ne jette _jamais_ d'erreur.
 
-### init
+## init
+
+> [!NOTE] Peut être ajoutée aux fichiers `src/hooks.server.js` et `src/hooks.client.js`
 
 Cette fonction est exécutée une seule fois, lorsque le serveur est créé ou lorsque l'application
 démarre dans le navigateur. C'est une fonction pratique pour effectuer des opérations asynchrones
@@ -385,13 +385,10 @@ export async function init() {
 > [!NOTE] Dans le navigateur, les tâches asynchrones au sein de `init` vont retarder l'hydratation,
 > soyez donc conscient•e de ce que vous y faites.
 
-## Hooks universels [!VO]Universal hooks
+## reroute
 
-Vous pouvez ajouter les fonctions suivantes au fichier `src/hooks.js`. Les hooks universels sont
-exécutés à la fois sur le serveur et le client (à ne pas confondre avec les hooks partagés, qui sont
-spécifiques à un environnement).
-
-### reroute
+> [!NOTE] Peut être ajoutée au fichier `src/hooks.js` ; elle est exécutée à la fois sur le serveur
+> et sur le client.
 
 Cette fonction est exécutée avant `handle` et vous permet de changer la manière dont les URLs sont
 traduites en routes. Le chemin renvoyé (qui vaut par défaut `url.pathname`) est utilisé pour
@@ -431,7 +428,7 @@ que la récupération de données soit rapide, car cela retardera la navigation 
 besoin de récupérer des données, utilisez la fonction `fetch` fourni en argument. Celle-ci hérite
 des [mêmes bénéfices](load#Making-fetch-requests) que la fonction `fetch` fournie aux fonctions
 `load`, avec l'inconvénient que `params` et `id` ne seront pas rendus disponibles pour
-[`handleFetch`](#Server-hooks-handleFetch) car la route n'est à ce moment-là pas encore déterminée.
+[`handleFetch`](#handleFetch) car la route n'est à ce moment-là pas encore déterminée.
 
 ```js
 // @errors: 2345 2304
@@ -456,7 +453,10 @@ export async function reroute({ url, fetch }) {
 > avoir d'effets de bord. Avec ces considérations, SvelteKit va cacher le résultat de `reroute` sur
 > le client afin que `reroute` ne soit exécutée qu'une seule fois par URL unique.
 
-### transport
+## transport
+
+> [!NOTE] Peut être ajoutée au fichier `src/hooks.js` ; elle est exécutée à la fois sur le serveur
+> et sur le client.
 
 Une collection de _transporteurs_, qui vous permettent de fournir des types personnalisés — renvoyés
 depuis une fonction `load`, au travers de la frontière serveur/client. Chaque transporteur contient

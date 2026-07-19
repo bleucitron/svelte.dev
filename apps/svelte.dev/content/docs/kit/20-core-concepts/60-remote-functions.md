@@ -193,7 +193,7 @@ export const getPost = query(v.string(), async (slug) => {
 L'argument et la valeur de retour sont tous deux sérialisés avec
 [devalue](https://github.com/sveltejs/devalue), qui gère des types comme `Date` et `Map` (et
 également des types personnalisés que vous pouvez définir dans votre [transport
-hook](hooks#Universal-hooks-transport)) en plus du JSON.
+hook](hooks#transport)) en plus du JSON.
 
 > [!NOTE] Pour les arguments de `query` et `prerender` (mais pas leurs valeurs de retour), les
 > objets, maps et sets sont triés de sorte que les occurrences ayant les mêmes éléments soient
@@ -1478,8 +1478,8 @@ avec des données malformées
 Dans le second cas, nous ne voulons pas donner à l'attaquant d'indices, c'est pourquoi SvelteKit va
 générer une réponse générique [400 Bad Request](https://http.dog/400). Vous pouvez contrôler le
 message en implémentant le hook serveur
-[`handleValidationError`](hooks#Server-hooks-handleValidationError), qui, comme
-[`handleError`](hooks#Shared-hooks-handleError), doit renvoyer un objet
+[`handleValidationError`](hooks#handleValidationError), qui, comme
+[`handleError`](hooks#handleError), doit renvoyer un objet
 [`App.Error`](errors#Type-safety) (qui est défini par défaut à `{ message: string }`) :
 
 ```js

@@ -90,8 +90,8 @@ l'utilisatrice visite une page, mais il ne précharge _pas_ par défaut les poli
 provoquer le téléchargement de fichiers non nécessaires (comme des graisses de police référencées
 par votre CSS mais non utilisées sur la page actuelle). Cela étant dit, précharger correctement les
 polices peut faire une énorme différence sur les performances ressenties de votre site. Dans votre
-hook [`handle`](hooks#Server-hooks-handle), vous pouvez appeler la fonction `resolve` avec un filtre
-`preload` incluant votre police.
+hook [`handle`](hooks#handle), vous pouvez appeler la fonction `resolve` avec un filtre `preload`
+incluant votre police.
 
 Vous pouvez réduire la taille de vos fichiers de police en [découpant vos fichiers de
 police](https://web.dev/learn/performance/optimize-web-fonts#subset_your_web_fonts).

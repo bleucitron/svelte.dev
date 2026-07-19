@@ -132,7 +132,7 @@ Depuis la version 5.51, vous pouvez contrôler ce comportement pour les frontiè
 > [!NOTE] Si vous utilisez Svelte via un framework tel que SvelteKit, vous n'aurez probablement pas
 > un accès direct à l'appel de `render(...)` — le framework doit configurer `transformError` à votre
 > place. SvelteKit ajoutera le support de cette fonctionnalité dans un futur proche, via le hook
-> [`handleError`](../kit/hooks#Shared-hooks-handleError).
+> [`handleError`](../kit/hooks#handleError).
 
 La fonction `transformError` doit renvoyer un objet pouvant être sérialisé en JSON et qui sera
 utilisé pour rendre le snippet `failed`. Cet objet sera sérialisé et utilisé pour hydrater le

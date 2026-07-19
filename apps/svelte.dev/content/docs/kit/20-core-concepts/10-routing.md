@@ -207,7 +207,7 @@ Si aucune route ne peut être trouvée (404), le fichier `src/routes/+error.svel
 d'erreur par défaut si ce fichier n'existe pas), sera utilisé.
 
 > [!NOTE] `+error.svelte` n'est _pas_ utilisé lorsqu'une erreur se produit au sein de
-> ['handle'](hooks#Server-hooks-handle) ou d'un gestionnaire de requête [+server.js](#server).
+> ['handle'](hooks#handle) ou d'un gestionnaire de requête [+server.js](#server).
 
 Vous pouvez en apprendre plus sur la gestion des erreurs [ici](errors).
 
@@ -408,7 +408,7 @@ _pas_ rendu dans ce cas. Vous pouvez en savoir plus sur la gestion des erreurs [
 
 > [!NOTE] Les fichiers `+layout` n'ont aucun effet sur les fichiers `+server.js`. Si vous souhaitez
 > exécuter de la logique avant chaque requête, ajoutez-la dans le hook serveur
-> [`handle`](hooks#Server-hooks-handle).
+> [`handle`](hooks#handle).
 
 ### Recevoir des données [!VO]Receiving data
 

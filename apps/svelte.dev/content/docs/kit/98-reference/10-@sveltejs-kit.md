@@ -1039,7 +1039,7 @@ Disponible depuis la version 2.10.0
 
 </blockquote>
 
-La fonction [`init`](/docs/kit/hooks#Shared-hooks-init) sera exécutée après le démarrage de
+La fonction [`init`](/docs/kit/hooks#init) sera exécutée après le démarrage de
 l'application dans le navigateur
 
 <div class="ts-block">
@@ -1231,7 +1231,7 @@ renvoie un objet `App.Platform`
 
 Les [variables d'environnement](/docs/kit/environment-variables) peuvent être configurées en
 exportant un objet `variables` depuis `src/env`, en utilisant
-[`defineEnvVars`](/docs/kit/@sveltejs-kit-hooks#defineEnvVars).
+[`defineEnvVars`](/docs/kit/@sveltejs-kit-env#defineEnvVars).
 
 <div class="ts-block">
 
@@ -1317,12 +1317,12 @@ Une description de la variable qui sera utilisée en tant que documentation lors
 
 ## Handle
 
-Le hook [`handle`](/docs/kit/hooks#Server-hooks-handle) est exécuté à chaque fois que le serveur
-SvelteKit reçoit une [requête](/docs/kit/web-standards#Fetch-APIs-Request) et détermine la
-[réponse](/docs/kit/web-standards#Fetch-APIs-Response).
-Il reçoit un objet `event` représentant la requête et une fonction appelée `resolve`, qui rend la
-route et génère une `Response`. Ceci vous permet de modifier les en-têtes ou corps de réponse, ou de
-contourner complètement SvelteKit (pour implémenter des routes programmatiquement, par exemple).
+Le hook [`handle`](/docs/kit/hooks#handle) est exécuté à chaque fois que le serveur SvelteKit reçoit
+une [requête](/docs/kit/web-standards#Fetch-APIs-Request) et détermine la
+[réponse](/docs/kit/web-standards#Fetch-APIs-Response). Il reçoit un objet `event` représentant la
+requête et une fonction appelée `resolve`, qui rend la route et génère une `Response`. Ceci vous
+permet de modifier les en-têtes ou corps de réponse, ou de contourner complètement SvelteKit (pour
+implémenter des routes programmatiquement, par exemple).
 
 <div class="ts-block">
 
@@ -1340,8 +1340,8 @@ type Handle = (input: {
 
 ## HandleClientError
 
-Le hook client [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) est exécuté lorsqu'une
-erreur inattendue est jetée lors de la navigation.
+Le hook client [`handleError`](/docs/kit/hooks#handleError) est exécuté lorsqu'une erreur inattendue
+est jetée lors de la navigation.
 
 Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
 exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
@@ -1361,10 +1361,10 @@ type HandleClientError = (input: {
 
 ## HandleFetch
 
-Le hook [`handleFetch`](/docs/kit/hooks#Server-hooks-handleFetch) vous permet de modifier (ou
-remplacer) le résultat d'un appel [`event.fetch`](/docs/kit/load#Making-fetch-requests) s'exécutant
-sur le serveur (ou lors du pré-rendu) au sein d'un endpoint, d'une fonction `load`, `action`,
-`handle`, `handleError`, ou `reroute`.
+Le hook [`handleFetch`](/docs/kit/hooks#handleFetch) vous permet de modifier (ou remplacer) le
+résultat d'un appel [`event.fetch`](/docs/kit/load#Making-fetch-requests) s'exécutant sur le serveur
+(ou lors du pré-rendu) au sein d'un endpoint, d'une fonction `load`, `action`, `handle`,
+`handleError`, ou `reroute`.
 
 <div class="ts-block">
 
@@ -1380,8 +1380,8 @@ type HandleFetch = (input: {
 
 ## HandleServerError
 
-Le hook serveur [`handleError`](/docs/kit/hooks#Shared-hooks-handleError) est exécutée lorsqu'une
-erreur inattendue est jetée lors de la réponse à une requête.
+Le hook serveur [`handleError`](/docs/kit/hooks#handleError) est exécutée lorsqu'une erreur
+inattendue est jetée lors de la réponse à une requête.
 
 Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
 exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
@@ -1401,8 +1401,8 @@ type HandleServerError = (input: {
 
 ## HandleValidationError
 
-Le hook [`handleValidationError`](/docs/kit/hooks#Server-hooks-handleValidationError) est exécuté
-lorsque l'argument d'une fonction distante échoue lors de sa validation.
+Le hook [`handleValidationError`](/docs/kit/hooks#handleValidationError) est exécuté lorsque
+l'argument d'une fonction distante échoue lors de sa validation.
 
 Il sera appelée avec les erreurs de validation et l'évènement, et doit renvoyer un objet dont la
 forme correspond à `App.Error`.
@@ -1634,7 +1634,7 @@ faire l'appel HTTP.
 - Lors du rendu côté serveur, la réponse sera capturée et inlinée dans le HTML rendu en utilisant
 les méthodes `text` et `json` de l'objet `Response`. Notez que les en-têtes ne seront _pas_
 sérialisées, à moins qu'elles ne soient incluses explicitement via
-[`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle).
+[`filterSerializedResponseHeaders`](/docs/kit/hooks#handle).
 - Lors de l'hydratation, la réponse sera lue depuis le HTML, en garantissant la consistance et
 empêchant une requête réseau additionnelle.
 
@@ -3182,7 +3182,7 @@ faire l'appel HTTP.
 - Lors du rendu côté serveur, la réponse sera capturée et inlinée dans le HTML rendu en utilisant
 les méthodes `text` et `json` de l'objet `Response`. Notez que les en-têtes ne seront _pas_
 sérialisées, à moins qu'elles ne soient incluses explicitement via
-[`filterSerializedResponseHeaders`](/docs/kit/hooks#Server-hooks-handle).
+[`filterSerializedResponseHeaders`](/docs/kit/hooks#handle).
 - Lors de l'hydratation, la réponse sera lue depuis le HTML, en garantissant la consistance et
 empêchant une requête réseau additionnelle.
 
@@ -3214,7 +3214,7 @@ locals: App.Locals;
 <div class="ts-block-property-details">
 
 Contient les données personnalisées ajoutées à la requête au sein du hook serveur
-[`handle`](/docs/kit/hooks#Server-hooks-handle).
+[`handle`](/docs/kit/hooks#handle).
 
 </div>
 </div>
@@ -3517,8 +3517,8 @@ Disponible depuis la version 2.3.0
 
 </blockquote>
 
-Le hook [`reroute`](/docs/kit/hooks#Universal-hooks-reroute) vous permet de modifier l'URL avant
-qu'elle ne soit utilisée pour déterminer quelle route afficher.
+Le hook [`reroute`](/docs/kit/hooks#reroute) vous permet de modifier l'URL avant qu'elle ne soit
+utilisée pour déterminer quelle route afficher.
 
 <div class="ts-block">
 
@@ -3821,8 +3821,8 @@ Disponible depuis la version 2.10.0
 
 </blockquote>
 
-Le hook [`init`](/docs/kit/hooks#Shared-hooks-init) sera invoqué avant que le serveur ne réponde à
-sa première requête.
+Le hook [`init`](/docs/kit/hooks#init) sera invoqué avant que le serveur ne réponde à sa première
+requête.
 
 <div class="ts-block">
 
@@ -4143,8 +4143,8 @@ Disponible depuis la version 2.11.0
 
 </blockquote>
 
-Le hook [`transport`](/docs/kit/hooks#Universal-hooks-transport) vous permet de transporter des
-types personnalisés au travers de la frontière serveur/client.
+Le hook [`transport`](/docs/kit/hooks#transport) vous permet de transporter des types personnalisés
+au travers de la frontière serveur/client.
 
 Chaque transporteur possède une paire de fonctions `encode` et `decode`. Sur le serveur, `encode`
 détermine si une valeur est une instance du type personnalisé et, si c'est le cas, renvoie une
@@ -4179,7 +4179,7 @@ type Transport = Record<string, Transporter>;
 
 ## Transporter
 
-Un membre du hook [`transport`](/docs/kit/hooks#Universal-hooks-transport).
+Un membre du hook [`transport`](/docs/kit/hooks#transport).
 
 <div class="ts-block">
 

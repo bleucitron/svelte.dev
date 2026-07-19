@@ -72,7 +72,7 @@ export function load(event) {
 ```
 
 > [!NOTE] Si vous ne gérez pas les cas 404, ils vont apparaître dans
-> [`handleError`](hooks#Shared-hooks-handleError)
+> [`handleError`](hooks#handleError)
 
 ## Paramètres optionnels [!VO]Optional parameters
 
@@ -95,6 +95,9 @@ caractères représentant le paramètre (`"apple"` ou `"rocketship"`) et renvoie
 est valide — à votre dossier `src/params`...
 
 ```js
+// TODO: remove the ts error once kit 3 docs are main
+// ---cut---
+// @errors: 1360
 /// file: src/params/fruit.js
 /**
  * @param {string} param

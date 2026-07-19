@@ -14,7 +14,7 @@ permettant de créer des sites qui performent bien à ce niveau.
 Même si les moteurs de recherche se sont améliorés depuis quelques années dans l'indexation de
 contenu rendu avec du code JavaScript côté client, le contenu rendu sur le serveur est indexé plus
 souvent et plus efficacement. SvelteKit utilise le SSR par défaut, et bien que vous puissiez le
-désactiver dans le hook [`handle`](hooks#Server-hooks-handle), vous devriez le laisser activé à
+désactiver dans le hook [`handle`](hooks#handle), vous devriez le laisser activé à
 moins que n'ayez une bonne raison de ne pas le faire.
 
 > [!NOTE] Le rendu de SvelteKit est très configurable et vous pouvez implémenter du [rendu
