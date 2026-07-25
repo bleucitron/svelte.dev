@@ -27,7 +27,7 @@ manière agressive, et met en cache toute autre requête lorsqu'elles se produis
 facto toute page visitée disponible en mode hors-ligne.
 
 ```js
-// @errors: 2688
+// @errors: 2688 2307
 /// file: src/service-worker.js
 // Désactive l'accès au types du DOM comme `HTMLElement` qui ne sont pas disponibles
 // dans un service worker et instancie les variables globales pertinentes

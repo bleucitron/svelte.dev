@@ -34,6 +34,7 @@ fichier `svelte.config.js` :
 
 ```js
 /// file: svelte.config.js
+// @errors: 2353
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
