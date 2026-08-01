@@ -51,10 +51,10 @@ Ne demande pas d'installer des dépendances.
 
 ## Add-ons officiels [!VO]Official add-ons
 
+- [`ai-tools`](ai-tools)
 - [`better-auth`](better-auth)
 - [`drizzle`](drizzle)
 - [`eslint`](eslint)
-- [`mcp`](mcp)
 - [`mdsvex`](mdsvex)
 - [`paraglide`](paraglide)
 - [`playwright`](playwright)

@@ -123,7 +123,7 @@ des adaptateurs SvelteKit, comme [Cloudflare](https://www.cloudflare.com/web-ana
 [Vercel](https://vercel.com/docs/analytics).
 
 Pour exécuter des scripts tiers dans un web worker (ce qui évite de bloquer le fil d'exécution
-principal), utilisez l'[intégration SvelteKit de PartyTown](https://partytown.builder.io/sveltekit).
+principal), utilisez l'[intégration SvelteKit de PartyTown](https://partytown.qwik.dev/sveltekit).
 
 ### Chargement sélectif [!VO]Selective loading
 

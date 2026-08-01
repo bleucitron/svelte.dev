@@ -27,6 +27,10 @@ vous aider à vous souvenir comment le routing de SvelteKit fonctionne :
 * Les fichiers `+layout` et `+error` s'appliquent au dossier dans lequel ils sont définis, ainsi
 qu'à tous les sous-dossiers de ce dossier
 
+> [!NOTE] Lorsque vous naviguez de la page A à la page B, SvelteKit conserve les composants communs
+> à ces deux pages — [voir ici](state-management#Component-and-page-state-is-preserved) pour plus
+> d'informations.
+
 ## +page
 
 ### +page.svelte

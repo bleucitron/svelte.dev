@@ -13,6 +13,7 @@
 		"check": "node scripts/update.js && svelte-kit sync && svelte-check",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
+		"prepare": "svelte-kit sync",
 		"sync-docs": "node scripts/sync-docs/index.ts",
 		"sync-packages": "node scripts/sync-packages/index.ts"
 	},
@@ -61,7 +62,6 @@
 		"@types/node": "catalog:",
 		"browserslist": "^4.28.1",
 		"chokidar": "^5.0.0",
-		"degit": "^2.8.4",
 		"esbuild": "^0.27.3",
 		"gzip": "workspace:*",
 		"jimp": "^1.6.0",

@@ -155,9 +155,6 @@ importers:
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
-      degit:
-        specifier: ^2.8.4
-        version: 2.8.4
       esbuild:
         specifier: ^0.27.3
         version: 0.27.7
@@ -2128,11 +2125,6 @@ packages:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
 
-  degit@2.8.4:
-    resolution: {integrity: sha512-vqYuzmSA5I50J882jd+AbAhQtgK6bdKUJIex1JNfEUPENCgYsxugzKVZlFyMwV4i06MmnV47/Iqi5Io86zf3Ng==}
-    engines: {node: '>=8.0.0'}
-    hasBin: true
-
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
@@ -2911,8 +2903,8 @@ packages:
   tailwindcss@4.2.1:
     resolution: {integrity: sha512-/tBrSQ36vCleJkAOsy9kbNTgaxvGbyOamC30PRePTQe/o1MFwEKHQk4Cn7BNGaPtjp+PuUrByJehM1hgxfq4sw==}
 
-  tar@7.5.16:
-    resolution: {integrity: sha512-56adEpPMouktRlBLXiaYFFzZ/3+JXa8P9n7WbR+ibIjtviN55mEaOkiysCnPnWm+7kkui1Dn8J9l+g6zV8731w==}
+  tar@7.5.22:
+    resolution: {integrity: sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==}
     engines: {node: '>=18'}
 
   tarparser@0.0.5:
@@ -3802,7 +3794,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.8.1
-      tar: 7.5.16
+      tar: 7.5.22
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4699,8 +4691,6 @@ snapshots:
   dedent-js@1.0.1: {}
 
   deepmerge@4.3.1: {}
-
-  degit@2.8.4: {}
 
   dequal@2.0.3: {}
 
@@ -5649,7 +5639,7 @@ snapshots:
 
   tailwindcss@4.2.1: {}
 
-  tar@7.5.16:
+  tar@7.5.22:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
