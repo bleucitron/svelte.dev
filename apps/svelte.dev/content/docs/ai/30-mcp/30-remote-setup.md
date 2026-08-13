@@ -5,6 +5,9 @@ title: Installation distante
 
 La version distant du serveur MCP est disponible sur `https://mcp.svelte.dev/mcp`.
 
+L'équipe de Svelte n'affiche rien, ne stocke rien, ou n'analyse rien du code envoyé au serveur
+distant.
+
 Voici comment l'installer pour quelques uns des clients MCP classiques :
 
 ## Claude Code
@@ -17,10 +20,6 @@ claude mcp add -t http -s [scope] svelte https://mcp.svelte.dev/mcp
 
 Vous pouvez choisir votre `scope` (doit être `user`, `project` ou `local`) et `name` favoris.
 
-Si vous préférez, vous pouvez également installer le plugin `svelte` depuis la [boutique Svelte sur
-Claude Code](claude-plugin), qui vous donnera accès au serveur distant ainsi qu'à des
-[skills](skills) utiles.
-
 ## Claude Desktop
 
 - Ouvrez Settings > Connectors
@@ -31,12 +30,9 @@ Claude Code](claude-plugin), qui vous donnera accès au serveur distant ainsi qu
 
 ## Codex CLI
 
-Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Codex](codex-plugin)
-(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration
-suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
+Ajoutez la configuration suivante dans votre fichier `config.toml` (qui se trouve par défaut dans
 `~/.codex/config.toml`, mais référez-vous à la [documentation de
 configuration](https://github.com/openai/codex/blob/main/docs/config.md) pour plus de détails) :
-
 
 ```toml
 experimental_use_rmcp_client = true
@@ -46,9 +42,7 @@ url = "https://mcp.svelte.dev/mcp"
 
 ## Copilot CLI
 
-Vous pouvez configurer automatiquement le serveur MCP en utilisant le [plugin Copilot](copilot-plugin)
-(recommandé). Si vous préférez configurer le serveur MCP manuellement, ajoutez la configuration,
-utilisez le CLI de Copilot pour ajouter le serveur MCP de manière interactive :
+Utilisez le CLI de Copilot pour ajouter le serveur MCP de manière interactive :
 
 ```bash
 /mcp add
@@ -84,9 +78,7 @@ Pour utiliser la version distante du MCP dans le CLI d'Antigravity, créez ou mo
 
 ## OpenCode
 
-Vous pouvez automatiquement configurer le serveur MCP en utilisant le [plugin
-OpenCode](opencode-plugin) (recommandé). Si vous préférez configurer le serveur MCP manuellement,
-lancez :
+Lancez :
 
 ```bash
 opencode mcp add
@@ -120,8 +112,7 @@ opencode mcp add
 
 ## Cursor
 
-Vous pouvez automatiquement configurer le serveur MCP en utilisant le [plugin Cursor](cursor-plugin)
-(recommandé). Si vous préférez configurer le serveur MCP manuellement, vous pouvez :
+Pour configurer le serveur distant :
 
 - Ouvrez la palette de commande
 - Sélectionnez "View: Open MCP Settings"

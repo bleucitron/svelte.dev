@@ -6,8 +6,8 @@ title: Claude Code
 Le [projet](https://github.com/sveltejs/ai-tools) open source contenant le code du serveur MCP est
 aussi un [plugin de marketplace](https://code.claude.com/docs/en/discover-plugins) Claude Code.
 
-La marketplace vous permet d'installer le plugin `svelte`, ce qui donnera accès au serveur MCP
-distant, aux [skills](skills) permettant d'enseigner au LLM comment écrire du code Svelte 5 correct,
+La marketplace vous permet d'installer le plugin `svelte`, ce qui donnera accès au serveur MCP local
+(stdio), aux [skills](skills) permettant d'enseigner au LLM comment écrire du code Svelte 5 correct,
 ainsi qu'à un agent spécialisé dans l'édition de fichiers Svelte.
 
 Si possible, nous recommandons que vous indiquiez au LLM d'exécuter des appels MCP avec l'agent

@@ -10,7 +10,7 @@ utilisez Claude Code. Ou [`GEMINI.md`](https://geminicli.com/docs/cli/gemini-md/
 GEMINI). Ceci indiquera au LLM quels outils sont disponibles et à quel moment il est
 approprié de les utiliser.
 
-> [!NOTE] Ceci est mis en place pour vous lorsque vous utilisez `npx sv add mcp`.
+> [!NOTE] Ceci est mis en place pour vous lorsque vous utilisez `npx sv add ai-tools`.
 
 <!-- prettier-ignore-start -->
 ````markdown

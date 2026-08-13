@@ -50,6 +50,10 @@ const plugins: PluginOption[] = [
 				: undefined,
 
 		prerender: {
+			handleHttpError({ referrer, referenceType, message }) {
+				// TODO: we need a better default in SvelteKit, otherwise the error message is too ambiguous
+				throw new Error(`${message} when ${referenceType} by ${referrer}`);
+			},
 			handleMissingId(warning) {
 				if (warning.id.startsWith('H4sIA')) {
 					// playground link — do nothing
@@ -79,22 +83,6 @@ const plugins: PluginOption[] = [
 	}) as PluginOption
 ];
 
-// Only enable sharp if we're not in a webcontainer env
-if (!process.versions.webcontainer) {
-	plugins.push(
-		(await import('vite-imagetools')).imagetools({
-			exclude: 'content/**',
-			defaultDirectives: (url) => {
-				if (url.searchParams.has('big-image')) {
-					return new URLSearchParams('w=640;1280;2560;3840&format=avif;webp;png&as=picture');
-				}
-
-				return new URLSearchParams();
-			}
-		}) as PluginOption
-	);
-}
-
 const config: UserConfig = {
 	plugins,
 	css: {
@@ -108,6 +96,8 @@ const config: UserConfig = {
 	},
 	server: {
 		fs: { allow: ['../../packages', '../../node_modules', '../../../KIT/kit/packages/kit'] },
+		// sync-docs copies these source files to content/docs, which is the only version Vite should watch
+		watch: { ignored: ['**/repos/**'] },
 		// for SvelteKit tutorial
 		headers: {
 			'cross-origin-opener-policy': 'same-origin',

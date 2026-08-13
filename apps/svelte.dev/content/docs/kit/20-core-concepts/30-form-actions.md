@@ -10,6 +10,14 @@ Lorsque vous utilisez un élément `<form>`, la présence de JavaScript côté c
 mais vous pouvez facilement _améliorer progressivement_ vos interactions de formulaire avec
 JavaScript pour fournir la meilleure expérience utilisateur.
 
+> [!NOTE] La [fonction distante expérimentale `form`](remote-functions#form) couvre les mêmes cas
+> d'usage que les actions de formulaire, en y ajoutant du typage et des [mutations
+> single-flight](remote-functions#Single-flight-mutations). Les actions de formulaire sont
+> polyvalentes et vont continuer de fonctionner, mais les nouveaux développements sont focalisés sur
+> les fonctions distantes, qui sont conçues pour devenir la méthode recommandée de communiquer avec
+> le serveur. Vous pouvez envisager l'usage des fonctions distantes pour vos nouveaux projets, en
+> gardant à l'esprit que l'API peut changer tant que cette fonctionnalité est expérimentale.
+
 ## Actions par défaut [!VO]Default actions
 
 Dans le cas le plus simple, une page déclare une action par défaut appelée `default` :

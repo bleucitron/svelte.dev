@@ -6,10 +6,10 @@ title: Cursor
 Cursor un [système de plugins](https://cursor.com/docs/plugins) qui contient des règles, des skills,
 des agents, des commandes, des serveurs MCP, et des hooks.
 
-Le plugin Svelte vous fournit le serveur MCP Svelte, les [skills](skills) Cursor, une règle toujours
-active disant à votre modèle comment utiliser les outils du serveur MCP de Svelte correctement, et
-le sous-agent `svelte-file-editor` pour travailler avec les fichiers `.svelte` et les modules
-`.svelte.ts`/`.svelte.js`. La source est disponible dans le projet
+Le plugin Svelte vous fournit le serveur MCP Svelte local (stdio), les [skills](skills) Cursor, une
+règle toujours active disant à votre modèle comment utiliser les outils du serveur MCP de Svelte
+correctement, et le sous-agent `svelte-file-editor` pour travailler avec les fichiers `.svelte` et
+les modules `.svelte.ts`/`.svelte.js`. La source est disponible dans le projet
 [`sveltejs/ai-tools`](https://github.com/sveltejs/ai-tools/tree/main/plugins/cursor/svelte).
 
 ## Installation

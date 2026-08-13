@@ -8,8 +8,9 @@ import * as marked from 'marked';
 import { createHighlighterCore } from 'shiki/core';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
 import { createCssVariablesTheme } from 'shiki';
-import { transformerTwoslash, rendererRich } from '@shikijs/twoslash';
-import { createFileSystemTypesCache } from '@shikijs/vitepress-twoslash/cache-fs';
+import { createTransformerFactory, rendererRich } from '@shikijs/twoslash/core';
+import { createTwoslasher } from 'twoslash';
+// import { createFileSystemTypesCache } from '@shikijs/vitepress-twoslash/cache-fs';
 import { compress_and_encode_text } from 'gzip';
 import {
 	decode_html_entities,
@@ -55,7 +56,9 @@ if (!fs.existsSync(original_file)) {
 hash_graph(hash, original_file);
 const digest = hash.digest().toString('base64').replace(/\//g, '-');
 
-const highlighter = await createHighlighterCore({
+// @ts-expect-error — this allows us to create a single Shiki instance
+// across dev server reloads, otherwise it complains
+const highlighter = (globalThis[Symbol.for('shiki highlighter')] ??= await createHighlighterCore({
 	themes: [],
 	langs: [
 		import('@shikijs/langs/javascript'),
@@ -74,7 +77,7 @@ const highlighter = await createHighlighterCore({
 		import('@shikijs/langs/http')
 	],
 	engine: createOnigurumaEngine(import('shiki/wasm'))
-});
+}));
 
 /**
  * Utility function to work with code snippet caching.
@@ -327,11 +330,11 @@ function injectReferenceLinks(
 export async function render_content_markdown(
 	filename: string,
 	body: string,
-	options?: { check?: boolean; references?: Record<string, string> },
+	options?: { check?: boolean; references?: Record<string, string>; twoslashRoot?: string },
 	twoslashBanner?: TwoslashBanner
 ) {
 	const headings: string[] = [];
-	const { check = true, references } = options ?? {};
+	const { check = true, references, twoslashRoot } = options ?? {};
 
 	interface CodeBlockFile {
 		selected: boolean;
@@ -504,7 +507,8 @@ export async function render_content_markdown(
 						prelude,
 						source,
 						check,
-						references
+						references,
+						twoslashRoot
 					});
 
 					cached.push(
@@ -524,7 +528,8 @@ export async function render_content_markdown(
 							prelude,
 							source: converted,
 							check,
-							references
+							references,
+							twoslashRoot
 						});
 
 						cached.push(highlighted.replace('<pre', '<pre data-ts'));
@@ -1120,7 +1125,8 @@ async function syntax_highlight({
 	filename,
 	language,
 	check,
-	references
+	references,
+	twoslashRoot
 }: {
 	prelude: string;
 	source: string;
@@ -1128,6 +1134,7 @@ async function syntax_highlight({
 	language: string;
 	check: boolean;
 	references?: Record<string, string>;
+	twoslashRoot?: string;
 }) {
 	let html = '';
 
@@ -1140,14 +1147,15 @@ async function syntax_highlight({
 		);
 	} else if (language === 'js' || language === 'ts') {
 		/** We need to stash code wrapped in `---` highlights, because otherwise TS will error on e.g. bad syntax, duplicate declarations */
-		const redactions: string[] = [];
+		const redactions: Array<{ content: string; placeholder: string }> = [];
 
 		const sub = delimiter_substitutes['---'];
 		const pattern = new RegExp(`${sub}([^ ]|[^ ][^]+?[^ ])${sub}`, 'g');
 
 		const redacted = source.replace(pattern, (_, content) => {
-			redactions.push(content);
-			return ' '.repeat(content.length);
+			const placeholder = '\f'.repeat(content.length);
+			redactions.push({ content, placeholder });
+			return placeholder;
 		});
 
 		try {
@@ -1156,7 +1164,10 @@ async function syntax_highlight({
 				theme,
 				transformers: check
 					? [
-							transformerTwoslash({
+							createTransformerFactory(
+								createTwoslasher(twoslashRoot ? { vfsRoot: twoslashRoot } : undefined),
+								rendererRich()
+							)({
 								renderer: rendererRich(),
 								twoslashOptions: {
 									compilerOptions: {
@@ -1168,19 +1179,20 @@ async function syntax_highlight({
 									}
 								},
 								// by default, twoslash does not run on .js files, change that through this option
-								filter: () => true,
-								typesCache: createFileSystemTypesCache({
-									dir: 'node_modules/.cache/twoslash'
-								})
+								filter: () => true
+								// TODO: re-enable type hover cache when we find out how to invalidate
+								// it when the types have changed
+								// typesCache: createFileSystemTypesCache({
+								// 	dir: 'node_modules/.cache/twoslash'
+								// })
 							})
 						]
 					: []
 			});
 
-			html = html.replace(
-				new RegExp(` {${delimiter_substitutes['---'].length + 1},}`, 'g'),
-				() => `<span class="highlight remove">${redactions.shift()!}</span>`
-			);
+			for (const { content, placeholder } of redactions) {
+				html = html.replace(placeholder, `<span class="highlight remove">${content}</span>`);
+			}
 
 			if (check) {
 				// munge the twoslash output so that it renders sensibly. the order of operations

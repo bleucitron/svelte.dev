@@ -1146,17 +1146,17 @@ d'évènement :
 
 ## Mutations single-flight [!VO]Single-flight mutations
 
-L'objectif des fonctions distantes [`form`](#form) et [`command`] est de *muter des données*. Dans
-plusieurs cas, la mutation de données invalide d'autres données. Par défaut, `form` gère ceci en
-invalidant automatiquement toutes les queries et fonctions `load` à la suite d'une soumission de
-formulaire réussie, pour simuler ce qu'il se passerait avec le rechargement classique de la page.
-`command`, de son côté, ne fait rien de particulier. Typiquement, aucune de ces options n'est idéale
-— tout invalider est probablement surdimensionné, car il est peu probable qu'une soumission de
-formulaire ait changé *tout* ce qui est visible sur votre page. Pour ce qui est de `command`, ne
-rien faire n'est pas beaucoup plus utile, car cela laisse des données périmées à l'écran. Dans les
-deux cas, il est courant d'avoir à effectuer deux aller-retours vers le serveur : un pour réaliser
-la mutation, et un autre dans la foulée permettant de re-requêter les données des queries qui ont
-besoin d'être mises à jour.
+L'objectif des fonctions distantes [`form`](#form) et [`command`](#command) est de *muter des
+données*. Dans plusieurs cas, la mutation de données invalide d'autres données. Par défaut, `form`
+gère ceci en invalidant automatiquement toutes les queries et fonctions `load` à la suite d'une
+soumission de formulaire réussie, pour simuler ce qu'il se passerait avec le rechargement classique
+de la page. `command`, de son côté, ne fait rien de particulier. Typiquement, aucune de ces options
+n'est idéale — tout invalider est probablement surdimensionné, car il est peu probable qu'une
+soumission de formulaire ait changé *tout* ce qui est visible sur votre page. Pour ce qui est de
+`command`, ne rien faire n'est pas beaucoup plus utile, car cela laisse des données périmées à
+l'écran. Dans les deux cas, il est courant d'avoir à effectuer deux aller-retours vers le serveur :
+un pour réaliser la mutation, et un autre dans la foulée permettant de re-requêter les données des
+queries qui ont besoin d'être mises à jour.
 
 SvelteKit solutionne ces deux problèmes avec les *mutations single-flight* : votre soumission de
 `form` ou votre invocation de `command` peuvent rafraîchir des queries et fournir leurs résultats en

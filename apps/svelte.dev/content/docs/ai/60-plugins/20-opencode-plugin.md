@@ -57,7 +57,7 @@ d'environnement, dans `$OPENCODE_CONFIG_DIR/svelte.json`)
 {
 	"$schema": "https://svelte.dev/opencode/schema.json",
 	"mcp": {
-		"type": "remote", // or "local" — defaults to remote
+		"type": "local", // or "remote"; defaults to local
 		"enabled": true
 	},
 	"subagent": {
