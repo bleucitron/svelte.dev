@@ -536,12 +536,12 @@ l'instance_ de votre composant.
 ### missing_context
 
 ```
-Context was not set in a parent component
+Context was not set in the current component or any of its ancestors
 ```
 
 L'utilitaire [`createContext()`](svelte#createContext) renvoie une paire de fonctions `[get, set]`.
-`get` jette une erreur si `set` n'a pas été utilisée pour définir le contexte dans un composant
-parent.
+`get` jette une erreur si `set` n'a pas été utilisée pour définir le contexte dans le composant
+courant ou l'un de ses parents.
 
 ### snippet_without_render_tag
 

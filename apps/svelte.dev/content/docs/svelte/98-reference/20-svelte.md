@@ -239,7 +239,8 @@ Disponible depuis la version 5.40.0
 Renvoie une paire de fonctions `[get, set]` permettant de travailler avec un contexte de manière
 typée.
 
-`get` va jeter une erreur si aucun composant parent n'a précédemment appelé `set`.
+`get` va jeter une erreur si `set` n'a pas encore été appelé dans le composant actuel ou dans l'un
+de ces ancêtres.
 
 <div class="ts-block">
 
@@ -400,7 +401,9 @@ function getAbortSignal(): AbortSignal;
 
 ## getAllContexts
 
-Récupère la map complète des contextes appartenant au composant parent le plus proche. Doit être
+Récupère la map complète des contextes appartenant au composant actuel, en incluant les entrées
+héritées de ces ancêtres.
+parent le plus proche. Doit être
 exécuté pendant l'initialisation du composant. Utile, par exemple, si vous créez programmatiquement
 un composant et souhaitez lui passer les contexte existant.
 
@@ -418,8 +421,12 @@ function getAllContexts<
 
 ## getContext
 
-Récupère le contexte nommé `key` appartenant au composant parent le plus proche. Doit être exécuté
-pendant l'initialisation du composant.
+Récupère le contexte défini dans le composant courant ou l'un de ces ancêtres avec la clé `key` fournie.
+Si plusieurs composants définissent la même clé, la valeur définie par l'ancêtre le plus proche est
+renvoyée.
+Un appel `setContext` exécuté dans le composant courant n'est visible que par les appels
+`getContext` exécutés après lui.
+Doit être appelé lors de l'initialisation du composant.
 
 [`createContext`](/docs/svelte/svelte#createContext) est une alternative typée.
 
@@ -435,8 +442,9 @@ function getContext<T>(key: any): T;
 
 ## hasContext
 
-Vérifie si une clé `key` a été définie dans le contexte d'un composant parent. Doit être exécuté
-pendant l'initialisation du composant.
+Vérifie si une clé `key` a été définie dans le contexte du composant courant ou de l'un de ces
+ancêtres.
+Doit être exécuté pendant l'initialisation du composant.
 
 <div class="ts-block">
 
@@ -573,8 +581,8 @@ function onMount<T>(
 ## setContext
 
 Associe un objet de `context` arbitraire avec le composant courant et la clé fournie `key`, et
-renvoie cet objet. Le contexte est rendu disponible pour les enfants du composant (incluant les
-contenus slottés) avec `getContext`.
+renvoie cet objet. Le contexte est rendu disponible pour le composant lui-même et tous ses
+descendants (incluant les contenus slottés) avec `getContext`.
 
 Comme pour les fonctions de cycle de vie, cette fonction doit être exécutée lors de l'initialisation
 du composant.

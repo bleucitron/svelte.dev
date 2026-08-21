@@ -62,6 +62,16 @@ défini au sein d'une balise d'expression.)
 {/if}
 ```
 
+## Accessibilité [!VO]Accessibility
+
+Les transitions sont pilotées par l'[API Web
+Animations](https://developer.mozilla.org/fr/docs/Web/API/Web_Animations_API) plutôt que par le CSS.
+Une règle globale `@media (prefers-reduced-motion: reduce)` qui met à zéro `transition-duration` et
+`animation-duration` n'aura donc aucun effet sur les transitions Svelte.
+
+Utilisez [`prefersReducedMotion`](svelte-motion#prefersReducedMotion) pour ajuster (ou désactiver
+entièrement) la transition pour les appareils ayant requis moins de mouvements.
+
 ## Fonctions de transition personnalisées [!VO]Custom transition functions
 
 ```js

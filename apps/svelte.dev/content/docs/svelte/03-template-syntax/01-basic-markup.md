@@ -264,3 +264,15 @@ survolerez le nom du composant dans d'autres fichiers.
 	</h1>
 </main>
 ````
+
+Vous pouvez aussi écrire des commentaires dans le style de JavaScript entre les attributs des
+balises :
+
+```svelte
+<div
+  // ceci est un commentaire !
+  data-foo="bar"
+>
+  foo bar
+</div>
+```
