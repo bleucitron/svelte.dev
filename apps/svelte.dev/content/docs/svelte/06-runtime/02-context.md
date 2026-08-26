@@ -179,13 +179,13 @@ Svelte vous avertira si vous vous trompez.
 De même, pour passer des valeurs primitives à travers le contexte, utilisez des fonctions comme
 décrit dans [Passer de l'état à des fonctions]($state#Passing-state-into-functions).
 
-## Component testing
+## Monter des composants ayant du contexte [!VO]Mounting components with context
 
-Lorsque vous écrivez des [tests de
-composants](testing#Unit-and-component-tests-with-Vitest-Component-testing), il peut être utile de
-créer un composant "d'emballage" qui définit le contexte afin de vérifier le comportement d'un
-composant consommant ce contexte. À partir de la version 5.49, vous pouvez faire ce genre de choses
-:
+Pour monter un composant avec un contexte spécifique, créez un composant englobant qui va définir le
+contexte avant de rendre votre composant. Ceci est notamment utile pour les [tests de
+composants](testing#Unit-and-component-tests-with-Vitest-Component-testing), ou pour tout autre
+scénario qui a besoin de fournir un contexte au travers de `mount`. Depuis la version 5.49, vous
+pouvez faire ce genre de choses :
 
 ```js
 import { mount, unmount } from 'svelte';
@@ -211,6 +211,10 @@ test('MyComponent', () => {
 
 Cette approche fonctionne également avec [`hydrate`](imperative-component-api#hydrate) et
 [`render`](imperative-component-api#render).
+
+Le contexte défini par le composant englobant s'applique uniquement à cet arbre de composants
+montés. Chaque appel à `mount`, `hydrate` ou `render` crée une instance englobante distincte, afin
+que le contexte ne fuite pas dans d'autres composants montés.
 
 ## Remplacer l'état global [!VO]Replacing global state
 

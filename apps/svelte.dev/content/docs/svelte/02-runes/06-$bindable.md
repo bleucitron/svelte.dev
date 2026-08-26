@@ -63,3 +63,7 @@ Dans ce cas, vous pouvez préciser une valeur par défaut à utiliser lorsqu'auc
 /// file: FancyInput.svelte
 let { value = $bindable('défaut'), ...props } = $props();
 ```
+
+Lorsqu'une prop liée a une valeur par défaut, le parent doit fournir une valeur autre que
+`undefined` si celui-ci utilise `bind:`. Ceci permet d'éviter des ambigüités sur la valeur à
+appliquer, puisque le parent et l'enfant sont censés partager la même valeur lors d'une liaison.

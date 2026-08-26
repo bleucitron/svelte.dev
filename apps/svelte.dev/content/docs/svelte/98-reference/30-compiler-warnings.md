@@ -425,9 +425,10 @@ contenu soit accessible aux lecteurs d'écran.
 '%event%' event must be accompanied by '%accompanied_by%' event
 ```
 
-S'assure que `onmouseover` et `onmouseout` sont accompagnés de `onfocus` et `onblur`,
-respectivement. Ceci permet de s'assurer que toute fonctionnalité déclenchée par ces évènements de
-souris est aussi accessible pour les utilisateurs et utilisatrices de clavier.
+S'assure que `onmouseover` et `onmouseout` sont accompagnés de `onfocus` (ou `onfocusin`) et
+`onblur` (ou `onfocusout`), respectivement. Ceci permet de s'assurer que toute fonctionnalité
+déclenchée par ces évènements de souris est aussi accessible pour les utilisateurs et utilisatrices
+de clavier.
 
 ```svelte
 <!-- A11y: onmouseover must be accompanied by onfocus -->

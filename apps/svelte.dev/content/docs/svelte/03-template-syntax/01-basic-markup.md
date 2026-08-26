@@ -251,7 +251,7 @@ survolerez le nom du composant dans d'autres fichiers.
 - Vous pouvez aussi utiliser des blocs de code ici.
 - Usage:
   ```html
-  <Main name="Arethra">
+  <Main name="Aretha">
   ```
 -->
 <script>

@@ -60,4 +60,97 @@ function render<
 
 
 
+## Csp
+
+<div class="ts-block">
+
+```dts
+type Csp = { nonce?: string; hash?: boolean };
+```
+
+</div>
+
+## RenderOutput
+
+<div class="ts-block">
+
+```dts
+type RenderOutput = SyncRenderOutput &
+	PromiseLike<SyncRenderOutput>;
+```
+
+</div>
+
+## Sha256Source
+
+<div class="ts-block">
+
+```dts
+type Sha256Source = `sha256-${string}`;
+```
+
+</div>
+
+## SyncRenderOutput
+
+<div class="ts-block">
+
+```dts
+interface SyncRenderOutput {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+head: string;
+```
+
+<div class="ts-block-property-details">
+
+Du HTML qui va se trouver dans `<head>`
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+html: string;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> utilisez plutôt `body`
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+body: string;
+```
+
+<div class="ts-block-property-details">
+
+Du HTML qui va se trouver quelque part dans `<body>`
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+hashes: {
+	script: Sha256Source[];
+};
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
 

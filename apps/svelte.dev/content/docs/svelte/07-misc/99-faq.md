@@ -155,14 +155,18 @@ une application mobile en utilisant [Tauri](https://v2.tauri.app/start/frontend/
 géolocalisation ou les notifications push sont disponibles via des plugins pour chacune des
 plateformes.
 
+Vous pouvez également écrire des applications Svelte qui compilent vers des composants natifs en
+utilisant [Symbiote Native](https://docs.symbiote-native.dev/), qui utilise l'infrastructure fournie
+par React Native.
+
 Des travaux ont été réalisés dans l'optique de fournir un support pour des [moteurs de rendu
 personnalisés pour Svelte 5](https://github.com/sveltejs/svelte/issues/15470), mais cette
 fonctionnalité n'est pas encore disponible. L'API de rendu personnalisé devrait supporter d'autres
-frameworks mobiles comme Lynx JS et Svelte Native. Svelte Native était une option disponible pour
-Svelte 4, mais Svelte 5 n'est actuellement pas compatible. Svelte Native vous permet d'écrire des
-apps NativeScript en utilisant des composants Svelte contenant des [composants d'UI
-NativeScript](https://docs.nativescript.org/ui/) plutôt que des éléments DOM, ce qui est similaire à
-ce que React Native permet.
+frameworks mobiles comme Lynx JS et Svelte Native. Symbiote Native va également adopter cette API.
+Svelte Native était une option disponible pour Svelte 4, mais Svelte 5 n'est actuellement pas
+compatible. Svelte Native vous permet d'écrire des apps NativeScript en utilisant des composants
+Svelte contenant des [composants d'UI NativeScript](https://docs.nativescript.org/ui/) plutôt que
+des éléments DOM.
 
 ## Puis-je dire à Svelte de ne pas supprimer mes styles non utilisés ? [!VO]Can I tell Svelte not to remove my unused styles?
 

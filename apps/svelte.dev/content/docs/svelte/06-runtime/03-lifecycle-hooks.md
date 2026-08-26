@@ -125,10 +125,11 @@ s'exécute avant _chaque_ mise à jour, qu'elle soit pertinente ou non. Dans l'e
 nous avons besoin d'ajouter des vérifications comme `updatingMessages` pour nous assurer que nous ne
 touchons pas à la position du défilement lorsque le mode sombre est activé ou désactivé.
 
-Avec les rune, nous pouvons utiliser `$effect.pre`, qui fonctionne comme `$effect` mais est exécuté
-avant la mise à jour du DOM. Tant que la variable `messages` est explicitement référencée dans le
-corps de l'effet, cet effet sera ré-exécutée lorsque la variable `messages` est mise à jour, mais
-_pas_ lorsque la variable `theme` change.
+Avec les runes, nous pouvons utiliser `$effect.pre`, qui fonctionne comme `$effect` mais est exécuté
+avant les mises à jour du DOM prévues après lui (voir [$effect.pre]($effect#$effect.pre) pour
+l'ordre précis). Tant que la variable `messages` est explicitement référencée dans le corps de
+l'effet, cet effet sera ré-exécutée lorsque la variable `messages` est mise à jour, mais _pas_
+lorsque la variable `theme` change.
 
 `beforeUpdate`, et sa tout aussi problématique contrepartie `afterUpdate`, sont donc dépréciées par
 Svelte 5.

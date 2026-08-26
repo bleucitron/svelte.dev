@@ -244,6 +244,11 @@ jour. Pour cela, nous avons accès à la rune `$effect.pre` :
 </div>
 ```
 
+`$effect.pre` est exécuté avant les mises à jour du DOM prévues après lui, et non avant chaque
+mutation du DOM  — le DOM des composants parent peut éventuellement être déjà mis à jour. Lorsque
+vous utilisez des [expressions await](await-expressions), les mises à jour de blocs comme `{#if ...}`
+et `{#each ...}` du même composant sont également exécutées avant `$effect.pre`.
+
 Le timing mis à part, `$effect.pre` fonctionne exactement comme `$effect`.
 
 ## `$effect.tracking`

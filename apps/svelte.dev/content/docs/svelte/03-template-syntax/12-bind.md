@@ -291,6 +291,22 @@ la valeur de la liaison est prioritaire sauf s'il cette valeur est `undefined`.
 </select>
 ```
 
+Depuis la version 5.57.0, si un `<select>` a une `defaultValue` et fait partie d'un formulaire, le
+`<select>` va revenir à cette valeur au lieu de la chaîne de caractères vide lorsque le formulaire
+est réinitialisé. Notez que pour le rendu initial, la valeur de la liaison prend la priorité à moins
+que celle-ci soit `null` ou `undefined`.
+
+```svelte
+<form>
+	<select bind:value defaultValue="b">
+		<option>a</option>
+		<option>b</option>
+		<option>c</option>
+	</select>
+	<input type="reset" value="Reset">
+</form>
+```
+
 ## `<audio>`
 
 Les éléments `<audio>` ont leur propre jeu de liaisons — cinq à double sens...
