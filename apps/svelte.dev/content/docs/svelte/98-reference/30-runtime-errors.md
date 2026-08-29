@@ -539,9 +539,9 @@ l'instance_ de votre composant.
 Context was not set in the current component or any of its ancestors
 ```
 
-L'utilitaire [`createContext()`](svelte#createContext) renvoie une paire de fonctions `[get, set]`.
-`get` jette une erreur si `set` n'a pas été utilisée pour définir le contexte dans le composant
-courant ou l'un de ses parents.
+L'utilitaire [`createContext()`](svelte#createContext) renvoie une triplette de fonctions `[get,
+set, has]`. `get` jette une erreur si `set` n'a pas été utilisée pour définir le contexte dans le
+composant courant ou l'un de ses parents.
 
 ### snippet_without_render_tag
 

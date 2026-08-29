@@ -236,8 +236,8 @@ Disponible depuis la version 5.40.0
 
 </blockquote>
 
-Renvoie une paire de fonctions `[get, set]` permettant de travailler avec un contexte de manière
-typée.
+Renvoie une triplette de fonctions `[get, set, has]` permettant de travailler avec un contexte de
+manière typée.
 
 `get` va jeter une erreur si `set` n'a pas encore été appelé dans le composant actuel ou dans l'un
 de ces ancêtres.
@@ -245,7 +245,11 @@ de ces ancêtres.
 <div class="ts-block">
 
 ```dts
-function createContext<T>(): [() => T, (context: T) => T];
+function createContext<T>(): [
+	() => T,
+	(context: T) => T,
+	() => boolean
+];
 ```
 
 </div>

@@ -7,8 +7,9 @@ Le contexte permet aux composants d'accéder aux valeurs appartenant aux composa
 fournir en tant que props (potentiellement au travers de plusieurs couches de composants
 intermédiaires, ce qui s'appelle faire du "prop-drilling").
 
-Vous pouvez créer une paire de fonctions `[get, set]` avec `createContext `, vous permettant ainsi
-de définir le contexte dans un composant parent et le récupérer dans un composant enfant :
+Vous pouvez créer une triplette de fonctions `[get, set, has]` avec `createContext `, vous
+permettant ainsi de définir le contexte dans un composant parent et le récupérer dans un composant
+enfant :
 
 <!-- codeblock:start {"title":"Context","selected":"context.ts"} -->
 ```svelte
