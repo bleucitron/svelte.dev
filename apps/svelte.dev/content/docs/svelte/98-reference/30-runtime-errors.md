@@ -541,7 +541,8 @@ composant courant ou l'un de ses parents.
 `setContext` must be called when a component first initializes, not in a subsequent effect or after an `await` expression
 ```
 
-This restriction only applies when using the `experimental.async` option, which will be active by default in Svelte 6.
+Cette restriction s’applique uniquement lorsque vous utilisez l’option `experimental.async`, qui
+sera activée par défaut dans Svelte 6.
 
 ### snippet_without_render_tag
 
