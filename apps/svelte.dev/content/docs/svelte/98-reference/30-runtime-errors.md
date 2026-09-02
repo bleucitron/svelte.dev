@@ -262,14 +262,6 @@ Rest element properties of `$props()` such as `%property%` are readonly
 The `%rune%` rune is only available inside `.svelte` and `.svelte.js/ts` files
 ```
 
-### set_context_after_init
-
-```
-`setContext` must be called when a component first initializes, not in a subsequent effect or after an `await` expression
-```
-
-This restriction only applies when using the `experimental.async` option, which will be active by default in Svelte 6.
-
 ### state_descriptors_fixed
 
 ```
@@ -542,6 +534,14 @@ Context was not set in the current component or any of its ancestors
 L'utilitaire [`createContext()`](svelte#createContext) renvoie une triplette de fonctions `[get,
 set, has]`. `get` jette une erreur si `set` n'a pas été utilisée pour définir le contexte dans le
 composant courant ou l'un de ses parents.
+
+### set_context_after_init
+
+```
+`setContext` must be called when a component first initializes, not in a subsequent effect or after an `await` expression
+```
+
+This restriction only applies when using the `experimental.async` option, which will be active by default in Svelte 6.
 
 ### snippet_without_render_tag
 
