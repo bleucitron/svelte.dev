@@ -131,7 +131,6 @@ Si l'élément (ou un parent) utilise
 Lors du rendu côté serveur,`page.state` est toujours un objet vide. C'est également le cas pour la
 première page sur laquelle l'utilisateur ou l'utilisatrice arrive — si cette personne recharge la
 page (ou revient depuis un autre site), l'état ne sera _pas_ appliqué avant la navigation suivante.
-During server-side rendering, `page.state` is always an empty object. The same is true for the fir
 
 Le shallow routing est une fonctionnalité qui nécessite JavaScript pour fonctionner. Soyez-en
 conscient•e lorsque vous vous en servez et essayez de penser à un comportement de remplacement dans

@@ -7,7 +7,7 @@
 </script>
 
 <div class="related-links">
-	<h2>See also</h2>
+	<h2>Voir aussi</h2>
 
 	<ul>
 		{#each links as link}
