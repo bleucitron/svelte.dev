@@ -2,7 +2,7 @@
 title: Blocs each à clé
 ---
 
-Par défaut, mettre à jour la value d'un bloc `#each` va déclencher l'ajout ou la suppression de
+Par défaut, lorsque la liste sur laquelle un bloc `#each` itère est mise à jour, Svelte va ajouter ou supprimer des
 noeuds du DOM à la _fin_ du bloc si sa taille change, et mettre à jour le DOM restant. Ceci peut ne
 pas être ce que vous souhaitez.
 
