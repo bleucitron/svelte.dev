@@ -10,10 +10,10 @@
     "yyx990803"
   ],
   "homepage": "https://vitest.dev",
-  "version": "5.0.1",
-  "downloads": 74872451,
+  "version": "5.0.2",
+  "downloads": 118685504,
   "github_stars": 15942,
-  "updated": "2026-09-15T08:49:35.830Z",
+  "updated": "2026-09-25T09:00:46.560Z",
   "svelte_range": "^3.0.0 || ^4.0.0 || ^5.0.0",
   "typescript": true,
   "runes": false,
