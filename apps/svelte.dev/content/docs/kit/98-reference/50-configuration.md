@@ -520,7 +520,7 @@ Si oui ou non activer les variables d'environnement explicites utilisant `src/en
 
 ```ts
 // @noErrors
-tracing?: {/*…*/}
+tracing?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -567,7 +567,7 @@ opérations de SvelteKit comme les [hooks `handle`](/docs/kit/hooks#handle), les
 
 ```ts
 // @noErrors
-instrumentation?: {/*…*/}
+instrumentation?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -733,7 +733,7 @@ nécessitant pas de traitement, comme `favicon.ico` et `manifest.json`.
 
 ```ts
 // @noErrors
-hooks?: {/*…*/}
+hooks?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -1586,7 +1586,76 @@ La contrepartie est que pour les chemins non visités, la résolution va prendre
 
 <div class="ts-block-property-children">
 
+<div class="ts-block-property">
 
+```ts
+// @noErrors
+files?: (file: string) => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">default</span> `(filename) => !/\.DS_Store/.test(filename)`
+
+</div>
+
+Determine which files in your `static` directory will be available in `$service-worker.files`.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+register: true;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">default</span> `true`
+
+</div>
+
+Whether to automatically register the service worker, if it exists.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+options?: RegistrationOptions;
+```
+
+<div class="ts-block-property-details">
+
+Options for serviceWorker.register("...", options);
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```ts
+// @noErrors
+register?: false;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">default</span> `true`
+
+</div>
+
+Whether to automatically register the service worker, if it exists.
+
+</div>
+</div>
 
 </div>
 
