@@ -1597,11 +1597,12 @@ files?: (file: string) => boolean;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `(filename) => !/\.DS_Store/.test(filename)`
+- <span class="tag">par défaut</span> `(filename) => !/\.DS_Store/.test(filename)`
 
 </div>
 
-Determine which files in your `static` directory will be available in `$service-worker.files`.
+Determine quels fichiers dans votre dossier `static` seront rendus disponibles dans
+`$service-worker.files`.
 
 </div>
 </div>
@@ -1616,11 +1617,11 @@ register: true;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `true`
+- <span class="tag">par défaut</span> `true`
 
 </div>
 
-Whether to automatically register the service worker, if it exists.
+Si oui ou non déclarer automatiquement le service worker, s'il existe.
 
 </div>
 </div>
@@ -1633,7 +1634,7 @@ options?: RegistrationOptions;
 
 <div class="ts-block-property-details">
 
-Options for serviceWorker.register("...", options);
+Options de `serviceWorker.register("...", options);`
 
 </div>
 </div>
@@ -1648,11 +1649,11 @@ register?: false;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">default</span> `true`
+- <span class="tag">par défaut</span> `true`
 
 </div>
 
-Whether to automatically register the service worker, if it exists.
+Si oui ou non déclarer automatiquement le service worker, s'il existe.
 
 </div>
 </div>
