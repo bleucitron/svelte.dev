@@ -18,17 +18,15 @@ export function load(+++{ cookies }+++) {
 }
 ```
 
-Pour définir un cookie, utilisez `cookies.set(name, value, options)`. Il est fortement recommandé de
-définir explicitement le `path` lorsque vous définissez un cookie, puisque le comportement par
-défaut des navigateurs est de définir le cookie sur le chemin parent du chemin courant — ce qui est
-plutôt inutile.
+Pour définir un cookie, utilisez `cookies.set(name, value, options)`. Par défaut, SvelteKit définit
+le `path` comme étant `/`, rendant le cookie disponible pour toute l'application.
 
 ```js
 /// file: src/routes/+page.server.js
 export function load({ cookies }) {
 	const visited = cookies.get('visited');
 
-	+++cookies.set('visited', 'true', { path: '/' });+++
+	+++cookies.set('visited', 'true');+++
 
 	return {
 		visited: visited === 'true'
@@ -41,15 +39,16 @@ Désormais, si vous rechargez l'iframe, `Bonjour étranger !` devient `Bonjour c
 Appeler `cookies.set(name, ...)` déclenche l'écriture de l'en-tête `Set-Cookie`, mais va _aussi_
 mettre à jour la map de cookies interne, impliquant que les appels suivants à `cookies.get(name)`
 pendant la même requête renverrons la valeur à jour. Sous le capot, l'API `cookies` utilise le
-paquet populaire `cookie` — les options passées à `cookies.get` et `cookies.set` correspondent aux
-options de `parse` et `serialize` dans la [documentation](https://github.com/jshttp/cookie#api) de
-`cookie`. SvelteKit définit les options suivantes par défaut pour sécuriser un peu plus vos cookies
+paquet populaire `cookie` — les options passées à `cookies.set` correspondent grossièrement à la
+forme de l'[objet `Set-Cookie`](https://github.com/jshttp/cookie#set-cookie-object). SvelteKit
+définit les options suivantes par défaut pour sécuriser un peu plus vos cookies
 :
 
 ```js
 {
 	httpOnly: true,
 	secure: true,
-	sameSite: 'lax'
+	sameSite: 'lax',
+	path: '/'
 }
 ```

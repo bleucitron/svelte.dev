@@ -9,25 +9,23 @@ Un projet SvelteKit typique ressemble à ça :
 my-project/
 ├ src/
 │ ├ lib/
-│ │ ├ server/
-│ │ │ └ [your server-only lib files]
-│ │ └ [your lib files]
-│ ├ params/
-│ │ └ [your param matchers]
+│ │ └ [vos fichier de librairie]
 │ ├ routes/
-│ │ └ [your routes]
+│ │ └ [vos routes]
+│ ├ service-worker/
+│ │ ├ index.js
+│ │ └ tsconfig.json
 │ ├ app.html
 │ ├ error.html
 │ ├ hooks.client.js
 │ ├ hooks.server.js
-│ ├ service-worker.js
-│ └ instrumentation.server.js
+│ ├ instrumentation.server.js
+│ └ params.js
 ├ static/
-│ └ [your static assets]
+│ └ [vos assets statiques]
 ├ tests/
-│ └ [your tests]
+│ └ [vos tests]
 ├ package.json
-├ svelte.config.js
 ├ tsconfig.json
 └ vite.config.js
 ```
@@ -44,14 +42,13 @@ Le dossier `src` contient le coeur de votre projet. Tout y est optionnel à l'ex
 `src/routes` et `src/app.html`.
 
 - `lib` contient votre code de "librairie" (utilitaires et composants), qui peut être importé via
-l'alias [`$lib`]($lib), ou empaqueté pour distribution en utilisant [`svelte-package`](packaging)
-	- `server` contient votre code de "librairie" dédié serveur. Il peut être importé en utilisant
-	l'alias [`$lib/server`](server-only-modules). SvelteKit vous empêchera d'importer du code
-	provenant de ce dossier dans du code client
-- `params` contient tout [matcher de paramètre](advanced-routing#Matching) dont votre application a
-	besoin
+l'alias [`#lib`]($lib), ou empaqueté pour distribution en utilisant [`svelte-package`](packaging)
+	- les dossiers nommés `server`, à n'importe quelle profondeur, définissent tout le code qu'ils
+	contiennent comme étant [réservés au serveur](server-only-modules). SvelteKit vous empêchera
+	d'importer ce code dans du code à destination du client
 - `routes` contient les [routes](routing) de votre application. Vous pouvez aussi y placer des
 composants qui ne seraient utilisés que pour une route spécifique
+- `service-worker` contiennent vos [service workers](service-workers)
 - `app.html` est votre template de page — un document HTML contenant les placeholders suivants :
 	- `%sveltekit.head%` — les éléments `<link>` et `<script>` nécessaires à votre application, plus
 	tout contenu défini par `<svelte:head>`
@@ -65,10 +62,8 @@ composants qui ne seraient utilisés que pour une route spécifique
 	- `%sveltekit.nonce` — une règle [CSP](configuration#csp) nonce pour les liens et scripts
 	manuellement inclus, s'il y en a
 	- `%sveltekit.env.[NAME]%` — ceci sera remplacé au moment du rendu par la variable
-	d'environnement `[NAME]`, dont le nom doit être préfixé par [`publicPrefix`](configuration#env)
-	(en général `PUBLIC_`), ou être défini en tant que variable publique dans `src/env` si vous
-	utilisez [`experimental.explicitEnvironmentVariables`](environment-variables). Ce placeholder
-	sera remplacé par `''` si aucune variable d'environnement ne correspond
+	d'environnement `[NAME]`, qui doit être définie en tant que variable publique dans `src/env`.
+	Par défaut vaut `''` si non définie.
 	- `%sveltekit.version%` — la version de l'application, qui peut être spécifiée avec la configuration
 - `error.html` est la page qui est affichée lorsque tout le reste s'est effondré. Elle peut contenir
 	les placeholders suivants :
@@ -77,7 +72,8 @@ composants qui ne seraient utilisés que pour une route spécifique
 [`version`](configuration#version)
 - `hooks.client.js` contient vos [hooks](hooks) client
 - `hooks.server.js` contient vos [hooks](hooks) serveur
-- `service-worker.js` contient votre [service worker](service-workers)
+- `params.js` contient les [matchers de paramètres](advanced-routing#Matching) dont votre
+application a besoin
 - `instrumentation.server.js` contient votre configuration d'[observabilité](observability) et du
 code d'instrumentation
   - Requiert le support de l'adaptateur. Si votre adaptateur le supporte, il est garanti que ce
@@ -112,26 +108,19 @@ contient `"type": "module"`. Ceci signifie que les fichiers `.js` sont interpré
 natifs JavaScript supportant les mot-clés `import` et `export`. Les fichiers en CommonJS nécessitent
 alors une extension `.cjs`.
 
-### svelte.config.js
+### vite.config.js
 
-Ce fichier contient votre [configuration](configuration) Svelte et SvelteKit.
+Un projet SvelteKit est en réalité un projet [Vite](https://vitejs.dev) qui utilise le plugin
+[`@sveltejs/kit/vite`](@sveltejs-kit-vite). Le plugin accepte vos [configurations](configuration)
+Svelte et SvelteKit.
 
 ### tsconfig.json
 
 Ce fichier (ou `jsconfig.json`, si vous préférez vérifier le typage dans des fichiers `.js`, plutôt
 que dans des fichiers `.ts`) configure TypeScript, si vous avec ajouté la vérification de types
 pendant `npx sv create`. Puisque SvelteKit repose sur le fait que certaines configurations doivent
-être définies d'une certaine manière, il génère lui-même son fichier `.svelte-kit/tsconfig.json` que
-votre propre configuration doit étendre avec `extends`. Pour faire des changements aux options
-de premier niveau telles que `include` et `exclude`, nous recommandons d'étendre la configuration
-générée ; voir la section [sur le paramétrage de `typescript.config`](configuration#typescript) pour
-plus de détails.
-
-### vite.config.js
-
-Un projet SvelteKit n'est en réalité qu'un projet [Vite](https://vitejs.dev) qui utilise le plugin
-[`@sveltejs/kit/vite`](@sveltejs-kit-vite), en plus d'autres configurations
-[Vite](https://vitejs.dev/config/).
+être définies d'une certaine manière, il génère un [module de configuration
+TypeScript]($app-tsconfig) dont doit hériter via `extends` votre propre configuration.
 
 ## Autres fichiers [!VO]Other files
 

@@ -45,8 +45,8 @@ plusieurs fichiers du projet ont besoin d'être déplacés ou modifiés.
 ### Configuration
 
 Votre fichier `webpack.config.js` ou `rollup.config.js` doit être remplacé par un fichier
-`svelte.config.js`, comme documenté [ici](configuration). Les options de préprocesseur de Svelte
-doivent être déplacées vers `config.preprocess`.
+`vite.config.js`, comme documenté [ici](configuration). Les options de préprocesseur de Svelte
+doivent être déplacées vers le paramètre `config.preprocess` du plugin SvelteKit.
 
 Vous devrez ajouter un [adaptateur](adapters). `sapper build` est grossièrement équivalent à
 [adapter-node](adapter-node) tandis que `sapper export` est grossièrement équivalent à
@@ -121,7 +121,7 @@ L'import `stores` depuis `@sapper/app` doit être remplacé — voir la section 
 [Stores](migrating#Pages-and-layouts-Stores) ci-dessous.
 
 Tout fichier précédemment importé depuis des dossiers dans `src/node_modules` doit être remplacé par
-des imports depuis [`$lib`]($lib).
+des imports depuis [`#lib`]($lib).
 
 ### Pré-chargement [!VO]Preload
 
@@ -187,7 +187,7 @@ contexte.
 ### Attributs &lt;a&gt; [!VO]&lt;a&gt;  attributes
 
 - `sapper:prefetch` est désormais `data-sveltekit-preload-data`
-- `sapper:noscroll` est désormais `data-sveltekit-noscroll`
+- `sapper:noscroll` est désormais `data-sveltekit-reset="false"`
 
 ## Endpoints
 
@@ -223,7 +223,7 @@ declare module 'html-minifier';
 // @filename: index.js
 // ---cut---
 import { minify } from 'html-minifier';
-import { building } from '$app/environment';
+import { building } from '$app/env';
 
 const minification_options = {
 	collapseBooleanAttributes: true,
@@ -244,7 +244,7 @@ const minification_options = {
 	sortClassName: true
 };
 
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export async function handle({ event, resolve }) {
 	let page = '';
 

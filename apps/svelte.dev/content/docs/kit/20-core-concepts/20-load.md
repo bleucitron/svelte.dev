@@ -63,13 +63,13 @@ serveur et récupère des données dans une base de données, pourrait ressemble
 ```js
 /// file: src/routes/blog/[slug]/+page.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function getPost(slug: string): Promise<{ title: string, content: string }>
 }
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -91,13 +91,13 @@ Vos fichiers `+layout.svelte` peuvent aussi charger des données, via `+layout.j
 ```js
 /// file: src/routes/blog/[slug]/+layout.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function getPostSummaries(): Promise<Array<{ title: string, slug: string }>>
 }
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
@@ -195,10 +195,6 @@ ou `+page.server.js`. Ceci est rendu possible par `page.data` :
 
 L'information de typage de `page.data` est fournie par `App.PageData`.
 
-> [!LEGACY]
-> `$app/state` a été ajouté par SvelteKit 2.12. Si vous utilisez une version antérieure ou si vous
-> utilisez Svelte 4, utilisez plutôt `$app/stores`. Ce module fournit un store de `page` ayant la
-> même interface, et vous pouvez vous y abonner avec, par exemple, `$page.data.title`.
 
 ## Universel vs serveur [!VO]Universal vs server
 
@@ -238,8 +234,8 @@ Les fonctions `load` universelles et de serveur ont toutes deux accès aux propr
 requête (`params`, `route`, et `url`) ainsi qu'à diverses fonctions (`fetch`, `setHeaders`,
 `parent`, `depends` et `untrack`). Ces fonctions sont décrites dans les sections suivantes.
 
-Les fonctions `load` de serveur sont appelées avec un `ServerLoadEvent`, qui hérite de
-`clientAddress`, `cookies`, `locals`, `platform` et `request` venant de `RequestEvent`.
+Les fonctions `load` de serveur sont appelées avec un `ServerLoadEvent`, qui hérite de `cookies`,
+`locals`, `platform` et `request` venant de `RequestEvent`.
 
 Les fonctions `load` universelles sont appelées avec un `LoadEvent`, qui a une propriété `data`. Si
 vous avez une fonction `load` à la fois dans `+page.js` et dans `+page.server.js` (ou `+layout.js`
@@ -377,18 +373,22 @@ export async function load({ fetch, params }) {
 
 ## Cookies
 
-Une fonction `load` de serveur peut récupérer et définir des [`cookies`](@sveltejs-kit#Cookies).
+Une fonction `load` de serveur peut récupérer et définir des [`cookies`](@sveltejs-kit#Cookies)
+comme montré ci-dessous. Lorsque vous définissez des cookies, SvelteKit fournit des valeurs par
+défaut pour `httpOnly`, `secure`, et `path` — comme [décrit dans la documentation de
+l'API](@sveltejs-kit#Cookies) — afin d'améliorer la sécurité et l'expérience de développement.
+
 
 ```js
 /// file: src/routes/+layout.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function getUser(sessionid: string | undefined): Promise<{ name: string, avatar: string }>
 }
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ cookies }) {
@@ -525,7 +525,7 @@ export async function load({ params, parent }) {
 ## Erreurs [!VO]Errors
 
 Si une erreur est jetée lors d'une fonction `load`, la page [`+error.svelte`](routing#error) la plus
-proche sera rendue. Pour les erreurs [_prévues_](errors#Expected-errors), utilisez l'utilitaire
+proche sera rendue. Pour les erreurs [_d'application_](errors#App-errors), utilisez l'utilitaire
 `error` importé depuis `@sveltejs/kit` pour préciser le statut HTTP et un message optionnel :
 
 ```js
@@ -559,8 +559,9 @@ export function load({ locals }) {
 Appeler `error(...)` va lever une exception, ce qui vous permet de facilement arrêter l'exécution
 depuis des fonctions utilitaires.
 
-Si une erreur [_imprévue_](errors#Unexpected-errors) est levée, SvelteKit va exécuter le hook
-[`handleError`](hooks#handleError) et la traiter comme une erreur 500 Internal Error.
+Toute erreur est fournie au hook [`handleError`](hooks#handleError). Une [erreur
+inconnue](errors#Unknown-errors) est traitée comme une erreur 500 Internal Error à moins que le hook
+n'en décide autrement.
 
 > [!NOTE] [Dans SvelteKit
 > 1.x](migrating-to-sveltekit-2#redirect-and-error-are-no-longer-thrown-by-you), vous deviez `throw`
@@ -719,13 +720,13 @@ Par exemple, étant donné une paire de fonctions `load` comme celles-ci...
 ```js
 /// file: src/routes/blog/[slug]/+page.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function getPost(slug: string): Promise<{ title: string, content: string }>
 }
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -738,13 +739,13 @@ export async function load({ params }) {
 ```js
 /// file: src/routes/blog/[slug]/+layout.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function getPostSummaries(): Promise<Array<{ title: string, slug: string }>>
 }
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
@@ -794,9 +795,13 @@ export async function load({ untrack, url }) {
 
 Vous pouvez également ré-exécuter des fonctions `load` s'appliquant à la page actuelle en utilisant
 [`invalidate(url)`]($app-navigation#invalidate), ce qui ré-exécute toutes les fonctions `load` qui
-dépendent d'`url`, ou [`invalidateAll()`]($app-navigation#invalidateAll), qui ré-exécute toutes les
-fonctions `load`. Les fonctions `load` de serveur ne vont jamais être automatiquement dépendantes
-d'une `url` utilisées par un `fetch` pour éviter de fuiter des informations sensibles au client.
+dépendent d'`url`, ou [`refreshAll()`]($app-navigation#refreshAll), qui ré-exécute toutes les
+fonctions `load` et toutes les queries actives. Les fonctions `load` de serveur ne vont jamais être
+automatiquement dépendantes d'une `url` utilisées par un `fetch` pour éviter de fuiter des
+informations sensibles au client.
+
+> [!NOTE] `refreshAll` ne réinitialse _pas_ `page.state`, à la différence de sa prédécesseure
+> dépréciée `invalidateAll`.
 
 Une fonction `load` dépend de l'`url` si elle exécute `fetch(url)` ou `depends(url)`. Notez qu'`url`
 peut être un identifiant qui commence par `[a-z]` :
@@ -821,7 +826,7 @@ export async function load({ fetch, depends }) {
 ```svelte
 <!--- file: src/routes/random-number/+page.svelte --->
 <script>
-	import { invalidate, invalidateAll } from '$app/navigation';
+	import { invalidate, refreshAll } from '$app/navigation';
 
 	/** @type {import('./$types').PageProps} */
 	let { data } = $props();
@@ -831,7 +836,7 @@ export async function load({ fetch, depends }) {
 		invalidate('app:random');
 		invalidate('https://api.example.com/random-number');
 		invalidate(url => url.href.includes('random-number'));
-		invalidateAll();
+		refreshAll();
 	}
 </script>
 
@@ -850,13 +855,16 @@ changé. Les propriétés de `request.url` ne sont _pas_ suivies
 `url.searchParams.has(...)` et le paramètre en question a changé. Lire d'autres propriétés de
 `url.searchParams` aura le même effet que lire `url.search`.
 - Elle exécute `await parent()` et une fonction `load` parente a été ré-exécutée
-- Une fonction `load` enfante exécute `await parent()` et est ré-exécutée, et le parent est une
-fonction `load` de serveur
+- Une fonction `load` de serveur enfante exécute `await parent()` et est ré-exécutée, et le parent
+est aussi une fonction `load` de serveur. Une fonction `load` universelle qui exécute `await
+parent()` réutilise plutôt les données existantes de la fonction `load` parente
 - Elle déclare une dépendance sur une URL spécifique via [`fetch`](#Making-fetch-requests) (`load`
 universelles uniquement) ou [`depends`](@sveltejs-kit#LoadEvent), et cette URL a été déclarée comme
 obsolète avec [`invalidate(url)`]($app-navigation#invalidate)
 - Toutes les fonctions `load` actives ont été ré-exécutées de manière forcée avec
 [`invalidateAll()`]($app-navigation#invalidateAll)
+- Toutes les fonctions `load` actives ont été ré-exécutées de force avec
+[`refreshAll()`]($app-navigation#refreshAll)
 
 `params` et `url` peuvent changer en réaction à un clic sur un lien `<a href="..">`, une
 [interaction de formulaire](form-actions#GET-vs-POST), une invocation de
@@ -944,7 +952,7 @@ formulaire]{form-actions), par exemple) pour garantir que la personnes est ident
 /// file: +page.server.js
 // @filename: ambient.d.ts
 
-declare module '$lib/server/auth' {
+declare module '#lib/server/auth.js' {
 	interface User {
 		name: string;
 	}
@@ -954,7 +962,7 @@ declare module '$lib/server/auth' {
 
 // @filename: index.ts
 // ---cut---
-import { requireLogin } from '$lib/server/auth';
+import { requireLogin } from '#lib/server/auth.js';
 
 export function load() {
 	const user = requireLogin();

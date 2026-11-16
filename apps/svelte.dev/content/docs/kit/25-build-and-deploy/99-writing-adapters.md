@@ -17,6 +17,8 @@ type AdapterSpecificOptions = any;
 
 // @filename: index.js
 // ---cut---
+import { getRequest, setResponse } from '@sveltejs/kit/node';
+
 /** @param {AdapterSpecificOptions} options */
 export default function (options) {
 	/** @type {import('@sveltejs/kit').Adapter} */
@@ -43,6 +45,22 @@ export default function (options) {
 				// Renvoyez `true` si cet adaptateur supporte le chargement du fichier `instrumentation.server.js`
 				// Renvoyez `false` sinon, ou jetez une erreur expliquant le problème.
 			}
+		},
+		vite: {
+			getRequest(options) {
+				const request = getRequest(options);
+				// modifiez l'objet Request ici si besoin
+				return request;
+			},
+			setResponse(res, response) {
+				// gérez les WebSockets ici, par exemple
+				setResponse(res, response);
+			},
+			plugins: {
+				// ajoutez des plugins ici, pour les intégrer à Vite
+				pre: [],
+				post: []
+			}
 		}
 	};
 
@@ -50,7 +68,7 @@ export default function (options) {
 }
 ```
 
-De ces options, uniquement `name` et `adapt` sont requises. `emulate` et `supports` sont
+De ces options, uniquement `name` et `adapt` sont requises. `emulate`, `vite` et `supports` sont
 optionnelles.
 
 L'adaptateur est censé faire un certain nombre de choses au sein de la méthode `adapt` :
@@ -59,9 +77,8 @@ L'adaptateur est censé faire un certain nombre de choses au sein de la méthode
 - Écrire l'output de SvelteKit avec `builder.writeClient`, `builder.writeServer` et
 `builder.writePrerendered`
 - Générer du code qui :
-	- Importe `Server` depuis `${builder.getServerDirectory()}/index.js`
-	- Instancie l'application avec un manifeste généré avec `builder.generateManifest({ relativePath
-	})`
+	- Importe une instance de `server` généré par `${builder.generateServerInstance()}`
+	- Exécute `await server.init({ env, read })`
 	- Écoute les requêtes venant de la plateforme, les convertit en objets
 	[`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) standards si besoin, appelle
 	la fonction `server.respond(request, { getClientAddress })` pour générer une
@@ -69,9 +86,6 @@ L'adaptateur est censé faire un certain nombre de choses au sein de la méthode
 	requête avec cette réponse
 	- expose à SvelteKit toute information spécifique à la plateforme via l'option `platform` passée à
 		`server.respond`
-	- remplace globalement la méthode `fetch` pour qu'elle puisse fonctionner sur la plateforme
-	ciblée, si nécessaire. SvelteKit fournit un utilitaire `@sveltejs/kit/node/polyfills` pour les
-	plateformes qui peuvent utiliser `undici`
 - Compile l'output pour éviter d'avoir à installer les dépendances sur la plateforme cible, si
 nécessaire
 - Place les fichiers statiques et les fichiers JS/CSS générés dans l'emplacement prévu par la

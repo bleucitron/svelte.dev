@@ -8,7 +8,7 @@ dehors du code source de votre application. Elles vous permettent d'utiliser des
 sensibles comme des clés d'API ou des authentifiants de bases de données sans les stocker dans votre
 contrôle de version.
 
-Lors du développement, et au moment de la compilation, les variables définids dans un fichier `.env`
+Lors du développement, et au moment de la compilation, les variables définies dans un fichier `.env`
 ou `.env.local` seront ajoutées à l'environnement :
 
 ```env
@@ -16,44 +16,20 @@ ou `.env.local` seront ajoutées à l'environnement :
 API_KEY=19f401ba-e8b0-48c4-8c77-b0ebb26d97fe
 ```
 
-Par défaut, chaque variable d'environnement est rendue implicitement disponible au sein de votre
-application via les modules suivants :
-
-- [`$env/static/private`]($env-static-private)
-- [`$env/static/public`]($env-static-public)
-- [`$env/dynamic/private`]($env-dynamic-private)
-- [`$env/dynamic/public`]($env-dynamic-public)
-
-## Variables d'environnement explicites [!VO]Explicit environment variables
-
-Depuis SvelteKit 2.63, vous pouvez activer les variables d'environnement _explicites_, ce qui vous
-permet plutôt d'importer vos variables d'environnement depuis ces modules :
+Après avoir suivi la mise en place ci-dessous, les variables d'environnement peuvent être importées
+via les modules suivantes :
 
 - [`$app/env/private`]($app-env-private)
 - [`$app/env/public`]($app-env-public)
 
-Additionnellement, le module [`$app/environment`]($app-environment) est renommé en
-[`$app/env`]($app-env).
+> [!LEGACY]
+> Les modules `$env/*`, ainsi que `$app/environment`, ont été dépréciés avec SvelteKit 3 (et seront
+> supprimés avec SvelteKit 4) en faveur de variables d'environnement explicites qui ont été ajoutées
+> avec SvelteKit 2.62 en tant qu'option expérimentale.
 
-> [!NOTE] Les variables d'environnement explicites seront le comportement par défaut de SvelteKit 3.
-> Les modules `$env/*`, ainsi que `$app/environment`, seront supprimés.
+## Setup
 
-### Mise en place [!VO]Setup
-
-Pour activer les variables d'environnement explicites, mettez votre configuration à jour...
-
-```js
-/// file: svelte.config.js
-export default {
-	kit: {
-		experimental: {
-			+++explicitEnvironmentVariables: true+++
-		}
-	}
-};
-```
-
-... et ajoutez un fichier `src/env.ts` (ou `src/env.js`) exportant un objet `variables` :
+Ajoutez un fichier `src/env.ts` (ou `src/env.js`) exportant un objet `variables` :
 
 ```ts
 /// file: src/env.ts
@@ -65,12 +41,12 @@ export const variables = defineEnvVars({
 ```
 
 Chaque valeur de l'objet passée à [`defineEnvVars`](@sveltejs-kit-env#defineEnvVars) est un objet
-[`EnvVarConfig`](@sveltejs-kit#EnvVarConfig) qui configure la variable d'environnement.
+[`EnvVarConfig`](@sveltejs-kit-env#EnvVarConfig) qui configure la variable d'environnement.
 
 > [!NOTE] `defineEnvVars` renvoie son argument inchangé — cette fonction n'existe que pour vous
 > aider avec le typage.
 
-### Variables privées [!VO]Private variables
+## Variables privées [!VO]Private variables
 
 Par défaut, toutes les variables sont considérées privées. Par exemple, vous ne souhaitez pas
 révéler votre `API_KEY` :
@@ -97,7 +73,7 @@ import { API_KEY } from '$app/env/private';
 Le module `$app/env/private` ne peut pas être importé dans du code exécuté dans le navigateur, de
 sorte que ne puissiez pas accidentellement révéler vos secrets dans un bundle JavaScript.
 
-### Variables publiques [!VO]Public variables
+## Variables publiques [!VO]Public variables
 
 Certaines variables peuvent être rendues accessibles dans le navigateur sans aucun danger — c'est
 même parfois nécessaire. Pour ces variables, nous pouvons préciser `public: true` :
@@ -144,7 +120,7 @@ fichier de template `app.html` en tant que `%sveltekit.env.GOOGLE_ANALYTICS_ID%`
 </html>
 ```
 
-### Validation
+## Validation
 
 Vous pouvez préciser un validateur de [Standard Schema](https://standardschema.dev/) comme
 [Zod](https://zod.dev/) ou [Valibot](https://valibot.dev/) pour vérifier que'une variable
@@ -163,10 +139,27 @@ export const variables = defineEnvVars({
 });
 ```
 
+Si vous ne souhaitez pas intégrer une librairie de schéma, vous pouvez passer une fonction qui
+renvoie la valeur (potentiellement transformée), ou jette une erreur expliquant le problème :
+
+```ts
+/// file: src/env.ts
+import { defineEnvVars } from '@sveltejs/kit/env';
+
+export const variables = defineEnvVars({
+	GOOGLE_ANALYTICS_ID: {
+		public: true,
+		schema: (value) => {
+			if (!value?.startsWith('G-')) throw new Error('doit être un ID Google Analytics');
+			return value;
+		}
+	}
+});
+```
+
 Si une valeur est invalide, l'application échouera à se lancer (ou à compiler). Pour en désactiver
 une, utilisez l'export [`building`]($app-env#building) de `$app/env` en combinaison avec un
 validateur qui accepte une valeur optionnelle :
-
 
 ```ts
 /// file: src/env.ts
@@ -186,7 +179,7 @@ Vous pouvez utiliser le validateurs pour rendre des valeurs optionnelles, ou les
 transformer une string en booléen, ou parser du JSON) — voir la documentation de votre librairie de
 validation pour en savoir plus.
 
-### Variables statiques [!VO]Static variables
+## Variables statiques [!VO]Static variables
 
 Par défaut, les variables sont dynamiques. Si une variable est configurée avec `static: true`, elle
 sera inlinée dans le code applicatif, permettant des optimisations telles que l'élimination de code
@@ -217,7 +210,7 @@ JavaScript à moins que `SHOW_DEBUG_OVERLAY` ne soit vrai :
 ```svelte
 <script>
 	import { SHOW_DEBUG_OVERLAY } from '$app/env/public';
-	import DebugOverlay from '$lib/components/DebugOverlay.svelte';
+	import DebugOverlay from '#lib/components/DebugOverlay.svelte';
 </script>
 
 {#if SHOW_DEBUG_OVERLAY}
@@ -233,7 +226,7 @@ SHOW_DEBUG_OVERLAY=true npm run build
 
 ... alors le composant sera inclus et affiché.
 
-### Documenter les variables [!VO]Documenting variables
+## Documenter les variables [!VO]Documenting variables
 
 Vous pouvez documenter le rôle d'une variable d'environnement en ajoutant une `description` :
 

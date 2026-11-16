@@ -12,22 +12,149 @@ import { defineEnvVars } from '@sveltejs/kit/env';
 
 ## defineEnvVars
 
-Utility for defining [environment variables](/docs/kit/environment-variables),
-which are made available via `$app/env/public` and `$app/env/private`.
+Un utilitaire permettant de définir des [variables
+d'environnement](/docs/kit/environment-variables), qui sont rendues disponibles via
+`$app/env/public`, et `$app/env/private`.
+
+```js
+// @errors: 7031
+import { defineEnvVars } from '@sveltejs/kit/env';
+import * as v from 'valibot';
+
+export const variables = defineEnvVars({
+	API_URL: {
+		schema: v.pipe(v.string(), v.url())
+	},
+	PORT: {
+		schema: (value) => {
+			if (value === undefined) return 3000;
+			const port = Number(value);
+			if (!Number.isInteger(port)) throw new Error('Le PORT doit être un entier');
+			return port;
+		}
+	}
+});
+```
 
 <div class="ts-block">
 
 ```dts
 function defineEnvVars<
-	T extends Record<
-		string,
-		import('@sveltejs/kit').EnvVarConfig<any>
-	>
->(variables: T): T;
+	T extends Record<string, EnvVarConfig<any>>
+>(variables: T): DefinedEnvVars<T>;
 ```
 
 </div>
 
 
+
+## DefinedEnvVars
+
+Le type de retour de [`defineEnvVars`](/docs/kit/@sveltejs-kit-env#defineEnvVars).
+
+<div class="ts-block">
+
+```dts
+type DefinedEnvVars<
+	T extends Record<string, EnvVarConfig<any>>
+> = {
+	readonly [K in keyof T]: EnvVarEntry<T[K]>;
+};
+```
+
+</div>
+
+## EnvVarConfig
+
+[Les variables d'environnement](/docs/kit/environment-variables) peuvent être configurées en
+exportant un objet `variables` depuis `src/env.ts`, en utilisant
+[`defineEnvVars`](/docs/kit/@sveltejs-kit-env#defineEnvVars).
+
+<div class="ts-block">
+
+```dts
+interface EnvVarConfig<T> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+public?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non la variable d'environnement est accessible par du code client.
+- si vaut `true`, elle peut être importée depuis `$app/env/public`
+- si vaut `false`, elle peut être importée depuis `$app/env/private`, qui est un [module réservé au
+serveur](/docs/kit/server-only-modules)
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+static?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si oui ou non la valeur est déterminée à la compilation ou lorsque l'application est en cours
+d'exécution.
+- si vaut `true`, la valeur à la compilation est inlinée dans le code compilé. Ceci permet des
+optimisations comme l'élimination de code mort
+- si vaut `false`, la valeur est lue depuis l'environnement lorsque l'application démarre
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+schema?: StandardSchemaV1<string | undefined, T> | ((value: string | undefined) => T | undefined);
+```
+
+<div class="ts-block-property-details">
+
+Un validateur de [Standard Schema](https://standardschema.dev/) qui est appliqué à la valeur lorsque
+l'application démarre.
+Peut être également être une fonction qui renvoie la valeur (potentiellement transformée), ou qui
+jette une erreur expliquant le problème. Renvoyer `undefined` est valide, de sorte que la fonction
+puisse décrire une variable optionnelle.
+Le validateur peut renvoyer toute sorte de valeur — pas uniquement une chaîne de caractères — mais
+les valeurs publiques non statiques doivent être sérialisables par
+[devalue](https://github.com/sveltejs/devalue) afin qu'elles puissent être envoyées au navigateur.
+
+Si le validateur est omis, la valeur doit être définie, mais peut être une chaîne de caractères
+vide.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+description?: string;
+```
+
+<div class="ts-block-property-details">
+
+Une description de la variable qui sera utilisée pour la documentation au survol.
+
+</div>
+</div></div>
 
 

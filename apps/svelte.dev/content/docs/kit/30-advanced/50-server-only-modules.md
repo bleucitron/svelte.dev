@@ -10,8 +10,7 @@ exemple). SvelteKit fournit un moyen de vous protéger contre ça : les modules 
 
 ## Variables d'environnement privées [!VO]Private environment variables
 
-Les modules [`$env/static/private`]($env-static-private) et
-[`$env/dynamic/private`]($env-dynamic-private) peuvent être uniquement importés dans des modules
+Le module [`$app/env/private`](environment-variables) peut être uniquement importé dans des modules
 réservés au serveur, comme [`hooks.server.js`](hooks) ou
 [`+page.server.js`](routing#page-page.server.js).
 
@@ -23,10 +22,20 @@ par du code qui s'exécute sur le serveur.
 
 ## Vos modules [!VO]Your modules
 
-Vous pouvez créer vos propres modules réservés au serveur de deux manières :
+Vous pouvez rendre un module réservé au serveur de deux manières :
+- Ajouter un segment `server` au nom du fichier, par ex. `server.js` ou `secrets.server.ts`. Ceci
+fonctionne pour tout fichier dans le dossier du projet.
+- Le placer dans un dossier `server` n'importe où dans votre projet sauf dans les dossier
+`src/routes` ou `static`, par ex. `src/lib/server/config.js` ou
+`src/lib/data/server/user/profile.js`.
 
-- ajouter `.server` au nom de fichier, par ex. `secrets.server.js`
-- placer vos fichiers dans le dossier `$lib/server`, par ex `$lib/server/secrets.js`
+> [!LEGACY]
+> Avec SvelteKit 2, les dossiers `server` étaient uniquement reconnus dans le dossier `src/folder`.
+
+> [!NOTE] Les modules en dehors de votre dossier de travail et ceux dans `node_modules` (par ex. les
+> paquets venant de npm) ne sont _pas_ soumis à ces règles. Si vous souhaitez publier un paquet
+> possédant un module réservé au serveur, ajoutez `import '$app/server'` en haut du fichier en
+> question.
 
 ## Comment ça fonctionne [!VO]How it works
 
@@ -35,14 +44,14 @@ indirectement)...
 
 ```js
 // @errors: 7005
-/// file: $lib/server/secrets.js
+/// file: #lib/server/secrets.js
 export const atlantisCoordinates = [/* censuré */];
 ```
 
 ```js
 // @errors: 2307 7006 7005
 /// file: src/routes/utils.js
-export { atlantisCoordinates } from '$lib/server/secrets.js';
+export { atlantisCoordinates } from '#lib/server/secrets.js';
 
 export const add = (a, b) => a + b;
 ```
@@ -57,11 +66,11 @@ export const add = (a, b) => a + b;
 ... SvelteKit va produire une erreur :
 
 ```
-Cannot import $lib/server/secrets.ts into code that runs in the browser, as this could leak sensitive information.
+Cannot import #lib/server/secrets.ts into code that runs in the browser, as this could leak sensitive information.
 
  src/routes/+page.svelte imports
   src/routes/utils.js imports
-   $lib/server/secrets.ts
+   #lib/server/secrets.ts
 
 If you're only using the import as a type, change it to `import type`.
 ```

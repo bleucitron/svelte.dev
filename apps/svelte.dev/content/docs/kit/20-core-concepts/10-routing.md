@@ -133,7 +133,7 @@ page](page-options).
 
 Si votre fonction `load` ne peut pas être exécutée ailleurs que sur le serveur — par exemple, si
 elle a besoin de récupérer des données depuis une base de données ou si vous avez besoin de lire des
-[variables d'environnement privées]($env-static-private) comme des clés d'API — vous pouvez alors
+[variables d'environnement](environment-variables) privées comme des clés d'API — vous pouvez alors
 renommer `+page.js` en `+page.server.js` et changer le type de `PageLoad` en `PageServerLoad`.
 
 ```js
@@ -191,10 +191,6 @@ défaut. Vous pouvez personnaliser cette page d'erreur route par route en ajouta
 
 <h1>{page.status}: {page.error.message}</h1>
 ```
-
-> [!LEGACY]
-> `$app/state` a été ajouté dans la version 2.12 de SvelteKit. Si vous utilisez une version plus
-> ancienne ou si vous utilisez Svelte 4, utilisez plutôt `$app/stores`.
 
 SvelteKit va "remonter à la racine" à la recherche de la frontière d'erreur la plus proche — si le
 fichier dans l'exemple ci-dessus n'existait pas, il essaierait `src/routes/blog/+error.svelte`, puis
@@ -364,7 +360,7 @@ Comme `+layout.js`, `+layout.server.js` peut exporter des [options de page](page
 Comme pour les pages, vous pouvez définir des routes avec un fichier `+server.js` (parfois appelé
 "route d'API" ou "endpoint"), ce qui vous donne un contrôle total sur la réponse. Votre fichier
 `+server.js` exporte des fonctions correspondant aux verbes HTTP comme `GET`, `POST`, `PATCH`,
-`PUT`, `DELETE`, `OPTIONS`, et `HEAD` qui prennent en argument un
+`PUT`, `DELETE`, `OPTIONS`, `HEAD` et `QUERY` qui prennent en argument un
 [`RequestEvent`](@sveltejs-kit#RequestEvent) et renvoient un
 objet [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
@@ -397,9 +393,9 @@ possible le streaming de grandes quantité de données ou bien la création d'é
 le serveur (à moins que vous déployiez sur des plateformes qui transforment les réponses en buffers,
 comme AWS Lambda).
 
-Vous pouvez utiliser les méthodes [`error`](@sveltejs-kit#error),
-[`redirect`](@sveltejs-kit#redirect), et [`json`](@sveltejs-kit#json) de `@sveltejs/kit` pour des
-raisons pratiques (mais leur usage n'est pas nécessaire).
+Vous pouvez utiliser les méthodes [`error`](@sveltejs-kit#error) et
+[`redirect`](@sveltejs-kit#redirect) de `@sveltejs/kit` pour des raisons pratiques (mais leur usage
+n'est pas nécessaire).
 
 Si une erreur est jetée (soit avec `error(...)`, soit par un évènement inattendu), la réponse sera
 une représentation JSON de l'erreur ou la page d'erreur de secours — qui peut être personnalisée via
@@ -416,7 +412,7 @@ _pas_ rendu dans ce cas. Vous pouvez en savoir plus sur la gestion des erreurs [
 
 ### Recevoir des données [!VO]Receiving data
 
-En exportant des gestionnaires `POST`/`PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD`, les fichiers
+En exportant des gestionnaires `POST`/`PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD`/`QUERY`, les fichiers
 `+server.js` peuvent être utilisés pour créer une API complète :
 
 ```svelte
@@ -448,12 +444,10 @@ En exportant des gestionnaires `POST`/`PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD`, l
 
 ```js
 /// file: src/routes/api/add/+server.js
-import { json } from '@sveltejs/kit';
-
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 	const { a, b } = await request.json();
-	return json(a + b);
+	return Response.json(a + b);
 }
 ```
 
@@ -470,18 +464,16 @@ y compris les méthodes comme `MOVE` qui n'ont pas d'export dédié prévu par `
 
 ```js
 /// file: src/routes/api/add/+server.js
-import { json, text } from '@sveltejs/kit';
-
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 	const { a, b } = await request.json();
-	return json(a + b);
+	return Response.json(a + b);
 }
 
 // Ce gestionnaire va répondre à PUT, PATCH, DELETE, etc.
 /** @type {import('./$types').RequestHandler} */
 export async function fallback({ request }) {
-	return text(`J'ai attrapé votre requête ${request.method} !`);
+	return new Response(`J'ai attrapé votre requête ${request.method} !`);
 }
 ```
 
@@ -494,7 +486,7 @@ Les fichiers `+server.js` peuvent être placés dans le même dossier que les fi
 permettant à la même route d'être soit une page, soit un endpoint d'API. Pour les distinguer,
 SvelteKit applique les règles suivantes :
 
-- Les requêtes `PUT`/`PATCH`/`DELETE`/`OPTIONS` sont toujours gérées par `+server.js` puisque ces
+- Les requêtes `PUT`/`PATCH`/`DELETE`/`OPTIONS`/`QUERY` sont toujours gérées par `+server.js` puisque ces
 méthodes ne s'appliquent pas aux pages
 - Les requêtes `GET`/`POST`/`HEAD` sont traitées comme des requêtes de page si l'en-tête `accept`
 priorise `text/html` (en d'autres mots, si la requête vient d'une page ouverte par un navigateur),
@@ -561,8 +553,11 @@ Tout autre fichier dans un dossier de route est ignoré par SvelteKit. Ceci sign
 ranger des composants et autres modules utilitaires dans les dossiers des routes qui les
 nécessitent.
 
+Les fichiers comme `+page.test.js`, `+server.spec.ts` et `+page.stories.svelte` sont également
+ignorés, permettant aux tests et aux stories d'être créés à côté des fichiers de route.
+
 Si des composants ou modules sont requis par plusieurs routes, c'est une bonne idée de les mettre
-dans le dossier [`$lib`]($lib).
+dans le dossier [`#lib`]($lib).
 
 ## En savoir plus [!VO]Further reading
 

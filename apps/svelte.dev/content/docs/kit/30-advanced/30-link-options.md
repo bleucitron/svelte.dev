@@ -116,42 +116,40 @@ session du navigateur. Ajouter l'attribut `data-sveltekit-replacestate` sur un l
 ... va remplacer l'entrée `history` courante plutôt que d'en créer une nouvelle avec `pushState`
 lors du clic sur le lien.
 
-## data-sveltekit-keepfocus
+## data-sveltekit-reset
 
-Parfois vous ne souhaitez pas que le [focus soit réinitialisé](accessibility#Focus-management) après
-la navigation. Par exemple, peut–être que avez un formulaire de recherche qui est soumis pendant que
-l'utilisateur ou utilisatrice est en train de taper, et vous souhaitez garder le focus sur l'élément
-`<input>` de texte. Ajouter l'attribut `data-sveltekit-keepfocus` sur cet élément...
+Lorsque vous naviguez vers des liens internes, SvelteKit reflète le comportement de navigation par
+défaut du navigateur : il change la position de défilement à 0,0 pour que l'utilisateur ou
+utilisatrice reste en haut de la page (à moins que le lien n'inclue un `#hash`, auquel cas il va
+défiler jusqu'à l'élément ayant l'ID correspondant), et [réinitialise le
+focus](accessibility#Focus-management).
+
+Dans certains, vous pourriez souhaiter désactiver ce comportement. Ajouter un attribut
+`data-sveltekit-reset="false"` à un lien...
 
 ```html
-<form data-sveltekit-keepfocus>
+<a href="path" data-sveltekit-reset="false">Path</a>
+```
+
+... va conserver la position de défilement et l'élément focalisé après le clic sur le lien.
+
+L'attribut peut également être utilisé sur un `<form method="GET">` — par exemple un formulaire de
+recherche qui est soumis lorsque l'utilisateur ou l'utilisatrice est en train de taper, car dans ce
+cas, on souhaite garder le focus sur l'input de texte :
+
+```html
+<form data-sveltekit-reset="false">
 	<input type="text" name="query">
 </form>
 ```
 
-... va forcer l'élément actuellement focalisé à garde le focus après la navigation. En général, il
-est recommandé d'éviter d'utiliser cet attribut sur des liens, puisque l'élément focalisé serait la
-balise `<a>` (et non un élément précédemment focalisé) et les personnes utilisant des lecteurs
-d'écran et autres technologies d'assistance s'attendent à ce que le focus se déplace après une
-navigation. Vous devriez également uniquement utiliser cet attribut sur des éléments qui existent
-toujours après la navigation. Si l'élément n'existe plus, le focus sera perdu, rendant l'expérience
-confuse pour les personnes utilisant des technologies d'assistance.
-
-## data-sveltekit-noscroll
-
-Lorsque vous naviguez vers des liens internes, SvelteKit reproduit le comportement par défaut du
-navigateur : il va réinitialiser la position du défilement à 0,0 afin que la personne soit tout en
-haut à gauche de la page (à moins que le lien n'inclue un `#hash`, auquel cas il va faire défiler la
-page jusqu'à l'élément dont l'ID correspond).
-
-Dans certains cas, vous pourriez vouloir désactiver ce comportement. Ajouter un attribut
-`data-sveltekit-noscroll` sur un lien...
-
-```html
-<a href="path" data-sveltekit-noscroll>Chemin</a>
-```
-
-... va empêcher le défilement après le clic sur le lien.
+En général, évitez de conserver le focus sur les liens, puisque l'élément focalisé serait la balise
+`<a>` (et non un élément précédemment focalisé) et les utilisateurs et utilisatrices de lecteurs
+d'écran et d'autres technologies d'assistance s'attendent généralement à ce que le focus soit
+déplacé après une navigation. Vous devriez uniquement utiliser cet attribut sur des éléments qui
+existent toujours après la navigation. Si l'élément n'existe plus, le focus de l'utilisateur ou de
+l'utilisatrice sera perdu, rendant l'expérience désorientante pour les personnes utilisant les
+technologies d'assistance.
 
 ## Désactiver les options [!VO]Disabling options
 

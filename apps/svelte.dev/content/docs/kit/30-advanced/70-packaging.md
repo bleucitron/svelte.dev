@@ -291,9 +291,9 @@ Vous pouvez en apprendre plus sur cette fonctionnalité
 
 ## Bonnes pratiques [!VO]Best practices
 
-Vous devriez éviter d'utiliser des modules spécifiques à SvelteKit comme `$app/environment` dans vos
+Vous devriez éviter d'utiliser des modules spécifiques à SvelteKit comme `$app/env` dans vos
 paquets, à moins que n'ayez l'intention qu'ils ne soient utilisables que par d'autres projets
-SvelteKit. Par ex. plutôt que d'utiliser `import { browser } from '$app/environment'`, vous pourriez
+SvelteKit. Par ex. plutôt que d'utiliser `import { browser } from '$app/env'`, vous pourriez
 utiliser `import { BROWSER } from 'esm-env'` ([voir la documentation de
 `esm-env`](https://github.com/benmccann/esm-env)). Vous pourriez également vouloir fournir des
 choses comme l'URL courante ou une action de navigation en tant que prop plutôt que se servir
@@ -301,8 +301,10 @@ directement de `$app/state`, `$app/navigation`, etc. Écrire votre application a
 plus générique va également la rendre plus simple à utiliser lors de tests, de démos, et ainsi de
 suite.
 
-Assurez-vous d'ajouter des [aliases](configuration#alias) via `svelte.config.js` (et non
-`vite.config.js` ou `tsconfig.json`) afin qu'ils soient traités par `svelte-package`.
+Utilisez les [imports de sous-chemin](https://nodejs.org/api/packages.html#subpath-imports) en tant
+qu'alias vers du code de librairie. `svelte-package` ré-écrit les imports préfixés avec `#` définis
+dans le champ `imports` de votre `package.json` vers des chemins relatifs lors de la création du
+paquet.
 
 Vous devriez accorder un soin particulier au fait de décider si les changements que vous faites sur
 votre paquet sont une résolution de bug, un nouvelle fonctionnalité, ou un changement majeur pouvant

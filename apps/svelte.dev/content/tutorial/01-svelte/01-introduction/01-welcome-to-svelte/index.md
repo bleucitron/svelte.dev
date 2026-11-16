@@ -31,9 +31,9 @@ paquets indépendants utilisables partout.
 Ce tutoriel est divisé en quatre sections principales :
 
 - [Bases de Svelte](/tutorial/svelte/welcome-to-svelte) (vous êtes ici)
-- [Svelte avancé](/tutorial/svelte/tweens)
+- [Svelte avancé](/tutorial/svelte/raw-state)
 - [Bases de SvelteKit](/tutorial/kit/introducing-sveltekit)
-- [SvelteKit avancé](/tutorial/kit/optional-params)
+- [SvelteKit avancé](/tutorial/kit/handle)
 
 Chaque section vous présentera un exercice conçu pour illustrer une fonctionnalité. Les exercices se
 basent sur les connaissances acquises dans les exercices précédents, il est donc recommandé de

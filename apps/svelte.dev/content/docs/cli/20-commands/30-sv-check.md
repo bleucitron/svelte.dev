@@ -101,6 +101,7 @@ Une liste de types de sources entre guillemets et séparées par des virgules qu
 analysées. par défaut, elles sont toutes actives.
 
 <!-- TODO would be nice to have a clearer definition of what these are -->
+
 - `js` (inclut TypeScript)
 - `svelte`
 - `css`

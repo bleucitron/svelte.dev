@@ -8,7 +8,6 @@ title: @sveltejs/kit
 ```js
 // @noErrors
 import {
-	Server,
 	VERSION,
 	error,
 	fail,
@@ -23,43 +22,6 @@ import {
 	text
 } from '@sveltejs/kit';
 ```
-
-## Server
-
-<div class="ts-block">
-
-```dts
-class Server {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-constructor(manifest: SSRManifest);
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-init(options: ServerInitOptions): Promise<void>;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-respond(request: Request, options: RequestOptions): Promise<Response>;
-```
-
-<div class="ts-block-property-details"></div>
-</div></div>
-
-
 
 ## VERSION
 
@@ -76,14 +38,22 @@ const VERSION: string;
 ## error
 
 Jette une erreur avec un statut HTTP et un message optionnel. Lorsqu'exécuté lors de la gestion
-d'une requête, cette méthode va imposer à SvelteKit de renvoyer une réponse d'erreur sans invoquer
-`handleError`. Assurez-vous de ne pas "attraper" l'erreur jetée, ce qui empêcherait SvelteKit de la
-gérer.
+d'une requête, cette méthode va imposer à SvelteKit de renvoyer une réponse d'erreur ; l'erreur sera
+passée à `handleError` en tant qu'erreur _attendue_. Assurez-vous de ne pas "attraper" l'erreur
+jetée, ce qui empêcherait SvelteKit de la gérer.
 
 <div class="ts-block">
 
 ```dts
-function error(status: number, body: App.Error): never;
+function error(
+	status: {
+		status: number;
+		message: string;
+	} extends App.Error
+		? number
+		: never,
+	message?: string | undefined
+): never;
 ```
 
 </div>
@@ -93,11 +63,26 @@ function error(status: number, body: App.Error): never;
 ```dts
 function error(
 	status: number,
-	body?: {
-		message: string;
-	} extends App.Error
-		? App.Error | string | undefined
-		: never
+	message: string,
+	properties: keyof Omit<
+		App.Error,
+		'status' | 'message'
+	> extends never
+		? never
+		: Omit<App.Error, 'status' | 'message'>
+): never;
+```
+
+</div>
+
+<div class="ts-block">
+
+```dts
+function error(
+	status: number,
+	properties: Omit<App.Error, 'status'> & {
+		status?: App.Error['status'];
+	}
 ): never;
 ```
 
@@ -147,7 +132,7 @@ erreurs spécifiques aux champs.
 ```ts
 import { invalid } from '@sveltejs/kit';
 import { form } from '$app/server';
-import { tryLogin } from '$lib/server/auth';
+import { tryLogin } from '#lib/server/auth';
 import * as v from 'valibot';
 
 export const login = form(
@@ -182,7 +167,9 @@ Vérifie si l'action a échoué via le jeté de `fail`.
 <div class="ts-block">
 
 ```dts
-function isActionFailure(e: unknown): e is ActionFailure;
+function isActionFailure(
+	e: unknown
+): e is ActionFailure<undefined>;
 ```
 
 </div>
@@ -199,7 +186,7 @@ Vérifie s'il s'agit d'une erreur jetée par `error`.
 function isHttpError<T extends number>(
 	e: unknown,
 	status?: T
-): e is HttpError_1 & {
+): e is HttpError & {
 	status: T extends undefined ? never : T;
 };
 ```
@@ -215,7 +202,7 @@ Vérifie s'il s'agit d'une redirection jetée par `redirect`.
 <div class="ts-block">
 
 ```dts
-function isRedirect(e: unknown): e is Redirect_1;
+function isRedirect(e: unknown): e is Redirect;
 ```
 
 </div>
@@ -235,7 +222,9 @@ Vérifie si l'erreur est une erreur de validation jetée par `invalid`.
 <div class="ts-block">
 
 ```dts
-function isValidationError(e: unknown): e is ActionFailure;
+function isValidationError(
+	e: unknown
+): e is ValidationError;
 ```
 
 </div>
@@ -243,6 +232,12 @@ function isValidationError(e: unknown): e is ActionFailure;
 
 
 ## json
+
+<blockquote class="tag deprecated note">
+
+use `Response.json`
+
+</blockquote>
 
 Crée un objet de réponse `Response` JSON à partir des données fournies.
 
@@ -322,7 +317,10 @@ function redirect(
 		| 307
 		| 308
 		| ({} & number),
-	location: string | URL
+	location: string | URL,
+	options?: {
+		external?: boolean | string[];
+	}
 ): never;
 ```
 
@@ -331,6 +329,12 @@ function redirect(
 
 
 ## text
+
+<blockquote class="tag deprecated note">
+
+use `new Response`
+
+</blockquote>
 
 Crée un objet de réponse `Response` à partir du body fourni.
 
@@ -403,34 +407,6 @@ data: T;
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## ActionResult
-
-Lorsqu'une action de formulaire est exécutée via fetch, la réponse aura l'une de ces formes.
-```svelte
-<form method="post" use:enhance={() => {
-	return ({ result }) => {
-		// le résultat est de type ActionResult
-	};
-}}
-```
-
-<div class="ts-block">
-
-```dts
-type ActionResult<
-	Success extends Record<string, unknown> | undefined =
-		Record<string, any>,
-	Failure extends Record<string, unknown> | undefined =
-		Record<string, any>
-> =
-	| { type: 'success'; status: number; data?: Success }
-	| { type: 'failure'; status: number; data?: Failure }
-	| { type: 'redirect'; status: number; location: string }
-	| { type: 'error'; status?: number; error: any };
-```
-
-</div>
-
 ## Actions
 
 Forme de l'objet `export const actions = {...}` dans un fichier `+page.server.js`. Voir la section
@@ -499,7 +475,7 @@ Cette fonction est exécutée après que SvelteKit a compilé votre application.
 <div class="ts-block-property">
 
 ```dts
-supports?: {/*…*/}
+supports?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -510,7 +486,7 @@ fonctionnalités spécifiques fonctionneront en production avec cet adaptateur.
 <div class="ts-block-property-children"><div class="ts-block-property">
 
 ```dts
-read?: (details: { config: any; route: { id: string } }) => boolean;
+read?: (details: { config: Record<string, any>; route: { id: string } }) => boolean;
 ```
 
 <div class="ts-block-property-details">
@@ -561,26 +537,136 @@ Crée un `Emulator`, permettant à l'adaptateur d'influencer l'environnement pen
 la compilation et le pré-rendu.
 
 </div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+vite?: AdapterViteConfig | ((ctx: { config: ValidatedConfig }) => AdapterViteConfig);
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Des options de configuration et d'interaction avec Vite
+
+</div>
 </div></div>
 
-## AfterNavigate
-
-L'argument passé aux callbacks [`afterNavigate`](/docs/kit/$app-navigation#afterNavigate).
+## AdapterViteConfig
 
 <div class="ts-block">
 
 ```dts
-type AfterNavigate = (Navigation | NavigationEnter) & {
-	type: Exclude<NavigationType, 'leave'>;
-	/**
-	 * Puisque les callbacks `afterNavigate` sont exécutés après la complétion d'une navigation, ils
-	 * ne seront jamais appelés lors d'une navigation qui décharge la page.
-	 */
-	willUnload: false;
-};
+interface AdapterViteConfig {/*…*/}
 ```
 
+<div class="ts-block-property">
+
+```dts
+getRequest?: typeof getRequest;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
 </div>
+
+Cette fonction surcharge le comportement par défaut lors des modes de développement (`dev`) et de
+prévisualisation (`preview`) de Vite pour convertir un `http.IncomingMessage` en un objet `Request`.
+Pour appeler la fonction `setRequest` originale, importez-la depuis `@sveltejs/kit/node`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+setResponse?: typeof setResponse;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">available since</span> v3.0.0
+
+</div>
+
+Cette fonction surcharge le comportement par défaut lors des modes de développement (`dev`) et de
+prévisualisation (`preview`) de Vite pour écrier un objet `Response` en une `http.ServerResponse`.
+Pour appeler la fonction `setResponse` originale, importez-la depuis `@sveltejs/kit/node`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+plugins?:
+	| Plugin[]
+	| {/*…*/};
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Les plugins Vite injectés par l'adaptateur. Par défaut, ils sont placés avant les plugins de
+SvelteKit.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+pre?: Plugin[];
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Les plugins placés avant tout plugin propre à SvelteKit.
+
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+post?: Plugin[];
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Les plugins placés après tout plugin propre à SvelteKit.
+
+</div>
+</div></div>
+
+</div>
+</div></div>
 
 ## AwaitedActions
 
@@ -596,23 +682,6 @@ type AwaitedActions<
 		>;
 	}[keyof T]
 >;
-```
-
-</div>
-
-## BeforeNavigate
-
-L'argument passé aux callbacks [`beforeNavigate`](/docs/kit/$app-navigation#beforeNavigate).
-
-<div class="ts-block">
-
-```dts
-type BeforeNavigate = Navigation & {
-	/**
-	 * Appelez cette méthode pour empêcher la navigation de démarrer.
-	 */
-	cancel: () => void;
-};
 ```
 
 </div>
@@ -650,6 +719,12 @@ rimraf: (dir: string) => void;
 
 <div class="ts-block-property-details">
 
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `fs.rmSync(dir, { force: true, recursive: true })`
+
+</div>
+
 Supprime `dir` et tout son contenu.
 
 </div>
@@ -662,6 +737,12 @@ mkdirp: (dir: string) => void;
 ```
 
 <div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `fs.mkdirSync(dir, { recursive: true })`
+
+</div>
 
 Crée `dir` et tout dossier parent requis.
 
@@ -676,7 +757,7 @@ config: ValidatedConfig;
 
 <div class="ts-block-property-details">
 
-L'objet de configuration Svelte entièrement résolu.
+L'objet de configuration SvelteKit entièrement résolu.
 
 </div>
 </div>
@@ -710,7 +791,46 @@ Un tableau de toutes les routes (incluant les routes pré-rendues)
 <div class="ts-block-property">
 
 ```dts
-createEntries: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
+manifest: typeof import('$app/manifest');
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+La valeur du module `$app/manifest`.
+La seule différence est que `manifest.assets` contient également le service worker, s'il existe.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+mimeTypes: Record<string, string>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Une correspondance extensions de fichier - types MIME
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+createEntries?: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
 ```
 
 <div class="ts-block-property-details">
@@ -718,7 +838,8 @@ createEntries: (fn: (route: RouteDefinition) => AdapterEntry) => Promise<void>;
 <div class="ts-block-property-bullets">
 
 - `fn` Une fonction qui regroupe un ensemble de routes en un point d'entrée
-- <span class="tag deprecated">déprécié</span> Utilisez plutôt `builder.routes`
+- <span class="tag deprecated">déprécié</span> supprimé dans la version 3.0. Utilisez plutôt
+`builder.routes`
 
 </div>
 
@@ -762,8 +883,8 @@ generateEnvModule: () => void;
 
 <div class="ts-block-property-details">
 
-Génère un module exposant les variables d'environnement de compilation en tant que
-`$env/dynamic/public` ou `$app/env/public` si l'application s'en sert.
+Génère un module exposant les variables d'environnement publiques en tant que `$app/env/public` si
+l'application s'en sert.
 
 </div>
 </div>
@@ -771,15 +892,16 @@ Génère un module exposant les variables d'environnement de compilation en tant
 <div class="ts-block-property">
 
 ```dts
-generateManifest: (opts: { relativePath: string; routes?: RouteDefinition[] }) => string;
+generateManifest?: (opts: { relativePath: string; routes?: RouteDefinition[] }) => string;
 ```
 
 <div class="ts-block-property-details">
 
 <div class="ts-block-property-bullets">
 
-- `opts` un chemin relatif au dossier racine de l'application et optionnellement le format (esm ou
-cjs) dans lequel le manifeste devrait être généré
+- `opts` un chemin relatif au dossier racine de la sortie serveur compilée
+- <span class="tag deprecated">déprécié</span> supprimé dans la version 3.0. Utilisez plutôt
+`builder.generateServerInstance` ou `builder.manifest`
 
 </div>
 
@@ -853,6 +975,33 @@ Récupère le chemin de l'application incluant tout chemin `base` configuré, pa
 <div class="ts-block-property">
 
 ```dts
+generateServerInstance: (
+	dest: string,
+	opts?: {
+		routes?: RouteDefinition[];
+		serverDirectory?: string;
+	}
+) => void;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `opts.routes` Un sous-ensemble des routes à inclure dans le manifeste serveur
+- `opts.serverDirectory` Le dossier contenant le code serveur. Vaut par défaut `getServerDirectory()`.
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Génère un module exposant une instance de [Server](/docs/kit/@sveltejs-kit#Server) SvelteKit.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
 writeClient: (dest: string) => string[];
 ```
 
@@ -906,6 +1055,37 @@ writeServer: (dest: string) => string[];
 </div>
 
 Écrit le code serveur vers `dest`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+createInstrumentationInitializer: (options: {
+	outputDirectory: string;
+	environment?: string;
+	serverDirectory?: string;
+}) => string;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `options` un objet contenant les propriétés suivantes :
+- `options.outputDirectory` le dossier dans lequel créer l'initialiseur
+- `options.environment` le contenu d'un module dont l'export par défaut contient les variables
+d'environnement de la plateforme. Si omis, `process.env` est utilisé.
+- `options.serverDirectory` le dossier contenant les fichier serveur compilés. Vaut par défaut
+`getServerDirectory()`.
+- <span class="tag">renvoie</span> le chemin de fichier vers l'initialiseur généré
+- <span class="tag since">disponible depuis la version</span> v3.0.0
+
+</div>
+
+Génère un initialiseur qui remplit `$env/dynamic/private` avant que l'instrumentation du serveur
+soit exécutée. Inclure le module renvoyé dans toute étape de compilation ou étape de suivi à venir.
 
 </div>
 </div>
@@ -968,12 +1148,17 @@ instrument: (args: {
 	entrypoint: string;
 	instrumentation: string;
 	start?: string;
+	initializer: string;
 	module?:
 		| {
 				exports: string[];
 		  }
 		| {
-				generateText: (args: { instrumentation: string; start: string }) => string;
+				generateText: (args: {
+					instrumentation: string;
+					start: string;
+					initializer: string;
+				}) => string;
 		  };
 }) => void;
 ```
@@ -986,11 +1171,14 @@ instrument: (args: {
 - `options.entrypoint` le chemin vers le point d'entrée à suivre.
 - `options.instrumentation` le chemin vers le fichier d'instrumentation.
 - `options.start` le nom du fichier de démarrage. C'est en quoi `entryPoint` sera renommé.
+- `options.initializer` le chemin de fichier vers l'initialiseur d'intrumentation compilé ou copié.
 - `options.module` configuration pour le module de point d'entrée généré.
 - `options.module.generateText` une fonction qui reçoit les chemins relatifs vers les fichiers
-d'instrumentation et de démarrage, et génère le texte du module à suivre. Si non fourni,
-l'implémentation par défaut, qui utilise des `await` racine, sera utilisée.
-- <span class="tag since">disponible depuis la version</span> v2.31.0
+d'initialiseur, d'instrumentation et de démarrage, et génère le texte du module à suivre. Elle doit
+importer `initializer` avant `instrumentation` et dynamiquement importer `start` après que
+l'instrumentation ait été exécutée. Si non fourni, l'implémentation par défaut, qui utilise des
+`await` racine, sera utilisée.
+- <span class="tag since">disponible depuis la version</span> v3.0.0
 
 </div>
 
@@ -999,6 +1187,9 @@ Instrumente `entrypoint` avec `instrumentation`.
 Renomme `entrypoint` en `start` et crée un nouveau module à l'emplacement `entrypoint`, module qui
 va importer `instrumentation` puis importer dynamiqument `start`. Ceci permet aux hooks de module
 nécessaires à l'instrumentation d'être chargés avant tout code applicatif.
+
+`initializer` est un module généré par `createInstrumentationInitializer`. Il doit être inclus dans
+toute étape de suivi et de compilation avant d'appeler cette méthode.
 
 Avertissements :
 - Les "exports live" ne fonctionneront pas. Si votre adaptateur utilise les exports live, vos
@@ -1014,7 +1205,7 @@ fichier d'instrumentation serveur ; si ce n'est pas le cas, vous ne devriez pas 
 <div class="ts-block-property">
 
 ```dts
-compress: (directory: string) => Promise<void>;
+compress: (directory: string) => Promise<string[]>;
 ```
 
 <div class="ts-block-property-details">
@@ -1022,6 +1213,7 @@ compress: (directory: string) => Promise<void>;
 <div class="ts-block-property-bullets">
 
 - `directory` Le dossier contenant les fichiers à compresser
+- <span class="tag">renvoie</span> un tableau des fichiers de `directory` qui ont été compressés
 
 </div>
 
@@ -1030,30 +1222,6 @@ Compresse les fichiers dans `directory` avec gzip et broli, lorsqu'approprié. G
 
 </div>
 </div></div>
-
-## ClientInit
-
-<blockquote class="since note">
-
-Disponible depuis la version 2.10.0
-
-</blockquote>
-
-La fonction [`init`](/docs/kit/hooks#init) sera exécutée après le démarrage de
-l'application dans le navigateur
-
-<div class="ts-block">
-
-```dts
-type ClientInit = () => MaybePromise<void>;
-```
-
-</div>
-
-## Config
-
-Voir le [documentation de référence sur la configuration](/docs/kit/configuration) pour plus de
-détails.
 
 ## Cookies
 
@@ -1066,7 +1234,7 @@ interface Cookies {/*…*/}
 <div class="ts-block-property">
 
 ```dts
-get: (name: string, opts?: import('cookie').CookieParseOptions) => string | undefined;
+get: (name: string, opts?: import('cookie').ParseOptions) => string | undefined;
 ```
 
 <div class="ts-block-property-details">
@@ -1074,7 +1242,8 @@ get: (name: string, opts?: import('cookie').CookieParseOptions) => string | unde
 <div class="ts-block-property-bullets">
 
 - `name` le nom du cookie
-- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
+- `opts` les options, passées directement à `cookie.parseCookie`. Voir la
+[documentation](https://github.com/jshttp/cookie?tab=readme-ov-file#cookieparsecookiestr-options)
 
 </div>
 
@@ -1086,14 +1255,15 @@ Récupère un cookie précédemment défini avec `cookies.set`, ou depuis les en
 <div class="ts-block-property">
 
 ```dts
-getAll: (opts?: import('cookie').CookieParseOptions) => Array<{ name: string; value: string }>;
+getAll: (opts?: import('cookie').ParseOptions) => Array<{ name: string; value: string }>;
 ```
 
 <div class="ts-block-property-details">
 
 <div class="ts-block-property-bullets">
 
-- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
+- `opts` les options, passées directement à `cookie.parseCookie`. Voir la
+[documentation](https://github.com/jshttp/cookie?tab=readme-ov-file#cookieparsecookiestr-options)
 
 </div>
 
@@ -1105,11 +1275,7 @@ Récupère tous cookies précédemment définis avec `cookies.set`, ou depuis le
 <div class="ts-block-property">
 
 ```dts
-set: (
-	name: string,
-	value: string,
-	opts: import('cookie').CookieSerializeOptions & { path: string }
-) => void;
+set: (name: string, value: string, opts?: import('cookie').SerializeOptions) => void;
 ```
 
 <div class="ts-block-property-details">
@@ -1118,20 +1284,20 @@ set: (
 
 - `name` le nom du cookie
 - `value` la valeur du cookie
-- `opts` les options, passées directement à `cookie.parse`. Voir la [documentation](https://github.com/jshttp/cookie#cookieparsestr-options)
+- `opts` les options, passées à `cookie.stringifySetCookie` avec les valeurs par défaut de SvelteKit
+telles que décrites ci-dessus. Voir la
+[documentation](https://github.com/jshttp/cookie?tab=readme-ov-file#cookiestringifysetcookiesetcookieobj-options)
 
 </div>
 
 Définit un cookie. Cela va ajouter un en-tête `set-cookie` à la réponse, mais également rendre le
 cookie disponible via `cookies.get` ou `cookies.getAll` lors de la requête courante.
 
-Les options `httpsOnly` et `secure` valent `true` par défaut (sauf sur http://localhost, où `secure`
-vaut `false`), et doit être explicitement désactivé si vous souhaitez que les cookies soient
-lisibles par du code JavaScript client et/ou transmis via HTTP. L'option `sameSite` vaut par défaut
-`lax`.
+L'option `httpsOnly` vaut `true` par défaut, tout comme `secure`, sauf lors du développement, lors
+duquel il vaut `false` par défaut. Ces options doivent être explicitement désactivées si vous
+souhaitez que les cookies soient lisibles par du code JavaScript client et/ou transmis via HTTP.
 
-Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
-préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+L'option `path` vaut `'/'` par défaut.
 Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
 disponible sur le chemin courant et ses enfants.
 
@@ -1141,7 +1307,7 @@ disponible sur le chemin courant et ses enfants.
 <div class="ts-block-property">
 
 ```dts
-delete: (name: string, opts: import('cookie').CookieSerializeOptions & { path: string }) => void;
+delete: (name: string, opts?: import('cookie').SerializeOptions) => void;
 ```
 
 <div class="ts-block-property-details">
@@ -1149,17 +1315,20 @@ delete: (name: string, opts: import('cookie').CookieSerializeOptions & { path: s
 <div class="ts-block-property-bullets">
 
 - `name` le nom du cookie
-- `opts` les options, passées directement à `cookie.serialize`. Le `path` doit correspondre au
-chemin du cookie que vous souhaitez supprimer. Voir la
-[documentation](https://github.com/jshttp/cookie#cookieserializename-value-options)
+- `opts` les options, passées à `cookie.stringifySetCookie` avec les valeurs par défaut de SvelteKit
+telles que décrites ci-dessus. Voir la
+[documentation](https://github.com/jshttp/cookie?tab=readme-ov-file#cookiestringifysetcookiesetcookieobj-options)
 
 </div>
 
 Supprime un cookie en définissant sa valeur à une chaîne de caractères vide et sa date d'expiration
 à une date dans le passé.
 
-Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
-préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+L'option `httpOnly` vaut `true` par défaut, tout comme `secure`, sauf lors du développement, lors
+duquel il vaut `false` par défaut. Ces options doivent être explicitement désactivées si vous
+souhaitez que les cookies soient lisibles par du code JavaScript client et/ou transmis via HTTP.
+
+L'option `path` vaut `'/'` par défaut.
 Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
 disponible sur le chemin courant et ses enfants.
 
@@ -1169,11 +1338,43 @@ disponible sur le chemin courant et ses enfants.
 <div class="ts-block-property">
 
 ```dts
-serialize: (
-	name: string,
-	value: string,
-	opts: import('cookie').CookieSerializeOptions & { path: string }
-) => string;
+parse: typeof import('cookie').parseSetCookie;
+```
+
+<div class="ts-block-property-details">
+
+Parse un unique en-tête `Set-Cookie`. Ceci vous permet d'appliquer des cookies reçus depuis une
+source externe :
+
+```js
+// @errors: 7031
+import { getRequestEvent } from '$app/server';
+
+export async function GET() {
+	const { cookies } = getRequestEvent();
+
+	const response = await fetch('...');
+
+	for (const str of response.headers.getSetCookie()) {
+		const { name, value, ...options } = cookies.parse(str);
+		cookies.set(name, value, options);
+	}
+
+	// ...
+}
+```
+
+Notez l'utilisation de `headers.getSetCookie()`, qui renvoie un tableau d'en-têtes de cookies, et
+_non_ `headers.get('set-cookie')`, qui renvoie une unique chaîne de caractères incluant des valeurs
+séparées par des virgules.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+serialize: (name: string, value: string, opts?: import('cookie').SerializeOptions) => string;
 ```
 
 <div class="ts-block-property-details">
@@ -1182,23 +1383,23 @@ serialize: (
 
 - `name` le nom du cookie
 - `value` la valeur du cookie
-- `opts` les options, passées directement à `cookie.serialize`. Voir la
-[documentation](https://github.com/jshttp/cookie#cookieserializename-value-options)
+- `opts` les options, passées à `cookie.stringifySetCookie` avec les valeurs par défaut de SvelteKit
+telles que décrites ci-dessus. Voir la
+[documentation](https://github.com/jshttp/cookie?tab=readme-ov-file#cookiestringifysetcookiesetcookieobj-options)
 
 </div>
 
 Sérialise la paire nom-valeur d'un cookie en une chaîne de caractères d'en-tête `Set-Cookie`, mais
 ne l'applique pas à la réponse.
 
-Les options `httpsOnly` et `secure` valent `true` par défaut (sauf sur http://localhost, où `secure`
-vaut `false`), et doit être explicitement désactivé si vous souhaitez que les cookies soient
-lisibles par du code JavaScript client et/ou transmis via HTTP. L'option `sameSite` vaut par défaut
-`lax`.
+L'option `httpOnly` vaut `true` par défaut, tout comme `secure`, sauf lors du développement, lors
+duquel il vaut `false` par défaut. Ces options doivent être explicitement désactivées si vous
+souhaitez que les cookies soient lisibles par du code JavaScript client et/ou transmis via HTTP.
 
-Vous devez préciser un `path` pour le cookie. Dans la plupart des cas vous devriez explicitement
-préciser `path: '/'` pour rendre le cookie disponible sur toutes les pages de votre application.
+L'option `path` vaut `'/'` par défaut.
 Vous pouvez utiliser des chemins relatifs, ou définir `path: ''` pour rendre le cookie uniquement
 disponible sur le chemin courant et ses enfants.
+
 </div>
 </div></div>
 
@@ -1226,200 +1427,6 @@ renvoie un objet `App.Platform`
 
 </div>
 </div></div>
-
-## EnvVarConfig
-
-Les [variables d'environnement](/docs/kit/environment-variables) peuvent être configurées en
-exportant un objet `variables` depuis `src/env`, en utilisant
-[`defineEnvVars`](/docs/kit/@sveltejs-kit-env#defineEnvVars).
-
-<div class="ts-block">
-
-```dts
-interface EnvVarConfig<T> {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-public?: boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- <span class="tag">par défaut</span> `false`
-
-</div>
-
-Si oui ou non la variable d'environnement est rendue accessible au code côté client.
-- si `true`, elle peut être importée depuis `$app/env/public`
-- si `false`, elle peut être importée depuis `$app/env/private`, qui est un [module réservé au
-serveur](/docs/kit/server-only-modules)
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-static?: boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- <span class="tag">default</span> `false`
-
-</div>
-
-Si la valeur est déterminée au moment de la compilation, ou lorsque l'application est exécutée.
-- si `true`, la valeur de compilation est inlinée dans le bundle. Cela permet des optimisations
-comme l'élimination de code mort
-- si `false`, la valeur est lue depuis l'environnement lorsque l'application démarre
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-schema?: StandardSchemaV1<string | undefined, T>;
-```
-
-<div class="ts-block-property-details">
-
-Un validateur de [Standard Schema](https://standardschema.dev/) appliqué à la valeur lorsque
-l'application démarre.
-Le validateur peut renvoyer n'importe quelle valeur — pas nécessairement une chaîne de caractères —
-mais les valeurs publiques non statiques doivent être sérialisables par
-[devalue](https://github.com/sveltejs/devalue) afin qu'elles puissent être envoyées au navigateur.
-
-Si aucun validateur n'est précisé, la valeur doit être une chaîne de caractères non vide.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-description?: string;
-```
-
-<div class="ts-block-property-details">
-
-Une description de la variable qui sera utilisée en tant que documentation lors du survol.
-
-</div>
-</div></div>
-
-## Handle
-
-Le hook [`handle`](/docs/kit/hooks#handle) est exécuté à chaque fois que le serveur SvelteKit reçoit
-une [requête](/docs/kit/web-standards#Fetch-APIs-Request) et détermine la
-[réponse](/docs/kit/web-standards#Fetch-APIs-Response). Il reçoit un objet `event` représentant la
-requête et une fonction appelée `resolve`, qui rend la route et génère une `Response`. Ceci vous
-permet de modifier les en-têtes ou corps de réponse, ou de contourner complètement SvelteKit (pour
-implémenter des routes programmatiquement, par exemple).
-
-<div class="ts-block">
-
-```dts
-type Handle = (input: {
-	event: RequestEvent;
-	resolve: (
-		event: RequestEvent,
-		opts?: ResolveOptions
-	) => MaybePromise<Response>;
-}) => MaybePromise<Response>;
-```
-
-</div>
-
-## HandleClientError
-
-Le hook client [`handleError`](/docs/kit/hooks#handleError) est exécuté lorsqu'une erreur inattendue
-est jetée lors de la navigation.
-
-Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
-exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
-
-<div class="ts-block">
-
-```dts
-type HandleClientError = (input: {
-	error: unknown;
-	event: NavigationEvent;
-	status: number;
-	message: string;
-}) => MaybePromise<void | App.Error>;
-```
-
-</div>
-
-## HandleFetch
-
-Le hook [`handleFetch`](/docs/kit/hooks#handleFetch) vous permet de modifier (ou remplacer) le
-résultat d'un appel [`event.fetch`](/docs/kit/load#Making-fetch-requests) s'exécutant sur le serveur
-(ou lors du pré-rendu) au sein d'un endpoint, d'une fonction `load`, `action`, `handle`,
-`handleError`, ou `reroute`.
-
-<div class="ts-block">
-
-```dts
-type HandleFetch = (input: {
-	event: RequestEvent;
-	request: Request;
-	fetch: typeof fetch;
-}) => MaybePromise<Response>;
-```
-
-</div>
-
-## HandleServerError
-
-Le hook serveur [`handleError`](/docs/kit/hooks#handleError) est exécutée lorsqu'une erreur
-inattendue est jetée lors de la réponse à une requête.
-
-Si une erreur inattendue est jetée lors du chargement ou du rendu suivant, cette fonction sera
-exécutée avec l'erreur et l'évènement. Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
-
-<div class="ts-block">
-
-```dts
-type HandleServerError = (input: {
-	error: unknown;
-	event: RequestEvent;
-	status: number;
-	message: string;
-}) => MaybePromise<void | App.Error>;
-```
-
-</div>
-
-## HandleValidationError
-
-Le hook [`handleValidationError`](/docs/kit/hooks#handleValidationError) est exécuté lorsque
-l'argument d'une fonction distante échoue lors de sa validation.
-
-Il sera appelée avec les erreurs de validation et l'évènement, et doit renvoyer un objet dont la
-forme correspond à `App.Error`.
-
-<div class="ts-block">
-
-```dts
-type HandleValidationError<
-	Issue extends StandardSchemaV1.Issue =
-		StandardSchemaV1.Issue
-> = (input: {
-	issues: Issue[];
-	event: RequestEvent;
-}) => MaybePromise<App.Error>;
-```
-
-</div>
 
 ## HttpError
 
@@ -1457,106 +1464,6 @@ Le contenu de l'erreur.
 
 </div>
 </div></div>
-
-## InvalidField
-
-Une fonction et un objet proxy utilisé pour impérativement créer des erreurs de validations dans les
-gestionnaires de formulaire.
-
-Accédez aux propriétés pour créer des erreurs spécifiques à certains champs :
-`invalid/fieldName('message')`.
-La structure de type reflète la structure des données d'entrée pour un accès typé au champ.
-Appelez `invalid(issue1, issue2, ...issueN)` pour jeter une erreur de validation.
-
-<div class="ts-block">
-
-```dts
-type InvalidField<T> =
-	WillRecurseIndefinitely<T> extends true
-		? Record<string | number, any>
-		: NonNullable<T> extends
-					| string
-					| number
-					| boolean
-					| File
-			? (message: string) => StandardSchemaV1.Issue
-			: NonNullable<T> extends Array<infer U>
-				? {
-						[K in number]: InvalidField<U>;
-					} & ((message: string) => StandardSchemaV1.Issue)
-				: NonNullable<T> extends RemoteFormInput
-					? {
-							[K in keyof T]-?: InvalidField<T[K]>;
-						} & ((
-							message: string
-						) => StandardSchemaV1.Issue)
-					: Record<string, never>;
-```
-
-</div>
-
-## KitConfig
-
-Voir la [documentation sur la configuration](/docs/kit/configuration) pour plus de détails.
-
-## LessThan
-
-<div class="ts-block">
-
-```dts
-type LessThan<
-	TNumber extends number,
-	TArray extends any[] = []
-> = TNumber extends TArray['length']
-	? TArray[number]
-	: LessThan<TNumber, [...TArray, TArray['length']]>;
-```
-
-</div>
-
-## LiveQueryRequestedResult
-
-<div class="ts-block">
-
-```dts
-type LiveQueryRequestedResult<Validated, Output> = Iterable<
-	LiveRequestedEntry<Validated, Output>
-> &
-	AsyncIterable<LiveRequestedEntry<Validated, Output>> & {
-		/**
-		 * Appelez `reconnect` sur toutes les queries live sélectionnées par cette invocation à
-		 * `requested`.
-		 * Ceci est identique à :
-		 * ```ts
-		 * import { requested } from '$app/server';
-		 *
-		 * for await (const { query } of requested(liveQuery, ...)) {
-		 *   void query.reconnect();
-		 * }
-		 * ```
-		 */
-		reconnectAll: () => Promise<void>;
-	};
-```
-
-</div>
-
-## LiveRequestedEntry
-
-Une entrée unique renvoyée par [`requested`](/docs/kit/$app-server#requested) lorsqu'appelée avec
-`query.live`. `arg` est l'argument validé ; `query` est une `RemoteLiveQuery` liée à la clé de cache
-du client d'origine, de sorte que `reconnect()` cible le bon abonnement client.
-
-<div class="ts-block">
-
-```dts
-type LiveRequestedEntry<Validated, Output> = {
-	arg: Validated;
-	query: RemoteLiveQuery<Output>;
-};
-```
-
-</div>
 
 ## Load
 
@@ -1802,7 +1709,7 @@ export async function load({ untrack, url }) {
 <div class="ts-block-property">
 
 ```dts
-tracing: {/*…*/}
+tracing: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -1873,149 +1780,6 @@ type LoadProperties<
 
 </div>
 
-## Navigation
-
-<div class="ts-block">
-
-```dts
-type Navigation =
-	| NavigationExternal
-	| NavigationFormSubmit
-	| NavigationPopState
-	| NavigationLink;
-```
-
-</div>
-
-## NavigationBase
-
-<div class="ts-block">
-
-```dts
-interface NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: NavigationType;
-```
-
-<div class="ts-block-property-details">
-
-Le type de navigation :
-- `enter`: L'application a été hydratée/démarrée
-- `form`: L'utilisateur ou utilisatrice a soumis un `<form method="GET">`
-- `goto`: La navigation a été déclenchée par un appel `goto(...)` ou une redirection
-- `leave`: L'application est en train d'être quittée à cause de la fermeture de l'onglet ou d'une
-navigation vers un document différent
-- `link`: La navigation a été déclenchée par un clic sur un lien
-- `popstate`: La navigation a été déclenchée par une navigation "précédent"/"suivant"
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-from: NavigationTarget | null;
-```
-
-<div class="ts-block-property-details">
-
-L'endroit d'où la navigation a été déclenchée
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-to: NavigationTarget | null;
-```
-
-<div class="ts-block-property-details">
-
-L'endroit où la navigation est/a été dirigée
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-willUnload: boolean;
-```
-
-<div class="ts-block-property-details">
-
-Si oui ou non la navigation entraîne le "déchargement" de la page (c-à-d pas une navigation côté
-client).
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-complete: Promise<void>;
-```
-
-<div class="ts-block-property-details">
-
-Une promesse qui se résout une fois que le navigation est terminée, et est rejetée si la navigation
-échoue ou est annulée. Dans le cas d'une navigation `willUnload`, la promesse ne sera jamais
-résolue.
-
-</div>
-</div></div>
-
-## NavigationEnter
-
-La navigation qui se produit lorsque l'app démarre/s'hydrate
-
-<div class="ts-block">
-
-```dts
-interface NavigationEnter extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'enter';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation via l'historique précédent/suivant, le nombre d'étapes pour retourner
-en arrière/avant
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-event?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Génère un objet `Event` lorsque la navigation se produit via `popstate` ou `link`.
-
-</div>
-</div></div>
-
 ## NavigationEvent
 
 <div class="ts-block">
@@ -2045,7 +1809,7 @@ string }`
 <div class="ts-block-property">
 
 ```dts
-route: {/*…*/}
+route: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -2082,554 +1846,12 @@ L'URL de la page courante
 </div>
 </div></div>
 
-## NavigationExternal
-
-<div class="ts-block">
-
-```dts
-type NavigationExternal = NavigationGoto | NavigationLeave;
-```
-
-</div>
-
-## NavigationFormSubmit
-
-Une navigation déclenchée par un `<form method="GET">`
-
-<div class="ts-block">
-
-```dts
-interface NavigationFormSubmit extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'form';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-event: SubmitEvent;
-```
-
-<div class="ts-block-property-details">
-
-Le `SubmitEvent` qui a provoqué la navigation
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation précédent/suivant dans l'historique, le nombre d'étapes pour aller en
-arrière/en avant
-
-</div>
-</div></div>
-
-## NavigationGoto
-
-Une navigation déclenchée par un appel `goto(...)` ou une redirection
-
-<div class="ts-block">
-
-```dts
-interface NavigationGoto extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'goto';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation "précédent/suivant", le nombre d'étapes pour revenir en arrière ou
-avancer
-
-</div>
-</div></div>
-
-## NavigationLeave
-
-Une navigation déclenchée par la fermeture de l'onglet, ou par une navigation vers un document
-différent
-
-<div class="ts-block">
-
-```dts
-interface NavigationLeave extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'leave';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation "précédent/suivant", le nombre d'étapes pour revenir en arrière ou
-avancer
-
-</div>
-</div></div>
-
-## NavigationLink
-
-Une navigation déclenchée par un click sur un lien
-
-<div class="ts-block">
-
-```dts
-interface NavigationLink extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'link';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-event: PointerEvent;
-```
-
-<div class="ts-block-property-details">
-
-Le `PointerEvent` qui a provoqué la navigation
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta?: undefined;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation précédent/suivant dans l'historique, le nombre d'étapes pour aller en
-arrière/en avant
-
-</div>
-</div></div>
-
-## NavigationPopState
-
-Une navigation déclenchée par une navigation "précédent"/"suivant"
-
-<div class="ts-block">
-
-```dts
-interface NavigationPopState extends NavigationBase {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-type: 'popstate';
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-delta: number;
-```
-
-<div class="ts-block-property-details">
-
-Dans le cas d'une navigation précédent/suivant dans l'historique, le nombre d'étapes pour aller en
-arrière/en avant
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-event: PopStateEvent;
-```
-
-<div class="ts-block-property-details">
-
-Le `PopStateEvent` qui a provoqué la navigation
-
-</div>
-</div></div>
-
-## NavigationTarget
-
-Informations à propos de la cible d'une navigation spécifique.
-
-<div class="ts-block">
-
-```dts
-interface NavigationTarget<
-	Params extends AppLayoutParams<'/'> =
-		AppLayoutParams<'/'>,
-	RouteId extends AppRouteId | null = AppRouteId | null
-> {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-params: Params | null;
-```
-
-<div class="ts-block-property-details">
-
-Paramètres de la page cible — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug: string
-}`. Vaut `null` si la cible ne fait pas partie de l'application SvelteKit (et ne peut donc pas être
-résolue en tant que route).
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-route: {/*…*/}
-```
-
-<div class="ts-block-property-details">
-
-Informations à propos de la route cible
-
-<div class="ts-block-property-children"><div class="ts-block-property">
-
-```dts
-id: RouteId | null;
-```
-
-<div class="ts-block-property-details">
-
-L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
-`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
-
-</div>
-</div></div>
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-url: URL;
-```
-
-<div class="ts-block-property-details">
-
-L'URL vers laquelle la navigation s'effectue
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-scroll: { x: number; y: number } | null;
-```
-
-<div class="ts-block-property-details">
-
-La position de défilement associée à cette navigation.
-
-Pour la cible `from`, il s'agit de la position de défilement au moment de la navigation.
-
-Pour la cible `to`, ceci représente la position de défilement qui sera ou a été restaurée :
-- Dans `beforeNavigate` et `onNavigate`, cette valeur n'est disponible que pour les navigations
-`popstate` (bouton précédent/suivant) et vaudra `null` pour d'autres types de navigation, puisque la
-position de défilement finale n'est pas connue à l'avance.
-- Dans `afterNavigate`, cette valeur est toujours la position de défilement qui a été appliquée
-après la fin de la navigation.
-
-</div>
-</div></div>
-
-## NavigationType
-
-- `enter`: L'application a été hydratée/relancée
-- `form`: L'utilisateur ou l'utilisatrice a soumis un `<form method="GET">` avec une méthode GET
-- `goto` : La navigation a été déclenchée par un appel `goto(...)` ou une redirection
-- `leave`: L'utilisateur ou l'utilisatrice en train de quitter l'application en fermant l'onglet ou
-en utilisant les boutons précédent/suivant du navigateur pour aller sur un document différent
-- `link` : La navigation a été déclenchée par un clic sur un lien
-- `popstate` : La navigation a été déclenchée par les fonctionnalités précédent/suivant du
-navigateur
-
-<div class="ts-block">
-
-```dts
-type NavigationType =
-	| 'enter'
-	| 'form'
-	| 'leave'
-	| 'link'
-	| 'goto'
-	| 'popstate';
-```
-
-</div>
-
-## NumericRange
-
-<div class="ts-block">
-
-```dts
-type NumericRange<
-	TStart extends number,
-	TEnd extends number
-> = Exclude<TEnd | LessThan<TEnd>, LessThan<TStart>>;
-```
-
-</div>
-
-## OnNavigate
-
-L'argument passé aux callbacks [`onNavigate`](/docs/kit/$app-navigation#onNavigate).
-
-<div class="ts-block">
-
-```dts
-type OnNavigate = Navigation & {
-	type: Exclude<NavigationType, 'enter' | 'leave'>;
-	/**
-	 * Puisque les callbacks `onNavigate` sont appelés immédiatement avant une navigation client, ils
-	 * ne seront jamais appelés avec une navigation qui "décharge" la page.
-	 */
-	willUnload: false;
-};
-```
-
-</div>
-
-## Page
-
-La forme de l'objet réactif [`page`](/docs/kit/$app-state#page) et du store
-[`$page`](/docs/kit/$app-stores).
-
-<div class="ts-block">
-
-```dts
-interface Page<
-	Params extends AppLayoutParams<'/'> =
-		AppLayoutParams<'/'>,
-	RouteId extends AppRouteId | null = AppRouteId | null
-> {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-url: URL & { pathname: ResolvedPathname };
-```
-
-<div class="ts-block-property-details">
-
-L'URL de la page courange.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-params: Params;
-```
-
-<div class="ts-block-property-details">
-
-Les paramètres de la page courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
-string }`.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-route: {/*…*/}
-```
-
-<div class="ts-block-property-details">
-
-Informations à propos de la route courante.
-
-<div class="ts-block-property-children"><div class="ts-block-property">
-
-```dts
-id: RouteId;
-```
-
-<div class="ts-block-property-details">
-
-L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
-`/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
-
-</div>
-</div></div>
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-status: number;
-```
-
-<div class="ts-block-property-details">
-
-Code HTTP de la page courante.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-error: App.Error | null;
-```
-
-<div class="ts-block-property-details">
-
-L'objet d'erreur de la page courante, s'il existe. Construit depuis les hooks `handleError`.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-data: App.PageData & Record<string, any>;
-```
-
-<div class="ts-block-property-details">
-
-Le résultat fusionné de toutes les données venant de toutes les fonctions `load` de la page
-courante. Vous pouvez typer un dénominateur commun grâce à `App.PageData`.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-state: App.PageState;
-```
-
-<div class="ts-block-property-details">
-
-L'état de la page, qui peut être manipulé en utilisant les fonctions
-[`pushState`](/docs/kit/$app-navigation#pushState) et
-[`replaceState`](/docs/kit/$app-navigation#replaceState) importées depuis `$app/navigation`.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-form: any;
-```
-
-<div class="ts-block-property-details">
-
-Rempli uniquement après une soumission de formulaire. Voir la section [actions de
-formulaire](/docs/kit/form-actions) pour plus d'informations.
-
-</div>
-</div></div>
-
-## ParamMatcher
-
-La forme d'un matcher de paramètres. Voir la section [matching](/docs/kit/advanced-routing#Matching)
-pour plus d'informations.
-
-<div class="ts-block">
-
-```dts
-type ParamMatcher = (param: string) => boolean;
-```
-
-</div>
-
 ## PrerenderOption
 
 <div class="ts-block">
 
 ```dts
 type PrerenderOption = boolean | 'auto';
-```
-
-</div>
-
-## QueryRequestedResult
-
-<div class="ts-block">
-
-```dts
-type QueryRequestedResult<Validated, Output> = Iterable<
-	RequestedEntry<Validated, Output>
-> &
-	AsyncIterable<RequestedEntry<Validated, Output>> & {
-		/**
-		 * Call `refresh` on all queries selected by this `requested` invocation.
-		 * Appelez `refresh` sur toutes les queries sélectionnées par cette invocation de
-		 * `requested`.
-		 * Ceci est identique à :
-		 * ```ts
-		 * import { requested } from '$app/server';
-		 *
-		 * for await (const { query } of requested(getPost, ...)) {
-		 *   void query.refresh();
-		 * }
-		 * ```
-		 */
-		refreshAll: () => Promise<void>;
-	};
 ```
 
 </div>
@@ -2671,470 +1893,6 @@ L'endroit vers lequel rediriger.
 </div>
 </div></div>
 
-## RemoteCommand
-
-Le type d'une fonction distante `command`. Voir la [section sur les fonctions
-distantes](/docs/kit/remote-functions#command) pour lire la documentation complète.
-
-<div class="ts-block">
-
-```dts
-type RemoteCommand<Input, Output> = {
-	(
-		arg: undefined extends Input ? Input | void : Input
-	): Promise<Output> & {
-		updates(
-			...updates: RemoteQueryUpdate[]
-		): Promise<Output>;
-	};
-	/** The number of pending command executions */
-	get pending(): number;
-};
-```
-
-</div>
-
-## RemoteForm
-
-La type d'une fonction distante `form`. Voir la [section sur les fonctions
-distantes](/docs/kit/remote-functions#form) pour lire la documentation complète.
-
-<div class="ts-block">
-
-```dts
-type RemoteForm<
-	Input extends RemoteFormInput | void,
-	Output
-> = {
-	/** Un attachement qui définit un gestionnaire d'évènement qui intercepte la soumission du
-	 * formulaire sur le client pour empêcher un rechargement complet de la page
-	 */
-	[attachment: symbol]: (node: HTMLFormElement) => void;
-	method: 'POST';
-	/** L'URL à laquelle envoyer le formulaire. */
-	action: string;
-	/** L'élément `<form>` auquel cette instance est actuellement attaché, s'il existe. */
-	get element(): HTMLFormElement | null;
-	/** Soumet programmatiquement le formulaire actuellement attaché */
-	submit(): Promise<boolean> & {
-		updates: (
-			...updates: RemoteQueryUpdate[]
-		) => Promise<boolean>;
-	};
-	/** Utilisez la méthode `enhance` pour influencer ce qu'il se produit lorsque le formulaire est soumis. */
-	enhance(
-		callback: RemoteFormEnhanceCallback<Input, Output>
-	): {
-		method: 'POST';
-		action: string;
-		[attachment: symbol]: (node: HTMLFormElement) => void;
-	};
-	/**
-	 * Crée une instance du formulaire pour la clé `id`.
-	 * La clé `id` est transformée en chaîne de caractères pour déduplication afin de pouvoir réutiliser des instances existantes.
-	 * Utile lorsque vous avez plusieurs formulaires qui utilisent la même action de formulaire distante, par exemple dans une boucle.
-	 * ```svelte
-	 * {#each todos as todo}
-	 *	{@const todoForm = updateTodo.for(todo.id)}
-	 *	<form {...todoForm}>
-	 *		{#if todoForm.result?.invalid}<p>Invalid data</p>{/if}
-	 *		...
-	 *	</form>
-	 *	{/each}
-	 * ```
-	 */
-	for(
-		id: ExtractId<Input>
-	): Omit<RemoteForm<Input, Output>, 'for'>;
-	/** Les vérifications de preflight */
-	preflight(
-		schema: StandardSchemaV1<Input, any>
-	): RemoteForm<Input, Output>;
-	/** Valider le contenu du formulaire programmatiquement */
-	validate(options?: {
-		/** Définissez cette valeur à `true` pour également afficher les problèmes de validation des champs qui n'ont pas encore été touchés. */
-		includeUntouched?: boolean;
-		/** Définissez cette valeur à `true` pour n'exécuter que la validation `preflight`. */
-		preflightOnly?: boolean;
-	}): Promise<void>;
-	/** Le résultat de la soumission du formulaire */
-	get result(): Output | undefined;
-	/** Le nombre de soumissions en cours */
-	get pending(): number;
-	/** Vaut `true` si le formulaire a été soumis au moins une fois */
-	get submitted(): boolean;
-	/** Accédez aux champs de formulaire en utilisant la notation objet */
-	fields: RemoteFormFieldsRoot<Input>;
-};
-```
-
-</div>
-
-## RemoteFormEnhanceCallback
-
-Le callback fourni à la méthode `enhance` d'une fonction distante. Voir le chapitre [Fonctions
-	distantes](/docs/kit/remote-functions#form) pour la documentation complète.
-
-<div class="ts-block">
-
-```dts
-type RemoteFormEnhanceCallback<
-	Input extends RemoteFormInput | void =
-		RemoteFormInput | void,
-	Output = any
-> = (
-	form: RemoteFormEnhanceInstance<Input, Output>
-) => MaybePromise<void>;
-```
-
-</div>
-
-## RemoteFormEnhanceInstance
-
-L'instance de formulaire telle que reçue dans callback `enhance`. Voir le chapitre [Fonctions
-	distantes](/docs/kit/remote-functions#form) pour la documentation complète.
-
-<div class="ts-block">
-
-```dts
-type RemoteFormEnhanceInstance<
-	Input extends RemoteFormInput | void =
-		RemoteFormInput | void,
-	Output = any
-> = Omit<
-	RemoteForm<Input, Output>,
-	'enhance' | 'element'
-> & {
-	readonly element: HTMLFormElement;
-};
-```
-
-</div>
-
-## RemoteFormField
-
-Type d'accesseur de champ de formulaire qui fournit les méthodes `name()`, `value()` et `issues()`
-
-<div class="ts-block">
-
-```dts
-type RemoteFormField<Value extends RemoteFormFieldValue> =
-	RemoteFormFieldMethods<Value> & {
-		/**
-		 * Renvoie un objet qui peut être étalé sur un élément input avec l'attribut de type correct,
-		 * l'attribut aria-invalid si le champ est invalide, et les getters/setters de propriétés
-		 * value/checked approprié
-		 * @example
-		 * ```svelte
-		 * <input {...myForm.fields.myString.as('text')} />
-		 * <input {...myForm.fields.myNumber.as('number')} />
-		 * <input {...myForm.fields.myBoolean.as('checkbox')} />
-		 * ```
-		 */
-		as<T extends RemoteFormFieldType<Value>>(
-			...args: AsArgs<T, Value>
-		): InputElementProps<T>;
-	};
-```
-
-</div>
-
-## RemoteFormFieldType
-
-<div class="ts-block">
-
-```dts
-type RemoteFormFieldType<T> = {
-	[K in keyof InputTypeMap]: T extends InputTypeMap[K]
-		? K
-		: never;
-}[keyof InputTypeMap];
-```
-
-</div>
-
-## RemoteFormFieldValue
-
-<div class="ts-block">
-
-```dts
-type RemoteFormFieldValue =
-	| string
-	| string[]
-	| number
-	| boolean
-	| File
-	| File[];
-```
-
-</div>
-
-## RemoteFormFields
-
-Type récursif pour construire une structure de champs de formulaire ayant un accès de proxy
-
-<div class="ts-block">
-
-```dts
-type RemoteFormFields<T> =
-	WillRecurseIndefinitely<T> extends true
-		? RecursiveFormFields
-		: NonNullable<T> extends
-					| string
-					| number
-					| boolean
-					| File
-			? RemoteFormField<NonNullable<T>>
-			: // [NonNullable<T>] est utilisé pour empêcher la distribution sur une union tout en
-			  // permettant que les wrappers nullables (par ex. `string[] | undefined` depuis un schema
-			  // ayant un `.default([])`) soient traités en tant que tableaux ; seule la dernière
-				// condition devrait se distribuer sur les unions
-				[NonNullable<T>] extends [string[] | File[]]
-				? RemoteFormField<NonNullable<T>> & {
-						[K in number]: RemoteFormField<
-							NonNullable<T>[number]
-						>;
-					}
-				: [NonNullable<T>] extends [Array<infer U>]
-					? RemoteFormFieldContainer<NonNullable<T>> & {
-							[K in number]: RemoteFormFields<U>;
-						}
-					: RemoteFormFieldContainer<T> & {
-							[K in KeysOfUnion<T>]-?: RemoteFormFields<
-								ValueOfUnionKey<T, K>
-							>;
-						};
-```
-
-</div>
-
-## RemoteFormInput
-
-<div class="ts-block">
-
-```dts
-interface RemoteFormInput {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput> | undefined;
-```
-
-<div class="ts-block-property-details"></div>
-</div></div>
-
-## RemoteFormIssue
-
-<div class="ts-block">
-
-```dts
-interface RemoteFormIssue {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-message: string;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-path: Array<string | number>;
-```
-
-<div class="ts-block-property-details"></div>
-</div></div>
-
-## RemoteLiveQuery
-
-<div class="ts-block">
-
-```dts
-type RemoteLiveQuery<T> = RemoteResource<T> &
-	AsyncIterable<T> & {
-		/** `true` si le flux live est actuellement connecté. */
-		readonly connected: boolean;
-		/** `true` une fois que l'itérateur du flux live actuel est épuisé. */
-		readonly done: boolean;
-		/** Reconnecte le flux live immédiatement. */
-		reconnect(): Promise<void>;
-	};
-```
-
-</div>
-
-## RemoteLiveQueryFunction
-
-Le type d'une fonction distante `query.live`. Voir la section [Fonctions
-distantes](/docs/kit/remote-functions#query.live) pour plus de documentation.
-
-Le paramètre générique `Validated` représente le type de l'argument *après* que le schéma de la
-query l'ait validé et (optionnellement) transformé, et correspond au type renvoyé par
-[`requested`](/docs/kit/$app-server#requested).
-
-<div class="ts-block">
-
-```dts
-type RemoteLiveQueryFunction<
-	Input,
-	Output,
-	_Validated = Input
-> = (
-	arg: undefined extends Input ? Input | void : Input
-) => RemoteLiveQuery<Output>;
-```
-
-</div>
-
-## RemotePrerenderFunction
-
-Le type d'une fonction distante `prerender`. Voir la [section sur les fonctions
-distantes](/docs/kit/remote-functions#prerender) pour lire la documentation complète.
-
-<div class="ts-block">
-
-```dts
-type RemotePrerenderFunction<Input, Output> = (
-	arg: undefined extends Input ? Input | void : Input
-) => RemoteResource<Output>;
-```
-
-</div>
-
-## RemoteQuery
-
-<div class="ts-block">
-
-```dts
-type RemoteQuery<T> = RemoteResource<T> & {
-	/**
-	 *
-	 * Sur le serveur, cette fonction peut être appelée dans le contexte d'une `command` ou d'un `form`
-	 * et les données fournies vont accompagner la réponse de l'action renvoyée au client.
-	 *
-	 * Ceci permet à SvelteKit de ne pas avoir besoin de rafraîchir toutes les queries de la page dans
-	 * un second aller-retour vers le serveur.
-	 */
-	set(value: T): void;
-	/**
-	 * Sur le client, cette fonction va re-requêter la query au serveur.
-	 *
-	 * Sur le serveur, cette méthode peut être appelée dans le contexte d'une `command` ou d'une `form`, et la donnée rafraîchie va alors accompagner la réponse de l'action lors de son retour au client.
-	 * Ceci évite à SvelteKit de rafraîchir toutes les queries sur la pages lors d'un deuxième aller-retour.
-	 */
-	refresh(): Promise<void>;
-	/**
-	 * Surcharge temporairement la valeur d'une query lors d'une [mutation single-flight](https://svelte.dev/docs/kit/remote-functions#Single-flight-mutations) pour permettre des mises-à-jour optimistes.
-	 *
-	 * ```svelte
-	 * <script>
-	 *   import { getTodos, addTodo } from './todos.remote.js';
-	 *   const todos = getTodos();
-	 * </script>
-	 *
-	 * <form {...addTodo.enhance(async (form) => {
-	 *   await form.submit().updates(
-	 *     todos.withOverride((todos) => [...todos, { text: form.fields.text.value() }])
-	 *   );
-	 * })}>
-	 *   <input type="text" name="text" />
-	 *   <button type="submit">Add Todo</button>
-	 * </form>
-	 * ```
-	 */
-	withOverride(
-		update: (current: T) => T
-	): RemoteQueryOverride;
-};
-```
-
-</div>
-
-## RemoteQueryFunction
-
-La valeur de retour d'une fonction distante `query`. Voir la [section sur les fonctions
-distantes](/docs/kit/remote-functions#query) pour lire la documentation complète.
-
-Le paramètre générique `Validated` représente le type de l'argument *après* sa validation et
-(potentielle transformation) par le schéma — il s'agit du type que la fonction d'implémentation de
-la query reçoit sur le serveur, et le type renvoyé par
-[`requested`](/docs/kit/$app-server#requested). Pour les queries déclarées avec un
-[Standard Schema](https://standardschema.dev/), il diffère de l'`Input` lorsque le schéma contient
-une transformation (par ex. `v.pipe(v.number(), v.transform(String))` a `Input = number` mais
-`Validated = string`). Pour les validateurs `'unchecked'` et les queries sans arguments, il vaut
-par défaut `Input`.
-
-<div class="ts-block">
-
-```dts
-type RemoteQueryFunction<
-	Input,
-	Output,
-	_Validated = Input
-> = (
-	arg: undefined extends Input ? Input | void : Input
-) => RemoteQuery<Output>;
-```
-
-</div>
-
-## RemoteQueryOverride
-
-<div class="ts-block">
-
-```dts
-type RemoteQueryOverride = () => void;
-```
-
-</div>
-
-## RemoteQueryUpdate
-
-<div class="ts-block">
-
-```dts
-type RemoteQueryUpdate =
-	| RemoteQuery<any>
-	| RemoteLiveQuery<any>
-	| RemoteQueryFunction<any, any>
-	| RemoteLiveQueryFunction<any, any>
-	| RemoteQueryOverride;
-```
-
-</div>
-
-## RemoteResource
-
-<div class="ts-block">
-
-```dts
-type RemoteResource<T> = Promise<T> & {
-	/** L'erreur lorsque la query échoue. La plupart du temps ce sera une [`HttpError`](/docs/kit/@sveltejs-kit#HttpError), mais ce n'est pas garanti. */
-	get error(): any;
-	/** `true` avant que le premier résultat ne soit disponible et lors des mises-à-jour. */
-	get loading(): boolean;
-} & (
-		| {
-				/** La valeur courante de la query. `undefined` tant que `ready` ne vaut pas `true` */
-				get current(): undefined;
-				ready: false;
-		  }
-		| {
-				/** La valeur courante de la query. `undefined` tant que `ready` ne vaut pas `true` */
-				get current(): T;
-				ready: true;
-		  }
-	);
-```
-
-</div>
-
 ## RequestEvent
 
 <div class="ts-block">
@@ -3150,7 +1908,7 @@ interface RequestEvent<
 <div class="ts-block-property">
 
 ```dts
-cookies: Cookies;
+readonly cookies: Cookies;
 ```
 
 <div class="ts-block-property-details">
@@ -3163,7 +1921,7 @@ Récupère ou définit des cookies liés à la requête courante
 <div class="ts-block-property">
 
 ```dts
-fetch: typeof fetch;
+readonly fetch: typeof fetch;
 ```
 
 <div class="ts-block-property-details">
@@ -3195,7 +1953,7 @@ Vous pouvez en apprendre plus sur les requêtes authentifiées avec cookies
 <div class="ts-block-property">
 
 ```dts
-getClientAddress: () => string;
+readonly getClientAddress: () => string;
 ```
 
 <div class="ts-block-property-details">
@@ -3208,7 +1966,7 @@ L'adresse IP du client, définie par l'adaptateur.
 <div class="ts-block-property">
 
 ```dts
-locals: App.Locals;
+readonly locals: App.Locals;
 ```
 
 <div class="ts-block-property-details">
@@ -3222,7 +1980,7 @@ Contient les données personnalisées ajoutées à la requête au sein du hook s
 <div class="ts-block-property">
 
 ```dts
-params: Params;
+readonly params: Params;
 ```
 
 <div class="ts-block-property-details">
@@ -3230,11 +1988,13 @@ params: Params;
 Les paramètres de la route courante — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
 string }`.
 
-Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
-page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
-crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
-ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
-requête et peuvent donc être manipulées.
+Au sein des fonctions `query` (incluant `query.batch` et `query.live`), accéder à cette propriété
+jette une erreur. Passez plutôt à la query des valeurs en tant qu'arguments depuis la page. Au sein
+des fonctions `form` et `command`, cette propriété fait référence à la page depuis laquelle la
+fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction
+distante. Ne l'utilisez jamais pour déterminer si un utilisateur ou une utilisatrice est autorisée à
+accéder à certaines données, puisque ces valeurs font partie de la requête et pourraient être
+manipulées.
 
 </div>
 </div>
@@ -3242,7 +2002,7 @@ requête et peuvent donc être manipulées.
 <div class="ts-block-property">
 
 ```dts
-platform: Readonly<App.Platform> | undefined;
+readonly platform: Readonly<App.Platform> | undefined;
 ```
 
 <div class="ts-block-property-details">
@@ -3255,7 +2015,7 @@ Les données supplémentaires rendues disponibles via l'adaptateur.
 <div class="ts-block-property">
 
 ```dts
-request: Request;
+readonly request: Request;
 ```
 
 <div class="ts-block-property-details">
@@ -3268,7 +2028,7 @@ L'objet représentant la requête d'origine.
 <div class="ts-block-property">
 
 ```dts
-route: {/*…*/}
+readonly route: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -3286,11 +2046,14 @@ id: RouteId;
 L'ID de la route courante — par ex. pour `src/routes/blog/[slug]`, cette valeur serait
 `/blog/[slug]`. Si aucune route ne correspond, cette valeur vaut `null`.
 
-Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
-page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
-crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
-ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
-requête et peuvent donc être manipulées.
+Au sein des fonctions `query` (incluant `query.batch` et `query.live`), accéder à cette propriété
+jette une erreur. Passez plutôt à la query des valeurs en tant qu'arguments depuis la page. Au sein
+des fonctions `form` et `command`, cette propriété fait référence à la page depuis laquelle la
+fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction
+distante. Ne l'utilisez jamais pour déterminer si un utilisateur ou une utilisatrice est autorisée à
+accéder à certaines données, puisque ces valeurs font partie de la requête et pourraient être
+manipulées.
+
 
 </div>
 </div></div>
@@ -3301,7 +2064,7 @@ requête et peuvent donc être manipulées.
 <div class="ts-block-property">
 
 ```dts
-setHeaders: (headers: Record<string, string>) => void;
+readonly setHeaders: (headers: Record<string, string>) => void;
 ```
 
 <div class="ts-block-property-details">
@@ -3337,25 +2100,28 @@ Vous ne pouvez pas ajouter une en-tête `set-cookie` avec `setHeaders` — utili
 <div class="ts-block-property">
 
 ```dts
-url: URL;
+readonly url: URL;
 ```
 
 <div class="ts-block-property-details">
 
 L'URL requêtée.
 
-Dans le contexte d'une requête de fonction distante initiée par le client, ceci est relatif à la
-page depuis laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit
-crée pour la fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur
-ou utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
-requête et peuvent donc être manipulées.
+Au sein des fonctions `query` (incluant `query.batch` et `query.live`), accéder à cette propriété
+jette une erreur. Passez plutôt à la query des valeurs en tant qu'arguments depuis la page. Au sein
+des fonctions `form` et `command`, cette propriété fait référence à la page depuis laquelle la
+fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction
+distante. Ne l'utilisez jamais pour déterminer si un utilisateur ou une utilisatrice est autorisée à
+accéder à certaines données, puisque ces valeurs font partie de la requête et pourraient être
+manipulées.
+
 </div>
 </div>
 
 <div class="ts-block-property">
 
 ```dts
-isDataRequest: boolean;
+readonly isDataRequest: boolean;
 ```
 
 <div class="ts-block-property-details">
@@ -3370,7 +2136,7 @@ cas. Utilisez cette propri��té si la distinction est importante pour vous.
 <div class="ts-block-property">
 
 ```dts
-isSubRequest: boolean;
+readonly isSubRequest: boolean;
 ```
 
 <div class="ts-block-property-details">
@@ -3384,7 +2150,7 @@ Ceci se produit lorsque vous faites des requêtes `fetch` ayant la même origine
 <div class="ts-block-property">
 
 ```dts
-tracing: {/*…*/}
+readonly tracing: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -3441,7 +2207,7 @@ courante.
 <div class="ts-block-property">
 
 ```dts
-isRemoteRequest: boolean;
+readonly isRemoteRequest: boolean;
 ```
 
 <div class="ts-block-property-details">
@@ -3475,133 +2241,6 @@ type RequestHandler<
 ```
 
 </div>
-
-## RequestedEntry
-
-Une entrée unique renvoyée par [`requested`](/docs/kit/$app-server#requested) lorsqu
-A single entry yielded by [`requested`](/docs/kit/$app-server#requested)
-
-Une entrée unique renvoyée par [`requested`](/docs/kit/$app-server#requested) lorsqu'appelée avec
-une `query` normale. `arg` est l'argument validé (l'entrée *après* que le schéma l'ait validé et
-transformé, si pertinent) ; `query` est une `RemoteQuery` liée à la clé de cache
-du client d'origine, de sorte que `refresh()` / `set()` mette à jour la bonne instance cliente.
-
-<div class="ts-block">
-
-```dts
-type RequestedEntry<Validated, Output> = {
-	arg: Validated;
-	query: RemoteQuery<Output>;
-};
-```
-
-</div>
-
-## RequestedResult
-
-<div class="ts-block">
-
-```dts
-type RequestedResult<Validated, Output> =
-	| QueryRequestedResult<Validated, Output>
-	| LiveQueryRequestedResult<Validated, Output>;
-```
-
-</div>
-
-## Reroute
-
-<blockquote class="since note">
-
-Disponible depuis la version 2.3.0
-
-</blockquote>
-
-Le hook [`reroute`](/docs/kit/hooks#reroute) vous permet de modifier l'URL avant qu'elle ne soit
-utilisée pour déterminer quelle route afficher.
-
-<div class="ts-block">
-
-```dts
-type Reroute = (event: {
-	url: URL;
-	fetch: typeof fetch;
-}) => MaybePromise<void | string>;
-```
-
-</div>
-
-## ResolveOptions
-
-<div class="ts-block">
-
-```dts
-interface ResolveOptions {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-transformPageChunk?: (input: { html: string; done: boolean }) => MaybePromise<string | undefined>;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- `input` le morceau de html et l'information de s'il s'agit du dernier morceau
-
-</div>
-
-Applique des transformations personnalisées au HTML. Si `done` vaut `true`, il s'agit du dernier
-morceau. Il n'y a pas de garantie que chaque morceau soit du HTML bien formé (ils pourraient inclure
-la balise ouvrante d'un élément mais pas sa balise fermante, par exemple) mais ils seront toujours
-divisés à des endroits sensibles, tels que `%sveltekit.head%` ou les composants de page/layout.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-filterSerializedResponseHeaders?: (name: string, value: string) => boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- `name` nom de l'en-tête
-- `value` valeur de l'en-tête
-
-</div>
-
-Détermine quelles en-têtes devraient être incluses dans les réponses sérialisées lorsqu'une fonction
-`load` charge une ressource avec `fetch`.
-Par défaut, aucune ne sera incluse.
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-preload?: (input: { type: 'font' | 'css' | 'js' | 'asset'; path: string }) => boolean;
-```
-
-<div class="ts-block-property-details">
-
-<div class="ts-block-property-bullets">
-
-- `input` le type de fichier et son chemin
-
-</div>
-
-Détermine ce qui devrait être ajouté à la balise `<head>` pour le précharger.
-Par défaut, les fichiers `js` et `css` seront préchargés.
-
-</div>
-</div></div>
 
 ## RouteDefinition
 
@@ -3687,18 +2326,18 @@ config: Config;
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## SSRManifest
+## Server
 
 <div class="ts-block">
 
 ```dts
-interface SSRManifest {/*…*/}
+interface Server {/*…*/}
 ```
 
 <div class="ts-block-property">
 
 ```dts
-appDir: string;
+init(options: ServerInitOptions): Promise<void>;
 ```
 
 <div class="ts-block-property-details"></div>
@@ -3707,130 +2346,11 @@ appDir: string;
 <div class="ts-block-property">
 
 ```dts
-appPath: string;
+respond(request: Request, options: RequestOptions): Promise<Response>;
 ```
 
 <div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-assets: Set<string>;
-```
-
-<div class="ts-block-property-details">
-
-Fichiers statiques venant de `kit.config.files.assets` et du service worker (s'il en existe).
-
-</div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-mimeTypes: Record<string, string>;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-_: {/*…*/}
-```
-
-<div class="ts-block-property-details">
-
-champs privés
-
-<div class="ts-block-property-children"><div class="ts-block-property">
-
-```dts
-client: BuildData['client'];
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-<div class="ts-block-property">
-
-```dts
-nodes: SSRNodeLoader[];
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-<div class="ts-block-property">
-
-```dts
-remotes: Record<string, () => Promise<any>>;
-```
-
-<div class="ts-block-property-details">
-
-nom de fichier hashé -> import vers ce fichier
-
-</div>
-</div>
-<div class="ts-block-property">
-
-```dts
-routes: SSRRoute[];
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-<div class="ts-block-property">
-
-```dts
-prerendered_routes: Set<string>;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-<div class="ts-block-property">
-
-```dts
-matchers: () => Promise<Record<string, ParamMatcher>>;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-<div class="ts-block-property">
-
-```dts
-server_assets: Record<string, number>;
-```
-
-<div class="ts-block-property-details">
-
-Un dictionnaire `[file]: size` de tous les assets importés par le code serveur.
-
-</div>
 </div></div>
-
-</div>
-</div></div>
-
-## ServerInit
-
-<blockquote class="since note">
-
-Disponible depuis la version 2.10.0
-
-</blockquote>
-
-Le hook [`init`](/docs/kit/hooks#init) sera invoqué avant que le serveur ne réponde à sa première
-requête.
-
-<div class="ts-block">
-
-```dts
-type ServerInit = () => MaybePromise<void>;
-```
-
-</div>
 
 ## ServerInitOptions
 
@@ -3843,7 +2363,7 @@ interface ServerInitOptions {/*…*/}
 <div class="ts-block-property">
 
 ```dts
-env: Record<string, string>;
+env: Record<string, string | undefined>;
 ```
 
 <div class="ts-block-property-details">
@@ -4014,7 +2534,7 @@ export async function load({ untrack, url }) {
 <div class="ts-block-property">
 
 ```dts
-tracing: {/*…*/}
+tracing: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -4069,6 +2589,13 @@ Le span associé avec la fonction `load` de serveur courante.
 
 ## Snapshot
 
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt l'utilitaire [`snapshot`](/docs/kit/$app-navigation#snapshot) importé depuis
+`$app/navigation`.
+
+</blockquote>
+
 Le type de `export const snapshot` exporté depuis un composant de page ou de layout.
 
 <div class="ts-block">
@@ -4090,122 +2617,6 @@ capture: () => T;
 
 ```dts
 restore: (snapshot: T) => void;
-```
-
-<div class="ts-block-property-details"></div>
-</div></div>
-
-## SubmitFunction
-
-<div class="ts-block">
-
-```dts
-type SubmitFunction<
-	Success extends Record<string, unknown> | undefined =
-		Record<string, any>,
-	Failure extends Record<string, unknown> | undefined =
-		Record<string, any>
-> = (input: {
-	action: URL;
-	formData: FormData;
-	formElement: HTMLFormElement;
-	controller: AbortController;
-	submitter: HTMLElement | null;
-	cancel: () => void;
-}) => MaybePromise<
-	| void
-	| ((opts: {
-			formData: FormData;
-			formElement: HTMLFormElement;
-			action: URL;
-			result: ActionResult<Success, Failure>;
-			/**
-			 * Appelez cette fonction pour récupérer le comportement par défaut d'une réponse de
-			 * soumission de formulaire.
-			 * @param options Définissez `reset: false` si vous ne voulez pas que les valeurs du `<form>` soient réinitialisées après une soumission réussie.
-			 * @param invalidateAll Définissez `invalidateAll: false` si vous ne souhaitez pas que l'action appelle `invalidateAll` après la soumission.
-			 */
-			update: (options?: {
-				reset?: boolean;
-				invalidateAll?: boolean;
-			}) => Promise<void>;
-	  }) => MaybePromise<void>)
->;
-```
-
-</div>
-
-## Transport
-
-<blockquote class="since note">
-
-Disponible depuis la version 2.11.0
-
-</blockquote>
-
-Le hook [`transport`](/docs/kit/hooks#transport) vous permet de transporter des types personnalisés
-au travers de la frontière serveur/client.
-
-Chaque transporteur possède une paire de fonctions `encode` et `decode`. Sur le serveur, `encode`
-détermine si une valeur est une instance du type personnalisé et, si c'est le cas, renvoie une
-encodage non-falsy de la valeur pouvant être un objet ou un tableau (ou `false` sinon).
-
-Dans le navigateur, `decode` transforme l'encodage dans l'autre sens vers une instance du type
-personnalisé.
-
-```ts
-import type { Transport } from '@sveltejs/kit';
-
-declare class MyCustomType {
-	data: any
-}
-
-// hooks.js
-export const transport: Transport = {
-	MyCustomType: {
-		encode: (value) => value instanceof MyCustomType && [value.data],
-		decode: ([data]) => new MyCustomType(data)
-	}
-};
-```
-
-<div class="ts-block">
-
-```dts
-type Transport = Record<string, Transporter>;
-```
-
-</div>
-
-## Transporter
-
-Un membre du hook [`transport`](/docs/kit/hooks#transport).
-
-<div class="ts-block">
-
-```dts
-interface Transporter<
-	T = any,
-	U = Exclude<
-		any,
-		false | 0 | '' | null | undefined | typeof NaN
-	>
-> {/*…*/}
-```
-
-<div class="ts-block-property">
-
-```dts
-encode: (value: T) => false | U;
-```
-
-<div class="ts-block-property-details"></div>
-</div>
-
-<div class="ts-block-property">
-
-```dts
-decode: (data: U) => T;
 ```
 
 <div class="ts-block-property-details"></div>
@@ -4241,7 +2652,7 @@ Les erreurs de validation
 Les types qui suivent sont référencés par les types publics documentés plus haut, mais ne peuvent
 pas être importés directement :
 
-## AdapterEntry
+### AdapterEntry
 
 <div class="ts-block">
 
@@ -4300,7 +2711,7 @@ la fonction vers le système de fichiers et générer les manifestes de redirect
 </div>
 </div></div>
 
-## Csp
+### Csp
 
 <div class="ts-block">
 
@@ -4351,7 +2762,7 @@ namespace Csp {
 
 </div>
 
-## CspDirectives
+### CspDirectives
 
 <div class="ts-block">
 
@@ -4694,7 +3105,7 @@ referrer?: Array<
 </div>
 </div></div>
 
-## DeepPartial
+### DeepPartial
 
 <div class="ts-block">
 
@@ -4714,7 +3125,7 @@ type DeepPartial<T> = T extends
 
 </div>
 
-## HasNonOptionalBoolean
+### HasNonOptionalBoolean
 
 <div class="ts-block">
 
@@ -4735,7 +3146,7 @@ type HasNonOptionalBoolean<T> =
 
 </div>
 
-## HttpMethod
+### HttpMethod
 
 <div class="ts-block">
 
@@ -4747,12 +3158,13 @@ type HttpMethod =
 	| 'PUT'
 	| 'DELETE'
 	| 'PATCH'
-	| 'OPTIONS';
+	| 'OPTIONS'
+	| 'QUERY';
 ```
 
 </div>
 
-## IsAny
+### IsAny
 
 <div class="ts-block">
 
@@ -4762,7 +3174,7 @@ type IsAny<T> = 0 extends 1 & T ? true : false;
 
 </div>
 
-## Logger
+### Logger
 
 <div class="ts-block">
 
@@ -4794,7 +3206,11 @@ success(msg: string): void;
 error(msg: string): void;
 ```
 
-<div class="ts-block-property-details"></div>
+<div class="ts-block-property-details">
+
+Affiche un message en rouge et gras sur stderr
+
+</div>
 </div>
 
 <div class="ts-block-property">
@@ -4803,7 +3219,11 @@ error(msg: string): void;
 warn(msg: string): void;
 ```
 
-<div class="ts-block-property-details"></div>
+<div class="ts-block-property-details">
+
+Affiche un message en jaune et gras sur stderr
+
+</div>
 </div>
 
 <div class="ts-block-property">
@@ -4812,7 +3232,11 @@ warn(msg: string): void;
 minor(msg: string): void;
 ```
 
-<div class="ts-block-property-details"></div>
+<div class="ts-block-property-details">
+
+Affiche un message estompé sur stdout si `verbose === true`
+
+</div>
 </div>
 
 <div class="ts-block-property">
@@ -4821,10 +3245,41 @@ minor(msg: string): void;
 info(msg: string): void;
 ```
 
-<div class="ts-block-property-details"></div>
+<div class="ts-block-property-details">
+
+Affiche sur stdout si `verbose === true`
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+err(msg: string): void;
+```
+
+<div class="ts-block-property-details">
+
+Affiche sur stderr sans aucun formattage
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+prettyError(error: unknown, caller?: string): void;
+```
+
+<div class="ts-block-property-details">
+
+Affiche un message en rouge et gras, suivi par la stack trace pour chaque erreur (en suivant les
+chaînes `.cause`)
+
+</div>
 </div></div>
 
-## MaybePromise
+### MaybePromise
 
 <div class="ts-block">
 
@@ -4834,7 +3289,7 @@ type MaybePromise<T> = T | Promise<T>;
 
 </div>
 
-## PrerenderEntryGeneratorMismatchHandler
+### PrerenderEntryGeneratorMismatchHandler
 
 <div class="ts-block">
 
@@ -4851,7 +3306,7 @@ interface PrerenderEntryGeneratorMismatchHandler {/*…*/}
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## PrerenderEntryGeneratorMismatchHandlerValue
+### PrerenderEntryGeneratorMismatchHandlerValue
 
 <div class="ts-block">
 
@@ -4865,7 +3320,7 @@ type PrerenderEntryGeneratorMismatchHandlerValue =
 
 </div>
 
-## PrerenderHttpErrorHandler
+### PrerenderHttpErrorHandler
 
 <div class="ts-block">
 
@@ -4888,7 +3343,7 @@ message: string;
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## PrerenderHttpErrorHandlerValue
+### PrerenderHttpErrorHandlerValue
 
 <div class="ts-block">
 
@@ -4902,7 +3357,7 @@ type PrerenderHttpErrorHandlerValue =
 
 </div>
 
-## PrerenderInvalidUrlHandler
+### PrerenderInvalidUrlHandler
 
 <div class="ts-block">
 
@@ -4919,7 +3374,7 @@ interface PrerenderInvalidUrlHandler {/*…*/}
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## PrerenderInvalidUrlHandlerValue
+### PrerenderInvalidUrlHandlerValue
 
 <div class="ts-block">
 
@@ -4933,7 +3388,7 @@ type PrerenderInvalidUrlHandlerValue =
 
 </div>
 
-## PrerenderMap
+### PrerenderMap
 
 <div class="ts-block">
 
@@ -4943,7 +3398,7 @@ type PrerenderMap = Map<string, PrerenderOption>;
 
 </div>
 
-## PrerenderMissingIdHandler
+### PrerenderMissingIdHandler
 
 <div class="ts-block">
 
@@ -4960,7 +3415,7 @@ interface PrerenderMissingIdHandler {/*…*/}
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## PrerenderMissingIdHandlerValue
+### PrerenderMissingIdHandlerValue
 
 <div class="ts-block">
 
@@ -4974,7 +3429,7 @@ type PrerenderMissingIdHandlerValue =
 
 </div>
 
-## PrerenderOption
+### PrerenderOption
 
 <div class="ts-block">
 
@@ -4984,7 +3439,7 @@ type PrerenderOption = boolean | 'auto';
 
 </div>
 
-## PrerenderUnseenRoutesHandler
+### PrerenderUnseenRoutesHandler
 
 <div class="ts-block">
 
@@ -5001,7 +3456,7 @@ interface PrerenderUnseenRoutesHandler {/*…*/}
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## PrerenderUnseenRoutesHandlerValue
+### PrerenderUnseenRoutesHandlerValue
 
 <div class="ts-block">
 
@@ -5015,7 +3470,7 @@ type PrerenderUnseenRoutesHandlerValue =
 
 </div>
 
-## Prerendered
+### Prerendered
 
 <div class="ts-block">
 
@@ -5095,7 +3550,7 @@ Un tableau de chemins pré-rendus (sans les trailing slashs, indépendamment de 
 </div>
 </div></div>
 
-## RequestOptions
+### RequestOptions
 
 <div class="ts-block">
 
@@ -5121,7 +3576,7 @@ platform?: App.Platform;
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## RouteSegment
+### RouteSegment
 
 <div class="ts-block">
 
@@ -5156,7 +3611,7 @@ rest: boolean;
 <div class="ts-block-property-details"></div>
 </div></div>
 
-## TrailingSlash
+### TrailingSlash
 
 <div class="ts-block">
 

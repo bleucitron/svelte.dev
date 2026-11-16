@@ -34,8 +34,7 @@ Le template de projet à utiliser :
 - `demo` — une app de démo incluant un jeu proposant de deviner des mots fonctionnant sans
 JavaScript
 - `library` — un template pour créer une librairie Svelte, utilisant `svelte-package`
-  <!-- TODO: JYC: Uncomment this when the addon template is ready -->
-  <!-- - `addon` — template for a community add-on, ready to be tested & published -->
+- `addon` — template for a community add-on, ready to be tested & published
 
 ### `--types <option>`
 
@@ -64,6 +63,19 @@ npx sv create --add eslint prettier [path]
 ### `--no-add-ons`
 
 Lance la commande sans l'utilitaire de choix d'options.
+
+### `--no-download-check`
+
+N'avertit pas au sujet des téléchargements d'add-ons communautaires.
+
+> [!NOTE]
+> Les mainteneurs de Svelte n'ont pas vérifié les add-ons communautaires, qui peuvent donc contenir
+> du code malveillant ! Utilisez à vos risques et périls.
+
+### `--addon-name <name>`
+
+Précise le nom de paquet lorsque vous créez un template d'add-on. Accept `@<org>/<pkg>` ou `<pkg>`.
+Lorsqu'omis, vous serez invité•e à rentrer un nom.
 
 ### `--install <package-manager>`
 

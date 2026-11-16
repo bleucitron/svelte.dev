@@ -9,9 +9,9 @@ Pages](https://pages.cloudflare.com/), utilisez l'adaptateur
 
 Cet adaptateur sera installé par défaut lorsque vous utilisez [`adapter-auto`](adapter-auto). Si
 vous prévoyez de rester sur Cloudflare, vous pouvez directement passer de
-[`adapter-auto`](adapter-auto) à cet adaptateur afin que la plateforme `event.platform` soit émulée
-lors du développement local, que les déclarations de type soient automatiquement appliquées et que
-la possibilité de définir des options spécifiques à Cloudflare soit activée.
+[`adapter-auto`](adapter-auto) à cet adaptateur afin que la plateforme `cloudflare:workers` soit
+émulée lors du développement local, que les déclarations de type soient automatiquement appliquées
+et que la possibilité de définir des options spécifiques à Cloudflare soit activée.
 
 ## Comparaisons [!VO]Comparisons
 
@@ -24,35 +24,37 @@ Static Assets et Cloudflare Pages
 
 ## Usage
 
-Installez l'adaptateur avec `npm i -D @sveltejs/adapter-cloudflare`, puis ajoutez-le à votre fichier
-`svelte.config.js` :
+Lancez [`npx sv add sveltekit-adapter="adapter:cloudflare"`](/docs/cli/sveltekit-adapter), ou
+installez-le avec `npm i -D @sveltejs/adapter-cloudflare` puis ajoutez l'adaptateur à votre fichier
+`vite.config.js`:
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
 import adapter from '@sveltejs/adapter-cloudflare';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			// Voir plus bas pour une explication de ces options
-			config: undefined,
-			platformProxy: {
-				configPath: undefined,
-				environment: undefined,
-				persist: undefined
-			},
-			fallback: 'plaintext',
-			routes: {
-				include: ['/*'],
-				exclude: ['<all>']
-			}
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter({
+				// Voir plus bas pour une explication de ces options
+				config: undefined,
+				platformProxy: {
+					configPath: undefined,
+					environment: undefined,
+					persist: undefined
+				},
+				fallback: 'plaintext',
+				routes: {
+					include: ['/*'],
+					exclude: ['<all>']
+				}
+			})
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
 ## Options
@@ -66,8 +68,8 @@ utiliser un nom de fichier de configuration Wrangler autre que `wranglet.jsonc`,
 
 ### platformProxy
 
-Les préférences pour les liaisons locales émulées `platform.env`. Voir la [documentation d'API de
-Wrangler qui traite de
+Les préférences pour les liaisons locales émulées `env`. Voir la [documentation d'API de Wrangler
+qui traite de
 `getPlatformProxy`](https://developers.cloudflare.com/workers/wrangler/api/#parameters-1) pour plus
 de détails.
 
@@ -190,72 +192,47 @@ tant que [endpoints de server](routing#server) de votre application SvelteKit, q
 
 L'objet [`env`](https://developers.cloudflare.com/workers/runtime-apis/fetch-event#parameters)
 contient les [liaisons](https://developers.cloudflare.com/workers/runtime-apis/bindings/) de votre
-projet, qui consistent en des namespaces KV/DO, etc. Il est passé à SvelteKit via la propriété
-`platform`, de même que
-[`ctx`](https://developers.cloudflare.com/workers/runtime-apis/context/),
-[`caches`](https://developers.cloudflare.com/workers/runtime-apis/cache/), et
-[`cf`](https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties),
-ce qui signifie que vous pouvez y accéder dans les hooks et les endpoints :
-
+projet, qui consistent en des namespaces KV/DO, etc. Il est disponible dans le module
+[`cloudflare:workers`](https://developers.cloudflare.com/workers/runtime-apis/bindings/#importing-env-as-a-global).
 
 ```js
+/// file: +server.js
 // @filename: ambient.d.ts
-import { DurableObjectNamespace } from '@cloudflare/workers-types';
-
-declare global {
-	namespace App {
-		interface Platform {
-			env: {
-				YOUR_DURABLE_OBJECT_NAMESPACE: DurableObjectNamespace;
-			};
-		}
-	}
+declare module 'cloudflare:workers' {
+	export const env: {
+		YOUR_DURABLE_OBJECT_NAMESPACE: import('@cloudflare/workers-types').DurableObjectNamespace;
+	};
 }
 // @filename: +server.js
 // ---cut---
 // @errors: 2355 2322
-/// file: +server.js
+import { env } from 'cloudflare:workers';
+
 /** @type {import('./$types').RequestHandler} */
-export async function POST({ request, platform }) {
-	const x = platform?.env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
+export async function POST() {
+	const x = env.YOUR_DURABLE_OBJECT_NAMESPACE.idFromName('x');
 }
 ```
 
-> [!NOTE] Le module intégré de [`$env`]($env-static-private) devrait être préféré pour les variables
-> d'environnement.
+> [!NOTE] Le module intégré de [`$app/env/*`](environment-variables) devrait être préféré pour les
+> variables d'environnement.
 
 Pour rendre ces types disponibles dans votre application, installez
-[`@cloudflare/workers-types`](https://www.npmjs.com/package/@cloudflare/workers-types) et
-référencez-les dans votre fichier `src/app.d.ts` :
-
-```ts
-/// file: src/app.d.ts
-+++import { KVNamespace, DurableObjectNamespace } from '@cloudflare/workers-types';+++
-
-declare global {
-	namespace App {
-		interface Platform {
-+++			env: {
-				YOUR_KV_NAMESPACE: KVNamespace;
-				YOUR_DURABLE_OBJECT_NAMESPACE: DurableObjectNamespace;
-			};+++
-		}
-	}
-}
-
-export {};
-```
+[`wrangler`](https://www.npmjs.com/package/wrangler) et lancez [`wrangler
+types`](https://developers.cloudflare.com/workers/languages/typescript/).
 
 ### Tester en local [!VO]Testing locally
 
-Les valeurs spécifiques à Cloudflare dans la propriété `platform` sont émulées lors du développement
-et de la prévisualisation. Les
-[liaisons](https://developers.cloudflare.com/workers/wrangler/configuration/#bindings) locales sont
-créées en fonction de votre [fichier de configuration
-Wrangler](https://developers.cloudflare.com/workers/wrangler/) et sont utilisées pour remplir
-`platform.env` lors du développement et de la prévisualisation. Utilisez la configuration
-[`platformProxy`](#Options-platformProxy) de
-l'adaptateur pour changer vos préférences de liaison.
+Les valeurs spécifiques à Cloudflare sont émulées lors du développement et de la prévisualisation.
+Les [liaisons](https://developers.cloudflare.com/workers/wrangler/configuration/#bindings) locales
+sont créées en fonction de votre [fichier de configuration
+Wrangler](https://developers.cloudflare.com/workers/wrangler/) et sont utilisées pour remplir `env`
+lors du développement et de la prévisualisation. Utilisez la configuration
+[`platformProxy`](#Options-platformProxy) de l'adaptateur pour changer vos préférences de liaison.
+
+> [!NOTE] Les [Durable Objects](https://developers.cloudflare.com/durable-objects/) et les
+> [Workflows](https://developers.cloudflare.com/workflows/), qui nécessitent que votre worker
+> exporte des classes personnalisées, ne sont pas actuellement supportées.
 
 Pour tester le projet compilé, vous devriez utiliser la version 4 de
 [Wrangler](https://developers.cloudflare.com/workers/wrangler/). Une fois que vous avez compilé
@@ -319,22 +296,20 @@ Assets](https://developers.cloudflare.com/workers/static-assets/). Pour migrer, 
 paramètres de configuration `site` de votre fichier de configuration Wrangler, puis ajoutez-y les
 paramètres de configuration `assets.directory` et `assets.bindings` :
 
-### svelte.config.js
-
 ```js
 // @errors: 2307
-/// file: svelte.config.js
----import adapter from '@sveltejs/adapter-cloudflare-workers';---
+/// file: vite.config.js
 +++import adapter from '@sveltejs/adapter-cloudflare';+++
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter()
-	}
-};
-
-export default config;
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			+++adapter: adapter()+++
+		})
+	]
+});
 ```
 
 ### wrangler.toml

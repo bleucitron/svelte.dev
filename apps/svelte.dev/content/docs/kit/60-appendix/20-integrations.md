@@ -9,20 +9,21 @@ title: Intégrations
 pré-traite vos balises `<style>` et `<script>` de vos fichiers `.svelte`.
 
 ```js
-// svelte.config.js
+// vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	preprocess: [
-		vitePreprocess({
-			style: true,      // valeur par défaut
-			script: false     // valeur par défaut
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			preprocess: vitePreprocess({
+				style: true,      // valeur par défaut
+				script: false     // valeur par défaut
+			})
 		})
 	]
-};
-
-export default config;
+});
 ```
 
 ### `style`
@@ -79,7 +80,7 @@ supporté](https://github.com/sveltejs/kit/issues/2920#issuecomment-996469815) p
 
 Vous devrez installer `svelte-preprocess` avec `npm i -D svelte-preprocess` et l'[ajouter à votre
 fichier de configuration
-`svelte.config.js`](https://github.com/sveltejs/svelte-preprocess/blob/main/docs/usage.md#with-svelte-config).
+`vite.config.js`](https://github.com/sveltejs/svelte-preprocess/blob/main/docs/usage.md#with-svelte-config).
 Ensuite, vous devrez [installer régulièrement la librairie correspondant à vos
 besoins](https://github.com/sveltejs/svelte-preprocess/blob/main/docs/getting-started.md) comme `npm
 i -D sass` ou `npm i -D less`.

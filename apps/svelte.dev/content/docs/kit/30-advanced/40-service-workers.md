@@ -9,49 +9,49 @@ si vous n'avez pas besoin de support hors-ligne (ou si vous ne pouvez pas réali
 l'implémenter à cause du type d'application que vous développez), il est souvent utile d'utiliser
 les service workers pour accélérer la navigation en pré-cachant vos JS et CSS compilés.
 
-Dans SvelteKit, si vous avez un fichier `src/service-worker.js` (ou `src/service-worker/index.js`),
-celui-ci sera compilé et automatiquement activé.
+Dans SvelteKit, si vous avez un fichier `src/service-worker/index.ts`, celui-ci sera compilé et
+automatiquement activé.
+
+> [!NOTE] `src/service-worker.ts` ok `.js` est également valide, voir la section sur le
+> [typage](#Type-safety) ci-dessous.
 
 ## Au sein du service worker [!VO]Inside the service worker
 
-Au sein du service worker vous avez accès au [module `$service-worker`]($service-worker), qui
-vous fournit les chemins vers tous les assets statiques, fichiers compilés et pages prérendues. Vous
-avez également accès à la chaîne de caractères représentant la version de l'application, que vous
-pouvez utiliser pour créer un nom de cache unique, ainsi qu'à la `base` du chemin de déploiement. Si
-votre configuration Vite précise l'option `define` (utilisé pour le remplacement de variables
-globales), celle-ci sera appliquée aux service workers ainsi qu'à vos fichiers compilés de serveur
-et de client.
+Pour que le service worker puisse être effectif, vous aurez probablement besoin d'importer certaines
+choses :
 
-L'exemple suivant met en cache l'application compilée et tout fichier dans le dossier `static` de
-manière agressive, et met en cache toute autre requête lorsqu'elles se produisent. Ceci rend de
-facto toute page visitée disponible en mode hors-ligne.
+- [`$app/service-worker`]($app-service-worker) exporte `self` qui est simplement `globalThis` typé
+en tant que
+[`ServiceWorkerGlobalScope`](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope)
+(à condition que vous suiviez [ces étapes](#Type-safety)), afin que vos évènements `fetch` soient
+correctement typés
+- [`$app/env`]($app-env) exporte `version`, qui est utile pour créer des caches dont la portée est
+limitée à chaque déploiement
+- [`$app/manifest`]($app-manifest) exporte des fichiers de compilation `immutable`, vos `assets`, et
+  tout contenu `prerendered`, vous permettant de remplir vos caches
+
+Un service worker typique ressemble à ceci :
 
 ```js
-// @errors: 2688 2307
 /// file: src/service-worker.js
-// Désactive l'accès au types du DOM comme `HTMLElement` qui ne sont pas disponibles
-// dans un service worker et instancie les variables globales pertinentes
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
-
-// Assure que l'import de `$service-worker` soit correctement typé
-/// <reference types="@sveltejs/kit" />
-
-// Uniquement nécessaire si vous avez un import depuis `$env/static/public`
-/// <reference types="../.svelte-kit/ambient.d.ts" />
-
-import { build, files, version } from '$service-worker';
-
-// Ceci donne à `self` le typage correct
-const self = /** @type {ServiceWorkerGlobalScope} */ (/** @type {unknown} */ (globalThis.self));
+// ---cut---
+import { self } from '$app/service-worker';
+import { version } from '$app/env';
+import { immutable, assets } from '$app/manifest';
+import { resolve } from '$app/paths';
 
 // Crée un nom de cache unique pour ce déploiement
 const CACHE = `cache-${version}`;
 
+// les chemins `immutable`/`assets` importés depuis `$app/manifest` sont relatifs au chemin de base,
+// résolvez-les donc en chemins absolus pouvant correspondre à `url.pathname` du gestionnaire
+// `fetch`
 const ASSETS = [
-	...build, // l'application elle-même
-	...files  // tout ce qui est dans `static`
+	...immutable.map((asset) => resolve(asset.path)), // la sortie générée par Vite
+	...assets.map((asset) => resolve(asset.path))  // tout ce qui est dans `static`
 ];
 
 self.addEventListener('install', (event) => {
@@ -83,7 +83,7 @@ self.addEventListener('fetch', (event) => {
 		const url = new URL(event.request.url);
 		const cache = await caches.open(CACHE);
 
-		// les fichiers `build`/`files` peuvent toujours être servis depuis le cache
+		// les fichiers `immutable`/`assets` peuvent toujours être servis depuis le cache
 		if (ASSETS.includes(url.pathname)) {
 			const response = await cache.match(url.pathname);
 
@@ -92,33 +92,26 @@ self.addEventListener('fetch', (event) => {
 			}
 		}
 
-		// pour tout le reste, essayer d'abord le réseau, mais
-		// se reporter au cache si le réseau est indisponible
+		// pour tout le reste, tester d'abord le réseau...
 		try {
 			const response = await fetch(event.request);
 
-			// si nous sommes hors-ligne, fetch peut renvoyer une valeur qui n'est pas une Response
-			// plutôt que de lever une erreur — and nous ne pouvons pas passer cette non-Response à
-			// respondWith
-			if (!(response instanceof Response)) {
-				throw new Error('la réponse de fetch est invalide');
-			}
-
 			if (response.status === 200 && !response.headers.get('cache-control')?.includes('no-store')) {
-				cache.put(event.request, response.clone());
+				// ... et mettez les réponses en cache pour la prochaine fois...
+				void cache.put(event.request, response.clone());
 			}
 
 			return response;
-		} catch (err) {
+		} catch (error) {
+			// ... et sinon, servez les données précédemment mises en cache si elles existent...
 			const response = await cache.match(event.request);
 
 			if (response) {
 				return response;
 			}
 
-			// s'il n'y a pas de cache, lever une erreur
-			// puisqu'il n'y a rien à répondre à cette requête
-			throw err;
+			// ... ou bien jetez une exception
+			throw error;
 		}
 	}
 
@@ -131,22 +124,48 @@ self.addEventListener('fetch', (event) => {
 > vont vider le cache s'il remplit trop, vous devriez également faire attention lorsque vous mettez
 > en cache des assets de grande taille comme des fichiers vidéo.
 
-> [!NOTE] `build` et `prerendered` sont des tableaux vides lors du développement.
+## Typage [!VO]Type safety
+
+Les service workers sont exécutés dans un contexte différent du reste de votre application. Ils
+nécessitent donc des types différents. Vous devez vous assurez que la racine de votre projet
+`tsconfig.json` exclue le code de votre service worker...
+
+```json
+/// file: tsconfig.json
+{
+	"extends": "$app/tsconfig",
+	"include": ["src", "test"],
+	"exclude": ["src/service-worker"]
+}
+```
+
+... et que votre fichier `src/service-worker/index.ts` soit placé à côté d'un `tsconfig.json`
+distinct, ce qui devrait définir correctement vos types si vous héritez de
+[`$app/tsconfig/service-worker`]($app-tsconfig-service-worker) :
+
+```json
+/// file: src/service-worker/tsconfig.json
+{
+	"extends": "$app/tsconfig/service-worker"
+}
+```
 
 ## Activation manuelle [!VO]Manual registration
 
 Vous pouvez [désactiver l'activation automatique](configuration#serviceWorker) si vous avez besoin
-de définir le service worker avec votre propre logique. La définition par défaut ressemble à quelque
-chose comme ça :
+de définir le service worker avec votre propre logique. La définition par défaut, qui est injectée
+dans du HTML rendu sur le serveur, ressemble à quelque chose comme ça :
 
 ```js
-import { dev } from '$app/environment';
-
 if ('serviceWorker' in navigator) {
+	const script_url = './service-worker.js';
+	const policy = globalThis?.window?.trustedTypes?.createPolicy(
+		'sveltekit-trusted-url',
+		{ createScriptURL(url) { return url; } }
+	);
+	const sanitised = policy?.createScriptURL(script_url) ?? script_url;
 	addEventListener('load', function () {
-		navigator.serviceWorker.register('./path/to/service-worker.js', {
-			type: dev ? 'module' : 'classic'
-		});
+		navigator.serviceWorker.register(sanitised, { type: 'module' });
 	});
 }
 ```

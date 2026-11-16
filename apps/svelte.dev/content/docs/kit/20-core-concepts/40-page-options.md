@@ -67,10 +67,10 @@ toutes les pages ou routes `+server.js` pouvant être pré-rendues qu'il trouve.
 scannée à la recherche d'éléments `<a>` pointant vers d'autres pages candidates au pré-rendu — pour
 cette raison, vous n'avez pas besoin de préciser quelles pages doivent être accessibles au processus
 de pré-rendu. Si vous _devez_ préciser les pages devant être accessibles au processus de pré-rendu,
-vous pouvez le faire avec [`config.kit.prerender.entries`](configuration#prerender), ou en exportant
-une fonction [`entries`](#entries) de votre route dynamique.
+vous pouvez le faire avec [`config.prerender.entries`](configuration#prerender), ou en exportant une
+fonction [`entries`](#entries) de votre route dynamique.
 
-Pendant le pré-rendu, la valeur de `building` importée depuis [`$app/environment`]($app-environment)
+Pendant le pré-rendu, la valeur de `building` importée depuis [`$app/env`]($app-env)
 sera `true`.
 
 ### Pré-rendu des routes de serveur [!VO]Prerendering server routes
@@ -139,14 +139,14 @@ Puisque ces routes ne peuvent pas être dynamiquement rendues sur le serveur, ce
 erreurs pour les personnes qui essaieraient d'accéder à la route en question. Il y a quelques moyens
 de régler ce problème :
 
-* Assurez-vous que SvelteKit peut trouver la route en suivant des liens depuis
-les entrées précisées dans [`config.kit.prerender.entries`](configuration#prerender) ou dans
-l'option de page [`entries`](#entries). Ajoutez des liens aux routes dynamiques (c-à-d les pages
-avec des `[parameters]`) à cette option si celles-ci ne sont pas trouvables en passant par les
-autres point d'entrée, sans quoi elles ne seront pas pré-rendues car SvelteKit ne peut pas savoir
-quelles valeurs les paramètres peuvent avoir. Les pages non marquées comme pouvant être pré-rendues
-seront ignorées et leurs liens vers d'autres pages ne seront pas utilisés lors du processus de
-pré-rendu, même si certaines d'entre elles pourraient être pré-rendues.
+* Assurez-vous que SvelteKit peut trouver la route en suivant des liens depuis les entrées précisées
+dans [`config.prerender.entries`](configuration#prerender) ou dans l'option de page
+[`entries`](#entries). Ajoutez des liens aux routes dynamiques (c-à-d les pages avec des
+`[parameters]`) à cette option si celles-ci ne sont pas trouvables en passant par les autres point
+d'entrée, sans quoi elles ne seront pas pré-rendues car SvelteKit ne peut pas savoir quelles valeurs
+les paramètres peuvent avoir. Les pages non marquées comme pouvant être pré-rendues seront ignorées
+et leurs liens vers d'autres pages ne seront pas utilisés lors du processus de pré-rendu, même si
+certaines d'entre elles pourraient être pré-rendues.
 * Assurez-vous que SvelteKit peut trouver la route en découvrant un lien la ciblant depuis l'une des
 autres pages pré-rendues ayant du rendu côté serveur activé.
 * Changez `export const prerender = true` en `export const prerender = 'auto'`. Les routes avec
@@ -171,9 +171,9 @@ La plupart du temps, c'est suffisant. Dans certaines situations, les liens vers 
 `/blog/hello-world` peuvent ne pas exister (ou peuvent ne pas exister sur des pages pré-rendues),
 auquel cas il est nécessaire de déclarer à SvelteKit leur existence.
 
-Vous pouvez faire cela avec [`config.kit.prerender.entries`](configuration#prerender), ou en
-exportant une fonction `entries` depuis un fichier `+page.js`, `+page.server.js` ou `+server.js`
-appartenant à une route dynamique :
+Vous pouvez faire cela avec [`config.prerender.entries`](configuration#prerender), ou en exportant
+une fonction `entries` depuis un fichier `+page.js`, `+page.server.js` ou `+server.js` appartenant à
+une route dynamique :
 
 ```js
 /// file: src/routes/blog/[slug]/+page.server.js
@@ -248,7 +248,7 @@ cette manière :
 
 ```js
 /// file: +page.js
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 
 export const csr = dev;
 ```

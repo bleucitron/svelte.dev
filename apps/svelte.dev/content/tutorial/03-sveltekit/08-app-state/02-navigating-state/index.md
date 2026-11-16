@@ -10,7 +10,7 @@ clic sur un lien, l'utilisation des boutons précédent/suivant, ou l'utilisatio
 - `type` — le type de navigation, par ex. `link`, `popstate` ou `goto`
 
 > [!NOTE] Pour des informations plus complètes sur le type, voir la documentation de
-> [`Navigation`](/docs/kit/@sveltejs-kit#Navigation).
+> [`Navigation`](/docs/kit/$app-navigation#Navigation).
 
 Il peut être utilisé pour afficher un indicateur de chargement lors des navigations longues. Dans
 cet exercice, `src/routes/+page.server.js` et `src/routes/about/+page.server.js` ont toutes les deux
@@ -43,5 +43,5 @@ message dans la barre de navigation :
 ```
 
 > [!NOTE] Avant SvelteKit 2.12, vous deviez utiliser `$app/stores` pour cela, qui fournit un store
-> `$page` contenant les mêmes informations. Si vous utilisez actuellement `$app/stores`, nous vous
-> conseillons de migrer vers `$app/state` (ce qui requiert Svelte 5).
+> `$page` contenant les mêmes informations. Ce store a été supprimé en faveur de `$app/state` avec
+> SvelteKit 3.

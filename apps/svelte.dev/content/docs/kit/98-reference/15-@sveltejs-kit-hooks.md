@@ -7,32 +7,8 @@ title: @sveltejs/kit/hooks
 
 ```js
 // @noErrors
-import { defineEnvVars, sequence } from '@sveltejs/kit/hooks';
+import { sequence } from '@sveltejs/kit/hooks';
 ```
-
-## defineEnvVars
-
-<blockquote class="tag deprecated note">
-
-Importez plutôt `defineEnvVars` depuis `@sveltejs/kit/env`
-
-</blockquote>
-
-Un utilitaire permettant de définir des [variables
-d'environnement](/docs/kit/environment-variables), qui sont rendues disponibles via
-`$app/env/public` et `$app/env/private`.
-
-<div class="ts-block">
-
-```dts
-function defineEnvVars<
-	T extends Record<string, EnvVarConfig<any>>
->(variables: T): T;
-```
-
-</div>
-
-
 
 ## sequence
 
@@ -48,7 +24,7 @@ n'est appelée après elle
 /// file: src/hooks.server.js
 import { sequence } from '@sveltejs/kit/hooks';
 
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 async function first({ event, resolve }) {
 	console.log('first pre-processing');
 	const result = await resolve(event, {
@@ -67,7 +43,7 @@ async function first({ event, resolve }) {
 	return result;
 }
 
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 async function second({ event, resolve }) {
 	console.log('second pre-processing');
 	const result = await resolve(event, {
@@ -105,6 +81,9 @@ second post-processing
 first post-processing
 ```
 
+Exécuter `resolve` invoque le prochain gestionnaire de la séquence (ou SvelteKit lui-même, s'il
+s'agit du dernier). Pour fournir des données entre chaque gestionnaire, utilisez `event.locals`.
+
 <div class="ts-block">
 
 ```dts
@@ -114,5 +93,381 @@ function sequence(...handlers: Handle[]): Handle;
 </div>
 
 
+
+## CaughtError
+
+L'erreur passée aux hooks [`handleError`](/docs/kit/hooks#handleError).
+Utilisez le discriminant `kind` pour distinguer les erreurs venant de votre application (jetées avec
+l'utilitaire [`error`](/docs/kit/errors#App-errors)), les erreurs générées par SvelteKit lui-même
+(comme les 404s), les erreurs de validation, et les erreurs inconnues (jetées par votre code, ou par
+du code que votre code exécute).
+
+<div class="ts-block">
+
+```dts
+type CaughtError<
+	Issue extends StandardSchemaV1.Issue =
+		StandardSchemaV1.Issue
+> =
+	| {
+			[Kind in keyof CaughtErrorMap]: {
+				/** Identifie la catégorie et l'origine de l'erreur */
+				kind: Kind;
+				/** L'erreur attrapée. Son type dépend de `kind` */
+				error: CaughtErrorMap[Kind];
+				/** Seulement présent pour les erreurs de validations */
+				issues?: undefined;
+			};
+	  }[keyof CaughtErrorMap]
+	| ValidationCaughtError<Issue>;
+```
+
+</div>
+
+## ClientCaughtError
+
+L'erreur passée au hook client `handleError`.
+
+<div class="ts-block">
+
+```dts
+type ClientCaughtError = Exclude<
+	CaughtError,
+	{ kind: 'validation' }
+>;
+```
+
+</div>
+
+## ClientInit
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.10.0
+
+</blockquote>
+
+Le hook [`init`](/docs/kit/hooks#init) sera invoqué lors du démarrage de l'application dans le
+navigateur.
+
+<div class="ts-block">
+
+```dts
+type ClientInit = () => MaybePromise<void>;
+```
+
+</div>
+
+## Handle
+
+Le hook [`handle`](/docs/kit/hooks#handle) est exécuté à chaque fois que le serveur SvelteKit reçoit
+une [requête](/docs/kit/web-standards#Fetch-APIs-Request) et en détermine la
+[réponse](/docs/kit/web-standards#Fetch-APIs-Response).
+Il reçoit un objet `event` représentant la requête et une fonction appelée `resolve`, qui rend la
+route et génère une `Response`.
+Ceci vous permet de modifier les en-têtes ou les corps des réponses, ou contourner entièrement
+SvelteKit (pour, par exemple, implémenter des routes programmatiquement).
+
+<div class="ts-block">
+
+```dts
+type Handle = (input: {
+	event: RequestEvent;
+	resolve: (
+		event: RequestEvent,
+		opts?: ResolveOptions
+	) => Promise<Response>;
+}) => MaybePromise<Response>;
+```
+
+</div>
+
+## HandleClientError
+
+Le hook client [`handleError`](/docs/kit/hooks#handleError) est exécuté pour chaque erreur lancée
+pendant une navigation, sauf pour les redirections.
+Les erreurs qui ont déjà été transformées par le hook serveur ne lui sont pas passées pour ne pas
+les traiter une seconde fois.
+
+La propriété `kind` permet de discriminer entre les erreurs d'_application_ (lancées avec
+l'utilitaire [`error`](/docs/kit/errors#App-errors)), les erreurs de _framework_ (générées par
+SvelteKit lui-même, comme les 404s), et les erreurs _inconnues_ (lancées par votre code, ou par du
+code que votre code exécute).
+
+Le hook renvoie un objet satisfaisant l'interface `App.Error`, dans lequel `status` et `message`
+sont optionnelles — renvoyez-les uniquement pour écraser les valeurs par défaut. Les propriétés
+omises sont héritées de l'erreur attrapée : le corps passé à `error(...)` pour les erreurs
+d'applicaction, le statut et un message sûr pour les erreurs de framework, et `500`/`'Internal
+Error'` pour les erreurs inconnues. Ne renvoyez rien pour ne garder toutes les valeurs par défaut
+(si vous choisissez d'augmenter `App.Error` avec des propriétés requises, vous devrez alors les
+fournir).
+
+Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
+
+<div class="ts-block">
+
+```dts
+type HandleClientError = (
+	input: ClientCaughtError & { event: NavigationEvent }
+) => MaybePromise<
+	| AppErrorWithOptionalDefaults
+	| VoidIfNoRequiredAppErrorProperties
+>;
+```
+
+</div>
+
+## HandleFetch
+
+Le hook [`handleFetch`](/docs/kit/hooks#handleFetch) vous permet de modifier (ou remplacer) le
+résultat d'un appel [`event.fetch`](/docs/kit/load#Making-fetch-requests) exécuté sur le serveur (ou
+lors du prérendu) au sein d'un endpoint, d'une fonction `load`, d'une `action`, de `handle`, de
+`handleError`, ou de `reroute`.
+
+<div class="ts-block">
+
+```dts
+type HandleFetch = (input: {
+	event: RequestEvent;
+	request: Request;
+	fetch: typeof fetch;
+}) => MaybePromise<Response>;
+```
+
+</div>
+
+## HandleServerError
+
+Le hook serveur [`handleError`](/docs/kit/hooks#handleError) est exécuté pour chaque erreur lancée
+
+La propriété `kind` permet de discriminer entre les erreurs d'_application_ (lancées avec
+l'utilitaire [`error`](/docs/kit/errors#App-errors)), les erreurs de _framework_ (générées par
+SvelteKit lui-même, comme les 404s), et les erreurs _inconnues_ (lancées par votre code, ou par du
+code que votre code exécute).
+
+Le hook renvoie un objet satisfaisant l'interface `App.Error`, dans lequel `status` et `message`
+sont optionnelles — renvoyez-les uniquement pour écraser les valeurs par défaut. Les propriétés
+omises sont héritées de l'erreur attrapée : le corps passé à `error(...)` pour les erreurs
+d'applicaction, le statut et un message sûr pour les erreurs de framework, et `500`/`'Internal
+Error'` pour les erreurs inconnues. Ne renvoyez rien pour ne garder toutes les valeurs par défaut
+(si vous choisissez d'augmenter `App.Error` avec des propriétés requises, vous devrez alors les
+fournir).
+
+Assurez-vous que cette fonction ne jette _jamais_ d'erreur.
+
+<div class="ts-block">
+
+```dts
+type HandleServerError<
+	Issue extends StandardSchemaV1.Issue =
+		StandardSchemaV1.Issue
+> = (
+	input: CaughtError<Issue> & { event: RequestEvent }
+) => MaybePromise<
+	| AppErrorWithOptionalDefaults
+	| VoidIfNoRequiredAppErrorProperties
+>;
+```
+
+</div>
+
+## Reroute
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.3.0
+
+</blockquote>
+
+Le hook [`reroute`](/docs/kit/hooks#reroute) vous permet de modifier l'URL avant qu'elle ne soit
+utilisée pour déterminer quelle route afficher.
+
+<div class="ts-block">
+
+```dts
+type Reroute = (event: {
+	url: URL;
+	fetch: typeof fetch;
+}) => MaybePromise<void | string>;
+```
+
+</div>
+
+## ResolveOptions
+
+<div class="ts-block">
+
+```dts
+interface ResolveOptions {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+transformPageChunk?: (input: { html: string; done: boolean }) => MaybePromise<string | undefined>;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `input` le morceau de html et l'info de s'il s'agit du dernier morceau ou non
+
+</div>
+
+Applique des transformations personnalisées sur le HTML. Si `done` est vrai, il s'agit du dernier
+morecau de HTML. Il n'y a pas de garantie que les morceaux de HTML soient bien formés (il se peut
+qu'ils incluent la balise ouvrante d'un élément, mais pas sa balise fermante, par exemple), mais ils
+seront toujours découpés sur des frontières pertinentes comme `%sveltekit.head%` ou les composants
+de layout ou de page.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+filterSerializedResponseHeaders?: (name: string, value: string) => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `name` header name
+- `value` header value
+
+</div>
+
+Détermine quels en-tête devraient être inclus dans les réponses sérialisées lorsqu'une fonction
+`load` charge une ressource avec `fetch`.
+Par défaut, aucun ne sera inclus.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+preload?: (
+	input:
+		| { type: 'css' | 'js' | 'asset'; path: string }
+		| { type: 'font'; path: string; filename: string }
+) => boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- `input` le type de fichier et son chemin
+
+</div>
+
+Détermine quels fichiers devraient être préchargés. Les fichiers sont préchargés via des balises
+`<link>` ajoutées à la balise `<head>` ; si `output.linkHeaderPreload` est activée, les pages
+dynamiquement rendues utiliseront plutôt les [en-têtes de réponse
+`Link`](https://developer.mozilla.org/fr/docs/Web/HTTP/Reference/Headers/Link).
+Par défaut, les fichiers `js` et `css` seront préchargés.
+
+Pour les fichiers `font`, `input` a également une propriété `filename`, le chemin du fichier source
+relatif à la racine du projet, de sorte qu'un filtre puisse le retrouver en se servant de ce chemin
+plutôt que du chemin haché. Les fichiers `js` et `css` sont compilés et n'ont aucun nom de fichier
+source.
+
+</div>
+</div></div>
+
+## ServerInit
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.10.0
+
+</blockquote>
+
+Le hook [`init`](/docs/kit/hooks#init) sera invoqué avant que le serveur ne réponde à sa première
+requête.
+
+<div class="ts-block">
+
+```dts
+type ServerInit = () => MaybePromise<void>;
+```
+
+</div>
+
+## Transport
+
+<blockquote class="since note">
+
+Disponible depuis la version 2.11.0
+
+</blockquote>
+
+Le hook [`transport`](/docs/kit/hooks#transport) vous perment de transporter des types personnalisés
+au travers de la frontière serveur/client.
+
+Chaque transporteur possède une paire de fonctions `encode` et `decode`. Sur le serveur, `encode`
+détermine si une valeur est une instance du type personnalisé, et, si c'est le cas, renvoie un
+encodage non-falsy de la valeur pouvant être un objet ou un tableau (ou `false` sinon).
+
+Dans le navigateur, `decode` transforme la valeur encodée en une instance du type personnalisé.
+
+```ts
+import type { Transport } from '@sveltejs/kit/hooks';
+
+declare class MyCustomType {
+	data: any
+}
+
+// hooks.js
+export const transport: Transport = {
+	MyCustomType: {
+		encode: (value) => value instanceof MyCustomType && [value.data],
+		decode: ([data]) => new MyCustomType(data)
+	}
+};
+```
+
+<div class="ts-block">
+
+```dts
+type Transport = Record<string, Transporter>;
+```
+
+</div>
+
+## Transporter
+
+Un membre du hook [`transport`](/docs/kit/hooks#transport).
+
+<div class="ts-block">
+
+```dts
+interface Transporter<
+	T = any,
+	U =
+		any /* sauf les valeurs falsy, mais il n'est pas possible de l'exprimer précisément */
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+encode: (value: T) => false | U;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+decode: (data: U) => T;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
 
 

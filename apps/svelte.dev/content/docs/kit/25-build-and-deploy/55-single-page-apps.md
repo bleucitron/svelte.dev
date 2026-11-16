@@ -38,24 +38,25 @@ c'est possible.
 Si vous n'avez aucune logique purement serveur (c-à-d des fichiers `+page.server.js`,
 `+layout.server.js` ou `+server.js`), vous pouvez utiliser l'adaptateur
 [`adapter-static`](adapter-static) pour créer votre SPA. Installez `adapter-static` avec `npm i -D
-@sveltejs/adapter-static` et ajoutez-le à votre fichier `svelte.config.js` avec l'option `fallback`:
+@sveltejs/adapter-static` et ajoutez-le à votre fichier `vite.config.js` avec l'option `fallback`:
 
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
 import adapter from '@sveltejs/adapter-static';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			fallback: '200.html' // peut être différent selon l'hébergeur
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter({
+				fallback: '200.html' // peut être différent selon l'hébergeur
+			})
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
 La page `fallback` est une page HTML créée par SvelteKit à partir de votre gabarit de page (par ex.

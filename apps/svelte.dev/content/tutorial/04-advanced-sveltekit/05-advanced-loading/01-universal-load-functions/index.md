@@ -17,11 +17,11 @@ Par exemple :
   apparitions soudaines
 - Vous avez besoin de renvoyer depuis `load` quelque chose qui ne peut pas être sérialisé (SvelteKit
   utilise [devalue](https://github.com/Rich-Harris/devalue) pour transformer les données de serveur en
-  JSON), comme un composant ou un store
+  JSON), comme un composant ou une instance de classe
 
 Dans cet exercice, nous avons affaire à ce dernier cas. Les fonctions de serveur `load` dans les
 fichiers `src/routes/red/+page.server.js`, `src/routes/green/+page.server.js` et
-`src/routes/blue/+page.server.js` renvoient un constructeur de `component`, qui ne peut pas être
+`src/routes/blue/+page.server.js` renvoient une fonction de `component`, qui ne peut pas être
 sérialisé en tant que données. Si vous naviguez vers `/red`, `/green` ou `/blue`, vous verrez une
 erreur "Data returned from `load` ... is not serializable" s'afficher dans le terminal.
 

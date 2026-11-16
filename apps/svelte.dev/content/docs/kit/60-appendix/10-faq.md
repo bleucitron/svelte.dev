@@ -21,7 +21,7 @@ cette manière :
 
 ```ts
 // @errors: 2732
-/// file: svelte.config.js
+/// file: vite.config.js
 import pkg from './package.json' with { type: 'json' };
 ```
 
@@ -53,7 +53,7 @@ pourriez suggérer aux auteurs et autrices de librairies qu'elles fournissent un
 Toutefois, les dépendances CommonJS (CJS) devraient fonctionner quand même puisque, par défaut,
 [`vite-plugin-svelte` va demander à Vite de les
 pré-compiler](https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/faq.md#what-is-going-on-with-vite-and-pre-bundling-dependencies)
-en utilisant `esbuild` pour les convertir en ESM.
+en utilisant `rolldown` pour les convertir en ESM.
 
 Si vous rencontrez toujours des problèmes, nous recommandons de chercher du côté des [issues
 Vite](https://github.com/vitejs/vite/issues) et/ou des issues de la librairie en question. Parfois
@@ -110,7 +110,7 @@ code s'exécute uniquement côté client, vous pouvez l'entourer d'une condition
 ```js
 /// <reference types="@sveltejs/kit" />
 // ---cut---
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 if (browser) {
 	// votre code uniquement client se place ici
@@ -158,7 +158,7 @@ Enfin, vous pouvez également envisager d'utiliser un block `{#await}` :
 ```svelte
 <!--- file: index.svelte --->
 <script>
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 
 	const promise = browser
 		? import('./BrowserComponent.svelte')
@@ -205,15 +205,18 @@ et relayer les en-têtes `request.headers`, en fonction de vos besoins.)
 
 ## Comment utiliser des middleware ? [!VO]How do I use middleware?
 
-L'adaptateur `adapter-node` construit un middleware que vous pouvez utiliser avec votre propre
-serveur pour le mode production. En mode dev, vous pouvez ajouter des middleware à Vite en utilisant
-un plugin Vite. Par exemple :
+L'adaptateur `@sveltejs/adapter-node` construit un middleware que vous pouvez utiliser avec votre
+propre serveur pour le mode production. En mode dev, vous pouvez ajouter des middleware à Vite en
+utilisant un plugin Vite. Par exemple :
 
 ```js
+// @errors: 2307
 /// file: vite.config.js
+import adapter from '@sveltejs/adapter-node';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('vite').Plugin} */
++++/** @type {import('vite').Plugin} */
 const myPlugin = {
 	name: 'log-request-middleware',
 	configureServer(server) {
@@ -222,14 +225,16 @@ const myPlugin = {
 			next();
 		});
 	}
-};
+};+++
 
-/** @type {import('vite').UserConfig} */
-const config = {
-	plugins: [myPlugin, sveltekit()]
-};
-
-export default config;
+export default defineConfig({
+	plugins: [
+		+++myPlugin,+++
+		sveltekit({
+			adapter: adapter()
+		})
+	]
+});
 ```
 
 Voir la documentation de Vite sur

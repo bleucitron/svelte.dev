@@ -18,37 +18,41 @@ elles vous permettent de charger et de manipuler les données directement au sei
 
 Cette fonctionnalité est actuellement expérimentale, ce qui signifie qu'elle contient très
 certainement des bugs, et peut être modifiée à tout moment. Vous devez l'activer en ajoutant
-les options `compilerOptions.experimental.async` et `kit.experimental.remoteFunctions` dans votre
-fichier `svelte.config.js`.
-optionnelle en ajoutant l'option `kit.experimental.remoteFunctions` dans votre `svelte.config.js` :
+les options `compilerOptions.experimental.async` et `experimental.remoteFunctions` à votre plugin
+SvelteKit dans votre fichier `vite.config.js`.
 
 ```js
-/// file: svelte.config.js
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		experimental: {
-			+++remoteFunctions: true+++
-		}
-	},
-	compilerOptions: {
-		experimental: {
-			+++async: true+++
-		}
-	}
-};
+/// file: vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-export default config;
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			experimental: {
+				+++remoteFunctions: true+++
+			},
+			compilerOptions: {
+				experimental: {
+					+++async: true+++
+				}
+			}
+		})
+	],
+});
 ```
 
 ## Aperçu [!VO]Overview
 
-Les fonctions distantes (_remote_) sont exportées depuis un fichier `.remote.js` ou `.remote.ts`, et
-sont disponibles en quatre versions : `query`, `form`, `command`, et `prerender`. Sur le client, les
-fonctions exportées sont transformées en wrappers autour de `fetch` qui invoquent leur contrepartie
-sur le serveur en utilisant un endpoint HTTP généré. Les fichiers `.remote.` peuvent être placés
-n'importe où dans votre dossier `src` (sauf dans le dossier `src/lib/server`), et des librairies
-externes peuvent également en fournir.
+Les fonctions distantes (_remote_) sont exportées depuis un module _distant_, qui est un fichier
+dont le nom contient un segment `remote` (par ex `remote.ts` ou `data.remote.ts`).
+Elles sont disponibles en quatre versions : `query`, `form`, `command`, et `prerender`. Sur le
+client, les fonctions exportées sont transformées en wrappers autour de `fetch` qui invoquent leur
+contrepartie sur le serveur en utilisant un endpoint HTTP généré. Les modules distants peuvent
+être placés n'importe où dans votre dossier `src` (sauf dans un dossier `src/lib/server` — les
+fichiers qui sont placés ne [peuvent pas être importés dans du code client](server-only-modules), et
+des librairies externes listant `@sveltejs/kit` dans leurs `peerDependencies` peuvent également en
+fournir.
 
 ## query
 
@@ -62,13 +66,13 @@ La fonction `query` vous permet de lire des données dynamiques depuis le serveu
 ```js
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
 // ---cut---
 import { query } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getPosts = query(async () => {
 	const posts = await db.sql`
@@ -83,9 +87,9 @@ export const getPosts = query(async () => {
 ```
 
 > [!NOTE] Tout au long de cette page, vous verrez des imports depuis des modules fictifs comme
-> `$lib/server/database` et `$lib/server/auth`. Ces imports n'existent que pour illustrer les propos
-> — vous pouvez bien sûr utiliser n'importe quel client de base de données et n'importe quel système
-> d'authentification.
+> `#lib/server/database.js` et `#lib/server/auth.js`. Ces imports n'existent que pour illustrer les
+> propos — vous pouvez bien sûr utiliser n'importe quel client de base de données et n'importe quel
+> système d'authentification.
 >
 > La fonction `db.sql` ci-dessus est une [fonction de gabarit
 > étiquété](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Template_literals#gabarits_%C3%A9tiquet%C3%A9s)
@@ -167,7 +171,7 @@ de [Standard Schema](https://standardschema.dev/), comme [Zod](https://zod.dev/)
 ```js
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
@@ -175,7 +179,7 @@ declare module '$lib/server/database' {
 import * as v from 'valibot';
 import { error } from '@sveltejs/kit';
 import { query } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getPosts = query(async () => { /* ... */ });
 
@@ -264,14 +268,14 @@ individuels et leurs résultats.
 ```js
 /// file: weather.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
 // ---cut---
 import * as v from 'valibot';
 import { query } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getWeather = query.batch(v.string(), async (cityIds) => {
 	const weather = await db.sql`
@@ -362,7 +366,7 @@ Vous pouvez utilisez `for await` directement sur l'instance :
 
 ```js
 // @filename: time.remote.ts
-import { RemoteLiveQueryFunction } from '@sveltejs/kit';
+import type { RemoteLiveQueryFunction } from '$app/server';
 export declare const getTime: RemoteLiveQueryFunction<undefined, Date>;
 // @errors: 2304
 // @filename: index.js
@@ -402,11 +406,11 @@ l'objet `data` construit à partir du
 ```ts
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 
-declare module '$lib/server/auth' {
+declare module '#lib/server/auth.js' {
 	interface User {
 		name: string;
 	}
@@ -421,8 +425,8 @@ declare module '$lib/server/auth' {
 import * as v from 'valibot';
 import { error, redirect } from '@sveltejs/kit';
 import { query, form } from '$app/server';
-import * as db from '$lib/server/database';
-import * as auth from '$lib/server/auth';
+import * as db from '#lib/server/database.js';
+import * as auth from '#lib/server/auth.js';
 
 export const getPosts = query(async () => { /* ... */ });
 
@@ -517,7 +521,10 @@ données existantes, comme un formulaire d'édition, ou plusieurs instances du f
 lorsque celui-ci est rendu, il contrôle également la valeur de l'élément lorsque le formulaire est
 réinitialisé. Les inputs `radio`, `submit`, et `hidden` ont
 toujours besoin de cette valeur, et les inputs `checkbox` en ont besoin lorsqu'ils représentent une
-option parmi d'autres. Les inputs `file` ne peuvent pas être remplis de cette manière.
+option parmi d'autres. Pour ces inputs `radio` et `checkbox`, le deuxième argument identifie
+l'option, le fait que l'input soit actuellent sélectionné passe donc dans un troisième argument, par
+ex. `.as('radio', option, settings.visibility === option)` ou `.as('checkbox', tag,
+settings.tags.includes(tag))`. Les inputs `file` ne peuvent pas être remplis de cette manière.
 
 > [!NOTE] L'attribut généré `name` utilise la notation d'objet JS (par ex. `nested.array[0].value`).
 > Les clés exprimés en chaînes de caractères qui nécessitent des guillemets tels que
@@ -587,11 +594,12 @@ Puisque notre formulaire contient un input `file`, nous avons ajouté un attribu
 `enctype="multipart/form-data"`. Les valeurs de `info.height` et `info.likesDogs` sont transformées
 en nombre et booléen respectivement.
 
-> [!NOTE] Si un input `checkbox` est non coché, sa valeur n'est pas incluses dans l'objet
-> [`FormData`](https://developer.mozilla.org/fr/docs/Web/API/FormData) à partir duquelSvelteKit
-> construit les données. Ainsi, nous devons rendre la valeur optionnelle dans votre schéma. Avec
-> Valibot cela signifie l'utilisation de `v.optional(v.boolean(), false)` plutôt que juste
-> `v.boolean()`, tandis qu'avec Zod, cela signifie l'utilisation de `z.coerce.boolean<boolean>()`.
+> [!NOTE] Si un input `checkbox` est non coché, sa valeur n'est pas incluse dans l'objet
+> [`FormData`](https://developer.mozilla.org/fr/docs/Web/API/FormData) à partir duquel SvelteKit
+> construit les données. Ainsi, nous devons fournir à la valeur de l'input une valeur par défaut de
+> `false` dans le schéma. Avec Valibot cela signifie l'utilisation de `v.optional(v.boolean(),
+> false)` plutôt que juste `v.boolean()`, tandis qu'avec Zod, cela signifie l'utilisation de
+> `z.boolean.default(false)` au lieu de simplement `z.boolean()`.
 
 Dans le cas d'inputs `radio` et `checkbox` qui appartiennent tous au même champ, la `value` doit
 être précisée en tant que second argument de `.as(...)` :
@@ -691,7 +699,7 @@ spécifiques). Utilisez le paramètre `issue` pour créer de telles erreurs de m
 // @errors: 18046
 /// file: src/routes/shop/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function buy(qty: number): Promise<void>
 }
 // @filename: index.js
@@ -699,7 +707,7 @@ declare module '$lib/server/database' {
 import * as v from 'valibot';
 import { invalid } from '@sveltejs/kit';
 import { form } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const buyHotcakes = form(
 	v.object({
@@ -890,11 +898,11 @@ l'utilisatrice vers la page nouvellement créée. De manière alternative, le ca
 ```ts
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 
-declare module '$lib/server/auth' {
+declare module '#lib/server/auth.js' {
 	interface User {
 		name: string;
 	}
@@ -908,8 +916,8 @@ declare module '$lib/server/auth' {
 import * as v from 'valibot';
 import { error, redirect } from '@sveltejs/kit';
 import { query, form } from '$app/server';
-import * as db from '$lib/server/database';
-import * as auth from '$lib/server/auth';
+import * as db from '#lib/server/database.js';
+import * as auth from '#lib/server/auth.js';
 
 export const getPosts = query(async () => { /* ... */ });
 
@@ -962,7 +970,7 @@ Nous pouvons personnaliser ce qui se produit lorsque le formulaire est soumis gr
 <!--- file: src/routes/blog/new/+page.svelte --->
 <script>
 	import { createPost } from '../data.remote';
-	import { showToast } from '$lib/toast';
+	import { showToast } from '#lib/toast.js';
 </script>
 
 <h1>Créer un nouvel article</h1>
@@ -1008,7 +1016,7 @@ argument à `.as(...)` :
 <h1>À faire</h1>
 
 {#each await getTodos() as todo}
-	{@const modify = modifyTodo.for(todo.id)}
+	{const modify = modifyTodo.for(todo.id)}
 	<form {...modify}>
 		<input {...modify.fields.description.as('text', todo.description)} />
 		<button disabled={!!modify.pending}>enregistrer les changements</button>
@@ -1028,7 +1036,7 @@ Pour faire cela, ajoutez un champ à votre schéma correspondant à la valeur du
 ```svelte
 <!--- file: src/routes/login/+page.svelte --->
 <script>
-	import { loginOrRegister } from '$lib/auth';
+	import { loginOrRegister } from '#lib/auth';
 </script>
 
 <form {...loginOrRegister}>
@@ -1051,7 +1059,7 @@ Pour faire cela, ajoutez un champ à votre schéma correspondant à la valeur du
 Dans votre gestionnaire de formulaire, vous pouvez vérifier quel bouton a été cliqué :
 
 ```js
-/// file: $lib/auth.js
+/// file: #lib/auth.js
 import * as v from 'valibot';
 import { form } from '$app/server';
 
@@ -1087,14 +1095,14 @@ tant que premier argument à `command`.
 ```ts
 /// file: likes.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
 // ---cut---
 import * as v from 'valibot';
 import { query, command } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getLikes = query(v.string(), async (id) => {
 	const [row] = await db.sql`
@@ -1122,7 +1130,7 @@ d'évènement :
 <!--- file: +page.svelte --->
 <script>
 	import { getLikes, addLike } from './likes.remote';
-	import { showToast } from '$lib/toast';
+	import { showToast } from '#lib/toast.js';
 
 	let { item } = $props();
 </script>
@@ -1215,6 +1223,10 @@ Puisque les queries sont associées à des clés en fonction de leurs arguments,
 client pour le mettre à jour. C'est le même fonctionnement pour `getPosts().refresh()` — il sait
 retrouver `getPosts()` sans argument sur le client.
 
+Appeler `refresh()`, `set()` ou `reconnect()` n'importe où dans un gestionnaire `form` remplace
+l'invalidation par défaut de toutes les queries et fonctions `load` pour cette soumission, de sorte
+que seules les queries que vous avez rafraîchies se mettent à jour.
+
 ### Reconnecter les queries live dans les mutations [!VO]Reconnecting live queries in mutations
 
 Les mutations "single-flight" peuvent également se reconnecter aux instances de `query.live`. Dans
@@ -1258,7 +1270,7 @@ spécifiques au serveur en utilisant `submit().updates` (pour `form`) ou `myComm
 `command`) :
 
 ```ts
-import type { RemoteQueryUpdate, RemoteQuery } from '@sveltejs/kit';
+import type { RemoteQueryUpdate, RemoteQuery } from '$app/server';
 interface Post {}
 declare function submit(): Promise<any> & {
 	updates(...updates: RemoteQueryUpdate[]): Promise<any>;
@@ -1308,13 +1320,35 @@ export const createPost = form(
 ```
 
 `requested` vous donne accès aux queries dont le client a demandé la mise à jour. Chaque entrée est
-un objet `{ arg, query }` : `arg` est la valeur que la fonction d'implémentation de la query a reçu
-— c-à-d l'argument *après* qu'il a été validé et (lorsqu'applicable) transformé par le schéma — et
-`query` est une `RemoteQuery` déjà liée à la clé de cache originelle du client, de sorte que appeler
-`query.refresh(...)` / `query.set(...)` mette à jour l'instance correcte sur le client. Si le
-parsing d'un argument échoue, cette query renverra une erreur, mais la commande entière n'échouera
-pas. Le deuxième paramètre de `requested`, `limit`, est le nombre d'éléments maximum qu'elle
-renverra. Toute requête de mise à jour au-delà de cette limite échouera.
+un objet `{ arg, query, ignore }` : `arg` est la valeur que la fonction d'implémentation de la query
+a reçu — c-à-d l'argument *après* qu'il a été validé et (lorsqu'applicable) transformé par le schéma
+— et `query` est une `RemoteQuery` déjà liée à la clé de cache originelle du client, de sorte que
+appeler `query.refresh(...)` / `query.set(...)` mette à jour l'instance correcte sur le client.
+Appelez `ignore()` si vous ne désirez pas intentionnellement mettre à jour une instance en
+particulier :
+
+Toute mise à jour demandée doit être mise en place, rafraîchie, reconnectée (pour une query live),
+ou explicitement ignorée. Si le parsing d'un argument échoue, cette query renverra une erreur, mais
+la commande entière n'échouera pas.
+
+Le deuxième paramètre de `requested`, `limit`, est le nombre d'éléments maximum qu'elle renverra.
+Toute requête de mise à jour au-delà de cette limite échouera côté client.
+
+```js
+import { requested, query } from '$app/server';
+
+export const getPosts = query('unchecked', ({ filter }) => {
+	return ['foo', 'bar'];
+});
+// ---cut---
+for (const { arg, query, ignore } of requested(getPosts, 10)) {
+	if (arg.filter === 'author:santa') {
+		void query.refresh();
+	} else {
+		ignore();
+	}
+}
+```
 
 > [!NOTE] `limit` est requis car la liste des requêtes de mise à jour est contrôllée par le client —
 chaque entrée amène le serveur à valider un argument et généralement à re-requêter des données, de
@@ -1327,13 +1361,30 @@ De plus, `requested` permet un raccourci lorsque vous voulez uniquement mettre �
 de la query demandée :
 
 ```ts
-import type { RemoteQueryFunction } from '@sveltejs/kit';
 import { requested } from '$app/server';
+import type { RemoteQueryFunction } from '$app/server';
 declare const getPosts: RemoteQueryFunction<any, any>;
 // ---cut---
 // ceci est équivalent à boucler sur son résultat puis appeler `void query(arg).refresh()`.
 await requested(getPosts, 1).refreshAll();
 ```
+
+Si vous souhaitez intentionnellement ignorer toutes les mises à jour sélectionnées, utilisez
+`ignoreAll` :
+
+```js
+import { requested, query } from '$app/server';
+
+export const getPosts = query('unchecked', ({ filter }) => {
+	return ['foo', 'bar'];
+});
+
+// ---cut---
+await requested(getPosts, 10).ignoreAll();
+```
+
+`ignoreAll` ignore seulement les entrées dans la `limit` précisée. Toute entrée supplémentaire
+continuera d'échouer côté client.
 
 > [!NOTE] Pourquoi la commande doit nommer chaque query qu'elle souhaite mettre à jour ? Il y a deux
 > raisons :
@@ -1356,13 +1407,13 @@ par déploiement.
 ```js
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
 // ---cut---
 import { prerender } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getPosts = prerender(async () => {
 	const posts = await db.sql`
@@ -1393,7 +1444,7 @@ Comme avec les queries, les fonctions `prerender` peuvent accepter un argument, 
 ```js
 /// file: src/routes/blog/data.remote.js
 // @filename: ambient.d.ts
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function sql(strings: TemplateStringsArray, ...values: any[]): Promise<any[]>;
 }
 // @filename: index.js
@@ -1401,7 +1452,7 @@ declare module '$lib/server/database' {
 import * as v from 'valibot';
 import { error } from '@sveltejs/kit';
 import { prerender } from '$app/server';
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
 export const getPosts = prerender(async () => { /* ... */ });
 
@@ -1476,21 +1527,27 @@ utilisatrices sont actuellement sur une version ancienne de votre application
 avec des données malformées
 
 Dans le second cas, nous ne voulons pas donner à l'attaquant d'indices, c'est pourquoi SvelteKit va
-générer une réponse générique [400 Bad Request](https://http.dog/400). Vous pouvez contrôler le
-message en implémentant le hook serveur
-[`handleValidationError`](hooks#handleValidationError), qui, comme
-[`handleError`](hooks#handleError), doit renvoyer un objet
-[`App.Error`](errors#Type-safety) (qui est défini par défaut à `{ message: string }`) :
+générer une réponse générique [400 Bad Request](https://http.dog/400). Les échecs de validation
+passent dans le hook serveur [`handleError`](hooks#handleError) avec `kind: 'validation'`, un objet
+d'erreur contenant `{ status, message }`, et les problèmes de validation `issues`. Vous pouvez
+utilisez les `issues` pour logguer les problèmes ou personnaliser la réponse :
 
 ```js
 /// file: src/hooks.server.js
-/** @type {import('@sveltejs/kit').HandleValidationError} */
-export function handleValidationError({ event, issues }) {
-	return {
-		message: 'Bien tenté, hacker !'
-	};
+/** @type {import('@sveltejs/kit/hooks').HandleServerError} */
+export function handleError({ kind, issues }) {
+	if (kind === 'validation') {
+		console.error(issues);
+		return {
+			message: 'Bien tenté, hacker !'
+		};
+	}
 }
 ```
+
+Soyez conscient·e des risques si vous exposer les problèmes de validation, puisqu'ils pourraient
+donner à un attaquant des informations utiles. En revanche, renvoyer `error` inchangée n'est pas
+risqué — à la différence de `issues`, `error` ne contient que le statut générique et le message.
 
 Si vous savez ce que vous faites et souhaitez vous passer de validation, vous pouvez passer la
 chaîne de caractères `'unchecked'` à la place du schéma :
@@ -1521,14 +1578,14 @@ interface User {
 	avatar: string;
 }
 
-declare module '$lib/server/database' {
+declare module '#lib/server/database.js' {
 	export function findUser(sessionId: string | undefined): Promise<User | null>;
 }
 
 // @filename: index.js
 // ---cut---
 import { getRequestEvent, query } from '$app/server';
-import { findUser } from '$lib/server/database';
+import { findUser } from '#lib/server/database.js';
 
 export const getProfile = query(async () => {
 	const user = await getUser();
@@ -1552,13 +1609,19 @@ Notez que certaines propriétés de `RequestEvent` sont différentes au sein des
 
 - vous ne pouvez pas définir d'en-têtes (si ce n'est écrire dans des cookies, et uniquement dans des
 fonctions `form` et `command`)
-- `route`, `params` et `url` sont relatives à la page depuis laquelle la fonction distante a été
-appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la fonction distante. Ne les utilisez
-jamais pour déterminer si oui ou non un utilisateur ou utilisatrice est autorisée à accéder à
-certaines données, puisque ces valeurs font partie de la requête et peuvent donc être manipulées.
-Les queries ne sont de plus pas ré-exécutées lorsque l'utilisateur ou l'utilisatrice navigue (à
-moins que l'argument de la query ait changé suite à une navigation), vous devriez donc être
-conscient•e de la façon dont vous utilisez ces valeurs.
+- au sein des fonctions `query` (y compris `query.batch` et `query.live`), accéder à `route`,
+`params` ou `url` jette une erreur. Les queries sont cachées par leurs arguments et ne sont pas
+rejouées lorsque l'utilisateur ou l'utilisatrice navigue, ce qui implique les résultats dépendant de
+ces valeurs deviendraient obsolètes sans que le cache ne soit mis au courant. Passez plutôt les
+valeurs en tant qu'arguments à la query depuis la page. Vous pouvez toujours dériver du contexte de
+confiance depuis les cookies ou les en-têtes dans le hook [`handle`](hooks#handle) et le mettre dans
+`locals`, mais notez que pour les requêtes de query, `handle` voit l'URL du endpoint distant, et non
+celle de la page.
+- dans les fonctions `form` et `command`, `route`, `params` et `url` sont relatives à la page depuis
+laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que SvelteKit crée pour la
+fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur ou
+utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
+requête et peuvent donc être manipulées.
 
 ## Redirections [!VO]Redirects
 

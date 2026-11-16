@@ -7,9 +7,9 @@ Lorsqu'un utilisateur ou une utilisatrice navigue d'une page à l'autre, SvelteK
 fonctions `load`, mais uniquement si quelque chose a changé.
 
 Dans cet exemple, naviguer entre les fuseaux horaires provoque la ré-exécution de la fonction `load`
-de `src/routes/[...timezone]/+page.js` car `params.timezone` est invalidé. Mais la fonction `load`
-de `src/routes/+layout.js` n'est _pas_ ré-exécutée car du point de vue de SvelteKit, la navigation
-n'a pas invalidé sa valeur.
+de `src/routes/[...timezone]/+page.js` car `params.timezone` a changé. Mais la fonction `load` de
+`src/routes/+layout.js` n'est _pas_ ré-exécutée car du point de vue de SvelteKit, la navigation n'a
+pas invalidé sa valeur.
 
 Nous pouvons corriger cela en invalidant cette valeur manuellement en utilisant la fonction
 [`invalidate(...)`](/docs/kit/$app-navigation#invalidate), qui prend une URL et ré-exécute toute

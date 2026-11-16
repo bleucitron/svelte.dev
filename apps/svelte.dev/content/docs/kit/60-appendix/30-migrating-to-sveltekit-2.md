@@ -225,8 +225,8 @@ Auparavant, le fichier `tsconfig.json` généré essayait au mieux de produire u
 moins valide lorsque votre `tsconfig.json` incluait `paths` ou `baseUrl`. Avec SvelteKit 2, la
 validation est plus stricte et vous avertira lorsque si vous utilisez `paths` ou `baseUrl` dans
 votre `tsconfig.json`. Ces paramètres sont utilisés pour générer des alias de chemin, et vous
-devriez plutôt utiliser l'option de [configuration `alias`](configuration#alias) de votre fichier
-`svelte.config.js`, pour créer également un alias pour le bundler.
+devriez plutôt utiliser l'option de [configuration `alias`](configuration#alias) du plugin SvelteKit
+de votre fichier `vite.config.js`, pour créer également un alias pour le bundler.
 
 ## `getRequest` ne jette plus d'erreurs [!VO]`getRequest` no longer throws errors
 

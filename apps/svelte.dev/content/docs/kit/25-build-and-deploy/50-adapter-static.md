@@ -13,31 +13,34 @@ pages, vous aurez besoin d'un adaptateur différent combiné à l'usage de l'[op
 
 ## Usage
 
-Installez l'adaptateur avec `npm i -D @sveltejs/adapter-static`, puis ajoutez-le à votre fichier
-`svelte.config.js` :
+Lancez [`npx sv add sveltekit-adapter="adapter:static"`](/docs/cli/sveltekit-adapter), ou
+intallez-le avec `npm i -D @sveltejs/adapter-static` et ajoutez l'adaptateur à votre fichier
+`vite.config.js`:
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
 import adapter from '@sveltejs/adapter-static';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			// les options par défaut sont montrées. Sur certaines
-			// plateformes, ces options sont définies automatiquement
-			// — voir plus bas
-			pages: 'build',
-			assets: 'build',
-			fallback: undefined,
-			precompress: false,
-			strict: true
+
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter({
+				// les options par défaut sont montrées. Sur certaines
+				// plateformes, ces options sont définies automatiquement
+				// — voir plus bas
+				pages: 'build',
+				assets: 'build',
+				fallback: undefined,
+				precompress: false,
+				strict: true
+			})
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
 ... et ajoutez l'option [`prerender`](page-options#prerender) à votre layout racine :
@@ -72,17 +75,18 @@ Sur ces plateformes, vous devriez omettre les options d'adaptateur afin que l'ad
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
 import adapter from '@sveltejs/adapter-static';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter(---{...}---)
-	}
-};
-
-export default config;
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter(---{...}---)
+		})
+	]
+});
 ```
 
 ## Options
@@ -130,7 +134,7 @@ certaines conditions), vous pouvez définir `strict` à `false` pour désactiver
 Lorsque vous compilez pour [GitHub
 Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages), si le
 nom de votre repo n'est pas équivalent à `votre-nom.github.io`, assurez-vous de mettre à jour
-l'option [`config.kit.paths.base`](configuration#paths) pour que cela corresponde au nom de votre
+l'option [`config.paths.base`](configuration#paths) pour que cela corresponde au nom de votre
 repo. C'est nécessaire car votre site sera servi depuis
 `https://your-username.github.io/your-repo-name` plutôt que depuis la racine.
 
@@ -141,22 +145,24 @@ Voici une configuration possible pour Github Pages :
 
 ```js
 // @errors: 2307 2322
-/// file: svelte.config.js
+/// file: vite.config.js
+import process from 'node:process';
 import adapter from '@sveltejs/adapter-static';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			fallback: '404.html'
-		}),
-		paths: {
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
-		}
-	}
-};
-
-export default config;
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter({
+				fallback: '404.html'
+			}),
+			paths: {
+				base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+			},
+		})
+	]
+});
 ```
 
 Vous pouvez utiliser les actions Github pour déployer automatiquement votre site sur Github Pages

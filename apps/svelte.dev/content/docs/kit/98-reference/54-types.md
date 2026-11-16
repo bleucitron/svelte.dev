@@ -129,98 +129,10 @@ que `LayoutProps` définit `data: LayoutData` ainsi que `children: Snippet`.
 > </script>
 > ```
 
-> [!NOTE] Pour que cela fonctionne, votre fichier `tsconfig.json` ou `jsconfig.json` devrait étendre
-> la configuration générée `.svelte-kit/tsconfig.json` (où `.svelte-kit` est votre dossier
-> [`outDir`](configuration#outDir)) :
+> [!NOTE] Pour que cela fonctionne, votre fichier `tsconfig.json` ou `jsconfig.json` devrait hériter
+> de la configuration générée `$app/types` :
 >
-> `{ "extends": "./.svelte-kit/tsconfig.json" }`
-
-### tsconfig.json par défaut [!VO]Default tsconfig.json
-
-Le fichier `.svelte-kit/tsconfig.json` généré contient un mélange d'options. Certaines sont générées
-programmatiquement en fonction de votre configuration de projet, et ne devraient généralement pas
-être écrasées sans bonne raison :
-
-```json
-/// file: .svelte-kit/tsconfig.json
-{
-	"compilerOptions": {
-		"paths": {
-			"$lib": ["../src/lib"],
-			"$lib/*": ["../src/lib/*"]
-		},
-		"rootDirs": ["..", "./types"]
-	},
-	"include": [
-		"ambient.d.ts",
-		"non-ambient.d.ts",
-		"./types/**/$types.d.ts",
-		"../vite.config.js",
-		"../vite.config.ts",
-		"../src/**/*.js",
-		"../src/**/*.ts",
-		"../src/**/*.svelte",
-		"../tests/**/*.js",
-		"../tests/**/*.ts",
-		"../tests/**/*.svelte"
-	],
-	"exclude": [
-		"../node_modules/**",
-		"../src/service-worker.js",
-		"../src/service-worker/**/*.js",
-		"../src/service-worker.ts",
-		"../src/service-worker/**/*.ts",
-		"../src/service-worker.d.ts",
-		"../src/service-worker/**/*.d.ts"
-	]
-}
-```
-
-Les autres sont requises pour que SvelteKit fonctionne correctement, et devraient être laissées
-telles quelles, à moins que vous sachiez ce que vous êtes en train de faire :
-
-```json
-/// file: .svelte-kit/tsconfig.json
-{
-	"compilerOptions": {
-		// ce garantit que les types sont explicitement
-		// importés avec `import type`, ce qui nécessaire
-		// puisque Svelte/Vite ne peut sinon pas compiler
-		// les composants correctement
-		"verbatimModuleSyntax": true,
-
-		// Vite compile un module TypeScript à la
-		// fois, plutôt que de compiler le graphe
-		// de modules tout entier
-		"isolatedModules": true,
-
-		// Dit à TypeScript qu'il est utilisé uniquement
-		// pour vérifier le typage
-		"noEmit": true,
-
-		// Ceci garantit qu'à la fois `vite build`
-		// et `svelte-package` fonctionnent correctement
-		"lib": ["esnext", "DOM", "DOM.Iterable"],
-		"moduleResolution": "bundler",
-		"module": "esnext",
-		"target": "esnext"
-	}
-}
-```
-
-Utilisez la configuration [`typescript.config`](configuration#typescript) du fichier
-`svelte.config.js` pour étendre ou modifier le fichier `tsconfig.json` généré.
-
-## $lib
-
-Ceci est un simple alias vers `src/lib`. Cela permet d'accéder aux composants communs et aux modules
-utilitaires sans l'absurdité des `../../../..`.
-
-### $lib/server
-
-Un sous-dossier de `$lib`. SvelteKit va vous empêcher d'importer tout module se trouvant dans
-`$lib/server` dans du code exécuté côté client. Voir la section [modules réservés au
-serveur](server-only-modules).
+> `{ "extends": "$app/tsconfig" }`
 
 ## app.d.ts
 
@@ -259,14 +171,24 @@ En remplissant ces interfaces, vous obtiendrez du typage lorsque vous utiliserez
 ## Error
 
 Définit la forme commune des erreurs prévues et imprévues. Les erreurs prévues sont jetées en
-utilisant la fonction `error`. Les erreurs imprévues sont gérées par les hooks `handleError`, qui
-devraient renvoyer cette forme.
+utilisant la fonction `error`. Chaque erreur passe à travers le hook `handleError`, qui doit
+retourner cette forme (avec `status` et `message` optionnels, puisque par défaut ces propriétés sont
+celles de l'erreur attrapée).
 
 <div class="ts-block">
 
 ```dts
 interface Error {/*…*/}
 ```
+
+<div class="ts-block-property">
+
+```dts
+status: number;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
 
 <div class="ts-block-property">
 
@@ -292,9 +214,8 @@ interface Locals {}
 
 ## PageData
 
-Définit la forme commune des [états `page.data`](/docs/kit/$app-state#page) et des [stores
-`$page.data`](/docs/kit/$app-stores#page) — c'est-à-dire les données partagées entre toutes les
-pages.
+Définit la forme commune des [états `page.data`](/docs/kit/$app-state#page) c'est-à-dire les données
+partagées entre toutes les pages.
 Les fonctions `Load` et `ServerLoad` dans les dossiers `./$types` seront restreintes en fonction.
 Utilisez des propriétés optionnelles pour les données qui ne sont présentes que sur certaines pages.
 N'ajoutez pas de signature d'indice (`[key: string]: any`).
@@ -309,9 +230,8 @@ interface PageData {}
 
 ## PageState
 
-La forme de l'objet `page.state`, qui peut être manipulé en utilisant les fonctions
-[`pushState`](/docs/kit/$app-navigation#pushState) et
-[`replaceState`](/docs/kit/$app-navigation#replaceState) importées depuis `$app/navigation`.
+La forme de l'objet `page.state`, qui peut être manipulé en utilisant la fonction
+[`goto`](/docs/kit/$app-navigation#goto).
 
 <div class="ts-block">
 

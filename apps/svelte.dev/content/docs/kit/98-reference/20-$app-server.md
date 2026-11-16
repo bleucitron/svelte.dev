@@ -101,7 +101,7 @@ function form<Input extends RemoteFormInput, Output>(
 	validate: 'unchecked',
 	fn: (
 		data: Input,
-		issue: InvalidField<Input>
+		issue: RemoteFormInvalidField<Input>
 	) => MaybePromise<Output>
 ): RemoteForm<Input, Output>;
 ```
@@ -125,7 +125,9 @@ function form<
 		: Schema,
 	fn: (
 		data: StandardSchemaV1.InferOutput<Schema>,
-		issue: InvalidField<StandardSchemaV1.InferInput<Schema>>
+		issue: RemoteFormInvalidField<
+			StandardSchemaV1.InferInput<Schema>
+		>
 	) => MaybePromise<Output>
 ): RemoteForm<StandardSchemaV1.InferInput<Schema>, Output>;
 ```
@@ -360,7 +362,7 @@ Vaut aussi pour les queries de temps réel (*live queries*), mais avec `reconnec
 function requested<Input, Output, Validated = Input>(
 	query: RemoteQueryFunction<Input, Output, Validated>,
 	limit: number
-): QueryRequestedResult<Validated, Output>;
+): RemoteQueryRequestedResult<Validated, Output>;
 ```
 
 </div>
@@ -371,12 +373,588 @@ function requested<Input, Output, Validated = Input>(
 function requested<Input, Output, Validated = Input>(
 	query: RemoteLiveQueryFunction<Input, Output, Validated>,
 	limit: number
-): LiveQueryRequestedResult<Validated, Output>;
+): RemoteLiveQueryRequestedResult<Validated, Output>;
 ```
 
 </div>
 
 
+
+## RemoteCommand
+
+Le type d'une fonction `command`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#command) pour plus d'infos.
+
+<div class="ts-block">
+
+```dts
+type RemoteCommand<Input, Output> = {
+	(
+		arg: undefined extends Input ? Input | void : Input
+	): Promise<Output> & {
+		updates(
+			...updates: RemoteQueryUpdate[]
+		): Promise<Output>;
+	};
+	/** Le nombre d'exécutions de commandes en cours */
+	get pending(): number;
+};
+```
+
+</div>
+
+## RemoteForm
+
+Le type d'une fonction `form`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#form) pour plus d'infos.
+
+<div class="ts-block">
+
+```dts
+type RemoteForm<
+	Input extends RemoteFormInput | void,
+	Output
+> = RemoteForm_<Input, Output, [Input]>;
+```
+
+</div>
+
+## RemoteFormEnhanceCallback
+
+Le callback passé à la méthode `enhance` d'une fonction distante `form`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#form) pour plus d'infos.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceCallback<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = (
+	form: RemoteFormEnhanceInstance<Input, Output>
+) => MaybePromise<void>;
+```
+
+</div>
+
+## RemoteFormEnhanceInstance
+
+L'instance de formulaire telle que reçue dans callback `enhance`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#form) pour plus d'infos.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormEnhanceInstance<
+	Input extends RemoteFormInput | void =
+		RemoteFormInput | void,
+	Output = any
+> = Omit<
+	RemoteForm<Input, Output>,
+	'enhance' | 'element'
+> & {
+	readonly element: HTMLFormElement;
+};
+```
+
+</div>
+
+## RemoteFormField
+
+Un type d'accesseur de champ de formulaire qui fournit les méthodes `name()`, `value()`, et
+`issues()`.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormField<Value extends RemoteFormFieldValue> =
+	RemoteFormFieldMethods<Value> & {
+		/**
+         * Renvoie un objet qui peut être étalé sur un élément d'input avec l'attribut type
+         * correct, l'attribut aria-invalid si le champ est invalide, et des getters/setters appropriés pour
+         * les propriétés value/checked
+		 * @example
+		 * ```svelte
+		 * <input {...myForm.fields.myString.as('text')} />
+		 * <input {...myForm.fields.myNumber.as('number')} />
+		 * <input {...myForm.fields.myBoolean.as('checkbox')} />
+		 * ```
+		 */
+		as<T extends RemoteFormFieldType<Value>>(
+			...args: AsArgs<T, Value>
+		): InputElementProps<T, WidenLiteralString<Value>>;
+	};
+```
+
+</div>
+
+## RemoteFormFieldType
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldType<T> = {
+	[K in keyof InputTypeMap]: T extends InputTypeMap[K]
+		? K
+		: never;
+}[keyof InputTypeMap];
+```
+
+</div>
+
+## RemoteFormFieldValue
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFieldValue =
+	| string
+	| string[]
+	| number
+	| boolean
+	| File
+	| File[]
+	| ImageInputValue;
+```
+
+</div>
+
+## RemoteFormFields
+
+Un type récursif pour construire un structure de champs de formulaire avec un accès par proxy.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormFields<T> =
+	WillRecurseIndefinitely<T> extends true
+		? RecursiveFormFields
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? RemoteFormField<NonNullable<T>>
+			: IsImageInputValue<NonNullable<T>> extends true
+				? RemoteFormField<
+						NonNullable<T> & ImageInputValue
+					> &
+						Pick<
+							RemoteFormFieldContainer<T>,
+							'allIssues'
+						> & {
+							[K in KeysOfUnion<T>]-?: RemoteFormFields<
+								ValueOfUnionKey<T, K>
+							>;
+						}
+				: // [NonNullable<T>] est utilisé pour empêcher de distribuer par-dessus une union
+                  // tout en permettant l'usage de wrappers nullables (par ex. `string[] | undefined` depuis un schéma
+                  // ayant `default([])`) à traiter comme des tableaux ; seule la dernière condition devrait distribuer
+                  // sur les unions
+					[NonNullable<T>] extends [string[] | File[]]
+					? RemoteFormField<NonNullable<T>> & {
+							[K in number]: RemoteFormField<
+								NonNullable<T>[number]
+							>;
+						}
+					: [NonNullable<T>] extends [Array<infer U>]
+						? RemoteFormFieldContainer<NonNullable<T>> & {
+								[K in number]: RemoteFormFields<U>;
+							}
+						: RemoteFormFieldContainer<T> & {
+								[K in KeysOfUnion<T>]-?: RemoteFormFields<
+									ValueOfUnionKey<T, K>
+								>;
+							};
+```
+
+</div>
+
+## RemoteFormInput
+
+<div class="ts-block">
+
+```dts
+interface RemoteFormInput {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+[key: string]: MaybeArray<string | number | boolean | File | RemoteFormInput> | undefined;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## RemoteFormInvalidField
+
+Une fonction et un objet proxy utilisé pour créer des erreurs de validation de manière impérative
+dans les gestionnaires de formulaire.
+
+Accéder aux propriétés pour créer des problèmes spécifiques à chaque champ :
+`issue.fieldName('message')`. La structure de type reflète la structure de données des inputs pour
+permettre un accès typé aux champs. Exécutez `invalid(issue.foo(...), issue.nested.bar(...))` pour
+jeter une erreur de validation.
+
+<div class="ts-block">
+
+```dts
+type RemoteFormInvalidField<T> =
+	WillRecurseIndefinitely<T> extends true
+		? Record<string | number, any>
+		: NonNullable<T> extends
+					| string
+					| number
+					| boolean
+					| File
+			? (message: string) => StandardSchemaV1.Issue
+			: NonNullable<T> extends Array<infer U>
+				? {
+						[K in number]: RemoteFormInvalidField<U>;
+					} & ((message: string) => StandardSchemaV1.Issue)
+				: NonNullable<T> extends RemoteFormInput
+					? {
+							[K in keyof T]-?: RemoteFormInvalidField<
+								T[K]
+							>;
+						} & ((
+							message: string
+						) => StandardSchemaV1.Issue)
+					: Record<string, never>;
+```
+
+</div>
+
+## RemoteFormIssue
+
+<div class="ts-block">
+
+```dts
+interface RemoteFormIssue {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+message: string;
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+path: Array<string | number>;
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## RemoteLiveQuery
+
+<div class="ts-block">
+
+```dts
+type RemoteLiveQuery<T> = RemoteResource<T> &
+	AsyncIterable<T> & {
+		/** `true` si le flux live est actuellement connecté */
+		readonly connected: boolean;
+		/** `true` une fois que l'itérateur de flux live est terminé */
+		readonly done: boolean;
+		/** Reconnecte le flux live immédiatement */
+		reconnect(): Promise<void>;
+	};
+```
+
+</div>
+
+## RemoteLiveQueryFunction
+
+Le type d'une fonction distatne `query.live`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#query.live) pour plus d'infos.
+
+La paramètre générique optionnel `Validated` représente le type de l'argument *après* que le schéma
+de la query a été validé et a (optionnellement) transformé la valeur, et correspond au type renvoyé
+par [`requested`](/docs/kit/$app-server#requested).
+
+<div class="ts-block">
+
+```dts
+type RemoteLiveQueryFunction<
+	Input,
+	Output,
+	_Validated = Input
+> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteLiveQuery<Output>;
+```
+
+</div>
+
+## RemoteLiveQueryRequestedEntry
+
+Une seule entrée renvoyée par [`requested`](/docs/kit/$app-server#requested) lorsqu'exécuté par
+`query.live`. `arg` est l'argument validé ; `query` est une `RemoteLiveQuery` liée à la clé de cache
+d'origine du client, afin que `reconnect()` cible la souscription cliente correcte.
+
+<div class="ts-block">
+
+```dts
+type RemoteLiveQueryRequestedEntry<Validated, Output> = {
+	arg: Validated;
+	query: RemoteLiveQuery<Output>;
+	/** Ignore explicitement cette mise à jour demandée */
+	ignore: () => void;
+};
+```
+
+</div>
+
+## RemoteLiveQueryRequestedResult
+
+<div class="ts-block">
+
+```dts
+type RemoteLiveQueryRequestedResult<Validated, Output> =
+	Iterable<
+		RemoteLiveQueryRequestedEntry<Validated, Output>
+	> &
+		AsyncIterable<
+			RemoteLiveQueryRequestedEntry<Validated, Output>
+		> & {
+			/**
+			 * Exécutez `reconnect` sur toutes les queries live sélectionnées par cette invocation
+             * de `requested`.
+			 * Ceci est identique à :
+			 * ```ts
+			 * import { requested } from '$app/server';
+			 *
+			 * for await (const { query } of requested(liveQuery, ...)) {
+			 *   void query.reconnect();
+			 * }
+			 * ```
+			 */
+			reconnectAll: () => Promise<void>;
+			/** Ignore explicitement toutes les mises à jour sélectionnées par cette invocation de
+	         * `requested`
+	         */
+			ignoreAll: () => Promise<void>;
+		};
+```
+
+</div>
+
+## RemotePrerenderFunction
+
+Le type d'une fonction distante `prerender`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#prerender) pour plus d'infos.
+
+<div class="ts-block">
+
+```dts
+type RemotePrerenderFunction<Input, Output> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteResource<Output>;
+```
+
+</div>
+
+## RemoteQuery
+
+<div class="ts-block">
+
+```dts
+type RemoteQuery<T> = RemoteResource<T> & {
+	/**
+     * Sur le client, cette fonction va mettre à jour la valeur de la query sans la re-requêter.
+	 *
+	 * Sur le serveur, ceci peut être exécuté dans le contexte de `command` ou de `form`, et les
+     * données précisées vont accompagner la réponse d'action jusqu'au client.
+     * Ceci permet à SvelteKit de ne pas avoir besoin de rafraîchir toutes les queries de la page
+     * lors d'un second aller-retour.
+	 */
+	set(value: T): void;
+	/**
+     * Sur le client, cette fonction va re-requêter la query depuis le serveur.
+	 *
+	 * Sur le serveur, ceci peut être exécuté dans le contexte de `command` ou de `form`, et les
+     * données précisées vont accompagner la réponse d'action jusqu'au client.
+     * Ceci permet à SvelteKit de ne pas avoir besoin de rafraîchir toutes les queries de la page
+     * lors d'un second aller-retour.
+	 */
+	refresh(): Promise<void>;
+	/**
+	 * Écrase temporairement la valeur d'une query lors d'une [mutation
+     * single-flight](https://svelte.dev/docs/kit/remote-functions#Single-flight-mutations) pour
+     * permettre de faire des mises à jour optimistes.
+	 *
+	 * ```svelte
+	 * <script>
+	 *   import { getTodos, addTodo } from './todos.remote.js';
+	 *   const todos = getTodos();
+	 * </script>
+	 *
+	 * <form {...addTodo.enhance(async (form) => {
+	 *   await form.submit().updates(
+	 *     todos.withOverride((todos) => [...todos, { text: form.fields.text.value() }])
+	 *   );
+	 * })}>
+	 *   <input type="text" name="text" />
+	 *   <button type="submit">Add Todo</button>
+	 * </form>
+	 * ```
+	 */
+	withOverride(
+		update: (current: T) => T
+	): RemoteQueryOverride;
+};
+```
+
+</div>
+
+## RemoteQueryFunction
+
+La valeur de retour d'une fonction distante `query`. Voir la section [Fonctions
+distantes](/docs/kit/remote-functions#query) pour plus d'infos.
+
+La paramètre générique optionnel `Validated` représente le type de l'argument *après* que le schéma
+de la query a été validé et a (optionnellement) transformé la valeur — il s'agit du type que la
+fonction d'implémentation de la query reçoit sur le serveur, ainsi que du type renvoyé par
+[`requested`](/docs/kit/$app-server#requested). Pour les queries déclarées avec [Standard
+Schema](https://standardschema.dev/), ce type diffère de `Input` lorsque le schéma contient une
+transformation (par ex. `v.pipe(v.number(), v.transform(String))` a `Input = number` mais
+`Validated = string`). Pour les validateurs `'unchecked'` et les queries sans arguments, ce type
+vaut par défaut `Input`.
+
+<div class="ts-block">
+
+```dts
+type RemoteQueryFunction<
+	Input,
+	Output,
+	_Validated = Input
+> = (
+	arg: undefined extends Input ? Input | void : Input
+) => RemoteQuery<Output>;
+```
+
+</div>
+
+## RemoteQueryOverride
+
+<div class="ts-block">
+
+```dts
+type RemoteQueryOverride = () => void;
+```
+
+</div>
+
+## RemoteQueryRequestedResult
+
+<div class="ts-block">
+
+```dts
+type RemoteQueryRequestedResult<Validated, Output> =
+	Iterable<RequestedEntry<Validated, Output>> &
+		AsyncIterable<RequestedEntry<Validated, Output>> & {
+			/**
+			 * Exécutez `refresh` sur toutes les queries sélectionnées par cette invocation de
+             * `requested`.
+			 * Ceci est identique à :
+			 * ```ts
+			 * import { requested } from '$app/server';
+			 *
+			 * for await (const { query } of requested(getPost, ...)) {
+			 *   void query.refresh();
+			 * }
+			 * ```
+			 */
+			refreshAll: () => Promise<void>;
+			/** Ignore explicitement toutes les mises à jour sélectionnées par cette invocation de
+	         * `requested`
+			ignoreAll: () => Promise<void>;
+		};
+```
+
+</div>
+
+## RemoteQueryUpdate
+
+<div class="ts-block">
+
+```dts
+type RemoteQueryUpdate =
+	| RemoteQuery<any>
+	| RemoteLiveQuery<any>
+	| RemoteQueryFunction<any, any>
+	| RemoteLiveQueryFunction<any, any>
+	| RemoteQueryOverride;
+```
+
+</div>
+
+## RemoteResource
+
+<div class="ts-block">
+
+```dts
+type RemoteResource<T> = Promise<T> & {
+	/** L'erreur lorsque la query échoue */
+	get error(): App.Error | undefined;
+	/** `true` avant que le premier résultat soit disponible et lors des rafraîchissements */
+	get loading(): boolean;
+} & (
+		| {
+				/** La valeur courante de la query. Vaut `undefined` jusqu'à ce que `ready` valle `true` */
+				get current(): undefined;
+				ready: false;
+		  }
+		| {
+				/** La valeur courante de la query. Vaut `undefined` jusqu'à ce que `ready` valle `true` */
+				get current(): T;
+				ready: true;
+		  }
+	);
+```
+
+</div>
+
+## RequestedEntry
+
+Une seule entrée renvoyée par [`requested`](/docs/kit/$app-server#requested) lorsqu'exécutée avec
+une `query` normale. `arg` est l'argument validé (la valeur de l'input *après* que le schéma de la
+qurey l'ait validée et transformée, si applicable) ; `query` est une `RemoteQuery` liée à la clé de
+cache d'origine du client, afin que `refresh()` / `set()` mettent à jour la bonne entrée cliente.
+Une seule
+
+<div class="ts-block">
+
+```dts
+type RequestedEntry<Validated, Output> = {
+	arg: Validated;
+	query: RemoteQuery<Output>;
+	/** Ignore explicitement cette mise à jour requêtée */
+	ignore: () => void;
+};
+```
+
+</div>
+
+## RequestedResult
+
+<div class="ts-block">
+
+```dts
+type RequestedResult<Validated, Output> =
+	| RemoteQueryRequestedResult<Validated, Output>
+	| RemoteLiveQueryRequestedResult<Validated, Output>;
+```
+
+</div>
 
 ## query
 

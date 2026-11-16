@@ -9,7 +9,7 @@ Nous pouvons également ajouter des gestionnaires pour d'autres verbes HTTP. Ajo
 
 ```js
 /// file: src/routes/todo/[id]/+server.js
-import * as database from '$lib/server/database.js';
+import * as database from '#lib/server/database.js';
 
 export async function PUT({ params, request, cookies }) {
 	const { done } = await request.json();

@@ -77,11 +77,12 @@ afterNavigate(() => {
 
 Vous pouvez aussi naviguer programmatiquement vers une page différente en utilisant la fonction
 [`goto`]($app-navigation#goto). Par défaut, cela aura le même comportement de navigation côté client
-que le fait de cliquer sur un lien. Toutefois, `goto` accepte également une option `keepFocus` qui
-va préserver l'élément actuellement focalisé plutôt que de réinitialiser le focus. Si vous activez
-cette option, assurez-vous que l'élément actuellement focalisé existe toujours sur la page après la
-navigation. Si l'élément n'existe plus, l'utilisateur ou l'utilisatrice va perdre le focus, rendant
-l'expérience désorientante pour les personnes utilisant des technologies d'assistance.
+que le fait de cliquer sur un lien. Toutefois, `goto` accepte également une option `reset: false`
+qui va préserver la position courante du défilement ainsi que l'élément actuellement focalisé plutôt
+que de les réinitialiser. Si vous activez cette option, assurez-vous que l'élément actuellement
+focalisé existe toujours sur la page après la navigation. Si l'élément n'existe plus, l'utilisateur
+ou l'utilisatrice va perdre le focus, rendant l'expérience désorientante pour les personnes
+utilisant des technologies d'assistance.
 
 ## L'attribut "lang" [!VO]The "lang" attribute
 
@@ -117,7 +118,7 @@ export function get_lang(event: import('@sveltejs/kit').RequestEvent) {
 // @filename: hooks.server.js
 import { get_lang } from './utils';
 // ---cut---
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export function handle({ event, resolve }) {
 	return resolve(event, {
 		transformPageChunk: ({ html }) => html.replace('%lang%', get_lang(event))

@@ -93,6 +93,26 @@ polices peut faire une énorme différence sur les performances ressenties de vo
 hook [`handle`](hooks#handle), vous pouvez appeler la fonction `resolve` avec un filtre `preload`
 incluant votre police.
 
+```js
+/// file: src/hooks.server.js
+/** @type {import('@sveltejs/kit/hooks').Handle} */
+export async function handle({ event, resolve }) {
+	return resolve(event, {
+		preload: (asset) => {
+			if (asset.type === 'font') {
+				return asset.filename === 'node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2';
+			}
+
+			return true;
+		}
+	});
+}
+```
+
+`filename` est le nom de fichier de la source relativement à la racine du projet, et n'est
+disponible que lorsque `asset.type === 'font'` puisque les assets JS et CSS sont empaquetés par
+Vite.
+
 Vous pouvez réduire la taille de vos fichiers de police en [découpant vos fichiers de
 police](https://web.dev/learn/performance/optimize-web-fonts#subset_your_web_fonts).
 

@@ -6,11 +6,6 @@ title: $app/state
 SvelteKit rend disponibles trois objets d'état en lecture seule via le module `$app/state`, —
 `page`, `navigating` et `updated`.
 
-> [!NOTE]
-> Ce module a été ajouté avec la version 2.12. Si vous utilisez une version plus ancienne de
-> SvelteKit, utilisez plutôt [`$app/stores`]($app-stores).
-
-
 
 ```js
 // @noErrors
@@ -28,7 +23,7 @@ côté serveur.
 
 ```dts
 const navigating:
-	| import('@sveltejs/kit').Navigation
+	| Navigation
 	| {
 			from: null;
 			to: null;
@@ -49,10 +44,10 @@ Un objet réactif en lecture seule avec des informations concernant la page cour
 plusieurs cas d'usage :
 - récupérer les `data` combinées de toutes les pages/layouts de votre arbre de composants (voir
 également la section [charger des données](/docs/kit/load))
-- récupérer la valeur courant de la propriété `form` n'importe où dans votre arbre de composant
+- récupérer la valeur courante de la propriété `form` n'importe où dans votre arbre de composant
 (voir également la section [actions de formulaire](/docs/kit/form-actions))
-- récupérer l'état de la page défini via `goto`, `pushState` ou `replaceState` (voir également les
-sections [goto](/docs/kit/$app-navigation#goto), et [shallow routing](/docs/kit/shallow-routing))
+- récupérer l'état de la page défini via `goto` (voir également les sections
+[goto](/docs/kit/$app-navigation#goto), et [shallow routing](/docs/kit/shallow-routing))
 - récupérer les métadonnées comme l'URL courante, la route courante et ses paramètres, et si oui ou
 non une erreur s'est produite
 
@@ -90,7 +85,7 @@ quel moment.
 <div class="ts-block">
 
 ```dts
-const page: import('@sveltejs/kit').Page;
+const page: Page;
 ```
 
 </div>
@@ -99,11 +94,14 @@ const page: import('@sveltejs/kit').Page;
 
 ## updated
 
-Une valeur réactive en lecture seule qui vaut initialement `false`. Si
-[`version.pollInterval`](/docs/kit/configuration#version) est une valeur différente de zéro,
-SvelteKit va régulièrement vérifier (en faisant du _polling_) s'il existe de nouvelles versions de
-l'application et mettre à jour `current` à `true` lors qu'une nouvelle version existe.
-`updated.check()` permet de forcer une vérification immédiate, indépendamment du polling.
+Une valeur réactive en lecture seule qui vaut initialement `false`.
+
+SvelteKit vérifie s'il existe une nouvelle version de l'application lors des réponses de données, de
+fonctions distantes, et d'actions de formulaire (via le header `x-sveltekit-version`), lorsque
+l'onglet récupère le focus ou devient visible, et avec un intervalle de polling
+([`version.pollInterval`](/docs/kit/configuration#version)). `updated.current` est défini à `true`
+lorsqu'une nouvelle version est détectée. `updated.check()` va forcer une vérification immédiate,
+indépendamment du polling.
 
 <div class="ts-block">
 
@@ -117,5 +115,219 @@ const updated: {
 </div>
 
 
+
+## Page
+
+La forme de l'objet réactif [`page`](/docs/kit/$app-state#page).
+
+<div class="ts-block">
+
+```dts
+interface Page<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+url: ReadonlyURL & { readonly pathname: ResolvedPathname | (string & {}) };
+```
+
+<div class="ts-block-property-details">
+
+L'URL de la page actuelle.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+params: Params;
+```
+
+<div class="ts-block-property-details">
+
+Les paramètres de la page actuelle — par ex. un objet `{ slug: string }` pour une route comme
+`/blog/[slug]`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+route: {/*…*/};
+```
+
+<div class="ts-block-property-details">
+
+Des infos sur la route actuelle.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+id: RouteId;
+```
+
+<div class="ts-block-property-details">
+
+L'ID de la route courante — par ex. `/blog/[slug]` pour la route `src/routes/blog/[slug]`. Vaut
+`null` lorsque aucune route ne correspond.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+status: number;
+```
+
+<div class="ts-block-property-details">
+
+Le code HTTP de la page courante.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+error: App.Error | null;
+```
+
+<div class="ts-block-property-details">
+
+L'objet d'erreur de la page courante, s'il existe. Rempli avec le `handleError`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+data: App.PageData & Record<string, any>;
+```
+
+<div class="ts-block-property-details">
+
+Les résutats combinés de toutes les données venant de fonctions `load` sur la page courante. Vous
+pouvez typer un dénominateur commun au travers de `App.PageData`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+state: App.PageState;
+```
+
+<div class="ts-block-property-details">
+
+L'état de la page, qui peut être manipulé en utilisant [`goto`](/docs/kit/$app-navigation#goto)
+importé depuis `$app/navigation`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+shallow: {/*…*/} | null;
+```
+
+<div class="ts-block-property-details">
+
+Des informations à propos de la cible de la navigation "creuse" courant, ou `null` si aucune
+navigation "creuse" n’a eu lieu.
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+params: AppLayoutParams<'/'> | null;
+```
+
+<div class="ts-block-property-details">
+
+Les paramètres de la route cible, ou `null` si l'URL ne se résout en aucune route.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+route: { id: AppRouteId } | null;
+```
+
+<div class="ts-block-property-details">
+
+Des infos à propos de la route cible, ou `null` si l'URL ne se résout en aucune route.
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+url: ReadonlyURL;
+```
+
+<div class="ts-block-property-details">
+
+L'URL normalisée passée à `goto(..., { shallow: true })`.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+form: any;
+```
+
+<div class="ts-block-property-details">
+
+Rempli uniquement après la soumission d'un formulaire. Voir [actions de
+formulaire](/docs/kit/form-actions) pour plus d'infos.
+
+</div>
+</div></div>
+
+## ReadonlyURL
+
+<div class="ts-block">
+
+```dts
+type ReadonlyURL = Readonly<
+	Omit<URL, 'searchParams'> & {
+		searchParams: ReadonlyURLSearchParams;
+	}
+>;
+```
+
+</div>
+
+## ReadonlyURLSearchParams
+
+<div class="ts-block">
+
+```dts
+type ReadonlyURLSearchParams = Omit<
+	URLSearchParams,
+	'set' | 'append' | 'delete' | 'sort'
+>;
+```
+
+</div>
 
 

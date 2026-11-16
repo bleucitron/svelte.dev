@@ -994,7 +994,7 @@ dans l'objet global `window.__svelte.v`.
 <div class="ts-block-property">
 
 ```dts
-compatibility?: {/*…*/}
+compatibility?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -1141,7 +1141,7 @@ interface CompileResult {/*…*/}
 <div class="ts-block-property">
 
 ```dts
-js: {/*…*/}
+js: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -1179,19 +1179,49 @@ Une sourcemap
 <div class="ts-block-property">
 
 ```dts
-css: null | {
-	/** Le code généré */
-	code: string;
-	/** Une sourcemap */
-	map: SourceMap;
-	/** Si oui ou non le CSS inclut des règles globales */
-	hasGlobal: boolean;
-};
+css: null | {/*…*/};
 ```
 
 <div class="ts-block-property-details">
 
 Le CSS compilé
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+code: string;
+```
+
+<div class="ts-block-property-details">
+
+Le code généré
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+map: SourceMap;
+```
+
+<div class="ts-block-property-details">
+
+Une source map
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+hasGlobal: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Si oui ou non le CSS inclut des règles globales
+
+</div>
+</div></div>
 
 </div>
 </div>
@@ -1217,7 +1247,7 @@ propriétés `line`, `column` et `character`
 <div class="ts-block-property">
 
 ```dts
-metadata: {/*…*/}
+metadata: {/*…*/};
 ```
 
 <div class="ts-block-property-details">
@@ -1377,7 +1407,7 @@ l'ignorer.
 <div class="ts-block-property">
 
 ```dts
-experimental?: {/*…*/}
+experimental?: {/*…*/};
 ```
 
 <div class="ts-block-property-details">

@@ -30,7 +30,7 @@ par exemple implémenter des routes programmatiquement).
 
 ```js
 /// file: src/hooks.server.js
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export async function handle({ event, resolve }) {
 	if (event.url.pathname.startsWith('/custom')) {
 		return new Response('réponse personnalisée');
@@ -77,7 +77,8 @@ de layout ou de page.
 - `filterSerializedResponseHeaders(name: string, value: string): boolean` — détermine quels en-têtes
 devraient être inclus dans les réponses sérialisées lorsqu'une fonction `load` charge une ressource
 avec `fetch`. Par défaut, aucun ne sera inclus.
-- `preload(input: { type: 'js' | 'css' | 'font' | 'asset', path: string }): boolean` — détermine
+- `preload(input: { type: 'js' | 'css' | 'asset', path: string }) | { type: 'font', path: string,
+filename: string }): boolean` — détermine
 quels fichiers devraient être ajoutés à la balise `<head>` pour les précharger. La méthode est
 appelée avec chaque fichier trouvé pendant la construction des fragments de code au moment de la
 compilation — donc si vous avez par exemple `import './styles.css'` dans votre fichier
@@ -87,11 +88,13 @@ l'analyse se produisant lors de la compilation. Le préchargement peut améliore
 téléchargeant les assets plus tôt, mais cela peut aussi la pénaliser si trop de choses sont
 téléchargées sans raison. Par défaut, les fichiers `js` et `css` seront préchargés. Les fichiers
 `asset` ne sont actuellement pas préchargés du tout, mais il est possible que cela soit ajouté à
-SvelteKit plus tard, en fonction des retours sur le sujet.
+SvelteKit plus tard, en fonction des retours sur le sujet. Pour les fichiers `font`, `input` a
+également une propriété `filename`, le chemin du fichier source relatif à la racine du projet, de
+sorte qu'un filtre puisse le retrouver en se servant de ce chemin plutôt que du chemin haché.
 
 ```js
 /// file: src/hooks.server.js
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export async function handle({ event, resolve }) {
 	const response = await resolve(event, {
 		transformPageChunk: ({ html }) => html.replace('old', 'new'),
@@ -132,7 +135,7 @@ const getUserInformation: (cookie: string | void) => Promise<User>;
 
 // @filename: index.js
 // ---cut---
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export async function handle({ event, resolve }) {
 	event.locals.user = await getUserInformation(event.cookies.get('sessionid'));
 
@@ -166,7 +169,7 @@ trouver entre l'API et internet).
 
 ```js
 /// file: src/hooks.server.js
-/** @type {import('@sveltejs/kit').HandleFetch} */
+/** @type {import('@sveltejs/kit/hooks').HandleFetch} */
 export async function handleFetch({ request, fetch }) {
 	if (request.url.startsWith('https://api.yourapp.com/')) {
 		// clone la requête originale, mais change l'URL
@@ -196,7 +199,7 @@ cookie en utilisant `handleFetch` :
 ```js
 /// file: src/hooks.server.js
 // @errors: 2345
-/** @type {import('@sveltejs/kit').HandleFetch} */
+/** @type {import('@sveltejs/kit/hooks').HandleFetch} */
 export async function handleFetch({ event, request, fetch }) {
 	if (request.url.startsWith('https://api.my-domain.com/')) {
 		request.headers.set('cookie', event.request.headers.get('cookie'));
@@ -206,77 +209,62 @@ export async function handleFetch({ event, request, fetch }) {
 }
 ```
 
-## handleValidationError
-
-> [!NOTE] Peut être ajoutée dans le fichier `src/hooks.server.js`
-
-Ce hook est appelé lorsqu'une fonction distante est appelée avec un argument qui ne correspond pas
-au [Standard Schema](https://standardschema.dev/) fourni. Il doit renvoyer un objet correspondant à
-la forme de [`App.Error`](types#Error).
-
-Si par exemple vous avez une fonction distante qui attend une chaîne de caractères comme argument...
-
-```js
-/// file: todos.remote.js
-import * as v from 'valibot';
-import { query } from '$app/server';
-
-export const getTodo = query(v.string(), (id) => {
-	// implémentation...
-});
-```
-
-... mais est exécutée avec quelque chose qui ne correspond pas au schéma — comme un nombre (par ex.
-`await getTodos(1)`) — la validation va alors échouer, le serveur va répondre avec un [code
-400](https://http.dog/400), et la fonction va jeter une erreur avec le message 'Bad Request'.
-
-Pour personnaliser ce message et ajouter des propriétés additionnelles à l'objet d'erreur,
-implémentez `handleValidationError` :
-
-```js
-/// file: src/hooks.server.js
-/** @type {import('@sveltejs/kit').HandleValidationError} */
-export function handleValidationError({ issues }) {
-	return {
-		message: 'Non merci'
-	};
-}
-```
-
-Soyez conscient•e des informations que vous exposez ici, car la raison d'échec de validation la plus
-probable est que quelqu'un de mal intentionné envoie des requêtes mal formées à votre serveur.
-
 ## handleError
 
 > [!NOTE] Peut être ajoutée aux fichiers `src/hooks.server.js` et `src/hooks.client.js`
 
-Si une [erreur imprévue](errors#Unexpected-errors) est levée lors du chargement, du rendu, ou de
-l'exécution d'un endpoint, cette fonction sera exécutée avec les arguments `error`, `event`,
-`status` et `message`. Cela permet deux choses :
+Cette fonction est appelée pour chaque erreur jetée lors du chargement, du rendu, ou du traitement
+de la réponse à une requête. Elle permet deux choses :
 
 - vous pouvez afficher l'erreur
 - vous pouvez générer une représentation personnalisée de l'erreur que vous pouvez afficher aux
 utilisateurs et utilisatrices, nettoyée des informations sensibles comme les messages ou les stack
-traces. La valeur renvoyée, qui vaut par défaut `{ message }`, devient la valeur de `page.error`.
+traces
 
-Pour les erreurs jetées depuis votre code (ou depuis du code d'une librairie appelée depuis votre
-code), le statut sera 500 et le message sera "Internal Error". Bien que `error.message` peut
-contenir des informations sensibles qui ne devraient pas être exposées aux utilisateurs et
-utilisatrices, `message` ne pose pas de problèmes (bien que sans grand intérêt pour une personne
-lambda).
+En plus de `event`, le hook reçoit un discriminant `kind` qui vous dit d'où l'erreur est venue,
+ainsi que l'`error` elle-même :
 
-Pour ajouter plus d'informations à l'objet `page.error` de manière typée, vous pouvez personnalisée
-la forme attendue en déclarant une interface `App.Error` (qui doit inclure `message: string`, pour
-garantir un comportement par défaut correct). Cela vous permet de — par exemple — ajouter un ID de
-suivi que les utilisateurs et utilisatrices pourront utiliser comme référence lors de leurs échanges
-potentiels avec vos équipes de support :
+- `'app'` — l'erreur vient de votre application via [`error(...)`](@sveltejs-kit#error)
+  - `error` est le corps de l'erreur, qui hérite de [`App.Error`](types#Error)
+  -  renvoie par défaut le corps de l'erreur elle-même
+- `'framework'` — l'erreur vient de SvelteKit, comme une 404, 405 ou 413
+  - `error` est `{ status, message }`, où `message` est du texte non dangereux comme `Not Found`
+  - renvoie par défaut ce même objet `{ status, message }`
+- `'validation'` (uniquement sur le serveur) — l'erreur vient de la validation d'un argument d'une
+fonction distante vis-à-vis de son [Standard Schema](https://standardschema.dev/)
+  - `error` est l'objet `{ status: 400, message: 'Bad Request' }`, et `issues` contient les
+  problèmes de validation
+  - renvoie par défaut l'objet `error` ; les problèmes ne sont pas exposés à moins que vous ne les
+  renvoyiez explicitement vous-même
+  - pour accéder aux propriétés des problèmes spécifiques à la librairie de validation, paramétrez
+  `HandleServerError` avec le type de problème, par exemple `HandleServerError<CustomIssue>`
+- `'unknown'` — on ne sait pas ce qu'il s'est mal passé ; l'erreur a été jetée par votre code, ou du
+code que votre code exécute
+  - `error` est la valeur jetée, qui peut contenir des informations sensibles à ne pas exposer au
+  public
+  - renvoie par défaut `{ status: 500, message: 'Internal Error' }`
+
+La prochaine section, [Errors](errors), explique les autres catégories plus en détail. Les
+redirections ne sont pas des erreurs, et n'atteignent jamais ce hook.
+
+Ce hook renvoie un objet héritant de [`App.Error`](types#Error), dans lequel `status` et `message`
+sont optionnels — renvoyez-les uniquement pour écraser les valeurs par défaut décrites dans la liste
+ci-dessus.
+
+> [!NOTE] Si vous augmentez `App.Error` avec des propriétés additionnelles _requises_, le hook doit
+> les renvoyer.
+
+Pour ajouter plus d'informations à l'objet `page.error` de manière typée, augmentez l'interface
+`App.Error` existante avec vos propriétés supplémentaires. Les propriété intégrées `status` et
+`message` sont déjà présentes et n'ont pas besoin d'être re-déclarées. Par exemple, vous pouvez
+ajouter un ID de suivi que vous utilisateurs et utilisatrices pourront utiliser pour contacter votre
+support :
 
 ```ts
 /// file: src/app.d.ts
 declare global {
 	namespace App {
 		interface Error {
-			message: string;
 			errorId: string;
 		}
 	}
@@ -300,15 +288,29 @@ import * as Sentry from '@sentry/sveltekit';
 
 Sentry.init({/*...*/})
 
-/** @type {import('@sveltejs/kit').HandleServerError} */
-export async function handleError({ error, event, status, message }) {
+/** @type {import('@sveltejs/kit/hooks').HandleServerError} */
+export async function handleError({ kind, error, event }) {
+	if (kind === 'app') {
+		// vous avez créé cette erreur avec `error(...)`, elle hérite donc déjà
+		// de `App.Error` — on la relaie inchangée
+		return error;
+	}
+
 	const errorId = crypto.randomUUID();
+
+	if (kind === 'framework') {
+		// une 404 (ou similaire) — `error.status` et `error.message` peuvent être exposés
+		// au public sans risque, on les garde donc, et on leur ajoute une autre propriété
+		return { ...error, errorId };
+	}
 
 	// exemple d'intégration avec https://sentry.io/
 	Sentry.captureException(error, {
-		extra: { event, errorId, status }
+		extra: { event, errorId }
 	});
 
+	// `status` et `message` sont optionels — nous écrasons uniquement `message`,
+	// pour que le statut garde sa valeur par défaut de 500
 	return {
 		message: 'Oups !',
 		errorId
@@ -331,13 +333,21 @@ import * as Sentry from '@sentry/sveltekit';
 
 Sentry.init({/*...*/})
 
-/** @type {import('@sveltejs/kit').HandleClientError} */
-export async function handleError({ error, event, status, message }) {
+/** @type {import('@sveltejs/kit/hooks').HandleClientError} */
+export async function handleError({ kind, error, event }) {
+	if (kind === 'app') {
+		return error;
+	}
+
 	const errorId = crypto.randomUUID();
+
+	if (kind === 'framework') {
+		return { ...error, errorId };
+	}
 
 	// exemple d'intégration avec https://sentry.io/
 	Sentry.captureException(error, {
-		extra: { event, errorId, status }
+		extra: { event, errorId }
 	});
 
 	return {
@@ -350,8 +360,8 @@ export async function handleError({ error, event, status, message }) {
 > [!NOTE] Dans le fichier `src/hooks.client.js`, le type de `handleError` est `HandleClientError` au
 > lieu de `HandleServerError`, et `event` est un `NavigationEvent` plutôt qu'un `RequestEvent`.
 
-Cette fonction n'est pas appelée pour les erreurs _prévues_ (celles jetées depuis la fonction
-[`error`](@sveltejs-kit#error) importée depuis `@sveltejs/kit`).
+Les erreurs qui étaient déjà transformées par le hook serveur ne sont pas passées au hook client une
+deuxième fois.
 
 Lors du développement, si une erreur se produit à cause d'une erreur de syntaxe dans votre code
 Svelte, l'erreur fournie aura une propriété `frame` mettant en valeur la position de l'erreur.
@@ -374,9 +384,9 @@ comme l'initialisation d'une connexion à une base de données.
 ```js
 // @errors: 2307
 /// file: src/hooks.server.js
-import * as db from '$lib/server/database';
+import * as db from '#lib/server/database.js';
 
-/** @type {import('@sveltejs/kit').ServerInit} */
+/** @type {import('@sveltejs/kit/hooks').ServerInit} */
 export async function init() {
 	await db.connect();
 }
@@ -409,7 +419,7 @@ const translated = {
 	'/fr/a-propos': '/fr/about',
 };
 
-/** @type {import('@sveltejs/kit').Reroute} */
+/** @type {import('@sveltejs/kit/hooks').Reroute} */
 export function reroute({ url }) {
 	if (url.pathname in translated) {
 		return translated[url.pathname];
@@ -434,7 +444,7 @@ des [mêmes bénéfices](load#Making-fetch-requests) que la fonction `fetch` fou
 // @errors: 2345 2304
 /// file: src/hooks.js
 
-/** @type {import('@sveltejs/kit').Reroute} */
+/** @type {import('@sveltejs/kit/hooks').Reroute} */
 export async function reroute({ url, fetch }) {
 	// Demandez à un endpoint spécial de votre application quelle est la destination
 	if (url.pathname === '/api/reroute') return;
@@ -466,9 +476,9 @@ qui n'est pas une instance du type) et une fonction `decode` correspondante :
 ```js
 // @errors: 2307
 /// file: src/hooks.js
-import { Vector } from '$lib/math';
+import { Vector } from '#lib/math.js';
 
-/** @type {import('@sveltejs/kit').Transport} */
+/** @type {import('@sveltejs/kit/hooks').Transport} */
 export const transport = {
 	Vector: {
 		encode: (value) => value instanceof Vector && [value.x, value.y],
@@ -476,7 +486,6 @@ export const transport = {
 	}
 };
 ```
-
 
 ## Plus de lecture [!VO]Further reading
 

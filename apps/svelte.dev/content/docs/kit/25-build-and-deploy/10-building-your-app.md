@@ -17,11 +17,11 @@ cible — plus sur ce point dans les pages suivantes.
 
 SvelteKit va charger vos fichiers `+page/layout(.server).js` (et tous les fichiers qu'ils importent)
 pour les analyser pendant la compilation. Tout code qui ne devrait _pas_ être exécuté à ce stade
-doit vérifier que `building` importé depuis [`$app/environment`]($app-environment) vaut `false` :
+doit vérifier que `building` importé depuis [`$app/environment`]($app-env) vaut `false` :
 
 ```js
-+++import { building } from '$app/environment';+++
-import { initialiseDatabase } from '$lib/server/database';
++++import { building } from '$app/env';+++
+import { initialiseDatabase } from '#lib/server/database.js';
 
 +++if (!building) {+++
 	initialiseDatabase();

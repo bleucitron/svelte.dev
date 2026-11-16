@@ -7,7 +7,7 @@ title: $app/paths
 
 ```js
 // @noErrors
-import { asset, assets, base, match, resolve, resolveRoute } from '$app/paths';
+import { asset, match, resolve } from '$app/paths';
 ```
 
 ## asset
@@ -19,7 +19,7 @@ Disponible depuis la version 2.26
 </blockquote>
 
 Résout l'URL d'un asset se trouvant dans votre dossier `static`, en le préfixant avec
-[`config.kit.paths.assets`](/docs/kit/configuration#paths) si configuré, ou avec le chemin de base
+[`config.paths.assets`](/docs/kit/configuration#paths) si configuré, ou avec le chemin de base
 sinon.
 
 Lors du rendu côté serveur, le chemin de base est relatif et dépend de la page en train d'être
@@ -30,64 +30,13 @@ rendue.
 	import { asset } from '$app/paths';
 </script>
 
-<img alt="a potato" src={asset('/potato.jpg')} />
+<img alt="a potato" src={asset('potato.jpg')} />
 ```
 
 <div class="ts-block">
 
 ```dts
-function asset(file: Asset): string;
-```
-
-</div>
-
-
-
-## assets
-
-
-<blockquote class="tag deprecated note">
-
-Utilisez plutôt [`asset(...)`](/docs/kit/$app-paths#asset)
-
-</blockquote>
-
-Un chemin absolu qui matche [`config.kit.paths.assets`](/docs/kit/configuration#paths).
-
-> [!NOTE] Si une valeur de `config.kit.paths.assets` est fournie, elle sera remplacé par
-> `'/_svelte_kit_assets'` lors de `vite dev` ou `vite preview`, puisque les assets ne sont pas
-> encore placés sur leur URL future.
-
-<div class="ts-block">
-
-```dts
-let assets:
-	| ''
-	| `https://${string}`
-	| `http://${string}`
-	| '/_svelte_kit_assets';
-```
-
-</div>
-
-
-
-## base
-
-<blockquote class="tag deprecated note">
-
-Utilisez plutôt [`resolve(...)`](/docs/kit/$app-paths#resolve)
-
-</blockquote>
-
-Une chaîne de caractères qui matche [`config.kit.paths.base`](/docs/kit/configuration#paths).
-
-Exemple d'usage : `<a href="{base}/your-page">Link</a>`
-
-<div class="ts-block">
-
-```dts
-let base: '' | `/${string}`;
+function asset(file: AssetPath): string;
 ```
 
 </div>
@@ -108,7 +57,7 @@ Fait correspondre un chemin ou une URL à un ID de route et en extrait les param
 // @errors: 7031
 import { match } from '$app/paths';
 
-const route = await match('/blog/hello-world');
+const route = await match('blog/hello-world');
 
 if (route?.id === '/blog/[slug]') {
 	const slug = route.params.slug;
@@ -120,12 +69,15 @@ if (route?.id === '/blog/[slug]') {
 <div class="ts-block">
 
 ```dts
-function match(
-	url: Pathname | URL | (string & {})
-): Promise<{
-	id: RouteId;
-	params: Record<string, string>;
-} | null>;
+function match(url: URL | string): Promise<
+	| {
+			[K in RouteId]: {
+				id: K;
+				params: RouteParams<K>;
+			};
+	  }[RouteId]
+	| null
+>;
 ```
 
 </div>
@@ -142,6 +94,7 @@ Disponible depuis la version 2.26
 
 Résout un chemin en le préfixant avec le chemin de base, s'il existe, ou avec un ID de route en
 remplissant les segments dynamiques avec des paramètres.
+En mode "routing par hash", l'URL renvoyée commence par `#`.
 
 Lors du rendu côté serveur, le chemin de base est relatif et dépend de la page en train d'être
 rendue.
@@ -151,7 +104,7 @@ rendue.
 import { resolve } from '$app/paths';
 
 // avec un chemin
-const resolved = resolve(`/blog/hello-world`);
+const resolved = resolve(`blog/hello-world`);
 
 // avec un ID de route et ses paramètres
 const resolved = resolve('/blog/[slug]', {
@@ -173,26 +126,6 @@ function resolve<
 
 
 
-## resolveRoute
 
-<blockquote class="tag deprecated note">
-
-Utilisez plutôt [`resolve(...)`](/docs/kit/$app-paths#resolve)
-
-</blockquote>
-
-<div class="ts-block">
-
-```dts
-function resolveRoute<
-	T extends
-		| RouteIdWithSearchOrHash
-		| PathnameWithSearchOrHash
->(...args: ResolveArgs<T>): ResolvedPathname;
-```
-
-</div>
-
-
-
-
+> [!LEGACY]
+> `base`, `assets`, et `resolveRoute` ont été supprimés avec la version in 3.0

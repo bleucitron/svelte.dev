@@ -45,7 +45,8 @@ L'élément `<form>` a un attribut optionnel `action`, qui est similaire à l'at
 > [!NOTE] L'attribut `action` peut être n'importe quelle URL — si l'action était définie sur une
 > autre page, vous pourriez avoir quelque chose comme `/todos?/create`. Puisque l'action est sur
 > _cette_ page, nous pouvons omettre complètement le chemin, ce qui explique que l'attribut `action`
-> a une valeur commençant par `?`.
+> a une valeur commençant par `?`. Comme avec les soumissions natives de formulaire, soumettre une
+> action appartenant à une autre page va déclencher une navigation vers cette page.
 
 Ensuite, nous souhaitons créer un formulaire pour chaque tâche, ainsi qu'un `<input>` caché qui
 l'identifie de manière unique :

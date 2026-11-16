@@ -27,7 +27,7 @@ Toutes les pages ne peuvent pas être pré-rendues. La règle d'or est la suivan
 puisse être pré-rendu, deux personnes lambda le requêtant directement doivent obtenir exactement le
 même contenu du serveur, et la page ne doit pas contenir d'actions de formulaires. Les pages avec
 des paramètres de routes dynamiques peuvent être pré-rendues tant qu'elles sont précisées dans le
-champ de configuration [`prerender.entries`](/docs/kit/configuration#prerender) ou qu'elles sont
+champ de configuration [`prerender.entries`](/docs/kit/@sveltejs-kit-vite#prerender) ou qu'elles sont
 accessibles en suivant des liens venant de pages qui _sont_ définies dans `prerender.entries`.
 
 > [!NOTE] Définir `prerender` à `tree` dans votre fichier `+layout.server.js` racine fait de votre

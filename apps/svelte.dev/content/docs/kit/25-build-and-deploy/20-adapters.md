@@ -13,6 +13,7 @@ les pages suivantes :
 - [`@sveltejs/adapter-cloudflare`](adapter-cloudflare) pour Cloudflare Workers et Cloudflare Pages
 - [`@sveltejs/adapter-netlify`](adapter-netlify) pour Netlify
 - [`@sveltejs/adapter-node`](adapter-node) pour les serveurs Node
+- [`@sveltejs/adapter-bun`](adapter-bun) pour les serveurs Bun
 - [`@sveltejs/adapter-static`](adapter-static) pour la génération de sites statiques (SSG)
 - [`@sveltejs/adapter-vercel`](adapter-vercel) pour Vercel
 
@@ -21,30 +22,33 @@ plateformes.
 
 ## Utiliser les adaptateurs [!VO]Using adapters
 
-Votre adaptateur est précisé dans le fichier `svelte.config.js` :
+Lancez [`npx sv add sveltekit-adapter`](/docs/cli/sveltekit-adapter) pour installer un adaptateur et
+ajoutez-le à votre configuration.
+
+Votre adaptateur est précisé dans le fichier `vite.config.js` :
 
 ```js
-/// file: svelte.config.js
+/// file: vite.config.js
 // @filename: ambient.d.ts
 declare module 'svelte-adapter-foo' {
-	const adapter: (opts: any) => import('@sveltejs/kit').Adapter;
+	const adapter: (opts?: any) => import('@sveltejs/kit').Adapter;
 	export default adapter;
 }
 
+// @errors: 2554
 // @filename: index.js
 // ---cut---
-import adapter from 'svelte-adapter-foo';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
++++import adapter from 'svelte-adapter-foo';+++
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			// les options d'adaptateur se définissent ici
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			+++adapter: adapter()+++
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
 ## Contexte spécifique à une plateforme [!VO]Platform-specific context
@@ -54,4 +58,3 @@ exemple, les Cloudflare Workers ont accès à un objet `env` contenant les names
 peut être passé au `RequestEvent` utilisé dans les [hooks](hooks) et les [routes de
 serveur](routing#server) en tant que propriété `platform` — consultez la documentation spécifique à
 chaque adaptateur pour en savoir plus.
-

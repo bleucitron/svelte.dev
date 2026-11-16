@@ -38,7 +38,8 @@ Et c'est tout ! Désormais, lorsque JavaScript est accessible, `use:enhance` va 
 comportement natif du navigateur à l'exception du rechargement complet de la page. Il va donc :
 
 - mettre à jour la prop `form`
-- invalider toutes les données lors d'une réponse de succès, provoquant le ré-exécutions des
+- réinitialiser l'élément `form`
+- rafraîchir toutes les données lors d'une réponse de succès, provoquant le ré-exécutions des
   fonctions `load`
 - naviguer vers la nouvelle page si la réponse est une redirection
 - afficher la page d'erreur la plus proche si une erreur se produit

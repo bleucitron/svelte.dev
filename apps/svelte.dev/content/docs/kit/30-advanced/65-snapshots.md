@@ -12,8 +12,75 @@ rafraîchit la page, les valeurs ayant été entrées dans le formulaire seront 
 où il est important de conserver ces valeurs, vous pouvez prendre un _snapshot_ de l'état du DOM,
 que vous pourrez ensuite restaurer si l'utilisateur ou l'utilisateur revient sur la page concernée.
 
-Pour cela, exportez un objet `snapshot` avec des méthodes `capture` et `restore` depuis un fichier
-`+page.svelte` ou `+layout.svelte` :
+Pour cela, exécutez `snapshot` importé depuis `$app/navigation` lors de l'initialisation du
+composant :
+
+```svelte
+<!--- file: +page.svelte --->
+<script>
+	import { snapshot } from '$app/navigation';
+
+	let comment = $state('');
+
+	snapshot({
+		capture: () => comment,
+		restore: (value) => (comment = value)
+	});
+</script>
+
+<form method="POST">
+	<label for="comment">Commentaire</label>
+	<textarea id="comment" bind:value={comment} />
+	<button>Publier le commentaire</button>
+</form>
+```
+
+Lorsque vous quittez la page — y compris via du [routing creux](shallow-routing), la fonction
+`capture` est exécutée immédiatement avant que la page ne soit modifiée, et la valeur renvoyée est
+associée avec l'entrée courante dans la pile d'historique du navigateur. Si vous revenez sur cette
+page, la fonction `restore` sera exécutée avec la valeur enregistrée aussitôt que la page sera
+construite.
+
+Les snapshots doivent avoir un ID unique pour pouvoir survivre au travers des remontages de
+composants et des rechargements de page. Par défaut, cet identifiant est généré depuis la stack
+trace lorsque `snapshot(...)` est exécuté, mais vous pouvez également fournir explicitement un `id`
+pour (par exemple) garder les snapshots stables parmi les déploiements, même si la stack trace
+diffère à cause des changements dans le code source, ou pour différencier les snapshots créés via
+une fonction "enrobante" partagée ou dans plusieurs instances du même composant :
+
+```js
+import { snapshot } from '$app/navigation';
+
+let comment = '';
+
+// ---cut---
+snapshot({
+	+++id: 'comment',+++
+	capture: () => comment,
+	restore: (value) => (comment = value)
+});
+```
+
+Le callback `reset` optionnel est exécuté pour les navigations où il n'y a pas de valeur capturée à
+restaurer, par exemple lorsqu'une nouvelle entrée d'historique est créée.
+
+Les valeurs capturées sont sérialisées avec [devalue](https://github.com/sveltejs/devalue), qui gère
+le JSON, les objets tels que les `Date` et les `Map`, et des types personnalisés spécifiés par votre
+hook [`transport`](hooks#transport). Les données sérialisées sont persistées dans `sessionStorage`,
+ce qui permet à l'état d'être restauré lorsque la page est rechargée, ou lorsque l'utilisateur ou
+l'utilisatrice revient sur votre application depuis un autre site.
+
+> [!NOTE] Évitez de renvoyez de très gros objets depuis `capture` — une fois capturés, ces objets
+> seront conservés en mémoire pour toute la durée de la session, et dans certains cas extrèmes
+> peuvent être trop volumineux pour être persistés dans `sessionStorage`.
+
+## export const snapshot
+
+> [!LEGACY]
+> Auparavant, les snapshots étaient créés en exportant un objet `snapshot` avec des méthodes
+> `capture` et `restore` depuis un fichier `+page.svelte` ou `+layout.svelte`. Cette façon de faire
+> est dépréciée en faveur de l'utilitaire `snapshot`, qui peut être appelé depuis n'importe quel
+> composant.
 
 ```svelte
 <!--- file: +page.svelte --->
@@ -27,22 +94,5 @@ Pour cela, exportez un objet `snapshot` avec des méthodes `capture` et `restore
 	};
 </script>
 
-<form method="POST">
-	<label for="comment">Commentaire</label>
-	<textarea id="comment" bind:value={comment} />
-	<button>Envoyer le commentaire</button>
-</form>
-```
-
-Lorsque vous quittez la page, la fonction `capture` est exécutée immédiatement avant que la page ne
-soit modifiée, et la valeur renvoyée est associée avec l'entrée courante dans la pile d'historique
-du navigateur. Si vous revenez sur cette page, la fonction `restore` sera exécutée avec la valeur
-enregistrée aussitôt que la page sera construite.
-
-Les données doivent être sérialisables en tant que JSON afin qu'elles puissent être persistées dans
-le `sessionStorage`. Ceci permet que l'état soit restauré lors du rechargement de la page, ou
-lorsque l'utilisateur ou l'utilisatrice revient sur la page depuis un autre site.
-
-> [!NOTE] Évitez de renvoyer de très gros objets depuis `capture` — une fois stockés, ces objets
-> seront gardés en mémoire pour toute la durée de la session, et dans certains cas extrêmes peuvent
-> être trop lourds pour être persistés dans le `sessionStorage`.
+Les valeurs capturées de cette manière sont sérialisées en tant que JSON, et les navigations creuses
+ne les capturent pas.

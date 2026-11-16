@@ -26,13 +26,11 @@ Le clic sur le bouton fonctionne désormais.
 
 Les gestionnaires de requête doivent renvoyer un objet
 [Response](https://developer.mozilla.org/fr/docs/Web/API/Response/Response). Puisqu'il est courant
-de renvoyer du JSON depuis une route d'API, SvelteKit fournit une fonction utilitaire pour générer
-facilement ces réponses :
+de renvoyer du JSON depuis une route d'API, l'objet `Response` a une méthode statique pratique pour
+générer ces réponses :
 
 ```js
 /// file: src/routes/roll/+server.js
-+++import { json } from '@sveltejs/kit';+++
-
 export function GET() {
 	const number = Math.floor(Math.random() * 6) + 1;
 
@@ -41,6 +39,6 @@ export function GET() {
 			'Content-Type': 'application/json'
 		}
 	});---
-+++	return json(number);+++
++++	return Response.json(number);+++
 }
 ```

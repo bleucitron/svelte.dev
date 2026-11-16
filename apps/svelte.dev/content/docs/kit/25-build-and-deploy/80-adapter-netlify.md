@@ -11,85 +11,48 @@ l'ajouter à votre projet vous permet de spécifier des options spécifiques à 
 
 ## Usage
 
-Installez l'adaptateur avec `npm i -D @sveltejs/adapter-netlify`, puis ajoutez-le à votre fichier
-`svelte.config.js` :
+Lancez [`npx sv add sveltekit-adapter="adapter:netlify"`](/docs/cli/sveltekit-adapter), ou
+installez-le avec `npm i -D @sveltejs/adapter-netlify` puis ajoutez l'adaptateur à votre fichier
+`vite.config.js` :
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
 import adapter from '@sveltejs/adapter-netlify';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		// les options par défaut sont affichées
-		adapter: adapter({
-			// si vaut true, va créer une Netlify Edge Function plutôt
-			// qu'utiliser des fonctions standards basées sur Node
-			edge: false,
-
-			// si vaut true, va découper votre application en différentes
-			// fonctions plutôt que d'en créer une seule pour toute votre application.
-			// si `edge` vaut true, cette option ne peut pas être utilisée
-			split: false
+export default defineConfig({
+	plugins: [
+		sveltekit({
+			adapter: adapter({
+				// Voir plus bas pour une explication de ces options
+				edge: false,
+				split: false,
+				publish: 'build'
+			})
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
-Ensuite, assurez-vous que vous avez un fichier
-[netlify.toml](https://docs.netlify.com/configure-builds/file-based-configuration) à la racine de
-votre projet. Celui-ci va déterminer l'endroit où créer des assets statiques en fonction des
-paramètres `build.publish`, comme montré dans cette configuration d'exemple :
+## Options
 
-```toml
-[build]
-	command = "npm run build"
-	publish = "build"
-```
+### `edge`
 
-Si le fichier `netlify.toml` ou la valeur `build.publish` sont manquantes, une valeur par défaut de
-`"build"` sera utilisée. Notez que si vous avez défini le dossier de publication dans l'interface de
-Netlify comme étant un autre dossier, vous devrez le répliquer dans `netlify.toml` également, ou
-bien utiliser la valeur par défaut de `"build"`.
+Si vaut `true`, votre applicaction sera déployée en tant que [Netlify Edge
+Function](https://docs.netlify.com/build/edge-functions/overview/) plutôt qu'en fonction standard
+basée sur Node.
 
-### Version de Node [!VO]Node version
+### `split`
 
-Les nouveaux projets utilisent la dernière version LTS de Node par défaut. Toutefois, si vous mettez
-à jour un projet que vous avez créé il y a un moment, celui-ci est peut-être bloqué sur une autre
-version. Référrez-vous à la [documentation de
-Netlify](https://docs.netlify.com/configure-builds/manage-dependencies/#node-js-and-javascript) pour
-obtenir des détails sur comment spécifier manuellement une version de Node.
+Si vaut `true`, votre application sera découpée en plusieurs fonctions plutôt qu'en une seule pour
+toute l'application.
 
-## Netlify Edge Functions
+### `publish`
 
-SvelteKit supporte les [Netlify Edge
-Functions](https://docs.netlify.com/build/edge-functions/overview/). Si vous
-passez l'option `edge: true` à la fonction `adapter`, le rendu côté serveur sera effectué dans une
-fonction edge basée sur Deno et déployée à proximité de l'emplacement de la personne visitant le
-site. Si l'option est définie à `false` (par défaut), le site sera déployé sur des Netlify Functions
-basées sur Node.
-
-```js
-// @errors: 2307
-/// file: svelte.config.js
-import adapter from '@sveltejs/adapter-netlify';
-
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			// va créer une Netlify Edge Function utilisant Deno
-			// plutôt qu'utiliser des fonctions Node standards basées sur Node
-			edge: true
-		})
-	}
-};
-
-export default config;
-```
+Le dossier dans lequel écrire les pages prérendues et les assets statiques (le contenu de `static`,
+plus le JS client et le CSS générés par SvelteKit). Vaut par défaut `build`.
 
 ## Alternatives Netlify à certaines fonctionnalités SvelteKit [!VO]Netlify alternatives to SvelteKit functionality
 
@@ -120,7 +83,7 @@ dans votre fichier `netlify.toml`.
 2. Le robot de compilation de Netlify va parser vos fichiers HTML au moment de la compilation, ce
 	 qui signifie que votre formulaire doit être [pré-rendu](page-options#prerender) en tant que HTML.
 	 Vous pouvez soit ajouter `export const prerender = true` à votre fichier `contact/+page.svelte`
-pour pré-rendre uniquement cette page, ou bien définir l'option `kit.prerender.force: true` pour
+pour pré-rendre uniquement cette page, ou bien définir l'option `prerender.force: true` pour
 pré-rendre toutes vos pages.
 3. Si votre formulaire Netlify a un [message de succès
 	 personnalisé](https://docs.netlify.com/forms/setup/#success-messages) comme `<form netlify ...

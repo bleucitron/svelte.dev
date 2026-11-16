@@ -4,7 +4,7 @@ title: page
 
 SvelteKit rend disponibles en lecture seule trois objets d'état via le module `$app/state` — `page`,
 `navigating`, et `updated`. Celui que vous utiliserez le plus souvent est
-[`page`](/docs/kit/@sveltejs-kit#Page), qui fournit des informations sur la page courante :
+[`page`](/docs/kit/$app-state#Page), qui fournit des informations sur la page courante :
 
 - `url` — l'[URL](https://developer.mozilla.org/fr/docs/Web/API/URL) de la page courante
 - `params` — les [paramètres](params) de la page courante
@@ -41,5 +41,5 @@ utilise `page.url.pathname` :
 ```
 
 > [!NOTE] Avant SvelteKit 2.12, vous deviez utiliser `$app/stores` pour cela, qui fournit un store
-> `$page` contenant les mêmes informations. Si vous utilisez actuellement `$app/stores`, nous vous
-> conseillons de migrer vers `$app/state` (ce qui requiert Svelte 5).
+> `$page` contenant les mêmes informations. Ce store a été supprimé en faveur de '$app/state' avec
+> SvelteKit 3.

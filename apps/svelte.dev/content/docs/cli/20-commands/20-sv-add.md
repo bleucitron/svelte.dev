@@ -54,6 +54,7 @@ Ne demande pas d'installer des dépendances.
 - [`ai-tools`](ai-tools)
 - [`better-auth`](better-auth)
 - [`drizzle`](drizzle)
+- [`enhanced-img`](enhanced-img)
 - [`eslint`](eslint)
 - [`mdsvex`](mdsvex)
 - [`paraglide`](paraglide)
@@ -66,9 +67,6 @@ Ne demande pas d'installer des dépendances.
 
 ## Add-ons communautaires [!VO]Community add-ons
 
-> [!NOTE] Les add-ons communautaires sont actuellement **expérimentaux**. L'API peut évoluer. Ne les
-> utilisez pas en production pour le moment !
-
 > [!NOTE]
 > Les mainteneurs de Svvelte ne vérifient pas le code des add-ons communautaires.
 
@@ -78,7 +76,13 @@ add-ons `sv` pour rendre leurs intégrations plus immédiates. Vous pouvez les t
 [`npmx`](https://www.npmx.dev/search?q=keyword:sv-add) en cherchant le mot-clé : `sv-add`.
 
 ```sh
-# Installer un add-on communautaire en cherchant le nom de l'organisation (cela cherchera @org/sv)
+# Installer un add-on communautaire
+npx sv add my-addon
+
+# Fonctionne aussi avec les noms d'organisation
+npx sv add @supacool/sv
+
+# Comme raccourci, les paquets nommés `sv` peuvent être ignorés
 npx sv add @supacool
 
 # Utiliser un add-on local (pour développer, ou bien votre usage interne)

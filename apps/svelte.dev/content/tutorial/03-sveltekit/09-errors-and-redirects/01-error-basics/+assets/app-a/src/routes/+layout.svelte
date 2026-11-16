@@ -4,8 +4,8 @@
 
 <nav>
 	<a href="/">accueil</a>
-	<a href="/expected">page avec une erreur prévue</a>
-	<a href="/unexpected">page avec une erreur imprévue</a>
+	<a href="/app">page avec une erreur d'application</a>
+	<a href="/unknown">page avec une erreur inconnue</a>
 </nav>
 
 {@render children()}

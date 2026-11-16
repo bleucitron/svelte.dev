@@ -2,7 +2,8 @@
 title: Pages d'erreur
 ---
 
-Lorsque quelque chose se passe mal dans une fonction `load`, SvelteKit affiche une page d'erreur.
+Lorsque quelque chose se passe mal dans une fonction `load`, ou lors du rendu, SvelteKit affiche une
+page d'erreur.
 
 La page d'erreur par défaut est quelque peu austère. Nous pouvons la personnaliser en créant un
 composant `src/routes/+error.svelte` :
@@ -24,9 +25,9 @@ Notez que le composant `+error.svelte` est affichée dans le `+layout.svelte` ra
 créer des `+error.svelte` plus granulaires :
 
 ```svelte
-/// file: src/routes/expected/+error.svelte
+/// file: src/routes/app/+error.svelte
 <h1>cette erreur était prévue</h1>
 ```
 
-Ce composant sera affiché pour la routes `/expected`, tandis que la page d'erreur racine
+Ce composant sera affiché pour la routes `/app`, tandis que la page d'erreur racine
 `src/routes/+error.svelte` sera affichée pour toutes les autres erreurs se produisant.

@@ -8,12 +8,16 @@ Lorsque vous créez un nouveau projet SvelteKit avec `npx sv create`, l'adaptate
 défaut. Celui-ci installe et utilise automatiquement l'adaptateur correct pour votre environnement
 lorsque vous déployez :
 
-- [`@sveltejs/adapter-cloudflare`](adapter-cloudflare) pour [Cloudflare Pages](https://developers.cloudflare.com/pages/)
+- [`@sveltejs/adapter-cloudflare`](adapter-cloudflare) pour les [Cloudflare
+Workers](https://www.cloudflare.com/products/workers/)
 - [`@sveltejs/adapter-netlify`](adapter-netlify) pour [Netlify](https://netlify.com/)
 - [`@sveltejs/adapter-vercel`](adapter-vercel) pour [Vercel](https://vercel.com/)
-- [`svelte-adapter-azure-swa`](https://github.com/geoffrich/svelte-adapter-azure-swa) pour [Azure Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/)
-- [`svelte-kit-sst`](https://github.com/sst/v2/tree/master/packages/svelte-kit-sst) pour [AWS via SST](https://sst.dev/docs/start/aws/svelte)
+- [`svelte-adapter-azure-swa`](https://github.com/geoffrich/svelte-adapter-azure-swa) pour [Azure
+Static Web Apps](https://docs.microsoft.com/en-us/azure/static-web-apps/)
+- [`svelte-kit-sst`](https://github.com/sst/v2/tree/master/packages/svelte-kit-sst) pour [AWS via
+SST](https://sst.dev/docs/start/aws/svelte)
 - [`@sveltejs/adapter-node`](adapter-node) pour [Google Cloud Run](https://cloud.google.com/run)
+- [`@sveltejs/adapter-node`](adapter-node) pour [Render](https://render.com)
 
 Il est recommandé d'installer l'adaptateur approprié dans vos `devDependencies` une fois que vous
 avez choisi un environnement de déploiement, car cela permet d'ajouter l'adaptateur à votre lockfile

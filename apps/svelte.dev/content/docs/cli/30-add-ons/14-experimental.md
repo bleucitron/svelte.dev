@@ -4,8 +4,7 @@ title: experimental
 ---
 
 Active les fonctionnalités expérimentales de Svelte et
-[SvelteKit](https://svelte.dev/docs/kit/configuration#experimental), et permet à votre projet
-d'utiliser leurs versions `next` (pre-release).
+[SvelteKit](https://svelte.dev/docs/kit/configuration#experimental).
 
 ## Usage
 
@@ -16,19 +15,8 @@ npx sv add experimental
 ## Ce que vous obtenez [!VO]What you get
 
 - les drapeaux expérimentaux sélectionnés dans votre configuration
-- de manière optionnelle,`@sveltejs/kit` (et votre adaptateur) en version `next`
 
 ## Options
-
-### versions
-
-Les paquets à mettre en version `next` de pre-release :
-
-- `kit` — `@sveltejs/kit@next` (monte aussi la version de votre adaptateur et des pairs requis)
-
-```sh
-npx sv add experimental="versions:kit"
-```
 
 ### features
 
@@ -36,9 +24,6 @@ Les drapeaux expérimentaux à activer :
 
 - `async` — `await` dans les composants
 - `remoteFunctions` — fonctions distantes
-- `explicitEnvironmentVariables` — les variables d'environnement explicites (SvelteKit `^2`
-uniquement)
-- `handleRenderingErrors` — le rendu des frontières d'erreur
 - `forkPreloads` — le préchargement "forké"
 
 ```sh

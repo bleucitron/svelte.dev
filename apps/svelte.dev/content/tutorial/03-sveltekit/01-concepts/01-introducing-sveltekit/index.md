@@ -45,12 +45,10 @@ commande `npm run dev` qui tourne dans la fenêtre du bas.)
 > `.js` sont traités comme des modules JavaScript par défaut, plutôt que comme des fichiers
 > CommonJS, format aujourd'hui déprécié.
 
-`svelte.config.js` contient votre configuration de projet. Nous n'avons pas besoin de nous soucier
+`vite.config.js` contient la configuration de [Vite](https://vitejs.dev/), ainsi que celle de
+SvelteKit. Nous n'avons pas besoin de nous soucier
 de ce fichier pour le moment, mais si vous êtez curieux ou curieuse, [jetez un oeil à la
-documentation](/docs/kit/configuration).
-
-`vite.config.js` contient la configuration de [Vite](https://vitejs.dev/). Puisque SvelteKit utilise
-Vite, vous pouvez utiliser les [fonctionnalités de Vite](https://vitejs.dev/guide/features.html)
+documentation](/docs/kit/@sveltejs-kit-vite). Puisque SvelteKit utilise Vite, vous pouvez utiliser les [fonctionnalités de Vite](https://vitejs.dev/guide/features.html)
 comme le remplacement de modules à la volée (HMR), l'intégration de TypeScript, la gestion des
 fichiers statiques, et d'autres.
 

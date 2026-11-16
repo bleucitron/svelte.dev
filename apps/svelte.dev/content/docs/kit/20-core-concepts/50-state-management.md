@@ -61,13 +61,13 @@ réutiliser la valeur dans vos composants :
 ```js
 /// file: +page.js
 // @filename: ambient.d.ts
-declare module '$lib/user' {
+declare module '#lib/user.js' {
 	export const user: { set: (value: any) => void };
 }
 
 // @filename: index.js
 // ---cut---
-import { user } from '$lib/user';
+import { user } from '#lib/user.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {
@@ -102,12 +102,10 @@ vos fonctions `load` — le flux de données dans votre application sera bien pl
 ## Utiliser des états et des stores avec le contexte [!VO]Using state and stores with context
 
 Vous pourriez vous demander comment nous sommes capables d'utiliser `page.data` et d'autres [états
-d'application]($app-state) (ou [stores d'application]($app-stores)) s'il ne faut pas utiliser d'état
-global. La réponse est que les états et stores d'application sur le serveur utilisent l'[API de
-contexte](/tutorial/svelte/context-api) de Svelte — l'état (ou le store) est attaché à l'arbre de
-composant avec `setContext`, et lorsque vous vous y abonnez, vous le lisez avec `getContext`. Nous
-pouvons faire la même chose avec nos propres états :
-
+d'application]($app-state) s'il ne faut pas utiliser d'état global. La réponse est que les états
+d'application sur le serveur utilisent l'[API de contexte](/tutorial/svelte/context-api) de Svelte —
+l'état (ou le store) est attaché à l'arbre de composant avec `setContext`, et lorsque vous vous y
+abonnez, vous le lisez avec `getContext`. Nous pouvons faire la même chose avec nos propres états :
 
 ```svelte
 <!--- file: src/routes/+layout.svelte --->

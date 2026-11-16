@@ -1,1 +1,1 @@
-export const message = 'bonjour depuis $lib/message';
+export const message = 'bonjour depuis #lib/message';

@@ -78,8 +78,8 @@ jamais exécutés sur le serveur.
 
 ## `$props`
 
-Traitez les props comme si elles ne changeaient jamais. Par exemple, les valeurs qui dépendent de
-props devraient en général être des `$derived` :
+Considérez que les props peuvent changer de valeur. Par exemple, les valeurs qui dépendent de props
+devraient en général être des `$derived` :
 
 ```js
 // @errors: 2451
@@ -99,6 +99,15 @@ correctement à jour ou est exécuté plus souvent que nécessaire, vous pouvez 
 `$inspect.trace(label)` en tant que première ligne d'un `$effect` ou d'un `$derived.by` (ou de
 n'importe quelle fonction appelée par l'un d'eux) pour tracer leurs dépendances et trouver lequel
 déclenche une mise à jour.
+
+## Bloc `#key` [!VO]`#key` block
+
+Bien que le bloc `#key` soit très utile lorsque vous souhaitez que des transitions ou animations
+s'exécutent lorsque certaines expressions changent, il peut être très coûteux — il démonte tout
+élément/composant qu'il contient à chaque changement de valeur de son expression, et doit donc être
+utilisé avec parcimonie. Plutôt que d'utiliser `#key` pour déclencher la ré-exécution des expressions du `<script>`
+d'un composant enfant, par exemple, vous pourriez envisager de placer ces expressions dans un
+`$derived`.
 
 ## Évènements [!VO]Events
 
@@ -217,8 +226,8 @@ typage.
 Si vous utilisez la version 5.36 ou supérieur, vous pouvez utiliser les [expressions
 `await`](await-expressions) et les [hydratables](hydratable) pour utiliser les promesses directement
 dans vos composants. Notez que ces expressions nécessitent d'avoir activé l'option
-`experimental.async` dans le fichier de configuration `svelte.config.js`, car elles ne sont pas
-encore considérées comme parfaitement stables.
+`experimental.async` dans les options de plugin du fichier `vite.config.js` ou dans le fichier
+`svelte.config.js`, car elles ne sont pas encore considérées comme parfaitement stables.
 
 ## Évitez l'usage de fonctionnalités dépréciées [!VO]Avoid legacy features
 

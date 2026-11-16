@@ -67,6 +67,12 @@ vers la page :
 </form>
 ```
 
+Soumettre ce formulaire vous amène sur la page `/login`, peu importe si l'action a réussi ou échoué
+— c'est ce que fait le navigateur, et [`use:enhance`](#Progressive-enhancement-use:enhance) émule ce
+comportement. Si vous préférez rester sur la page courante et gérer le résultat sur place, il y a
+une méthode pour cela dans la section sur l'[amélioration
+progressive](#Progressive-enhancement-use:enhance).
+
 ## Actions nommées [!VO]Named actions
 
 Plutôt qu'une seule action `default` par défaut, une page peut avoir autant d'actions nommées que
@@ -135,11 +141,11 @@ l'application, jusqu'à sa prochaine mise à jour.
 ```js
 /// file: src/routes/login/+page.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/db';
+declare module '#lib/server/db.js';
 
 // @filename: index.js
 // ---cut---
-import * as db from '$lib/server/db';
+import * as db from '#lib/server/db.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
@@ -155,7 +161,7 @@ export const actions = {
 		const password = data.get('password');
 
 		const user = await db.getUser(email);
-		cookies.set('sessionid', await db.createSession(user), { path: '/' });
+		cookies.set('sessionid', await db.createSession(user));
 
 		return { success: true };
 	},
@@ -199,15 +205,21 @@ l'utilisateur ou l'utilisatrice afin qu'il ou elle ré-essaye. La fonction `fail
 renvoyer un statut HTTP (généralement 400 ou 422, dans le cas d'erreurs de validation) avec les
 données. Le statut est rendu disponible via `page.status` et les données via `form` :
 
+Lorsque vous utilisez `use:enhance` (ou que vous faites une requête `fetch` avec l'en-tête `accept:
+application/json`), le code HTTP de réponse va correspondre au code de statut passé à `fail`.
+Lorsqu'une action renvoie des données, la réponse aura un statut 200, et lorsqu'elle ne renvoie rien
+(c-à-d `undefined`), la réponse aura un statut 204. Ceci facilite le suivi des soumissions de
+formulaire avec des outils d'observabilité.
+
 ```js
 /// file: src/routes/login/+page.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/db';
+declare module '#lib/server/db.js';
 
 // @filename: index.js
 // ---cut---
 +++import { fail } from '@sveltejs/kit';+++
-import * as db from '$lib/server/db';
+import * as db from '#lib/server/db.js';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -226,7 +238,7 @@ export const actions = {
 			return fail(400, { email, incorrect: true });
 		}+++
 
-		cookies.set('sessionid', await db.createSession(user), { path: '/' });
+		cookies.set('sessionid', await db.createSession(user));
 
 		return { success: true };
 	},
@@ -270,12 +282,12 @@ Les redirections (et les erreurs) fonctionnent exactement de la même façon que
 // @errors: 2345
 /// file: src/routes/login/+page.server.js
 // @filename: ambient.d.ts
-declare module '$lib/server/db';
+declare module '#lib/server/db.js';
 
 // @filename: index.js
 // ---cut---
 import { fail, +++redirect+++ } from '@sveltejs/kit';
-import * as db from '$lib/server/db';
+import * as db from '#lib/server/db.js';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -293,7 +305,7 @@ export const actions = {
 			return fail(400, { email, incorrect: true });
 		}
 
-		cookies.set('sessionid', await db.createSession(user), { path: '/' });
+		cookies.set('sessionid', await db.createSession(user));
 
 +++		if (url.searchParams.has('redirectTo')) {
 			redirect(303, url.searchParams.get('redirectTo'));
@@ -341,7 +353,7 @@ export {};
 
 // @filename: index.js
 // ---cut---
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import('@sveltejs/kit/hooks').Handle} */
 export async function handle({ event, resolve }) {
 	event.locals.user = await getUser(event.cookies.get('sessionid'));
 	return resolve(event);
@@ -371,7 +383,7 @@ export function load(event) {
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
 	logout: async (event) => {
-		event.cookies.delete('sessionid', { path: '/' });
+		event.cookies.delete('sessionid');
 		event.locals.user = null;
 	}
 };
@@ -413,18 +425,60 @@ La manière la plus simple d'améliorer un formulaire progressivement est d'ajou
 Sans argument, `use:enhance` va émuler le comportement natif du navigateur, simplement sans le
 rechargement complet de la page. Plus précisément, cela va :
 
-- mettre à jour la propriété `form`, ainsi que `page.form` et `page.status` lors d'une réponse
-réussie ou invalide, mais uniquement si l'action est sur la même page que celle depuis laquelle vous
-soumettez. Par exemple, si vous formulaire ressemble à `<form action="/somewhere/else" ..>`, la
-propriété `form` et l'état `page.form` ne seront _pas_ mis à jour. En effet, la soumission native
-d'un formulaire vous redirige vers la page sur laquelle l'action est définie. Si vous souhaitez tout
-de même les mettre à jour, vous devez utiliser
-[`applyAction`](#Progressive-enhancement-Customising-use:enhance)
-- réinitialiser l'élément `<form>`
-- invalider toutes les données avec `invalidateAll` si la réponse est réussie
-- appeler `goto` si la réponse est une redirection
-- afficher la frontière d'erreur `+error` la plus proche si une erreur se produit
-- [réinitialiser le focus](accessibility#Focus-management) sur l'élément approprié
+- si l'action est sur la page sur laquelle vous êtes en train de soumettre le formulaire, émule un
+rechargement de la page courante — en mettant à jour les propriétés `form`, `page.form` et
+`page.status` pour des réponses valides ou invalides
+- si l'action est sur une page différent (par exemple `<form action="/somewhere/else" ..>`), navigue
+  vers l'URL de l'action pour des réponses valides _ou_ invalides, remplissant les propriété `form`
+  et `page.status` de cette page, comme une soumission native le ferait. Une nouvelle entrée
+d'historique est poussée
+- réinitialise l'élément `<form>`
+- rafraîchit toutes les données en utilisant `refreshAll` lors des réponses valides
+- exécute `goto` lors des réponses de redirection
+- rend la frontière `+error` la plus proche si une erreur inattendue se produit — la frontière la
+plus proche de la route de l'_action_ si l'action est sur une page différente
+- [réinitialise le focus](accessibility#Focus-management) sur l'élément approprié
+
+
+> [!NOTE] Il y a deux détails importants à noter à propos de l'URL :
+>
+> L'endroit où atterrit une soumission est `result.location` — l'URL de l'`action` de formulaire sans
+> le paramètre `?/actionName`, puisque ce paramètre a terminé son travail une fois que l'action a
+> été exécutée. `action="/login?/do-login"` atterrit sur `/login`, et tous les autres paramètres de
+> recherche sont conservés, de sorte que `action="/login?redirectTo=/dashboard&/do-login"` atterrit
+> sur `/login?redirectTo=/dashboard`. Les fonctions `load` de la destination peuvent retrouver cette
+> URL via `url.search`.
+>
+> Il y a deux conséquences importantes à connaître :
+>
+> - Un effet de bord de la résolution de l'URL est qu'une action _relative_ remplace entièrement la
+>   chaîne de recherche — `action="?/delete` sur `/items?page=2` se résout en `/items?/delete`,
+>   afin qu'à la fois les soumissions natives et améliorées suppriment `page=2`. Utilisez
+>   `action="?page=2&/delete"` pour le conserver.
+> - Sans JavaScript, le navigateur ne peut rien supprimer de l'URL, ce signifie qu'une soumission
+>   non améliorée vous laisse sur l'URL de l'action brute (`/login?/do-login`). Recharger cette URL
+>   déclenche un `GET` simple, ce qui ne ré-exécute pas l'action et rend la page normalement, la
+>   différence est donc cosmétique — mais une fonction `load` peut voir une `url.search` différente
+>   selon si JavaScript est disponible ou non.
+
+Si vous ne souhaitez pas qu'une soumission cross-page navigue — un besoin commun pour des widgets de
+connexion ou de newsletter qui se trouvent dans un layout et soumettent vers l'action d'une autre
+page — passez `navigate: false` lors de l'exécution de `update`, ce qui permet de retrouver le même
+comportement que SvelteKit 2 :
+
+```svelte
+<form
+	method="POST"
+	action="/other/page?/subscribe"
+	use:enhance={() => async ({ update }) => {
+		await update({ navigate: false });
+	}}
+>
+```
+
+Le résultat est appliqué à la page sur laquelle vous vous trouvez : les propriétés `form`,
+`page.form` et `page.status` sont mises à jour, et les erreurs déclenchent le rendu de la frontière
+`+error` la plus proche de la route courante.
 
 ### Personnaliser use:enhance [!VO]Customising use:enhance
 
@@ -455,8 +509,8 @@ Vous pouvez utiliser ces fonctions pour afficher et cacher des éléments d'inte
 entre autres.
 
 Si vous renvoyez un callback, vous écrasez le comportement post-soumission par défaut. Pour le
-récupérer, appelez `update`, qui accepte les paramètres `invalidateAll` et `reset`, ou utilisez
-`applyAction` sur le résultat :
+récupérer, appelez `update`, qui accepte les paramètres `navigate`, `refreshAll` et `reset`, ou
+utilisez `applyAction` sur le résultat :
 
 ```svelte
 /// file: src/routes/login/+page.svelte
@@ -482,15 +536,33 @@ récupérer, appelez `update`, qui accepte les paramètres `invalidateAll` et `r
 >
 ```
 
+> [!NOTE] `update` accepte ces options :
+>
+> - `reset: false` si vous ne souhaitez pas que les valeurs de `form` soient réinitialisées après
+>   une soumission réussie
+> - `refreshAll` contrôle le fait que toutes les données soient rafraîchies après la soumission.
+Vaut par défaut `true` pour les soumissions réussies et `false` pour les échecs. Lorsque la
+soumission provoque une navigation vers une autre page, définir cette option à `false` n'empêche
+_pas_ les fonctions `load` de la page de destination de s'exécuter — elle ne fait qu'autoriser les
+données des layouts partagés à être réutilisées. `invalidateAll` est un alias déprécié pour
+`refreshAll`
+> - `navigate: false` applique un résultat de non-redirection à la page courant au lieu de naviguer
+>   vers `result.location`. Les redirections sont toujours suivies
+
 Le comportement de `applyAction(result)` dépend de `result.type` :
 
 - `success`, `failure` — définit `page.status` en tant que `result.status` et met à jour `form` et
-`page.form` en tant que `result.data` (indépendamment de la source de soumission, à la différence du
-`update` venant de `enhance`)
-- `redirect` — exécute `goto(result.location, { invalidateAll: true })`
-- `error` — affiche la frontière `+error` la plus proche en utilisant `result.error`
+`page.form` en tant que `result.data`
+- `redirect` — exécute `goto(result.location, { refreshAll: true })`
+- `error` — affiche la frontière `+error` de la route la plus proche en utilisant `result.error`
 
-Dans tous les cas, [le focus sera réinitialisé](accessibility#Focus-management).
+Dans tous les cas, [le focus sera réinitialisé](accessibility#Focus-management). `applyAction` ne
+provoque pas la navigation vers la `location` d'un résultat de non-redirection, ni ne rafraîchit de
+données. Utilisez `update` pour récupérer le comportement par défaut amélioré et complet, incluant
+le transport des données de formulaire ainsi que le statut lors une navigation cross-page. Lorsque
+vous implémentez l'amélioration manuellement, inspectez `result.location` et utilisez
+[`goto`]($app-navigation#goto) ou [`refreshAll`]($app-navigation#refreshAll) selon ce qui est le
+plus pertinent.
 
 ### Gestionnaire personnalisé d'évènement [VO]Custom event listener
 
@@ -500,7 +572,7 @@ un gestionnaire d'évènement normal sur l'élément `<form>` :
 ```svelte
 <!--- file: src/routes/login/+page.svelte --->
 <script>
-	import { invalidateAll, goto } from '$app/navigation';
+	import { refreshAll, goto } from '$app/navigation';
 	import { applyAction, deserialize } from '$app/forms';
 
 	/** @type {import('./$types').PageProps} */
@@ -516,15 +588,18 @@ un gestionnaire d'évènement normal sur l'élément `<form>` :
 			body: data
 		});
 
-		/** @type {import('@sveltejs/kit').ActionResult} */
+		/** @type {import('$app/forms').ActionResult} */
 		const result = deserialize(await response.text());
 
-		if (result.type === 'success') {
-			// ré-exécute toutes les fonctions `load`, en cas de succès
-			await invalidateAll();
+		if (result.type !== 'redirect' && result.location !== undefined) {
+			if (result.location === location.pathname + location.search) {
+				if (result.type === 'success') await refreshAll();
+			} else {
+				await goto(result.location, { refreshAll: result.type === 'success' });
+			}
 		}
 
-		applyAction(result);
+		await applyAction(result);
 	}
 </script>
 
@@ -606,9 +681,8 @@ Soumettre ce formulaire va déclencher une navigation vers `/search?q=...` et in
 `load`, mais ne va invoquer aucune action. Comme pour les éléments `<a>`, vous pouvez définir les
 attributs
 [`data-sveltekit-reload`](link-options#data-sveltekit-reload),
-[`data-sveltekit-replacestate`](link-options#data-sveltekit-replacestate),
-[`data-sveltekit-keepfocus`](link-options#data-sveltekit-keepfocus) et
-[`data-sveltekit-noscroll`](link-options#data-sveltekit-noscroll) sur l'élément `<form>` pour
+[`data-sveltekit-replacestate`](link-options#data-sveltekit-replacestate) et
+[`data-sveltekit-reset`](link-options#data-sveltekit-reset) sur l'élément `<form>` pour
 contrôler le comportement du routeur.
 
 ## Sur le même sujet

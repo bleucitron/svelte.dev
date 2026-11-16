@@ -72,7 +72,8 @@ export function load(event) {
 ```
 
 > [!NOTE] Si vous ne gérez pas les cas 404, ils vont apparaître dans
-> [`handleError`](hooks#handleError)
+> [`handleError`](hooks#handleError) en tant qu'[erreurs de framework](errors#Framework-errors) avec
+> le `kind: 'framework'`. Sinon, ils apparaîtront avec `kind: 'app'`.
 
 ## Paramètres optionnels [!VO]Optional parameters
 
@@ -90,23 +91,18 @@ ce qui implique que le paramètre optionnel sera toujours inutilisé.
 
 Une route comme `src/routes/fruits/[page]` va matcher `/fruits/apple`, mais aussi
 `/fruits/rocketship`. Ce n'est pas souhaitable. Vous pouvez vous assurer que les paramètres de route
-sont bien formés en ajoutant un _matcher_ — une fonction qui va prendre en paramètre une chaîne de
-caractères représentant le paramètre (`"apple"` ou `"rocketship"`) et renvoie `true` si le paramètre
-est valide — à votre dossier `src/params`...
+sont bien formés en ajoutant un _matcher_ à votre fichier `src/params.js` (ou `src/params.ts`).
 
 ```js
-// TODO: remove the ts error once kit 3 docs are main
-// ---cut---
-// @errors: 1360
-/// file: src/params/fruit.js
-/**
- * @param {string} param
- * @return {param is ('apple' | 'orange')}
- * @satisfies {import('@sveltejs/kit').ParamMatcher}
- */
-export function match(param) {
-	return param === 'apple' || param === 'orange';
-}
+/// file: src/params.js
+import { defineParams } from '@sveltejs/kit/params';
+
+export const params = defineParams({
+	fruit: (param) => {
+		if (param !== 'apple' && param !== 'orange') return;
+		return param;
+	}
+});
 ```
 
 ... et en modifiant les noms de vos dossier de route :
@@ -115,13 +111,52 @@ export function match(param) {
 src/routes/fruits/[page+++=fruit+++]
 ```
 
-Si le chemain ne correspond pas, SvelteKit va essayer de le faire correspondre à d'autres routes (en
-utilisant l'ordre de tri précisé ci-dessous), avant d'éventuellement renvoyer une 404.
+Si le chemin ne correspond pas, SvelteKit va essayer de le faire correspondre à d'autres routes (en
+utilisant l'ordre de tri précisé ci-dessous), avant d'éventuellement renvoyer une 404. Si en
+revanche il correspond, la valeur renvoyée est passée en tant que valeur du paramètre.
 
-Chaque module dans le dossier `params` correspond à un matcher, à l'exception des fichiers
-`*.test.js` et `*.spec.js` qui servent généralement à tester unitairement vos matchers.
+Vous pouvez également utiliser un [Standard Schema](https://standardschema.dev) — par exemple avec
+[Valibot](https://valibot.dev) :
+
+```js
+/// file: src/params.js
+import { defineParams } from '@sveltejs/kit/params';
+import * as v from 'valibot';
+
+export const params = defineParams({
+	number: v.pipe(v.string(), v.toNumber())
+});
+```
+
+Si la validation échoue, la route ne correspondra pas. Si elle réussit, le paramètre est typé avec
+le type de sortie du schéma, qui doit étendre `string`, `boolean`, `number` (comme dans l'exemple
+ci-dessus) ou `bigint` :
+
+```js
+/// file: src/routes/items/[id=number]/+page.js
+/** @type {import('./$types').PageLoad} */
+export function load({ params }) {
+	console.log(typeof params.id); // 'number'
+}
+```
+
+Les transformations doivent être _symmétriques_ — par exemple lors d'une conversion vers un nombre,
+appeler ensuite `toString()` sur ce nombre doit renvoyer la chaîne de caractères d'origine. Ceci
+permet à la fonction [`resolve`]($app-paths#resolve) de construire un chemin correctement :
+
+```js
+import { resolve } from '$app/paths';
+
+resolve('/blog/[id=number]', { id: 1 });
+```
 
 > [!NOTE] Les matchers sont éxecutés à la fois sur le serveur et dans le navigateur.
+
+> [!NOTE] Avant SvelteKit 3, vous deviez définir chaque paramètre dans un fichier séparé, tous
+> placés dans un dossier `params` (par exemple `src/params/foo.js` avec `export const match =
+> (param) => param === 'foo';`), et la correspondance était faite selon si oui ou non le matcher
+> renvoyait une valeur truthy (ce qui impliquait qu'aucune transformation de valeur n'était
+> effectuée).
 
 ## Priorités des routes [!VO]Sorting
 
@@ -331,7 +366,7 @@ et des fonctions que d'autres layouts peuvent aussi utiliser :
 ```svelte
 <!--- file: src/routes/nested/route/+layout@.svelte --->
 <script>
-	import ReusableLayout from '$lib/ReusableLayout.svelte';
+	import ReusableLayout from '#lib/ReusableLayout.svelte';
 	let { data, children } = $props();
 </script>
 
@@ -343,12 +378,12 @@ et des fonctions que d'autres layouts peuvent aussi utiliser :
 ```js
 /// file: src/routes/nested/route/+layout.js
 // @filename: ambient.d.ts
-declare module "$lib/reusable-load-function" {
+declare module "#lib/reusable-load-function.js" {
 	export function reusableLoad(event: import('@sveltejs/kit').LoadEvent): Promise<Record<string, any>>;
 }
 // @filename: index.js
 // ---cut---
-import { reusableLoad } from '$lib/reusable-load-function';
+import { reusableLoad } from '#lib/reusable-load-function.js';
 
 /** @type {import('./$types').PageLoad} */
 export function load(event) {

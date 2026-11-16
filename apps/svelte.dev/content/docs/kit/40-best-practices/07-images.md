@@ -23,7 +23,7 @@ les images, mais peut également être utile pour les vidéos, l'audio, etc.
 
 ```svelte
 <script>
-	import logo from '$lib/assets/logo.png';
+	import logo from '#lib/assets/logo.png';
 </script>
 
 <img alt="Le logo du projet" src={logo} />
@@ -55,14 +55,15 @@ npm i -D @sveltejs/enhanced-img
 Ajustez le fichier `vite.config.js`:
 
 ```js
-import { sveltekit } from '@sveltejs/kit/vite';
+/// file: vite.config.js
 +++import { enhancedImages } from '@sveltejs/enhanced-img';+++
+import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [
 		+++enhancedImages(), // doit être exécuté avant le plugin SvelteKit++
-		sveltekit()
+		sveltekit({/* ... */})
 	]
 });
 ```

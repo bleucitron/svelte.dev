@@ -29,7 +29,7 @@ Vous pouvez mettre l'attribut sur des liens individuels, ou sur n'importe quel �
 _contient_ des liens. Le template de projet inclut par défaut l'attribut sur l'élément `<body>` :
 
 ```html
-<body data-sveltekit-preload-data>
+<body data-sveltekit-preload-data="hover">
 	%sveltekit.body%
 </body>
 ```

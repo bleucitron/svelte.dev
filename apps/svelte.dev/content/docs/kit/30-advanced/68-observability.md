@@ -23,33 +23,27 @@ exécutées sur le serveur
 Toutefois, vous ne serez pas très avancé•e•s en vous contentant de dire à SvelteKit d'émettre des
 spans — vous devez également les collecter quelque part pour être capables de les analyser.
 SvelteKit fournit le fichier `src/instrumentation.server.ts` comme emplacement pour écrire votre
-configuration de suivi ainsi que votre code d'instrumentation. Le code de ce fichier est garanti
-d'être exécuté avant que votre code applicatif ne soit importé, à condition que votre plateforme de
-déploiement le supporte et que votre adapteur soit conscient de son existence.
+configuration de suivi ainsi que votre code d'instrumentation. Si ce fichier existe, il est chargée
+avant votre code applicatif (à condition que votre plateforme de déploiement le supporte et que
+votre adaptateur en ait conscience).
 
-Ces deux fonctionnalités sont actuellement expérimentales, ce qui signifie qu'elles peuvent contenir
-des bugs et sont sujettes à des changements impromptus. Vous devez les activer en ajoutant les
-options `kit.experimental.tracing.server` et `kit.experimental.instrumentation.server` dans votre
-fichier `svelte.config.js` :
+Pour activer l'émission de span intégrée de SvelteKit, définissez à `true` l'option `tracing.server`
+du plugin SvelteKit dans votre fichier 'vite.config.js' :
 
 ```js
-/// file: svelte.config.js
-// @errors: 2353
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		experimental: {
+/// file: vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [
+		sveltekit({
 			+++tracing: {
 				server: true
-			},
-			instrumentation: {
-				server: true
 			}+++
-		}
-	}
-};
-
-export default config;
+		})
+	]
+});
 ```
 
 > [!NOTE] Le suivi — et de manière plus significative, l'instrumentation de l'observabilité —
@@ -66,17 +60,17 @@ contexte. Vous pouvez annoter ces spans avec n'importe quel attribut que vous so
 :
 
 ```js
-/// file: $lib/authenticate.ts
+/// file: #lib/authenticate.ts
 
 // @filename: ambient.d.ts
-declare module '$lib/auth-core' {
+declare module '#lib/auth-core.js' {
 	export function getAuthenticatedUser(): Promise<{ id: string }>
 }
 
 // @filename: index.js
 // ---cut---
 import { getRequestEvent } from '$app/server';
-import { getAuthenticatedUser } from '$lib/auth-core';
+import { getAuthenticatedUser } from '#lib/auth-core.js';
 
 async function authenticate() {
 	const user = await getAuthenticatedUser();
@@ -92,8 +86,10 @@ utiliser [Jaeger](https://www.jaegertracing.io/docs/getting-started/) dans cet e
 fournit une commande de démarrage rapide simple à utiliser. Une fois que votre collecteur est en
 cours d'exécution localement :
 
-- Activez les flags expérimentaux mentionnés plus haut dans votre fichier `svelte.config.js`
+- Activez le suivi dans votre `vite.config.js` tel que décrit plutôt, et créez le fichier
+`src/instrumentation.server.js` (que SvelteKit va charger automatiquement)
 - Utilisez votre gestionnaire de paquet pour installer les dépendances dont vous aurez besoin :
+
   ```sh
   npm i @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-trace-otlp-proto import-in-the-middle
   ```
@@ -105,11 +101,9 @@ cours d'exécution localement :
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
-import { createAddHookMessageChannel } from 'import-in-the-middle';
-import { register } from 'node:module';
+import { register } from 'import-in-the-middle/register-hooks.mjs';
 
-const { registerOptions } = createAddHookMessageChannel();
-register('import-in-the-middle/hook.mjs', import.meta.url, registerOptions);
+register();
 
 const sdk = new NodeSDK({
 	serviceName: 'test-sveltekit-tracing',
@@ -123,6 +117,45 @@ sdk.start();
 À partir de maintenant, les requêtes côté serveur vont générer des traces, que vous pouvez afficher
 dans la console web de Jaeger sur [localhost:16686](http://localhost:16686).
 
+> [!NOTE] `import-in-the-middle/register-hooks.mjs` enregistre le loader via  registers the loader
+> via [`module.registerHooks()`](https://nodejs.org/api/module.html#moduleregisterhooksoptions), qui
+> exécute les hooks de manière synchrone sur le fil de l'application. Ceci permet d'éviter le canal
+> de messagerie inter-threads que l'ancienne méthode basée sur `module.register()` utilisait.
+>
+> Le loader synchrone nécessite Node.js 22.22.3+, 24.11.1+, 25.1.0+, or 26.0.0+. `register()` va
+> jeter une exception sur des versions plus anciennes de Node.js. Si vous avez besoin de supporter
+> ces versions, rabattez-vous sur le loader asynchrone :
+>
+> ```js
+> // @errors: 2307
+> /// file: src/instrumentation.server.js
+> import { NodeSDK } from '@opentelemetry/sdk-node';
+> import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+> import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-proto';
+> import { register, supportsSyncHooks } from 'import-in-the-middle/register-hooks.mjs';
+> import { createAddHookMessageChannel } from 'import-in-the-middle';
+> import { register as registerAsync } from 'node:module';
+>
+> if (supportsSyncHooks()) {
+> 	register();
+> } else {
+> 	const { registerOptions } = createAddHookMessageChannel();
+> 	registerAsync('import-in-the-middle/hook.mjs', import.meta.url, registerOptions);
+> }
+>
+> const sdk = new NodeSDK({
+> 	serviceName: 'test-sveltekit-tracing',
+> 	traceExporter: new OTLPTraceExporter(),
+> 	instrumentations: [getNodeAutoInstrumentations()]
+> });
+>
+> sdk.start();
+> ```
+>
+> L'API asynchrone `module.register()` a été dépréciée avec Node.js 25.9.0 et émit un avertissement
+> de dépréciation à l'exécution depuis la version 26.0.0. Il est donc recommandé d'utiliser la
+> version synchrone dès lors que votre version de Node.js est compatible.
+
 ## `@opentelemetry/api`
 
 SvelteKit utilise `@opentelemetry/api` pour générer ses spans. Ce paquet est déclaré en tant que
@@ -135,3 +168,84 @@ vous voyez une erreur venant de SvelteKit vous disant qu'il n'arrive pas à trou
 `@opentelemetry/api`, il est possible que vous n'ayez pas encore mis en place votre suivi. Si vous
 l'_avez fait_ et avez toujours l'erreur, vous pouvez installer le paquet `@opentelemetry/api`
 vous-même.
+
+## Inconvénients liés au bundling [!VO]Bundling caveats
+
+L'auto-instrumentation d'OpenTelemetry fonctionne généralement en interceptant les imports et en
+remplaçant ou entourant les exports d'un module avec des versions instrumentées. Ceci est ce que
+fait `import-in-the-middle` dans l'exemple ci-dessus. Puisque les exports de modules ESM sont
+immutables, l'intercepteur doit être installé avant que le module instrumenté ne soit évalué. C'est
+pourquoi `instrumentation.server.js` est un point d'entrée spécial : SvelteKit s'arrange pour
+l'exécuter avant qu'il importe dynamiquement votre code applicatif. L'ordre prévu est :
+
+1. `instrumentation.server.js` enregistre un intercepteur pour `my-database-library`
+2. Votre application importe `my-database-library`
+3. L'intercepteur observe l'import et renvoie les exports instrumentés
+
+Le bundling peut interférer avec ce process de deux manières.
+
+D'abord, un bundler peut placer du code importé par `instrumentation.server.js` et du code
+applicatif dans le même chunk. Importer ce chunk pour initialiser l'instrumentation peut alors
+amener à évaluer le code applicatif avant que l'intercepteur ait été installé. Au moment de l'import
+dynamique de l'application, le module est déjà dans le cache des modules ESM et il est trop tard pour
+l'intrumenter.
+
+Il y a également une limitation liée à une situation de l'oeuf et de la poule inévitable : importer
+[des modules `$app/env/*`] provoque l'évaluation de votre module `src/env.js` et de ses dépendances.
+À cause de cela, l'instrumentation ne peut pas intercepter un module importé par `src/env.js`, car
+ce module importé doit être exécuté avant que `instrumentation.server.js` ne démarre. En
+conséquence, vous devriez éviter d'importer quoi que ce soit que vous souhaitez instrumenter dans
+`src/env.js`.
+
+Ensuite, un bundler peut inliner ou transformer le module que vous souhaitez instrumenter. Par
+exemple, il pourrait remplacer ceci :
+
+```js
+// @errors: 2307 example library
+import { query } from 'my-database-library';
+```
+
+... par du code embarqué directement dans un chunk d'application, ou par un import tel que `import {
+query } from './chunks/abc.js'`. Au moment de l'exécution, il n'y a plus d'import de
+`my-database-library` à observer pour l'intercepteur. Le tree-shaking et la ré-écriture d'exports
+peut aussi changer la forme du module de manière à ce que l'intrumentation d'OpenTelemetry ne la
+reconnaisse pas.
+
+SvelteKit externalise automatiquement `@opentelemetry/api` de sorte que son exécution et votre
+instrumentation partagent la même instance de module. Si une autre librairie n'est pas instrumentée
+tel qu'attendu, dites à Vite de ne pas inclure cette librairie dans le bundle de serveur :
+
+```js
+/// file: vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+	plugins: [sveltekit()],
+	ssr: {
+		external: ['my-database-library']
+	}
+});
+```
+
+L'externalisation conserve l'import brut `my-database-library` dans le code serveur généré. Node.js
+charge ensuite le paquet au moment de l'exécution, après que `instrumentation.server.js` ait
+enregistré l'intercepteur, donnant à l'instrumentation une opportunité de l'entourer. Externalisez
+le paquet en train d'être instrumenté ainsi que tout paquet dont les imports doivent rester visibles
+pour son instrumentation. N'externalisez pas les fichiers source applicatifs, et évitez
+d'externaliser les dépendances de manière indiscriminée, puisque cela peut altérer la façon dont ils
+sont résolus et déployés.
+
+Les dépendances requises au moment de l'exécution doivent être listées dans `dependencies`, plutôt
+que dans `devDependencies`, afin qu'elles soient disponibles dans l'application déployée.
+`adapter-node` se sert également de cette distinction lorsqu'il compile la sortie de Vite : il
+garde automatiquement les paquets listés dans `dependencies`, en incluant leurs imports profonds,
+extérieurs à ceux du bundle final. Vous pourriez tout de même avoir besoin que `ssr.external`
+empêche Vite de compiler un paquet lors de la compilation SSR qui a lieu plus tôt.
+
+Les autres adaptateurs officiles n'appliquent eux-mêmes pas la même règle d'externalisation basée
+sur les `dependencies`. Certains adaptateurs ou plateformes de déploiement effectuent leur propre
+suivi ou étapes de compilation, tandis que d'autres ne supportent pas du tout les imports de paquets
+à l'exécution. Dans ces environnements, le paramètre `ssr.external` de Vite peut ne pas être
+suffisant ou supporté. Consultez la documentation de l'adaptateur ou de la plateforme pour vérifier
+que la dépendance peut rester externe.

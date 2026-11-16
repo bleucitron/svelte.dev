@@ -10,12 +10,8 @@ en développement web sont applicables à SvelteKit. De même, le temps passé �
 vous aidera à devenir un•e meilleur•e développeur ou développeuse web de manière générale.
 
 Ces APIs sont disponibles dans tous les navigateurs modernes et dans de nombreux environnements
-comme les Cloudflare Workers, Deno, et les Vercel Functions. Pendant votre développement, et au sein
-des [adaptateurs](adapters) pour environnements basés sur Node (AWS Lambda compris), ces APIs sont
-rendues disponibles via des polyfills lorsque nécessaires (pour le moment — Node met à jour
-rapidement son support des nouveaux standards du web).
-
-En particulier, vous allez vous familiariser avec les concepts suivants :
+comme les Cloudflare Workers, Deno, et les Vercel Functions. En particulier, vous allez vous
+familiariser avec les concepts suivants :
 
 ## APIs Fetch [!VO]Fetch APIs
 
@@ -51,21 +47,20 @@ application SvelteKit est une machine à transformer des `Request` en `Response`
 
 L'interface [`Headers`](https://developer.mozilla.org/fr/docs/Web/API/Headers) vous permet de lire
 les `request.headers` entrantes et de définir les `response.headers` sortantes. Par exemple, vous
-pouvez récupérer `request.headers` comme montré ci-dessous, et utiliser la [fonction utilitaire
-`json`](@sveltejs-kit#json) pour envoyer des `response.headers` modifiées :
+pouvez récupérer `request.headers` comme montré ci-dessous, et utiliser
+[`Response.json`](https://developer.mozilla.org/en-US/docs/Web/API/Response/json_static) pour
+envoyer des `response.headers` modifiés :
 
 ```js
 // @errors: 2461
 /// file: src/routes/what-is-my-user-agent/+server.js
-import { json } from '@sveltejs/kit';
-
 /** @type {import('./$types').RequestHandler} */
 export function GET({ request }) {
 	// affiche toutes les en-têtes
 	console.log(...request.headers);
 
 	// crée une Response JSON en utilisant une en-tête reçue
-	return json({
+	return Response.json({
 		// récupère une en-tête précise
 		userAgent: request.headers.get('user-agent')
 	}, {
@@ -83,8 +78,6 @@ des objets [`FormData`](https://developer.mozilla.org/fr/docs/Web/API/FormData).
 ```js
 // @errors: 2461
 /// file: src/routes/hello/+server.js
-import { json } from '@sveltejs/kit';
-
 /** @type {import('./$types').RequestHandler} */
 export async function POST(event) {
 	const body = await event.request.formData();
@@ -92,7 +85,7 @@ export async function POST(event) {
 	// affiche tous les champs
 	console.log([...body]);
 
-	return json({
+	return Response.json({
 		// récupère la value d'un champ spécifique
 		name: body.get('name') ?? 'world'
 	});

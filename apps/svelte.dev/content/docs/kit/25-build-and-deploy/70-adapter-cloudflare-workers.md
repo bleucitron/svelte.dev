@@ -16,23 +16,24 @@ Sites](https://developers.cloudflare.com/workers/configuration/sites/), utilisez
 ## Usage
 
 Installez l'adaptateur avec `npm i -D @sveltejs/adapter-cloudflare-workers`, puis ajoutez-le à votre
-fichier `svelte.config.js` :
+fichier `vite.config.js` :
 
 ```js
 // @errors: 2307
-/// file: svelte.config.js
+/// file: vite.config.js
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vite';
 import adapter from '@sveltejs/adapter-cloudflare-workers';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter({
-			// voir plus bas pour les options que vous pouvez définir ici
+export default defineConfig({
+	plugins: [
+		sveltekit({
++++			adapter: adapter({
+			    // voir plus bas pour les options que vous pouvez définir ici
+			})+++
 		})
-	}
-};
-
-export default config;
+	]
+});
 ```
 
 ## Options
@@ -133,8 +134,8 @@ export async function POST({ request, platform }) {
 }
 ```
 
-> [!NOTE] Le module intégré de [`$env`]($env-static-private) devrait être préféré pour les variables
-> d'environnement.
+> [!NOTE] Les modules intégrés [`$app/env/*`](environment-variables) devraient être préférés pour
+> les variables d'environnement.
 
 Pour rendre ces types disponibles dans votre application, installez
 [`@cloudflare/workers-types`](https://www.npmjs.com/package/@cloudflare/workers-types) et

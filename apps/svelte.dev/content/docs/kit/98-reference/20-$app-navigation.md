@@ -19,7 +19,8 @@ import {
 	preloadData,
 	pushState,
 	refreshAll,
-	replaceState
+	replaceState,
+	snapshot
 } from '$app/navigation';
 ```
 
@@ -35,9 +36,7 @@ longtemps que le composant reste monté.
 
 ```dts
 function afterNavigate(
-	callback: (
-		navigation: import('@sveltejs/kit').AfterNavigate
-	) => void
+	callback: (navigation: AfterNavigate) => void
 ): void;
 ```
 
@@ -73,9 +72,7 @@ longtemps que le composant reste monté.
 
 ```dts
 function beforeNavigate(
-	callback: (
-		navigation: import('@sveltejs/kit').BeforeNavigate
-	) => void
+	callback: (navigation: BeforeNavigate) => void
 ): void;
 ```
 
@@ -103,28 +100,25 @@ function disableScrollHandling(): void;
 
 ## goto
 
-Vous permet de naviguer programmatiquement vers une route donnée, avec des options permettant
-notamment de garder sur le focus sur l'élément courant.
-Renvoie une `Promise` qui se résout lorsque SvelteKit navigue (ou échoue à naviguer, auquel cas la
-promesse échoue) vers l'`url` fournie.
+Vous permet de naviguer programmatiquement vers une route donnée, en ayant le contrôle sur des
+détails comme est-ce que le focus ou le défilement sont réinitialisés (comme ils le seraient avec
+une navigation classique).
 
-Pour les URLs externes, utilisez `window.location = url` plutôt que d'appeler `goto(url)`.
+Renvoie une Promesse qui est résolue lorsque SvelteKit navigue (ou échoue à naviguer, et dans ce cas
+la Promesse est rejetée) ou lorsque le changement d'état a été appliqué.
+
+Pour les URLs externes, utilisez `window.location = url` pour effectuer une navigation avec un
+rechargement complet de page plutôt que d'appeler `goto(url)`.
+
+`goto` est prévu pour les navigations vers des routes appartenant à votre application, et sera
+rejetée si une route ne peut pas être résolue.
 
 <div class="ts-block">
 
 ```dts
 function goto(
 	url: string | URL,
-	opts?: {
-		replaceState?: boolean | undefined;
-		noScroll?: boolean | undefined;
-		keepFocus?: boolean | undefined;
-		invalidateAll?: boolean | undefined;
-		invalidate?:
-			| (string | URL | ((url: URL) => boolean))[]
-			| undefined;
-		state?: App.PageState | undefined;
-	}
+	opts?: GotoOptions
 ): Promise<void>;
 ```
 
@@ -159,7 +153,8 @@ invalidate((url) => url.pathname === '/path');
 
 ```dts
 function invalidate(
-	resource: string | URL | ((url: URL) => boolean)
+	resource: string | URL | ((url: URL) => boolean),
+	keepState?: boolean
 ): Promise<void>;
 ```
 
@@ -169,9 +164,20 @@ function invalidate(
 
 ## invalidateAll
 
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt [`refreshAll`](/docs/kit/$app-navigation#refreshAll). À la différence de
+`invalidateAll`, `refreshAll` ne réinitialise pas `page.state`.
+
+</blockquote>
+
 Provoque la ré-exécution de toutes les fonctions `load` et `query` appartenant à la page
 actuellement active. Renvoie une `Promise` qui se résout lorsque la page est mise en jour en
 conséquence.
+
+Notez que ceci réinitialise `page.state` à un objet vide. Si vous souhaitez conserver l'état
+`page.state` (par exemple lorsque vous utilisez le [shallow routing](/docs/kit/shallow-routing)),
+utilisez plutôt `refreshAll`.
 
 <div class="ts-block">
 
@@ -204,7 +210,7 @@ longtemps que le composant reste monté.
 ```dts
 function onNavigate(
 	callback: (
-		navigation: import('@sveltejs/kit').OnNavigate
+		navigation: OnNavigate
 	) => MaybePromise<(() => void) | void>
 ): void;
 ```
@@ -218,9 +224,19 @@ function onNavigate(
 Importe programmatiquement le code des routes qui n'a pas encore été récupéré.
 Typiquement, vous pourriez appeler cette méthode pour accélerer les navigations à venir.
 
-Vous pouvez préciser les routes en utilisant n'importe quel chemin correspondant, comme `/about`
-(pour cibler `src/routes/about/+page.svelte`) ou `/blog/*` (pour cibler
-`src/routes/blog/[slug]/+page.svelte`).
+Prend un ID de route tel que `/about` ou `/blog/[slug]`. À la différence de pathnames, les IDs de
+route ne sont jamais préfixées avec le [chemin de base](/docs/kit/configuration#paths) de
+l'application. Si vous avez un pathname plutôt qu'un ID de route, vous pouvez le convertir avec
+[`match`](/docs/kit/$app-paths#match) importé de `$app/paths` :
+
+```js
+// @errors: 7031
+import { match } from '$app/paths';
+import { preloadCode } from '$app/navigation';
+
+const matched = await match('/blog/hello-world');
+if (matched) await preloadCode(matched.id);
+```
 
 À la différence de `preloadData`, ceci n'exécutera aucune fonction `load`.
 Renvoie une `Promise` qui se résout lorsque les modules ont été importés.
@@ -228,7 +244,9 @@ Renvoie une `Promise` qui se résout lorsque les modules ont été importés.
 <div class="ts-block">
 
 ```dts
-function preloadCode(pathname: string): Promise<void>;
+function preloadCode(
+	id: import('$app/types').RouteId
+): Promise<void>;
 ```
 
 </div>
@@ -252,15 +270,22 @@ nouvelle route une fois le préchargement terminé.
 
 ```dts
 function preloadData(href: string): Promise<
-	| {
-			type: 'loaded';
-			status: number;
-			data: Record<string, any>;
-	  }
-	| {
-			type: 'redirect';
-			location: string;
-	  }
+	(
+		| {
+				type: 'loaded';
+				data: Record<string, any>;
+		  }
+		| {
+				type: 'redirect';
+				location: string;
+		  }
+		| {
+				type: 'error';
+				error: App.Error;
+		  }
+	) & {
+		status: number;
+	}
 >;
 ```
 
@@ -270,8 +295,14 @@ function preloadData(href: string): Promise<
 
 ## pushState
 
-Crée programmatiquement une nouvelle entrée d'historique avec le `page.state` fourni. Pour utiliser
-l'URL courante, vous pouvez passer `''` comme premier argument. Utilisé pour le [shallow
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt `goto(url, { state, shallow: true })`.
+
+</blockquote>
+
+Crée programmatiquement une nouvelle entrée d'historique avec le `page.state` fourni. Utilisé pour
+le [shallow
 routing](/docs/kit/shallow-routing).
 
 <div class="ts-block">
@@ -280,7 +311,7 @@ routing](/docs/kit/shallow-routing).
 function pushState(
 	url: string | URL,
 	state: App.PageState
-): void;
+): Promise<void>;
 ```
 
 </div>
@@ -290,18 +321,14 @@ function pushState(
 ## refreshAll
 
 Provoque la mise-à-jour de toutes les fonctions distantes actuellement actives, et la ré-exécution
-de toutes les fonctions `load` appartenant à la page actuellement active (à moins qu'elles ne soient
-désactivées via l'argument en option).
+de toutes les fonctions `load` appartenant à la page actuellement active.
+
 Renvoie une `Promise` qui est résolue lorsque la page a terminé sa mise à jour.
 
 <div class="ts-block">
 
 ```dts
-function refreshAll({
-	includeLoadFunctions
-}?: {
-	includeLoadFunctions?: boolean;
-}): Promise<void>;
+function refreshAll(): Promise<void>;
 ```
 
 </div>
@@ -310,9 +337,14 @@ function refreshAll({
 
 ## replaceState
 
-Remplace programmatiquement l'entrée d'historique courante avec la `page.state` fourni. Pour
-utiliser l'URL courante, vous pouvez passer `''` comme premier argument. Utilisé pour le [shallow
-routing](/docs/kit/shallow-routing).
+<blockquote class="tag deprecated note">
+
+Utilisez plutôt `goto(url, { state, shallow: true })`.
+
+</blockquote>
+
+Remplace programmatiquement l'entrée d'historique courante avec la `page.state` fourni. Utilisé pour
+le [shallow routing](/docs/kit/shallow-routing).
 
 <div class="ts-block">
 
@@ -320,11 +352,692 @@ routing](/docs/kit/shallow-routing).
 function replaceState(
 	url: string | URL,
 	state: App.PageState
-): void;
+): Promise<void>;
 ```
 
 </div>
 
 
+
+## snapshot
+
+Une fonction de cycle de vie qui capture l'état de la page avant la navigation et le restaure
+lorsque l'on parcourt l'historique.
+
+Par défaut, l'`id` de snapshot est généré depuis le site d'appel. Passez un `id` pour garder les
+snapshots cohérents entre tous les déploiements, ou pour distinguer les différents usages d'un
+utilitaire partagé.
+
+Le callback optionnel `reset` est exécuté lors des navigations qui n'ont pas de valeur capturée à
+restaurer, comme lorsqu'une nouvelle entrée d'historique est créée. Les valeurs capturées sont
+sérialisées avec le hook de transport de l'application.
+
+`snapshot` doit être appelé lors de l'initialisation d'un composant. Il reste actif tant que le
+composant est monté.
+
+<div class="ts-block">
+
+```dts
+function snapshot<T>(options: {
+	id?: string;
+	capture: () => T;
+	restore: (value: T) => void;
+	reset?: () => void;
+}): void;
+```
+
+</div>
+
+
+
+## AfterNavigate
+
+L'argument passé aux callbacks [`afterNavigate`](/docs/kit/$app-navigation#afterNavigate).
+
+<div class="ts-block">
+
+```dts
+type AfterNavigate = (Navigation | NavigationEnter) & {
+	type: Exclude<NavigationType, 'leave'>;
+	/**
+	 * Puisque les callbacks `afterNavigate` sont appelés lorsqu'une navigation se termine, ils ne seront jamais appelés lors d'une navigation qui provoque le déchargement d'une page.
+	 */
+	willUnload: false;
+};
+```
+
+</div>
+
+## BeforeNavigate
+
+L'argument passé aux callbacks [`beforeNavigate`](/docs/kit/$app-navigation#beforeNavigate).
+
+<div class="ts-block">
+
+```dts
+type BeforeNavigate = Navigation & {
+	/**
+	 * Appelez ceci pour empêcher le démarrage de la navigation.
+	 */
+	cancel: () => void;
+};
+```
+
+</div>
+
+## GotoOptions
+
+<div class="ts-block">
+
+```dts
+interface GotoOptions {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+replace?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si vaut `true`, remplace l'entrée d'historique actuelle plutôt que d’en créer une nouvelle.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+replaceState?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `replace`.
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+shallow?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si vaut `true`, met à jour l'URL et `page.state` sans effectuer de navigation.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+reset?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `true`, or `false` when `shallow` is `true`
+
+</div>
+
+Si vaut `true`, réinitialise la position de défilement (en haut de la page, ou sur l'élément
+correspondant au `#hash` de l'URL s'il y en a un) et réinitialise le focus (sur le `<body>`, ou sur
+l'élément `autofocus` s'il y en a un) lorsque la navigation se termine.
+
+Si vaut `false`, la position de défilement et l'élément focalisé actuels sont laissés inchangés.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+refreshAll?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si vaut `true`, ré-exécute toutes les fonctions `load` et toutes les queries de la page.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+invalidate?: Array<string | URL | ((url: URL) => boolean)>;
+```
+
+<div class="ts-block-property-details">
+
+Provoque la ré-exécution de toutes les fonctions `load` qui dépendent de l'une de ces URLs.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+invalidateAll?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> Utilisez plutôt `refreshAll`.
+
+</div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+state?: App.PageState;
+```
+
+<div class="ts-block-property-details">
+
+Un objet optionnel qui sera rendu disponible en tant que `page.state`.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+persistState?: boolean;
+```
+
+<div class="ts-block-property-details">
+
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `false`
+
+</div>
+
+Si vaut `true`, `page.state` sera restauré après un rechargement complet de page.
+
+</div>
+</div></div>
+
+## Navigation
+
+<div class="ts-block">
+
+```dts
+type Navigation =
+	| NavigationExternal
+	| NavigationFormSubmit
+	| NavigationPopState
+	| NavigationLink;
+```
+
+</div>
+
+## NavigationBase
+
+<div class="ts-block">
+
+```dts
+interface NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: NavigationType;
+```
+
+<div class="ts-block-property-details">
+
+Le type de navigation :
+- `enter`: L'application démarré/été hydratée
+- `form`: Un `<form method="GET">` a été soumis
+- `goto`: La navigation a été déclenchée par un appel à `goto(...)` ou une redirection
+- `leave`: L'utilisateur ou utilisatrice est en train de quitter l'application via la fermeture de
+l'onglet ou via une navigation vers un document différent
+- `link`: La navigation a été déclenchée par un clic sur un lien
+- `popstate`: La navigation a été déclenchée par une navigation précédent/suivant
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+shallow: boolean;
+```
+
+<div class="ts-block-property-details">
+
+S'il s'agit d'une navigation "creuse".
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+from: NavigationTarget | null;
+```
+
+<div class="ts-block-property-details">
+
+L'élément ayant provoqué la navigation.
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+to: NavigationTarget | null;
+```
+
+<div class="ts-block-property-details">
+
+La destination de la navigation
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+willUnload: boolean;
+```
+
+<div class="ts-block-property-details">
+
+Si oui ou non la navigation va déboucher sur le déchargement de la page (c-à-d pas lors d'une
+navigation côté client).
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+complete: Promise<void>;
+```
+
+<div class="ts-block-property-details">
+
+Une promesse qui est résolue une fois que la navigation se termine, et est rejetée si la navigation
+échoue ou est annulée. Dans le cas d'une navigation `willUnload`, la promesse ne sera jamais
+résolue.
+
+</div>
+</div></div>
+
+## NavigationEnter
+
+La navigation qui se produit lorsque l'application démarre ou est hydratée.
+
+<div class="ts-block">
+
+```dts
+interface NavigationEnter extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'enter';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+Dans le cadre d'une navigation précédent/suivant, le nombre d'étapes pour reculer/avancer
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event?: undefined;
+```
+
+<div class="ts-block-property-details">
+
+L'objet `Event` généré lorsque la navigation s'est produite via `popstate` ou `link`.
+
+</div>
+</div></div>
+
+## NavigationExternal
+
+<div class="ts-block">
+
+```dts
+type NavigationExternal = NavigationGoto | NavigationLeave;
+```
+
+</div>
+
+## NavigationFormSubmit
+
+Une navigation déclenchée par un `<form method="GET">`
+
+<div class="ts-block">
+
+```dts
+interface NavigationFormSubmit extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'form';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: SubmitEvent;
+```
+
+<div class="ts-block-property-details">
+
+Le `SubmitEvent` qui a provoqué la navigation
+
+</div>
+</div></div>
+
+## NavigationGoto
+
+Une navigation déclenchée par un appel à `goto(...)` ou une redirection
+
+<div class="ts-block">
+
+```dts
+interface NavigationGoto extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'goto';
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## NavigationLeave
+
+Une navigation déclenchée par l'onglet en train d'être fermé, ou l'utilisateur ou l'utilisatrice qui
+navigue vers un autre document.
+
+<div class="ts-block">
+
+```dts
+interface NavigationLeave extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'leave';
+```
+
+<div class="ts-block-property-details"></div>
+</div></div>
+
+## NavigationLink
+
+Une navigation déclenchée par un clic sur un lien
+
+<div class="ts-block">
+
+```dts
+interface NavigationLink extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'link';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: PointerEvent;
+```
+
+<div class="ts-block-property-details">
+
+Le `PointerEvent` qui a déclenché la navigation
+
+</div>
+</div></div>
+
+## NavigationPopState
+
+Une navigation déclenchée par une navigation précédent/suivant
+
+<div class="ts-block">
+
+```dts
+interface NavigationPopState extends NavigationBase {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+type: 'popstate';
+```
+
+<div class="ts-block-property-details"></div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+delta: number;
+```
+
+<div class="ts-block-property-details">
+
+Dans le cas d'une navigation précédent/suivant, le nombre d'étapes pour reculer/avancer
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+event: PopStateEvent;
+```
+
+<div class="ts-block-property-details">
+
+Le `PopStateEvent` qui a déclenché la navigation
+
+</div>
+</div></div>
+
+## NavigationTarget
+
+Des informations au sujet de la cible d'une navigation spécifique.
+
+<div class="ts-block">
+
+```dts
+interface NavigationTarget<
+	Params extends AppLayoutParams<'/'> =
+		AppLayoutParams<'/'>,
+	RouteId extends AppRouteId | null = AppRouteId | null
+> {/*…*/}
+```
+
+<div class="ts-block-property">
+
+```dts
+params: Params | null;
+```
+
+<div class="ts-block-property-details">
+
+Les paramètres de la page cible — par ex. pour une route comme `/blog/[slug]`, un objet `{ slug:
+string }`.
+Vaut `null` si la cible ne fait pas partie de l'application SvelteKit (elle n'a pas pu être résolue
+en tant que route).
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+route: {/*…*/};
+```
+
+<div class="ts-block-property-details">
+
+Des infos sur la route cible
+
+<div class="ts-block-property-children"><div class="ts-block-property">
+
+```dts
+id: RouteId | null;
+```
+
+<div class="ts-block-property-details">
+
+L'ID de la route courante — par ex. `/blog/[slug]` la route `src/routes/blog/[slug]`. Vaut `null`
+lorsqu'aucune route ne correspond.
+
+</div>
+</div></div>
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+url: URL;
+```
+
+<div class="ts-block-property-details">
+
+L'URL vers laquelle la navigation se fait
+
+</div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+scroll: { x: number; y: number } | null;
+```
+
+<div class="ts-block-property-details">
+
+La position de défilement associée à cette navigation.
+
+Pour la cible `from`, ceci est la position de défilement au moment de la navigation.
+
+Pour la cible `to`, ceci est la position de défilement qui sera ou a été restaurée :
+- dans `beforeNavigate` et `onNavigate`, ceci est uniquement disponible pour les navigations de type
+`popstate` (bouton précédent/suivant) et vaudra `null` pour les autres types de navigation, puisque
+la position de défilement finale n'est pas connue à l'avance.
+- dans `afterNavigate`, ceci est toujours la position de défilement qui a été appliquée à la fin de
+la navigation.
+
+
+</div>
+</div></div>
+
+## NavigationType
+
+- `enter`: L'application démarré/été hydratée
+- `form`: Un `<form method="GET">` a été soumis
+- `goto`: La navigation a été déclenchée par un appel à `goto(...)` ou une redirection
+- `leave`: L'utilisateur ou utilisatrice est en train de quitter l'application via la fermeture de
+l'onglet ou via une navigation vers un document différent
+- `link`: La navigation a été déclenchée par un clic sur un lien
+- `popstate`: La navigation a été déclenchée par une navigation précédent/suivant
+
+<div class="ts-block">
+
+```dts
+type NavigationType =
+	| 'enter'
+	| 'form'
+	| 'leave'
+	| 'link'
+	| 'goto'
+	| 'popstate';
+```
+
+</div>
+
+## OnNavigate
+
+L'argument passé aux callbacks [`onNavigate`](/docs/kit/$app-navigation#onNavigate).
+
+<div class="ts-block">
+
+```dts
+type OnNavigate = Navigation & {
+	type: Exclude<NavigationType, 'enter' | 'leave'>;
+	/**
+	 * Puisque les callbacks `onNavigate` sont appelés juste avant une navigation côté client, ils ne seront jamais appelés lors d'une navigation qui provoque le déchargement d'une page.
+	 */
+	willUnload: false;
+};
+```
+
+</div>
 
 

@@ -58,8 +58,8 @@ export function createTodo(userid, description) {
 
 Essayez de soumettre une tâche dupliquée. Beurk ! SvelteKit nous amène vers une page d'erreur
 bizarre et peu accueillante. Sur le serveur, nous avons défini une erreur "chaque tâche doit être
-unique" mais SvelteKit cache les messages d'erreurs inattendues aux utilisateurs et utilisatrices
-car ils pourraient contenir des données sensibles.
+unique" mais SvelteKit cache les messages d'erreurs inconnues aux utilisateurs et utilisatrices car
+ils pourraient contenir des données sensibles.
 
 Il serait bien mieux de rester sur la même page et de fournir une indication de ce qui ne va pas
 afin que la personne puisse corriger le problème. Pour faire cela, nous pouvons utiliser la fonction
@@ -68,7 +68,7 @@ afin que la personne puisse corriger le problème. Pour faire cela, nous pouvons
 ```js
 /// file: src/routes/+page.server.js
 +++import { fail } from '@sveltejs/kit';+++
-import * as db from '$lib/server/database.js';
+import * as db from '#lib/server/database.js';
 
 export function load({ cookies }) {...}
 

@@ -12,9 +12,10 @@ import { applyAction, deserialize, enhance } from '$app/forms';
 
 ## applyAction
 
-Cette action met à jour la propriété `form` de la page courante avec les données correspondantes et
+Met à jour la propriété `form` de la page courante avec les données correspondantes et
 met à jour `page.status`.
-Dans le cas d'une erreur, elle redirige vers la page d'erreur la plus proche.
+Dans le cas d'une erreur, elle affiche la page d'erreur la plus proche. Dans le cas d’une
+redirection, navigue vers la destination de redirection.
 
 <div class="ts-block">
 
@@ -22,12 +23,7 @@ Dans le cas d'une erreur, elle redirige vers la page d'erreur la plus proche.
 function applyAction<
 	Success extends Record<string, unknown> | undefined,
 	Failure extends Record<string, unknown> | undefined
->(
-	result: import('@sveltejs/kit').ActionResult<
-		Success,
-		Failure
-	>
-): Promise<void>;
+>(result: ActionResult<Success, Failure>): Promise<void>;
 ```
 
 </div>
@@ -61,9 +57,7 @@ async function handleSubmit(event) {
 function deserialize<
 	Success extends Record<string, unknown> | undefined,
 	Failure extends Record<string, unknown> | undefined
->(
-	result: string
-): import('@sveltejs/kit').ActionResult<Success, Failure>;
+>(result: string): ActionResult<Success, Failure>;
 ```
 
 </div>
@@ -83,22 +77,32 @@ autre soumission démarré.
 Si une fonction est renvoyée, cette fonction est appelée avec la réponse venant du serveur.
 Si rien n'est renvoyé, le comportement par défaut sera utilisé.
 
-Si cette fonction ou sa valeur de retour ne sont pas définies, `enhance` va
-- par défaut mettre à jour la prop `form` avec les données renvoyées si l'action est sur la même
+Si cette fonction ou sa valeur de retour ne sont pas définies, cette fonction va émuler le
+comportement natif du navigateur, à l’exception du rechargement complet de la page. Elle va
+notamment
+- réinitialiser la prop `form` et mettre à jour toutes ses données dans le cas d’une soumission
+réussie qui n’a pas de réponse de redirection
 page que le formulaire
-- mettre à jour `page.status`
-- réinitialiser l'élément `<form>` et invalider toutes les données en cas de soumission réussie sans
-réponse de redirection
+- mettre à jour les props `form`, `page.form` et `page.status` si l’action est sur la même page que
+le formulaire
+- naviguer vers la page que la soumission détermine — remplissant la prop `form` de cette page ainsi
+que le `page.status` — lors d’un succès ou d’un échec si cette page n’est pas la page courante, de
+la même façon qu’une soumission de formulaire native, mais avec le paramètre `?/actionName` nettoyé
+de l’URL de destination
 - rediriger dans le cas d'une réponse de redirection
-- rediriger vers la page d'erreur la plus proche dans le cas d'une erreur inattendue
+- afficher la page d'erreur la plus proche dans le cas d'une erreur inattendue — celle la plus
+proche de la route de l’action, si l’action est sur une autre page
 
 Si vous fournissez une fonction personnalisée avec un callback et souhaitez utiliser le comportement
 par défaut, invoquez la fonction `update` dans votre callback.
 Elle accepte un objet d'options
 - `reset: false` si vous ne voulez pas que les valeurs de l'élément `<form>` soient réinitialisées
 après une soumission réussie
-- `invalidateAll: false` si vous ne voulez pas que l'action appelle `invalidateAll` après la
+- `refreshAll` pour contrôler si toutes les données sont rafraîchies après la soumission ; vaut par
+défaut `true` pour les succès et `false` pour les échecs
 soumission
+- `navigate: false` pour appliquer les résultats non redirigés à la page courante plutôt que de
+naviguer vers `result.location` ; les redirections sont toujours suivies
 
 <div class="ts-block">
 
@@ -108,10 +112,7 @@ function enhance<
 	Failure extends Record<string, unknown> | undefined
 >(
 	form_element: HTMLFormElement,
-	submit?: import('@sveltejs/kit').SubmitFunction<
-		Success,
-		Failure
-	>
+	submit?: SubmitFunction<Success, Failure>
 ): {
 	destroy(): void;
 };
@@ -120,5 +121,102 @@ function enhance<
 </div>
 
 
+
+## ActionResult
+
+Lorsque vous appelez une action de formulaire via `fetch`, la réponse aura l'une de ces formes.
+```svelte
+<form method="post" use:enhance={() => {
+	return ({ result }) => {
+		// le résultat est de type ActionResult
+	};
+}}
+```
+
+Les soumissions réussies et échouées portent le chemin relatif à la racine `pathname + search` de
+l'URL de l'action, dont le paramètre `?/actionName` a été supprimé. Les soumissions de redirection
+portent la cible de la redirection. Les soumissions d'erreur générées sur le serveur portent
+également la location de l'action, à la différence des erreurs générées sur le client comme les
+erreurs de réseau. `update` utilise cette location pour émuler la navigation par formulaire native.
+
+<div class="ts-block">
+
+```dts
+type ActionResult<
+	Success extends Record<string, unknown> | undefined =
+		Record<string, any>,
+	Failure extends Record<string, unknown> | undefined =
+		Record<string, any>
+> =
+	| {
+			type: 'success';
+			status: number;
+			data?: Success;
+			location: string;
+	  }
+	| {
+			type: 'failure';
+			status: number;
+			data?: Failure;
+			location: string;
+	  }
+	| { type: 'redirect'; status: number; location: string }
+	| {
+			type: 'error';
+			status?: number;
+			error: App.Error;
+			location?: string;
+	  };
+```
+
+</div>
+
+## SubmitFunction
+
+<div class="ts-block">
+
+```dts
+type SubmitFunction<
+	Success extends Record<string, unknown> | undefined =
+		Record<string, any>,
+	Failure extends Record<string, unknown> | undefined =
+		Record<string, any>
+> = (input: {
+	action: URL;
+	formData: FormData;
+	formElement: HTMLFormElement;
+	controller: AbortController;
+	submitter: HTMLElement | null;
+	cancel: () => void;
+}) => MaybePromise<
+	| void
+	| ((opts: {
+			formData: FormData;
+			formElement: HTMLFormElement;
+			action: URL;
+			result: ActionResult<Success, Failure>;
+			/**
+			 * Exécutez ceci pour obtenir le comportement par défaut d'une réponse à une soumission
+				de formulaire.
+			 * @param options Définissez `reset: false` si vous ne souhaitez pas que les valeurs de
+`<form>` soient réinitialisées après une soumission réussie. `refreshAll` vaut par défaut `true`
+pour les soumissions réussies et `false` pour les échecs. Lorsque la soumission provoque une
+navigation, définir cette valeur à `false` exécute tout de même les fonctions `load` de la
+destination mais peuvent réutiliser des données de layout partagées. Définissez `navigate: false`
+pour appliquer des résultats de non-redirection à la page courante plutôt que de naviguer vers
+`result.location`. Les redirections sont toujours suivies.
+			 */
+			update: (options?: {
+				reset?: boolean;
+				refreshAll?: boolean;
+				navigate?: boolean;
+				/** @deprecated Utilisez plutôt `refreshAll`. */
+				invalidateAll?: boolean;
+			}) => Promise<void>;
+	  }) => MaybePromise<void>)
+>;
+```
+
+</div>
 
 
