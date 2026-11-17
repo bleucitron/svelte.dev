@@ -28,5 +28,5 @@ plutôt [`prerendered`]($app-manifest#prerendered) importé depuis `$app/manifes
 
 ## version
 
-La valeur de [`config.version.name`](configuration#version), utilisée pour remplir les caches.
+La valeur de [`config.version.name`](@sveltejs-kit-vite#version), utilisée pour remplir les caches.
 Utilisez plutôt [`version`]($app-env#version) importé depuis `$app/env`.

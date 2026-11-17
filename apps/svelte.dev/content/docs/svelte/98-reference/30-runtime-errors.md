@@ -408,7 +408,7 @@ Cette erreur se produit lorsque `hydratable` est utilisée plusieurs fois avec l
 ```
 Failed to serialize `hydratable` data for key `%key%`.
 
-`hydratable` can serialize anything [`uneval` from `devalue`](https://npmjs.com/package/uneval) can, plus Promises.
+`hydratable` can serialize anything [`uneval` from `devalue`](https://npmjs.com/package/devalue) can, plus Promises.
 
 Cause:
 %stack%

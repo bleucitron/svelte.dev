@@ -134,7 +134,7 @@ certaines conditions), vous pouvez définir `strict` à `false` pour désactiver
 Lorsque vous compilez pour [GitHub
 Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages), si le
 nom de votre repo n'est pas équivalent à `votre-nom.github.io`, assurez-vous de mettre à jour
-l'option [`config.paths.base`](configuration#paths) pour que cela corresponde au nom de votre
+l'option [`config.paths.base`](@sveltejs-kit-vite#paths) pour que cela corresponde au nom de votre
 repo. C'est nécessaire car votre site sera servi depuis
 `https://your-username.github.io/your-repo-name` plutôt que depuis la racine.
 
@@ -176,6 +176,14 @@ on:
   push:
     branches: 'main'
 
+permissions:
+  contents: read
+  pages: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build_site:
     runs-on: ubuntu-latest
@@ -187,21 +195,23 @@ jobs:
 			# plus bas pour utiliser pnpm
       # - name: Install pnpm
       #   uses: pnpm/action-setup@v6
-      #   with:
-      #     version: 8
 
       - name: Install Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Installer les dépendances
         run: npm i
 
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
       - name: build
         env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
         run: |
           npm run build
 
@@ -211,6 +221,8 @@ jobs:
 					# ceci devrait correspondre à l'option `pages` dans les options de l'adaptateur
 					# adapter-static
           path: 'build/'
+          # garde les dotfiles comme `static/.well-known`
+          include-hidden-files: true
 
   deploy:
     needs: build_site

@@ -23,8 +23,8 @@ côté serveur (SSR)](glossary#SSR) et les pages suivantes avec du [rendu côté
 la performance perçue du chargement de page initial. Le rendu côté client prend ensuite le relais et
 met à jour la page sans avoir besoin de re-rendre les composants en commun, ce qui est généralement
 plus rapide et évite un flash lorsque de la navigation entre les pages. Les applications construites
-avec cette approche de rendu hybride sont aussi appelée ["applications
-transitionnelles"](https://www.youtube.com/watch?v=860d8usGC0o).
+avec cette approche de rendu hybride sont aussi appelées ["applications
+transitionnelles"](https://2021.jamstackconf.com/talk/c17544108e71/transitional-apps/).
 
 ## Génération de site statique [!VO]Static site generation
 
@@ -121,9 +121,9 @@ plateformes.
 
 Ces plateformes de développement mobile fonctionnent en lançant un serveur web local, puis en
 servant votre application comme un hôte statique sur votre téléphone. L'option [`bundleStrategy:
-'single'`](configuration#output) peut vous être utile pour limiter le nombre de requêtes effectuées.
-Par ex. au moment où ces lignes sont écrites, le serveur local de Capacitor utilise HTTP/1, qui
-limite le nombre de connexions simultanées.
+'single'`](@sveltejs-kit-vite#output) peut vous être utile pour limiter le nombre de requêtes
+effectuées. Par ex. au moment où ces lignes sont écrites, le serveur local de Capacitor utilise
+HTTP/1, qui limite le nombre de connexions simultanées.
 
 ## Application desktop [!VO]Desktop app
 
@@ -143,4 +143,4 @@ les extensions navigateur.
 Grâce à son rendu performant, Svelte peut être exécuté sur les appareils de faible puissance. Les
 appareils embarqués comme les micro-contrôlleurs et les télévisions peuvent limiter le nombre de
 connexions simultanées. Pour réduire le nombre de connexions simultanées, l'option [`bundleStrategy:
-'single'`](configuration#output) peut vous être utile dans cette configuration de déploiement.
+'single'`](@sveltejs-kit-vite#output) peut vous être utile dans cette configuration de déploiement.

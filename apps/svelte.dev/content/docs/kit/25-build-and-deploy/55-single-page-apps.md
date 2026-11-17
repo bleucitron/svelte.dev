@@ -71,7 +71,7 @@ pourrait rentrer en conflit avec des pages pré-rendues.
 
 > [!NOTE] Notez que la page de secours (`fallback`) va toujours contenir des chemins d'assets
 > absolus (c-à-d commençant par `/` plutôt que par `.`) peu importe la valeur de
-> [`paths.relative`](configuration#paths), puisque cette page est utilisée pour répondre aux
+> [`paths.relative`](@sveltejs-kit-vite#paths), puisque cette page est utilisée pour répondre aux
 > requêtes vers des chemins arbitraires.
 
 ## Pré-rendre des pages individuelles [!VO]Prerendering individual pages

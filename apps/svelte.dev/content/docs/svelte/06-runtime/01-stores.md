@@ -80,6 +80,42 @@ complexes, ou lorsqu'il est important que vous contrôliez manuellement la mise 
 l'écoute des changements. Si vous êtes familier•e•s de RxJs et souhaitez vous servir de ces
 connaissances, le `$` peut être pratique pour vous.
 
+## Granularité des stores [!VO]Granularity of stores
+
+Les stores notifient leurs abonnés au sujet de leur valeur toute entière. À la différence des [proxy
+`$state`]($state#Deep-state) réactifs, un objet simple contenu dans un store ne suit pas les
+lectures individuelles de ses propriétés. Un [`$effect`]($effect) qui viendrait lire `$user.name`
+sera donc ré-exécuté lorsque le store sera mis à jour via le changement de valeur d'une autre
+propriété, comme `age` par exemple.
+
+Si un effect devait réagir uniquement à une valeur particulière, sélectionnez cette valeur avec
+[`$derived`]($derived) :
+
+<!-- codeblock:start {"title":"$effect.tracking()"} -->
+```svelte
+<!--- file: App.svelte --->
+<script>
+	import { writable } from 'svelte/store';
+
+	const user = writable({ name: 'Ada', age: 36 });
+	let name = $derived($user.name);
+
+	$effect(() => {
+		// Est ré-exécuté lorsque soit name soit age change
+		console.log('Store mis à jour :', $user.name);
+	});
+
+	$effect(() => {
+		// Est ré-exécuté uniquement lorsque name change
+		console.log('Le nom a changé :', name);
+	});
+</script>
+
+<button onclick={() => ($user.age += 1)}>Augmenter l'âge</button>
+<button onclick={() => ($user.name += '!')}>Changer le nom</button>
+```
+<!-- codeblock:end -->
+
 ## svelte/store
 
 Le module `svelte/store` contient une implémentation de store minimale qui satisfait le contrat de

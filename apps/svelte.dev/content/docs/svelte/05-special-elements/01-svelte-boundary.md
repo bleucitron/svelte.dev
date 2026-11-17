@@ -48,8 +48,9 @@ les expressions [`await`](await-expressions) au sein de la frontière ne sont pa
 Le snippet `pending` ne sera _pas_ affiché pour les mises à jour asynchrones suivantes — pour
 celles-ci, vous pouvez utiliser [`$effect.pending()`]($effect#$effect.pending).
 
-> [!NOTE] Dans le [bac à sable](/playground), votre application est rendue au sein d'une frontière
-> ayant un snippet `pending` vide, afin que vous puissez utiliser `await` sans avoir à en créer un.
+> [!NOTE] Lors du rendu côté serveur, une frontière avec un snippet `pending` affiche ce snippet et
+> ignore le reste du contenu. Voir la section [Rendu côté
+> serveur](await-expressions#Server-side-rendering).
 
 ### `failed`
 

@@ -66,10 +66,15 @@ const FEATURED: {
 					'Une librairie i18n basée sur un compilateur qui émet des fonctions de message pouvant être tree-shakées'
 			},
 			{
-				name: 'vite-plugin-devtools-json',
-				svAlias: 'devtools-json',
+				name: '@sveltejs/enhanced-img',
+				svAlias: 'enhanced-img',
+				description: "De l'optimisation d'image pour vos applications Svelte"
+			},
+			{
+				name: '@sveltejs/mcp',
+				svAlias: 'ai-tools',
 				description:
-					'Génère des paramètres de project pour les DevTools de Chromium lors de vos développements'
+					'Des outils Svelte AI tools qui aident votre LLM à écrire du meilleur code Svelte'
 			}
 		]
 	},
@@ -122,25 +127,12 @@ const FEATURED: {
 			{ name: '@sveltejs/adapter-netlify', description: 'Compile votre application pour Netlify' },
 			{ name: '@sveltejs/adapter-vercel', description: 'Compile votre application pour Vercel' },
 			{ name: '@sveltejs/adapter-static', description: 'Compile votre site statique' },
+			{ name: 'svelte-adapter-bun', description: 'Compile votre application pour Bun' },
 			{ name: '@deno/svelte-adapter', description: 'Compile votre application pour Deno Deploy' },
 			{ name: 'amplify-adapter', description: 'Compile votre application pour AWS Amplify' },
 			{
 				name: 'svelte-kit-sst',
 				description: 'Compile votre application pour AWS Lambda et AWS Lamda@Edge'
-			},
-			{ name: 'svelte-adapter-bun', description: 'Compile votre application pour Bun' },
-			{
-				name: 'svelte-adapter-appengine',
-				description: 'Compile votre application pour Google Cloud App Engine'
-			},
-			{
-				name: 'sveltekit-adapter-chrome-extension',
-				description:
-					"Compile votre application en tant qu'extension Chrome utilisant un manifeste v3"
-			},
-			{
-				name: '@slicemachine/adapter-sveltekit',
-				description: 'Intégration avec la Slice Machine de Prismic'
 			}
 		]
 	},
@@ -192,6 +184,7 @@ const FEATURED: {
 				name: 'prosekit',
 				description: "Framework d'édition riche de texte agnostique et headless"
 			},
+			{ name: 'svedit', description: 'Éditeur de canvas complet et structuré pour Svelte' },
 			{
 				name: 'svelte-lexical',
 				description: 'Éditeur riche de texte pour Svelte basé sur le lexique'
@@ -250,7 +243,7 @@ const FEATURED: {
 				name: 'svelte-kit-sessions',
 				description: 'Bibliothèque de gestion de session pour SvelteKit'
 			},
-			{ name: '@passlock/sveltekit' }
+			{ name: '@passlock/browser' }
 		]
 	},
 	{
@@ -289,7 +282,10 @@ const FEATURED: {
 	{
 		title: 'Media',
 		packages: [
-			{ name: '@sveltejs/enhanced-img' },
+			{
+				name: '@sveltejs/enhanced-img',
+				description: 'Image optimization for your Svelte apps'
+			},
 			{
 				name: '@unpic/svelte',
 				description: "Composant responsif d'image qui s'intègre avec les CDNs populaires"
@@ -326,7 +322,11 @@ const FEATURED: {
 				description:
 					'Un composant de liste et grille virtuelles, sans configuration, rapide et léger (~3kO)'
 			},
-			{ name: '@event-calendar/core' }
+			{ name: '@event-calendar/core' },
+			{
+				name: '@c15t/svelte',
+				description: 'Cookie banner, preferences dialog and consent rules'
+			}
 		]
 	},
 	{
@@ -335,11 +335,18 @@ const FEATURED: {
 			{ name: '@threlte/core' },
 			{ name: '@neoconfetti/svelte', description: 'Explosion de confettis' },
 			{ name: 'svelte-motion', description: "Bibliothèque d'animation basé sur framer-motion" },
-			{ name: '@lottiefiles/svelte-lottie-player', description: "Lecteur d'animation Lottie" },
+			{
+				name: '@lottiefiles/svelte-lottie-player',
+				description: "Lecteur d'animation Lottie et dotLottie"
+			},
 			{
 				name: '@tsparticles/svelte',
 				description:
 					"Créez facilement des effets personnalisables de particules, de confettis et de feux d'artifices"
+			},
+			{
+				name: '@animotion/core',
+				description: 'Créez de jolies présentations avec Svelte'
 			}
 		]
 	},
@@ -371,7 +378,8 @@ const FEATURED: {
 		title: 'Outillage dev',
 		packages: [
 			{ name: 'svelte-render-scan', description: 'Outil de déboggage visuel' },
-			{ name: 'svelte-inspect-value', description: "Composant permettant d'inspecter des valeurs" }
+			{ name: 'svelte-inspect-value', description: "Composant permettant d'inspecter des valeurs" },
+			{ name: 'sonda', description: 'Un analyseur et visualiseur de bundle universel' }
 		]
 	},
 	{
@@ -463,7 +471,25 @@ const FEATURED: {
 				description: 'Composants de formulaires accessibles basés sur sveltekit-superforms'
 			},
 			{ name: 'felte', description: 'Une bibliothèque de formulaire extensible' },
-			{ name: '@tanstack/svelte-form', description: 'Des formulaires typées et puissants' }
+			{ name: '@tanstack/svelte-form', description: 'Des formulaires typées et puissants' },
+			{
+				name: 'valibot',
+				description: 'Une librairie schéma typée et modulaire pour valider des données'
+			}
+		]
+	},
+	{
+		title: 'Extensions navigateur',
+		packages: [
+			{
+				name: 'wxt',
+				description:
+					'Construisez des extensions cross-navigateur avec Svelte en utilisant le module officiel de Svelte'
+			},
+			{
+				name: '@crxjs/vite-plugin',
+				description: 'Un plugin Vite pour construire des extensions Chrome avec du HMR'
+			}
 		]
 	}
 ];

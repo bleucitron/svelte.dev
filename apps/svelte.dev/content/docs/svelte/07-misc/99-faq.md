@@ -198,7 +198,8 @@ besoins dans l'immense majorité des cas.
 Aucune nouvelle fonctionnalité n'y est ajouté, et aucun bug ne sera vraisemblablement corrigé, à
 moins qu'ils ne soient véritablement affreux ou qu'ils présentent des risques graves de sécurité.
 
-La documenation est toujours disponible [ici](https://v2.svelte.dev/guide) (en anglais uniquement).
+La documenation est toujours disponible
+[ici](https://github.com/sveltejs/v2.svelte.dev/tree/master/content) (en anglais uniquement).
 
 ## Comment puis-je activer le hot module reloading ? [!VO]How do I do hot module reloading?
 

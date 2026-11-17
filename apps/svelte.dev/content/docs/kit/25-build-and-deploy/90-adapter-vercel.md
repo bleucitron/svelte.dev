@@ -56,10 +56,11 @@ export const config = {
 
 Vous pouvez définir les options suivantes :
 
-- `runtime` : `'nodejs22.x'`, `'nodejs24.x'` ou `'bun1.x'`. Par défaut, l'adaptateur va choisir
-l'environnement d'exécution utilisé pour la compilation, qui correspond à la version de Node sur
-laquelle votre projet est configuré sur l'interface de Vercel, à moins que vous ne [compiliez
-l'application avec Bun](https://bun.com/docs/guides/ecosystem/vite)
+- `runtime` : Versions de Node (par exemple `'nodejs22.x'`, `'nodejs24.x'`, `'nodejs26.x'`),
+`'bun1.x'` ou `'bun1.4.x'`. Par défaut, l'adaptateur va choisir l'environnement d'exécution utilisé
+pour la compilation, qui correspond à la version de Node sur laquelle votre projet est configuré sur
+l'interface de Vercel, à moins que vous ne [compiliez l'application avec
+Bun](https://bun.com/docs/guides/ecosystem/vite)
 - `regions` : un tableau de [régions du réseau
 edge](https://vercel.com/docs/concepts/edge-network/regions) (par défaut `["iad1"]`). Notez que
 plusieurs régions de fonctions serverless sont seulement supportées sur les plans Enterprise

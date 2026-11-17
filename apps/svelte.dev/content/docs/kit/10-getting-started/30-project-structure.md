@@ -57,9 +57,9 @@ composants qui ne seraient utilisés que pour une route spécifique
 	causés par d'éventuelles extensions navigateur injectant des éléments qui seraient ensuite
 	détruits lors du processus d'hydratation. SvelteKit vous préviendra lors du développement si ce
 	n'est pas le cas
-	- `%sveltekit.assets%` — soit [`paths.assets`](configuration#paths), si précisé, soit un chemin
-	relatif à [`paths.base`](configuration#paths)
-	- `%sveltekit.nonce` — une règle [CSP](configuration#csp) nonce pour les liens et scripts
+	- `%sveltekit.assets%` — soit [`paths.assets`](@sveltejs-kit-vite#paths), si précisé, soit un chemin
+	relatif à [`paths.base`](@sveltejs-kit-vite#paths)
+	- `%sveltekit.nonce` — une règle [CSP](@sveltejs-kit-vite#csp) nonce pour les liens et scripts
 	manuellement inclus, s'il y en a
 	- `%sveltekit.env.[NAME]%` — ceci sera remplacé au moment du rendu par la variable
 	d'environnement `[NAME]`, qui doit être définie en tant que variable publique dans `src/env`.
@@ -69,7 +69,7 @@ composants qui ne seraient utilisés que pour une route spécifique
 	les placeholders suivants :
 	- `%sveltekit.status%` — le status HTTP
 	- `%sveltekit.error.message%` — le message d'erreur
-[`version`](configuration#version)
+[`version`](@sveltejs-kit-vite#version)
 - `hooks.client.js` contient vos [hooks](hooks) client
 - `hooks.server.js` contient vos [hooks](hooks) serveur
 - `params.js` contient les [matchers de paramètres](advanced-routing#Matching) dont votre
@@ -111,8 +111,8 @@ alors une extension `.cjs`.
 ### vite.config.js
 
 Un projet SvelteKit est en réalité un projet [Vite](https://vitejs.dev) qui utilise le plugin
-[`@sveltejs/kit/vite`](@sveltejs-kit-vite). Le plugin accepte vos [configurations](configuration)
-Svelte et SvelteKit.
+[`@sveltejs/kit/vite`](@sveltejs-kit-vite). Le plugin accepte vos
+[configurations](@sveltejs-kit-vite) Svelte et SvelteKit.
 
 ### tsconfig.json
 
@@ -127,6 +127,6 @@ TypeScript]($app-tsconfig) dont doit hériter via `extends` votre propre configu
 ### .svelte-kit
 
 Au fur et à mesure que vous allez construire votre projet, SvelteKit va générer des fichiers dans un
-dossier `.svelte-kit` (configurable avec [`outDir`](configuration#outDir)). Vous pouvez ignorer son
-contenu, et le supprimer à tout moment (tous ces fichiers seront régénérés lors du prochain `dev` ou
-`build`).
+dossier `.svelte-kit` (configurable avec [`outDir`](@sveltejs-kit-vite#outDir)). Vous pouvez ignorer
+son contenu, et le supprimer à tout moment (tous ces fichiers seront régénérés lors du prochain
+`dev` ou `build`).

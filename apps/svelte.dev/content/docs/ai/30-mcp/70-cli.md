@@ -75,7 +75,9 @@ source directement.
 
 Options disponibles :
 
-- `--svelte-version <4|5>` - choisit quelle version de Svelte utiliser (par défaut `5`)
+- `--svelte-version <version>` — choisit quelle version de Svelte utiliser, idéalement la version
+complète venant de votre fichier `package.json` (par ex. `5.16.0`) afin d'activer les suggestions
+spécifiques à la version. La majeure doit être `4` ou `5` (et vaut par défaut `5`)
 - `--async` - active l'analyse du code Svelte asynchrone pour les projets Svelte 5
 
 La commande affiche un objet avec :

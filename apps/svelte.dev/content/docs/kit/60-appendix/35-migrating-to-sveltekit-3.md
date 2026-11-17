@@ -53,7 +53,7 @@ export default defineConfig({
 });
 ```
 
-Voir la [documentation sur la configuration](configuration) pour plus d'exemples.
+Voir la [documentation sur la configuration](@sveltejs-kit-vite) pour plus d'exemples.
 
 ### Options supprimées [!VO]Removed options
 
@@ -85,7 +85,7 @@ des soumissions de formulaire.
 application si elle ne peut pas être correctement dérivée des en-têtes de requête (par exemple parce
 que votre application se trouve derrière un proxy). Elle sera utilisée pour les vérification CSRF
 des soumissions de formulaire et des appels de fonctions distantes. Si vous utilisez `adapter-node`,
-ceci remplace la variable d'environnement `ORIGIN`.
+ceci est prioritaire sur la variable d'environnement `ORIGIN`.
 
 ### Options modifiées [!VO]Changed options
 
@@ -649,8 +649,6 @@ types`](https://developers.cloudflare.com/workers/languages/typescript/).
 ### `adapter-node`
 
 - la compilation est désormais effectuée par `rolldown`
-- la variable d'environnement `ORIGIN` est supprimée (définissez plutôt `paths.origin` dans votre
-configuration Vite)
 - les assets statiques sont servis depuis une liste enregistrée au moment de la compilation ; les
 fichiers ajoutés a posteriori dans le dossier compilé ne sont pas servis, et les fichiers remplacés
 gardent leur ancienne taille et `ETag` (utilisez des variables d'environnement pour la configuration

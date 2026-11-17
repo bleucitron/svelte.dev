@@ -1446,14 +1446,13 @@ server?: boolean;
 
 Active l'émission de spans [OpenTelemetry](https://opentelemetry.io/) côté serveur pour les
 opérations SvelteKit telles que le [hook `handle`](/docs/kit/hooks#handle), les [fonctions
-`load`](/docs/kit/load), les [actions de formulaire](/docs/kit/form-actions), et les [fonctions
-distantes](/docs/kit/remote-functions). Le suivi — et plus significativement, l'instrumentation de
-l'observabilité — peut avoir un surcoût non trivial. Prenez le temps de réfléchir à si vous en avez
-réellement besoin, ou s'il serait plus approprié de l'activer uniquement pour les environnments de
-développement et de prévisualisation.
+`load`](/docs/kit/load), les [actions de formulaire](/docs/kit/form-actions), les gestionnaires
+[`+server`](/docs/kit/routing#server), et les [fonctions distantes](/docs/kit/remote-functions). Le
+suivi — et plus significativement, l'instrumentation de l'observabilité — peut avoir un surcoût non
+trivial. Prenez le temps de réfléchir à si vous en avez réellement besoin, ou s'il serait plus
+approprié de l'activer uniquement pour les environnments de développement et de prévisualisation.
 
-</div>
-</div>
+</div> </div>
 
 </div>
 
@@ -1481,7 +1480,6 @@ config?: (config: Record<string, any>) => Record<string, any> | void;
 
 <div class="ts-block-property-bullets">
 
-- <span class="tag">par défaut</span> `(config) => config`
 - <span class="tag since">disponible depuis la version</span> v1.3.0
 
 </div>

@@ -79,7 +79,7 @@ SSR sur le contenu personnalisé, comme discuté plus haut.
 
 Avec SvelteKit, vous pouvez contrôler le pré-rendu avec l'[option de page
 `prerender`](page-options#prerender) et l'[option de configuration
-`prerender`](configuration#prerender) du plugin SvelteKit dans le fichier `vite.config.js`.
+`prerender`](@sveltejs-kit-vite#prerender) du plugin SvelteKit dans le fichier `vite.config.js`.
 
 ## PWA
 
@@ -132,7 +132,7 @@ octet" (_time to first byte_). Cette stratégie est souvent appelée "JAMStack".
 Avec SvelteKit, vous pouvez faire de la génération de site statique en utilisant l'adaptateur
 [`adapter-static`](adapter-static) ou en configurant chaque page pour qu'elle soit
 [pré-rendue](#Prerendering) grâce à l'[option de page `prerender`](page-options#prerender) ou à la
-[configuration `prerender`](configuration#prerender) du plugin SvelteKit dans le fichier
+[configuration `prerender`](@sveltejs-kit-vite#prerender) du plugin SvelteKit dans le fichier
 `vite.config.js`.
 
 ## SSR

@@ -107,8 +107,8 @@ que le protocole `https`, si aucun `PROTOCOL_HEADER` n'est défini).
 Si votre application est servie depuis une origine qui n'est pas connue au moment de la requête —
 car par exemple elle se trouve derrière un proxy qui ne relaie pas l'en-tête `host`, ou parce que
 vous souhaitez utiliser pour les vérifications CSRF une origine canonique qui diffère de celle de
-l'hôte de la requête — vous pouvez définir l'option [`paths.origin`](configuration#paths) dans votre
-fichier `vite.config.js` :
+l'hôte de la requête — vous pouvez définir l'option [`paths.origin`](@sveltejs-kit-vite#paths) dans
+votre fichier `vite.config.js` :
 
 ```js
 // @errors: 2307
@@ -122,20 +122,28 @@ export default defineConfig({
 		sveltekit({
 			adapter: adapter(),
 			paths: {
-				origin: process.env.ORIGIN
+				origin: 'https://my.site'
 			}
 		})
 	]
 });
 ```
 
-Lorsque `paths.origin` n'est pas défini (c'est le cas par défaut), `adapter-node` dérive l'origine
-depuis la requête — en utilisant l'en-tête `host` (et `PROTOCOL_HEADER`/`PORT_HEADER` si définis) —
-et définit `request.url` en fonction. Sinon, la valeur configurée est utilisée en tant qu'origine
-propre de confiance pour les vérifications CSRF sur les soumissions de formulaire et les appels de
-fonctions distantes, et en tant que valeur de `url.origin` lors du pré-rendu.
+Lorsque `paths.origin` n'est pas défini (c'est le cas par défaut), `adapter-node` utilise une
+variable d'environnement `ORIGIN` définie à l'exécution :
 
-Autrement, vous pouvez préciser des en-têtes qui informent SvelteKit des protocole et hôte de la
+```sh
+ORIGIN=https://my.site node build
+```
+
+Sinon, il dérive l'origine depuis la requête — en utilisant l'en-tête `host` (et
+`PROTOCOL_HEADER`/`PORT_HEADER` si définis) — et définit `request.url` en fonction. Autrement, la
+valeur configurée est utilisée en tant qu'origine propre de confiance pour les vérifications CSRF
+sur les soumissions de formulaire et les appels de fonctions distantes, et en tant que valeur de
+`url.origin` lors du pré-rendu.
+
+
+Vous pouvez également préciser des en-têtes qui informent SvelteKit des protocole et hôte de la
 requête, à partir desquels vous pouvez construire l'URL d'origine :
 
 ```sh

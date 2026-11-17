@@ -36,7 +36,7 @@ du temps, en prenant en compte les paramètres de `spring.stiffness` et `spring.
 </script>
 
 <input type="range" bind:value={spring.target} />
-<input type="range" bind:value={spring.current} disabled />
+<input type="range" value={spring.current} disabled />
 ```
 
 <div class="ts-block">
@@ -174,7 +174,7 @@ valeur au cours du temps, en prenant en compte les options `delay`, `duration`, 
 </script>
 
 <input type="range" bind:value={tween.target} />
-<input type="range" bind:value={tween.current} disabled />
+<input type="range" value={tween.current} disabled />
 ```
 
 <div class="ts-block">

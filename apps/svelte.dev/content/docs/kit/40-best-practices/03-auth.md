@@ -31,14 +31,108 @@ les identifiants d'utilisateur ou utilisatrice correspondent à une entrée dans
 les informations d'utilisateur peuvent être stockées dans le champ
 [`locals`](hooks#handle-locals).
 
+```js
+/// file: src/hooks.server.js
+// @filename: ambient.d.ts
+type User = {
+	name: string;
+};
+
+declare namespace App {
+	interface Locals {
+		user: User | null;
+	}
+}
+
+const getUserInformation: (cookie: string | void) => Promise<User | null>;
+
+// @filename: index.js
+// ---cut---
+/** @type {import('@sveltejs/kit/hooks').Handle} */
+export async function handle({ event, resolve }) {
+	event.locals.user = await getUserInformation(event.cookies.get('sessionid'));
+
+	return resolve(event);
+}
+```
+
+Vous pouvez ensuite utiliser [`getRequestEvent`]($app-server#getRequestEvent) pour lire
+`locals.user` et vérifier si l'utilisateur ou l'utilisatrice est authentifiée. Cette vérification
+peut être faite dans un utilitaire partagé, puis réutilisée dans chaque fonction `load`, comme
+montré dans [cet exemple](load#Using-getRequestEvent).
+
+> [!NOTE] Faites toujours les vérifications dans les fichiers `+page.server.js` plutôt que dans les
+> fichiers `+layout.server.js` — voir la section [implications pour
+> l'authentification](load#Implications-for-authentication).
+
+### Protéger plusieurs routes [!VO]Protecting multiple routes
+
+Pour protéger vos routes privées, ajoutez dans votre hook `handle` un gardien d'authentification qui
+vérifie dans une liste de routes publiques autorisées :
+
+```js
+/// file: src/hooks.server.js
+// @filename: ambient.d.ts
+type User = {
+	name: string;
+};
+
+declare namespace App {
+	interface Locals {
+		user: User | null;
+	}
+}
+
+const getUserInformation: (cookie: string | void) => Promise<User | null>;
+
+// @filename: index.js
+// ---cut---
+import { redirect } from '@sveltejs/kit';
+
+const PUBLIC_ROUTES = new Set(['/', '/login', '/signup']);
+
+/** @type {import('@sveltejs/kit/hooks').Handle} */
+export async function handle({ event, resolve }) {
+	event.locals.user = await getUserInformation(event.cookies.get('sessionid'));
+
+	if (!event.locals.user && !PUBLIC_ROUTES.has(event.route.id ?? '')) {
+		redirect(303, '/login');
+	}
+
+	return resolve(event);
+}
+```
+
+Lorsque c'est possible, vous devriez faire utiliser `event.route.id` plutôt que
+`event.url.pathname` car `event.route.id` est le nom réel de la route que SvelteKit a fait
+correspondre, et représente donc le contenu qui sera servi si la requête est autorisée à progresser.
+Les vérifications simples de chaînes de caractères sur le chemin de l'URL peuvent amener toutes
+sortes de problèmes — par exemple, le chemin d'URL peut être [encodé](advanced-routing#Encoding), de
+sorte qu'une vérification telle que `event.url.pathname.startsWith('/admin')` peut être contournée
+avec son équivalent encodé `/%61dmin`. Si vous devez absolument utiliser une partie brute de l'URL
+pour faire votre vérification, assurez-vous d'utiliser un décodage approprié et écrivez des tests
+associés.
+
+> [!NOTE] Les pages pré-rendues et les assets statiques sont servis sans invoquer `handle`, et ne
+> peuvent donc pas être protégés de cette manière.
+
+### Fonctions distantes [!VO]Remote functions
+
+Si vous utilisez des [fonctions distantes](remote-functions), vous _devez_ faire les vérifications
+d'authentification directement au sein de ces fonctions — voir la section [implications pour
+l'authentification](remote-functions#Implications-for-authentication).
+
 ## Libraries [!VO]Libraries
 
 Le [CLI de Svelte](/docs/cli) vous permet de [mettre en place Better
-Auth](https://svelte.dev/docs/cli/better-auth) sur un nouveau projet ou de l'ajouter à un projet
+Auth](/docs/cli/better-auth) sur un nouveau projet ou de l'ajouter à un projet
 existant.
 
 ## Guides
 
-Si vous souhaitez implémenter votre propre système d'authentification, le [guide d'authentification
-de Lucia](https://lucia-auth.com/), fournit une référence pour mettre en place une authentification
-d'application web basée sur des tokens de session, avec des exemples SvelteKit.
+Si vous souhaitez implémenter votre propre système d'authentification, le livre [Pilcrow's Auth
+Book](https://auth.pilcrowonpaper.com/) fournit une référence pour mettre en place une authentification
+d'application web basée sur des tokens de session.
+Il existe également un [exemple
+simple](https://github.com/lucia-auth/lucia/blob/main/code/auth_session.ts) de comment implémenter
+ceci de manière générale.

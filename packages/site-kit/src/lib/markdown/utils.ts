@@ -10,6 +10,7 @@ export const TWINKLEPLOP_LANGUAGE_MAP = {
 	dts: 'typescript',
 	js: 'javascript',
 	ts: 'typescript',
+	jsx: 'tsx',
 	yml: 'yaml',
 	md: 'markdown',
 	// These formats intentionally render without syntax highlighting.
@@ -66,6 +67,15 @@ export function clean(markdown: string) {
 			.replace(/ {2,}/g, ' ')
 			.trim()
 	);
+}
+
+export function escape_html(value: string) {
+	return value
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#39;');
 }
 
 export function decode_html_entities(text: string): string {

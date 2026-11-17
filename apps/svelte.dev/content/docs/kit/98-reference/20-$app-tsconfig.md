@@ -20,7 +20,7 @@ suivantes peut casser certaines choses — SvelteKit vous préviendra si cela se
 You can extend this configuration with your own `compilerOptions`. Overriding the following
 
 - `paths` — ceci est dérivé depuis l'option (dépréciée) de configuration
-[`alias`](configuration#alias), ainsi que de tout [import de
+[`alias`](@sveltejs-kit-vite#alias), ainsi que de tout [import de
 sous-chemin](https://nodejs.org/api/packages.html#subpath-imports) précisé dans votre fichier
 `package.json`, pour aligner les comportements de Vite et TypeScript. Idéalement, configurez les
 imports de sous-chemins plutôt que d'utiliser `paths` directement

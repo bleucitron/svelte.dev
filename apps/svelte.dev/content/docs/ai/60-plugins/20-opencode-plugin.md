@@ -9,16 +9,18 @@ programmatiquement. Svelte a un plugin OpenCode publié dans `@sveltejs/opencode
 
 ## Installation
 
-Avec OpenCode 1.3.4 ou plus récent, installez le plugin depuis la ligne de commande :
-With OpenCode 1.3.4 or newer, install the plugin from the command line:
+Avec OpenCode 2 ou plus récent, installez le plugin depuis la ligne de commande :
 
 ```sh
-opencode plugin @sveltejs/opencode
+opencode plugin add @sveltejs/opencode
 ```
+
+> [!LEGACY] Avec OpenCode de 1.3.4 à 1.x, lancez plutôt `opencode plugin @sveltejs/opencode`.
 
 Vous pouvez également modifier votre [configuration OpenCode](https://opencode.ai/docs/config/)
 (soit la configuration globale, soit la configuration locale), et ajoutez-y `@sveltejs/opencode` à
 la liste des plugins :
+
 
 ```json
 {
@@ -83,8 +85,16 @@ d'environnement, dans `$OPENCODE_CONFIG_DIR/svelte.json`)
 }
 ```
 
-### Automatic updates
+### Mises à jour automatiques[!VO]Automatic updates
 
-The plugin checks npm for newer versions and warns you when one is available. OpenCode caches plugins, so it continues using the cached version until that cache is removed.
+Ce plugin vérifie s'il existe de nouvelles versions sur npm et vous prévient si c'est le cas.
+OpenCode met en cache les plugins, et continue donc d'utiliser les versions mises en cache jusqu'à
+ce que le cache soit supprimé.
 
-Automatic updates are enabled by default. After detecting a newer version, the plugin removes itself from the cache when OpenCode shuts down. OpenCode installs the latest version the next time it starts. Automatic updates only apply when the plugin is unpinned or explicitly uses the `latest` tag. Exact versions, ranges, and other dist-tags are left untouched because reinstalling them may resolve to the same version again. Set `"autoupdate": false` to only receive the warning.
+Les mises à jour automatiques sont activées par défaut. Après qu'une nouvelle version a été
+détectée, le plugin se supprime lui-même du cache à la fermeture d'OpenCode. OpenCode installera sa
+dernière version lors de son prochain lancement. Les mises à jour automatiques s'appliquent
+uniquement lorsque le plugin est non épinglé ou utilise explicitement le tag `latest`. Les versions
+exactes, les gammes, et autres tags de distribution sont laissés tels quels car les réinstaller
+pourrait produire de nouveau la même version. Définissez `"autoupdate": false` pour ne recevoir que
+l'avertissement.

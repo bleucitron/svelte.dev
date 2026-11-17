@@ -19,8 +19,8 @@ pré-rendues, et des routes
 
 Un tableau d'objets `{ path: AssetPath }` représentant les fichiers de votre dossier `static`, ou de
 n'importe quel dossier précisé dans `config.files.assets`.
-Le chemin est relatif au [chemin de base](/docs/kit/configuration#paths), et peut être utilisé avec
-[`asset(...)`](/docs/kit/$app-paths#asset).
+Le chemin est relatif au [chemin de base](/docs/kit/@sveltejs-kit-vite#paths), et peut être utilisé
+avec [`asset(...)`](/docs/kit/$app-paths#asset).
 
 <div class="ts-block">
 
@@ -36,9 +36,9 @@ const assets: Array<{
 
 ## immutable
 
-Un tableau d'objets `{ path: string }` représentant les fichiers générés par Vite.
-Le chemin est relatif au [chemin de base](/docs/kit/configuration#paths), et prévu pour être utilisé
-avec `cache.add(...)` au sein d'[service worker](/docs/kit/service-workers).
+Un tableau d'objets `{ path: string }` représentant les fichiers générés par Vite. Le chemin est
+relatif au [chemin de base](/docs/kit/@sveltejs-kit-vite#paths), et prévu pour être utilisé avec
+`cache.add(...)` au sein d'[service worker](/docs/kit/service-workers).
 Pendant le développement, c'est un tableau vide.
 
 <div class="ts-block">
@@ -54,7 +54,7 @@ const immutable: Array<{ path: string }>;
 ## prerendered
 
 Un tableau d'objets `{ path: Path }` représentant les pages et endpoints pré-rendus, relativement au
-[chemin de base](/docs/kit/configuration#paths).
+[chemin de base](/docs/kit/@sveltejs-kit-vite#paths).
 Pendant le développement, c'est un tableau vide.
 
 <div class="ts-block">

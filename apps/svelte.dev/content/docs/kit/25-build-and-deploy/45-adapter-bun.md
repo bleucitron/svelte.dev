@@ -13,13 +13,8 @@ depuis `$app/server`.
 
 ## Usage
 
-Installez l'adaptateur :
-
-```sh
-bun add -D @sveltejs/adapter-bun
-```
-
-Configurez-le avec `vite.config.js` :
+Exécutez `npx sv add sveltekit-adapter="adapter:bun"`, ou installez-le avec `npm i -D
+@sveltejs/adapter-bun` et ajoutez l'adaptateur à votre fichier `vite.config.js` :
 
 ```js
 // @errors: 2307 2554
@@ -66,10 +61,6 @@ plages d'octets pour les fichiers portés par le système de fichiers, et le str
 chaque asset en mémoire tampon. Les fichiers dans le dossier `immutable` de SvelteKit reçoivent
 `Cache-Control: public,max-age=31536000,immutable`.
 
-> [!NOTE] Bun traite un `*` dans un chemin de route comme un joker. L'adaptateur rejette les
-> fichiers client et les fichiers pré-rendus contenant un `*` litéral ; renommez ces fichiers avant
-> la compilation.
-
 ## Options
 
 ```js
@@ -101,9 +92,9 @@ Le dossier de sortie. Vaut par défaut `build`.
 ### precompress
 
 Définissez `precompress: true` pour générer des variants `.br` et `.gz` des assets client et
-pré-rendus lors de la compilation. Les routes générées négocient `Accept-Encoding` pour chaque
-requête, préférant brotli plutôt que gzip, et chaque variant porte son propre ETag. Cette option est
-ignorée lorsque `buildOptions.compile` est défini, car les assets embarqués sont importés par chemin
+pré-rendus lors de la compilation. Le serveur négocie `Accept-Encoding` pour chaque requête,
+préférant brotli plutôt que gzip, et chaque variant porte son propre ETag. Cette option est ignorée
+lorsque `buildOptions.compile` est défini, car les assets embarqués sont importés par chemin
 d'identité.
 
 ### envPrefix
@@ -204,7 +195,7 @@ adapter({
 
 Le résultat dans cet exemple est `dist/application`. Les cibles des plateformes, les dépendences
 natives et autres limitations suivent les [règles de compilation des exécutables
-Bun](https://bun.com/docs/bundler/executables).
+Bun](https://bun.com/docs/compiler/executables).
 
 Les exécutables compilent les dépendances de production, puisqu'il n'y a pas de `node_modules`
 depuis lequel les résoudre. Pour plutôt résoudre un paquet depuis `node_modules` au moment de
@@ -255,11 +246,12 @@ pour le serveur généré.
 
 ### Origine publique derrière un proxy [!VO]Public origin behind a proxy
 
-Si [`paths.origin`](configuration#paths) est configurée, cette valeur est l'origine de confiance
-pour chaque requête. Sinon, l'adaptateur extrait l'hôte depuis l'en-tête `Host` et suppose que le
-protocole est `https`, puisque les déploiements de production stoppent le TLS en amont. Configurez
-`paths.origin` ou `PROTOCOL_HEADER` si cette supposition est fausse, par exemple lorsque vous servez
-du HTTP brut en direct.
+Si [`paths.origin`](@sveltejs-kit-vite#paths) est configurée, ou si la variable d'environnement
+`ORIGIN` est définie au moment de l'exécution, cette valeur est l'origine de confiance pour chaque
+requête. Sinon, l'adaptateur extrait l'hôte depuis l'en-tête `Host` et suppose que le protocole est
+`https`, puisque les déploiements de production stoppent le TLS en amont. Configurez `paths.origin`,
+`ORIGIN`, ou `PROTOCOL_HEADER` si cette supposition est fausse, par exemple lorsque vous servez du
+HTTP brut en direct.
 
 Derrière un proxy de confiance, les en-têtes de noms `PROTOCOL_HEADER`, `HOST_HEADER`, et
 `PORT_HEADER` contenant un protocole, un hôte et un port publics :

@@ -45,7 +45,7 @@ plusieurs fichiers du projet ont besoin d'être déplacés ou modifiés.
 ### Configuration
 
 Votre fichier `webpack.config.js` ou `rollup.config.js` doit être remplacé par un fichier
-`vite.config.js`, comme documenté [ici](configuration). Les options de préprocesseur de Svelte
+`vite.config.js`, comme documenté [ici](@sveltejs-kit-vite). Les options de préprocesseur de Svelte
 doivent être déplacées vers le paramètre `config.preprocess` du plugin SvelteKit.
 
 Vous devrez ajouter un [adaptateur](adapters). `sapper build` est grossièrement équivalent à

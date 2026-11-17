@@ -114,17 +114,17 @@ pour plus d'informations.
 Avec SvelteKit 1, les occurences de `%sveltekit.assets%` dans votre fichier `app.html` étaient
 remplacées par un chemin relatif par défaut (c-à-d `.` ou `..` ou `../..` etc, en fonction du chemin
 en train d'être rendu) lors du rendu côté serveur à moins que l'option de configuration
-[`paths.relative`](configuration#paths) n'ait été explicitement définie à `false`. Le même
+[`paths.relative`](@sveltejs-kit-vite#paths) n'ait été explicitement définie à `false`. Le même
 comportement s'appliquait pour `base` et `assets` importés depuis `$app/paths`, mais seulement si
 l'option `paths.relative` avait été définie à `true`.
 
 Cette incohérence est corrigée dans la version 2. Les chemins sont soit toujours relatifs, soit
-toujours absolus, en fonction de la valeur de [`paths.relative`](configuration#paths). Cette option
-vaut `true` par défaut car cela permet des applications plus portables : si la `base` vaut autre
-chose que ce que l'application attend (comme c'est le cas lorsqu'on visite l'application depuis
-l'[Internet Archive](https://archive.org), par exemple), ou une valeur inconnue au moment de la
-compilation (comme c'est le cas lorque vous déployez sur l'[IPFS](https://ipfs.tech/) entre autres),
-il y a alors moins de risques de casser des choses.
+toujours absolus, en fonction de la valeur de [`paths.relative`](@sveltejs-kit-vite#paths). Cette
+option vaut `true` par défaut car cela permet des applications plus portables : si la `base` vaut
+autre chose que ce que l'application attend (comme c'est le cas lorsqu'on visite l'application
+depuis l'[Internet Archive](https://archive.org), par exemple), ou une valeur inconnue au moment de
+la compilation (comme c'est le cas lorque vous déployez sur l'[IPFS](https://ipfs.tech/) entre
+autres), il y a alors moins de risques de casser des choses.
 
 ## Les requêtes depuis le serveur ne sont plus traçables [!VO]Server fetches are not trackable anymore
 
@@ -221,12 +221,12 @@ pas disponible.
 
 ## Le fichier `tsconfig` généré est plus strict [!VO]Generated `tsconfig.json` is more strict
 
-Auparavant, le fichier `tsconfig.json` généré essayait au mieux de produire une configuration plus ou
-moins valide lorsque votre `tsconfig.json` incluait `paths` ou `baseUrl`. Avec SvelteKit 2, la
+Auparavant, le fichier `tsconfig.json` généré essayait au mieux de produire une configuration plus
+ou moins valide lorsque votre `tsconfig.json` incluait `paths` ou `baseUrl`. Avec SvelteKit 2, la
 validation est plus stricte et vous avertira lorsque si vous utilisez `paths` ou `baseUrl` dans
 votre `tsconfig.json`. Ces paramètres sont utilisés pour générer des alias de chemin, et vous
-devriez plutôt utiliser l'option de [configuration `alias`](configuration#alias) du plugin SvelteKit
-de votre fichier `vite.config.js`, pour créer également un alias pour le bundler.
+devriez plutôt utiliser l'option de [configuration `alias`](@sveltejs-kit-vite#alias) du plugin
+SvelteKit de votre fichier `vite.config.js`, pour créer également un alias pour le bundler.
 
 ## `getRequest` ne jette plus d'erreurs [!VO]`getRequest` no longer throws errors
 

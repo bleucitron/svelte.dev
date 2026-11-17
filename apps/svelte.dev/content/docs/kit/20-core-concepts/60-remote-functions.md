@@ -108,7 +108,7 @@ qui résout des `posts` :
 <h1>Articles récents</h1>
 
 <ul>
-	{#each await getPosts() as { title, slug }}
+	{#each await getPosts() as { title, slug } (slug)}
 		<li><a href="/blog/{slug}">{title}</a></li>
 	{/each}
 </ul>
@@ -136,7 +136,7 @@ les propriétés `loading`, `error` et `current` de la query :
 	<p>chargement...</p>
 {:else}
 	<ul>
-		{#each query.current as { title, slug }}
+		{#each query.current as { title, slug } (slug)}
 			<li><a href="/blog/{slug}">{title}</a></li>
 		{/each}
 	</ul>
@@ -300,7 +300,7 @@ export const getWeather = query.batch(v.string(), async (cityIds) => {
 
 <h2>Weather</h2>
 
-{#each cities.slice(0, limit) as city}
+{#each cities.slice(0, limit) as city (city.id)}
 	<h3>{city.name}</h3>
 	<CityWeather weather={await getWeather(city.id)} />
 {/each}
@@ -1015,7 +1015,7 @@ argument à `.as(...)` :
 
 <h1>À faire</h1>
 
-{#each await getTodos() as todo}
+{#each await getTodos() as todo (todo.id)}
 	{const modify = modifyTodo.for(todo.id)}
 	<form {...modify}>
 		<input {...modify.fields.description.as('text', todo.description)} />
@@ -1436,6 +1436,10 @@ Dans le navigateur, les données pré-rendues sont sauvegardées en utilisant l'
 page, et sera nettoyé lorsque l'utilisateur ou l'utilisatrice visitera pour la première fois une
 nouveau déploiement de votre application.
 
+> [!NOTE] Les fonctions `prerender` ne devraient pas être utilisées pour des données privées,
+> puisqu'elles sont exécutées au moment de la compilation, et que leurs résultats sont servis de
+> manière publique en tant que fichiers statiques.
+
 ### Arguments de prerender [!VO]Prerender arguments
 
 Comme avec les queries, les fonctions `prerender` peuvent accepter un argument, qui devrait être
@@ -1622,6 +1626,89 @@ laquelle la fonction distante a été appelée, et _non_ l'URL du endpoint que S
 fonction distante. Ne les utilisez jamais pour déterminer si oui ou non un utilisateur ou
 utilisatrice est autorisée à accéder à certaines données, puisque ces valeurs font partie de la
 requête et peuvent donc être manipulées.
+
+## Implications pour l'authentification [!VO]Implications for authentication
+
+Puisqu'un appel à une fonction distante peut venir de n'importe quelle page, l'URL de l'évènement de
+requête peut être manipulée par le client. Par conséquent, vous _devez_ exécuter vos vérifications
+d'authentification directement au sein des fonctions distantes qui en ont besoin. Ces vérifications
+peuvent être faites dans un utilitaire partagé que vous pouvez créer :
+
+```js
+/// file: src/lib/server/auth.js
+// @filename: ambient.d.ts
+interface User {
+	id: string;
+	name: string;
+}
+
+declare namespace App {
+	interface Locals {
+		user: User | null;
+	}
+}
+
+// @filename: index.js
+// ---cut---
+import { redirect } from '@sveltejs/kit';
+import { getRequestEvent } from '$app/server';
+
+export function requireLogin() {
+	const { locals } = getRequestEvent();
+
+	if (!locals.user) redirect(303, '/login');
+
+	return locals.user;
+}
+```
+
+Vous pouvez maintenant l'utiliser dans n'importe quelle fonction distante qui nécessite de
+l'authentification :
+
+```js
+/// file: src/lib/projects.remote.js
+// @filename: ambient.d.ts
+declare module '#lib/server/auth.js' {
+	export function requireLogin(): { id: string; name: string };
+}
+
+declare module '#lib/server/database.js' {
+	export function getProjects(
+		userId: string
+	): Promise<Array<{ id: string; name: string }>>;
+}
+
+// @filename: index.js
+// ---cut---
+import { query } from '$app/server';
+import { requireLogin } from '#lib/server/auth.js';
+import { getProjects } from '#lib/server/database.js';
+
+export const getMyProjects = query(async () => {
+	const user = requireLogin();
+
+	return await getProjects(user.id);
+});
+```
+
+> [!NOTE] `redirect` ne peut pas être utilisé dans des fonctions `command`, les commandes doivent
+> donc utiliser [`error(401)`](@sveltejs-kit#error) à la place.
+
+Désormais, tout composant qui appelle `getMyProjects` ne seront rendus que si l'utilisateur ou
+utilisatrice est connectée, peu importe la page sur laquelle il est utilisé.
+
+```svelte
+<!--- file: src/lib/ProjectList.svelte --->
+<script>
+	import { getMyProjects } from '$lib/projects.remote';
+</script>
+
+<ul>
+	{#each await getMyProjects() as project (project.id)}
+		<li><a href="/projects/{project.id}">{project.name}</a></li>
+	{/each}
+</ul>
+```
 
 ## Redirections [!VO]Redirects
 

@@ -2195,8 +2195,8 @@ current: Span;
 
 <div class="ts-block-property-details">
 
-Le span associé au hook `handle` courant, à la fonction `load` courante, ou à l'action de formulaire
-courante.
+Le span associé au hook `handle` courant, à la fonction `load` courante, à l'action de formulaire
+courante ou un gestionnaire `+server`.
 
 </div>
 </div></div>
@@ -2643,6 +2643,22 @@ issues: StandardSchemaV1.Issue[];
 Les erreurs de validation
 
 </div>
+</div>
+
+<div class="ts-block-property">
+
+```dts
+remote?: {
+	name?: string;
+	file?: string;
+};
+```
+
+<div class="ts-block-property-details">
+
+Des informations au sujet de la fonction distante dont la validation a échoué
+
+</div>
 </div></div>
 
 
@@ -2717,7 +2733,12 @@ la fonction vers le système de fichiers et générer les manifestes de redirect
 
 ```dts
 namespace Csp {
-	type ActionSource = 'strict-dynamic' | 'report-sample';
+	type ActionSource =
+		| 'strict-dynamic'
+		| 'report-sample'
+		| 'report-sha256'
+		| 'report-sha384'
+		| 'report-sha512';
 	type BaseSource =
 		| 'self'
 		| 'unsafe-eval'

@@ -18,6 +18,7 @@ du hook racine `handle`)
 - Les fonctions [`load`](load) de serveur et les fonctions `load` universelles lorsqu'elles sont
 exécutées sur le serveur
 - Les [actions de formulaire](form-actions)
+- Les gestionnaires [`+server`](routing#server)
 - Les [fonctions distantes](remote-functions)
 
 Toutefois, vous ne serez pas très avancé•e•s en vous contentant de dire à SvelteKit d'émettre des
@@ -55,9 +56,9 @@ export default defineConfig({
 
 SvelteKit fournit un accès au span `root` et au span `current` dans l'évènement de requête. Le span
 racine est celui associé à votre fonction `handle` racine, et le span courant peut être associé à
-une fonction `handle`, `load`, une action de formulaire, ou une fonction distante, selon le
-contexte. Vous pouvez annoter ces spans avec n'importe quel attribut que vous souhaitez enregistrer
-:
+une fonction `handle`, `load`, une action de formulaire, un gestionnaire `+server` ou une fonction
+distante, selon le contexte. Vous pouvez annoter ces spans avec n'importe quel attribut que vous
+souhaitez enregistrer :
 
 ```js
 /// file: #lib/authenticate.ts

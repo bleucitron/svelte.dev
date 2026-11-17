@@ -8,20 +8,37 @@ d'instructions que les agents IA peuvent charger à la demande pour les aider su
 précises.
 
 Les skills sont disponibles dans le plugin Claude Code (installé via la marketplace), le plugin CLI
-de Codex, le plugin CLI de Github Copilot, et le plugin OpenCode (`@sveltejs/opencode`). Ils peuvent
+de Codex, le plugin CLI de Github Copilot, le plugin OpenCode (`@sveltejs/opencode`), et le paquet
+pi (`@sveltejs/pi`). Ils peuvent
 également être installés manuellement dans votre dossier `.claude/skills`, `.copilot/skills` ou
 `.opencode/skills`.
 
 Vous pouvez télécharger les derniers skills depuis la [page des
 releases](https://github.com/sveltejs/ai-tools/releases) du repo, ou les trouver dans le dossier
-[`tools/skills`](https://github.com/sveltejs/ai-tools/tree/main/tools/skills).
+[`tools/skills`](https://github.com/sveltejs/ai-tools/tree/main/tools/skills). Chaque skill
+ci-dessous vient également avec une commande [`npx skills`](https://skills.sh) que vous pouvez
+utilisez pour l'installer avec l'agent de votre choix.
+
+## Feedback d'autofixer optionnel [!VO]Opt-in autofixer feedback
+
+Le skill `svelte-mcp-feedback` dit à votre agent de trouver des opportunités d'améliorer l'autofixer
+du MCP lorsque vous corrigez une erreur Svelte ou SvelteKit faite par un agent. Il crée une issue
+dans [`sveltejs/ai-tools`](https://github.com/sveltejs/ai-tools) en utilisant le CLI de Github, ou
+ouvre un formulaire d'issue pré-rempli que vous pouvez soumettre lorsque le CLI est indisponible.
+
+Puisque nous souhaitons que ceci soit complètement optionnel, ce skill n'est compilé avec aucun
+plugin, et vous devez l'installer séparément.
 
 ## `svelte-code-writer`
 
 Des outils CLI pour effectuer des recherches dans la documentation et des analyses de code pour
 Svelte 5. DOIT être utilisé lors de la création, l'édition ou l'analyse de tout composant Svelte
 (`.svelte`) ou module Svelte (`.svelte.ts`/`.svelte.js`). Si possible, ce skill doit être exécuté au
-sein de l'agent svelte-file-editor pour des résultats optimaux.
+sein du sous-agent svelte-file-editor pour des résultats optimaux.
+
+```bash
+npx skills add sveltejs/ai-tools --skill svelte-code-writer
+```
 
 <a href="https://github.com/sveltejs/ai-tools/releases?q=svelte-code-writer" target="_blank" rel="noopener noreferrer">Ouvrir la page des Releases</a>
 
@@ -30,6 +47,11 @@ sein de l'agent svelte-file-editor pour des résultats optimaux.
 
 <!-- prettier-ignore-start -->
 ````markdown
+---
+name: svelte-code-writer
+description: CLI tools for Svelte 5 documentation lookup and code analysis. MUST be used whenever creating, editing or analyzing any Svelte component (`.svelte`) or Svelte module (`.svelte.ts`/`.svelte.js`). If possible, this skill should be executed within the `svelte-file-editor` subagent for optimal results.
+---
+
 ## CLI tools
 
 You have access to `@sveltejs/mcp` CLI for Svelte-specific assistance. Use these commands via `npx`:
@@ -67,7 +89,7 @@ Analyzes Svelte code and suggests fixes for common issues.
 **Options:**
 
 - `--async` - Enable async Svelte mode (default: false)
-- `--svelte-version` - Target version: 4 or 5 (default: 5)
+- `--svelte-version` - Target version, ideally the full version from `package.json` (e.g. `5.16.0`) so version-specific suggestions are enabled. The major must be 4 or 5 (default: 5)
 
 **Examples:**
 
@@ -101,6 +123,10 @@ vous trouvez dans un projet Svelte et qu'il faut créer/éditer ou analyser un c
 module. Couvre la réactivité, la gestion d'évènements, le style, l'intégration avec des librairies,
 entre autres.
 
+```bash
+npx skills add sveltejs/ai-tools --skill svelte-core-bestpractices
+```
+
 <a href="https://github.com/sveltejs/ai-tools/releases?q=svelte-core-bestpractices" target="_blank" rel="noopener noreferrer">Ouvrir la page des Releases</a>
 
 <details>
@@ -108,6 +134,11 @@ entre autres.
 
 <!-- prettier-ignore-start -->
 ````markdown
+---
+name: svelte-core-bestpractices
+description: Guidance on writing fast, robust, modern Svelte code. Load this skill whenever in a Svelte project and asked to write/edit or analyze a Svelte component or module. Covers reactivity, event handling, styling, integration with libraries and more.
+---
+
 ## `$state`
 
 Only use the `$state` rune for variables that should be _reactive_ — in other words, variables that cause an `$effect`, `$derived` or template expression to update. Everything else can be a normal variable.
@@ -283,6 +314,105 @@ Always use runes mode for new code, and avoid features that have more modern rep
 - use classes with `$state` fields to share reactivity between components, instead of using stores
 - use `{@attach ...}` instead of `use:action`
 - use clsx-style arrays and objects in `class` attributes, instead of the `class:` directive
+````
+<!-- prettier-ignore-end -->
+
+</details>
+
+## `svelte-mcp-feedback`
+
+Rapporte les opportunités de l'autofixer du MCP de Svelte lorsque l'utilisateur corrige une erreur
+Svelte ou SvelteKit que l'agent a faite. Utilisez après des corrections aux composants `.svelte`,
+aux modules `.svelte.ts`/`.svelte.js`, ou aux fonctionnalités SvelteKit quand une vérification
+réutilisable pourrait empêcher l'erreur d'être reproduite. Ne pas déclencher pour les requêtes
+d'implémentation initiale, les bugs sans rapport, ou les préférences personnelles de style.
+
+```bash
+npx skills add sveltejs/ai-tools --skill svelte-mcp-feedback
+```
+
+<a href="https://github.com/sveltejs/ai-tools/releases?q=svelte-mcp-feedback" target="_blank" rel="noopener noreferrer">Open Releases page</a>
+
+<details>
+	<summary>Voir le contenu du skill</summary>
+
+<!-- prettier-ignore-start -->
+````markdown
+---
+name: svelte-mcp-feedback
+description: Report Svelte MCP autofixer opportunities when the user corrects a Svelte or SvelteKit mistake the agent made. Use after corrections to .svelte components, .svelte.ts/.svelte.js modules, or SvelteKit features where a reusable check or fix could prevent the mistake. Do not trigger for initial implementation requests, unrelated bugs, or personal style preferences.
+---
+
+# Svelte MCP feedback
+
+Turn a user-corrected mistake into actionable feedback for the Svelte MCP autofixer in `sveltejs/ai-tools`.
+
+## 1. Identify the autofixer opportunity
+
+Use the conversation and the code you just worked on to identify:
+
+- The incorrect code you produced and the user's correction.
+- The Svelte or SvelteKit rule that explains the correction.
+- A reusable code pattern the MCP could detect, and the fix or suggestion it could provide.
+
+Include SvelteKit JavaScript/TypeScript files such as `+page.ts`, `+layout.server.ts`, `+server.ts`, `hooks.server.ts`, and `svelte.config.js`; feedback is not limited to `.svelte` files.
+
+Only proceed if there is a concrete, generalizable Svelte/SvelteKit mistake. A changed product requirement, a personal naming preference, or an unrelated application bug does not justify an autofixer issue. If the correction is ambiguous, clarify it while continuing the user's task.
+
+Apply the user's correction and complete the requested work. Reporting feedback should not leave the original mistake unfixed.
+
+## 2. Capture a minimal reproduction
+
+Reduce the before/after code to the smallest example that preserves the mistake. Use generic names and sample data instead of copying unrelated project code, credentials, or conversation history.
+
+If the Svelte MCP is available, check its relevant documentation and run `svelte-autofixer` on the incorrect example when it supports that file type. Record whether it missed the issue, suggested an incorrect fix, or already reported the issue and you overlooked it. Do not claim the tool missed something without checking its output. If the tool is unavailable or does not support the file type, say so; a proposed new rule can still be useful.
+
+If an existing diagnostic already clearly covers the correction, follow it instead of opening a new-rule request. Report only a concrete gap, such as an unclear diagnostic, a wrong suggested fix, or a missed case.
+
+Prepare a title like `Autofixer: detect <incorrect pattern>` and a Markdown body with:
+
+1. **Summary** — the mistake and why it matters.
+2. **Incorrect code** — a fenced minimal example with the relevant filename/file type.
+3. **User correction / expected code** — the corrected example and a brief explanation.
+4. **Proposed detection and fix** — the recognizable pattern, suggested transformation or guidance, and cases where a fix would be ambiguous.
+5. **Current MCP behavior** — the actual relevant output, or explicitly "not checked" with the reason.
+6. **Environment** — Svelte, SvelteKit, MCP, and model versions when known; do not invent missing versions.
+
+The report is ready when a maintainer can understand the pattern and expected outcome without access to the original project.
+
+## 3. Open the issue
+
+Use GitHub CLI when it is installed and authenticated. Check with `gh --version` and `gh auth status`. Always specify `--repo sveltejs/ai-tools` so the issue does not go to the user's project repository.
+
+Search for an existing report of the same pattern:
+
+```sh
+gh issue list --repo sveltejs/ai-tools --state all --search '<pattern keywords>' --limit 20
+```
+
+Read likely matches with `gh issue view <number> --repo sveltejs/ai-tools`. If an issue already describes the same reproduction and expected fix, share its link instead of filing a duplicate. If a closed issue was supposedly fixed but your example still fails, describe that regression and link the old issue in the new report.
+
+Write the issue body to a temporary Markdown file using a file-writing tool or a quoted heredoc. Pass the title as a safely quoted argument and use `--body-file` so code snippets and backticks are not interpreted by the shell:
+
+```sh
+gh issue create --repo sveltejs/ai-tools --title 'Autofixer: detect <incorrect pattern>' --body-file '<temporary-body-file>'
+```
+
+Capture and share the returned issue URL. Do not guess labels or assignees. If creation fails, report the failure and use the browser fallback. If the result is uncertain (for example, a network timeout after submission), check for the issue before retrying.
+
+### Browser fallback
+
+If `gh` is unavailable, unauthenticated, or unable to create the issue, build a URL for:
+
+```text
+https://github.com/sveltejs/ai-tools/issues/new?title=<encoded-title>&body=<encoded-body>
+```
+
+Encode each query value with `encodeURIComponent`, `URLSearchParams`, or an equivalent URL encoder; do not interpolate raw Markdown into the URL. Open it using an available browser tool or the platform URL opener (`open` on macOS, `xdg-open` on Linux, or `Start-Process` in PowerShell). This opens the new-issue form with the draft filled in for the user to submit.
+
+If the full report makes the URL too long, prefill the title and a short summary, and provide the full Markdown body for the user to paste. If no browser can be opened, provide the clickable prefilled URL and the body in the response.
+
+Distinguish the outcome: either give the URL of the created/existing issue, or say that the draft form is ready and the user still needs to submit it. Then return to the user's original task.
 ````
 <!-- prettier-ignore-end -->
 

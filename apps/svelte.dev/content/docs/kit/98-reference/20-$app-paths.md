@@ -19,7 +19,7 @@ Disponible depuis la version 2.26
 </blockquote>
 
 Résout l'URL d'un asset se trouvant dans votre dossier `static`, en le préfixant avec
-[`config.paths.assets`](/docs/kit/configuration#paths) si configuré, ou avec le chemin de base
+[`config.paths.assets`](/docs/kit/@sveltejs-kit-vite#paths) si configuré, ou avec le chemin de base
 sinon.
 
 Lors du rendu côté serveur, le chemin de base est relatif et dépend de la page en train d'être

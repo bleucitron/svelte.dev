@@ -2,10 +2,10 @@
 	{
 		"path": "/tutorial/svelte/key-blocks",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
+			"Tutoriel",
+			"Bases de Svelte",
 			"Transitions",
-			"Key blocks"
+			"Blocs key"
 		],
 		"tags": [
 			"template-key"
@@ -14,10 +14,10 @@
 	{
 		"path": "/tutorial/svelte/transition",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
+			"Tutoriel",
+			"Bases de Svelte",
 			"Transitions",
-			"The transition directive"
+			"La directive transition"
 		],
 		"tags": [
 			"transitions"
@@ -26,10 +26,10 @@
 	{
 		"path": "/tutorial/svelte/attach",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Attachments",
-			"The attach tag"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Attachements",
+			"La balise attach"
 		],
 		"tags": [
 			"attachments"
@@ -38,10 +38,10 @@
 	{
 		"path": "/tutorial/svelte/component-styles",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Classes and styles",
-			"Component styles"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Classes et styles",
+			"Styles de composants"
 		],
 		"tags": [
 			"styles-global",
@@ -51,10 +51,10 @@
 	{
 		"path": "/tutorial/svelte/styles",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Classes and styles",
-			"The style directive"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Classes et styles",
+			"La directive style"
 		],
 		"tags": [
 			"template-style"
@@ -63,10 +63,10 @@
 	{
 		"path": "/tutorial/svelte/classes",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Classes and styles",
-			"The class attribute"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Classes et styles",
+			"L'attribut class"
 		],
 		"tags": [
 			"template-class"
@@ -75,10 +75,10 @@
 	{
 		"path": "/tutorial/svelte/text-inputs",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Bindings",
-			"Text inputs"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Liaisons",
+			"Inputs texte"
 		],
 		"tags": [
 			"template-bind"
@@ -87,10 +87,10 @@
 	{
 		"path": "/tutorial/svelte/await-blocks",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Logic",
-			"Await blocks"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Logique",
+			"Blocs await"
 		],
 		"tags": [
 			"template-await"
@@ -99,10 +99,10 @@
 	{
 		"path": "/tutorial/svelte/each-blocks",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Logic",
-			"Each blocks"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Logique",
+			"Blocs each"
 		],
 		"tags": [
 			"template-each"
@@ -111,10 +111,10 @@
 	{
 		"path": "/tutorial/svelte/if-blocks",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Logic",
-			"If blocks"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Logique",
+			"Blocs if"
 		],
 		"tags": [
 			"template-if"
@@ -123,10 +123,10 @@
 	{
 		"path": "/tutorial/svelte/declaring-props",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
+			"Tutoriel",
+			"Bases de Svelte",
 			"Props",
-			"Declaring props"
+			"Déclarer des props"
 		],
 		"tags": [
 			"rune-props"
@@ -135,10 +135,10 @@
 	{
 		"path": "/tutorial/svelte/effects",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Reactivity",
-			"Effects"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Réactivité",
+			"Effets"
 		],
 		"tags": [
 			"rune-effect"
@@ -147,10 +147,10 @@
 	{
 		"path": "/tutorial/svelte/inspecting-state",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Reactivity",
-			"Inspecting state"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Réactivité",
+			"Inspecter un état"
 		],
 		"tags": [
 			"rune-inspect"
@@ -159,10 +159,10 @@
 	{
 		"path": "/tutorial/svelte/derived-state",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Reactivity",
-			"Derived state"
+			"Tutoriel",
+			"Bases de Svelte",
+			"Réactivité",
+			"État dérivé"
 		],
 		"tags": [
 			"rune-derived"
@@ -171,9 +171,9 @@
 	{
 		"path": "/tutorial/svelte/state",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
-			"Reactivity",
+			"Tutoriel",
+			"Bases de Svelte",
+			"Réactivité",
 			"State"
 		],
 		"tags": [
@@ -183,10 +183,10 @@
 	{
 		"path": "/tutorial/svelte/html-tags",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
+			"Tutoriel",
+			"Bases de Svelte",
 			"Introduction",
-			"HTML tags"
+			"Balises HTML"
 		],
 		"tags": [
 			"template-html"
@@ -195,10 +195,10 @@
 	{
 		"path": "/tutorial/svelte/styling",
 		"breadcrumbs": [
-			"Tutorial",
-			"Basic Svelte",
+			"Tutoriel",
+			"Bases de Svelte",
 			"Introduction",
-			"Styling"
+			"Style"
 		],
 		"tags": [
 			"styles-scoped"
@@ -209,7 +209,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Reference",
+			"Référence",
 			"svelte/attachments"
 		],
 		"tags": [
@@ -221,7 +221,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Reference",
+			"Référence",
 			"svelte/transition"
 		],
 		"tags": [
@@ -233,8 +233,8 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Styling",
-			"Scoped styles"
+			"Style",
+			"Styles scopés"
 		],
 		"tags": [
 			"styles-scoped"
@@ -245,8 +245,8 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Styling",
-			"Global styles"
+			"Style",
+			"Styles globaux"
 		],
 		"tags": [
 			"styles-global"
@@ -257,8 +257,8 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Styling",
-			"Custom properties"
+			"Style",
+			"Propriétés personnalisées"
 		],
 		"tags": [
 			"styles-custom-properties"
@@ -269,7 +269,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{#if ...}"
 		],
 		"tags": [
@@ -281,7 +281,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{#each ...}"
 		],
 		"tags": [
@@ -293,7 +293,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{#key ...}"
 		],
 		"tags": [
@@ -305,7 +305,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{#await ...}"
 		],
 		"tags": [
@@ -317,7 +317,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{@html ...}"
 		],
 		"tags": [
@@ -329,7 +329,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"{@attach ...}"
 		],
 		"tags": [
@@ -337,11 +337,23 @@
 		]
 	},
 	{
+		"path": "/docs/svelte/bind",
+		"breadcrumbs": [
+			"Docs",
+			"Svelte",
+			"Syntaxe de template",
+			"bind:"
+		],
+		"tags": [
+			"template-bind"
+		]
+	},
+	{
 		"path": "/docs/svelte/transition",
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"transition:"
 		],
 		"tags": [
@@ -353,8 +365,8 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
-			"in: and out:"
+			"Syntaxe de template",
+			"in: et out:"
 		],
 		"tags": [
 			"transitions"
@@ -365,7 +377,7 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"style:"
 		],
 		"tags": [
@@ -377,11 +389,11 @@
 		"breadcrumbs": [
 			"Docs",
 			"Svelte",
-			"Template syntax",
+			"Syntaxe de template",
 			"class"
 		],
 		"tags": [
-			"template-style"
+			"template-class"
 		]
 	},
 	{
@@ -442,6 +454,163 @@
 		],
 		"tags": [
 			"rune-inspect"
+		]
+	},
+	{
+		"path": "/docs/kit/$app-forms",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Référence",
+			"$app/forms"
+		],
+		"tags": [
+			"enhance"
+		]
+	},
+	{
+		"path": "/docs/kit/$app-navigation",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Référence",
+			"$app/navigation"
+		],
+		"tags": [
+			"invalidation",
+			"preloading"
+		]
+	},
+	{
+		"path": "/docs/kit/$app-state",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Référence",
+			"$app/state"
+		],
+		"tags": [
+			"app-state"
+		]
+	},
+	{
+		"path": "/docs/kit/$lib",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Référence",
+			"#lib"
+		],
+		"tags": [
+			"lib"
+		]
+	},
+	{
+		"path": "/docs/kit/advanced-routing",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Avancé",
+			"Routing avancé"
+		],
+		"tags": [
+			"routing"
+		]
+	},
+	{
+		"path": "/docs/kit/hooks",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Avancé",
+			"Hooks"
+		],
+		"tags": [
+			"hooks"
+		]
+	},
+	{
+		"path": "/docs/kit/errors",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Avancé",
+			"Erreurs"
+		],
+		"tags": [
+			"errors"
+		]
+	},
+	{
+		"path": "/docs/kit/link-options",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Avancé",
+			"Options de liens"
+		],
+		"tags": [
+			"preloading"
+		]
+	},
+	{
+		"path": "/docs/kit/routing",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Concepts de base",
+			"Routing"
+		],
+		"tags": [
+			"routing"
+		]
+	},
+	{
+		"path": "/docs/kit/load",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Concepts de base",
+			"Charger des données"
+		],
+		"tags": [
+			"load"
+		]
+	},
+	{
+		"path": "/docs/kit/form-actions",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Concepts de base",
+			"Actions de formulaire"
+		],
+		"tags": [
+			"forms"
+		]
+	},
+	{
+		"path": "/docs/kit/page-options",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Concepts de base",
+			"Options de page"
+		],
+		"tags": [
+			"page-options"
+		]
+	},
+	{
+		"path": "/docs/kit/environment-variables",
+		"breadcrumbs": [
+			"Docs",
+			"SvelteKit",
+			"Concepts de base",
+			"Variables d'environnement"
+		],
+		"tags": [
+			"env"
 		]
 	}
 ]

@@ -4,6 +4,8 @@ title: svelte/transition
 tags: transitions
 ---
 
+Ce module fournit des fonctions de transition intégrées à utiliser avec la directive
+[`transition:`](transition).
 
 
 ```js

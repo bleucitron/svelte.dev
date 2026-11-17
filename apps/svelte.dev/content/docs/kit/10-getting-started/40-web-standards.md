@@ -135,8 +135,8 @@ const foo = url.searchParams.get('foo');
 
 L'API [Web Crypto API](https://developer.mozilla.org/fr/docs/Web/API/Web_Crypto_API) est rendu
 disponibles via la variable globale `crypto`. Elle est utilisée en interne pour les en-têtes de
-[Content Security Policy](configuration#csp), mais vous pouvez aussi vous en servir pour des choses
-comme la génération de UUIDs :
+[Content Security Policy](@sveltejs-kit-vite#csp), mais vous pouvez aussi vous en servir pour des
+choses comme la génération de UUIDs :
 
 ```js
 const uuid = crypto.randomUUID();

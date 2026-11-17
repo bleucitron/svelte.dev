@@ -226,7 +226,7 @@ nombre de fournisseurs. Certains fournisseurs de CDNs comme
 [Cloudinary](https://svelte.cloudinary.dev/) supportent Svelte. Enfin, certains CMS supportant
 Svelte (comme [Contentful](https://www.contentful.com/sveltekit-starter-guide/),
 [Storyblok](https://www.storyblok.com/docs/guides/svelte), et
-[Contentstack](https://www.contentstack.com/docs/developers/sample-apps/build-a-starter-website-with-sveltekit-and-contentstack))
+[Contentstack](https://www.contentstack.com/docs/headless-cms/sveltekit))
 ont un support intégré pour la gestion des images.
 
 ## Bonnes pratiques [!VO]Best practices

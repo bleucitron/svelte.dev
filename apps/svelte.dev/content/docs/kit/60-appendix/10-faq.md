@@ -13,6 +13,22 @@ questions relatives à ces librairies.
 
 Voir [la documentation concernant les types de projet](project-types) pour plus d'informations.
 
+## Quels sont les navigateurs que SvelteKit supporte ? [!VO]Which browsers does SvelteKit support?
+
+L'environnement d'exécution client de SvelteKit cible les mêmes navigateurs que [la valeur par défaut
+de l'option `build.target` de Vite](https://vite.dev/config/build-options#build-target), qui vaut
+`'baseline-widely-available'`. Avec Vite 8, cela signifie Chrome 111, Edge 111, Firefox 114 et
+Safari 16.4 ou plus récent.
+
+L'environnement d'exécution client n'est pas augmenté avec des polyfills. Définir une cible
+`build.target` plus basse change uniquement comment la syntaxe est tranformée — cela n'ajoute pas
+d'APIs manquantes —, si vous avez besoin de supporter des navigateurs plus anciens vous aurez besoin
+d'ajouter les polyfills vous-même, par exemple avec
+[`@vitejs/plugin-legacy`](https://github.com/vitejs/vite/tree/main/packages/plugin-legacy).
+
+Les [service workers](service-workers) sont activés avec `type: 'module'`, ce qui implique que les
+navigateurs n'ayant pas de support pour les service workers de module ne pourront pas les activer.
+
 ## Comment inclure des informations du fichier package.json dans mon application ? [!VO]How do I include details from package.json in my application?
 
 Si vous souhaitez inclure le numéro de version de votre application ou d'autres informations

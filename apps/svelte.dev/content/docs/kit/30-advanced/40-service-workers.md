@@ -152,9 +152,9 @@ distinct, ce qui devrait définir correctement vos types si vous héritez de
 
 ## Activation manuelle [!VO]Manual registration
 
-Vous pouvez [désactiver l'activation automatique](configuration#serviceWorker) si vous avez besoin
-de définir le service worker avec votre propre logique. La définition par défaut, qui est injectée
-dans du HTML rendu sur le serveur, ressemble à quelque chose comme ça :
+Vous pouvez [désactiver l'activation automatique](@sveltejs-kit-vite#serviceWorker) si vous avez
+besoin de définir le service worker avec votre propre logique. La définition par défaut, qui est
+injectée dans du HTML rendu sur le serveur, ressemble à quelque chose comme ça :
 
 ```js
 if ('serviceWorker' in navigator) {
@@ -183,8 +183,8 @@ SvelteKit exécute
 [`registration.update()`](https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/update)
 uniquement en tant que partie de la gestion d'erreur — si un module de route échoue à se charger ou
 si une navigation résulte en un statut d'erreur, et que le [polling de
-version](configuration#version) détecte que l'application a été redéployée, le service worker sera
-mis à jour avant que SvelteKit ne déclenche une navigation complète pour se mettre à jour.
+version](@sveltejs-kit-vite#version) détecte que l'application a été redéployée, le service worker
+sera mis à jour avant que SvelteKit ne déclenche une navigation complète pour se mettre à jour.
 
 Si vous souhaitez que les nouveaux déploiements soient pris en compte de manière plus agressive,
 vous pouvez déclencher vous-même une vérification des mises à jour — par exemple pour chaque

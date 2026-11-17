@@ -1,33 +1,27 @@
-import { render_content_markdown } from '@sveltejs/site-kit/markdown';
+import {
+	render_content_markdown,
+	strip_origin,
+	type DocumentationReferences
+} from '@sveltejs/site-kit/markdown';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const docs_types_root = path.dirname(fileURLToPath(import.meta.resolve('docs-types/package.json')));
-const canonical_origin = 'https://svelte.dev';
-
-export function replace_canonical_origin(href: string, origin: string) {
-	let url: URL;
-
-	try {
-		url = new URL(href);
-	} catch {
-		return href;
-	}
-
-	return url.origin === canonical_origin
-		? `${origin}${url.pathname}${url.search}${url.hash}`
-		: href;
-}
 
 export const render_content = (
 	filename: string,
 	body: string,
-	options: { check?: boolean; origin?: string; references?: Record<string, string> } = {}
+	options: {
+		check?: boolean;
+		origin?: string;
+		references?: DocumentationReferences;
+		referenceModule?: string;
+	} = {}
 ) => {
 	const { origin, ...rest } = options;
 	const render_options = {
 		...rest,
-		transformLink: origin ? (href: string) => replace_canonical_origin(href, origin) : undefined,
+		transformLink: strip_origin,
 		twoslashRoot: docs_types_root
 	};
 

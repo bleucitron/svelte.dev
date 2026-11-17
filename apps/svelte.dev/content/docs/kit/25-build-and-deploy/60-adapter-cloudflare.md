@@ -166,10 +166,10 @@ compilation devraient être les suivants :
 - Commande de compilation – `npm run build` ou `vite build`
 - Dossier de sortie de compilation – `.svelte-kit/cloudflare`
 
-
-Une fois configuré, rendez vous sur la section **Runtime** des paramètres de votre projet, et
-ajoutez le flag de compatibilité `nodejs_als` pour activer la fonctionnalité [ AsyncLocalStorage de
-Node.js](https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-asynclocalstorage).
+Pour activer uniquement l'[API AsyncLocalStorage de
+Node.js](https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-asynclocalstorage),
+ajoutez l'option de compatibilité `nodejs_als` dans votre configuration wrangler en utilisant le
+tableau `compatibility_flags`.
 
 Autrement, vous pouvez faire ceci dans la configuration de Wrangler en utilisant le tableau
 `compatibility_flags`.

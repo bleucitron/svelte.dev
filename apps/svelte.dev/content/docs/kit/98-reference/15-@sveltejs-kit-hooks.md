@@ -115,8 +115,10 @@ type CaughtError<
 				kind: Kind;
 				/** L'erreur attrapée. Son type dépend de `kind` */
 				error: CaughtErrorMap[Kind];
-				/** Seulement présent pour les erreurs de validations */
+				/** Seulement présente pour les erreurs de validation */
 				issues?: undefined;
+				/** Seulement présente pour les erreurs de validation */
+				remote?: undefined;
 			};
 	  }[keyof CaughtErrorMap]
 	| ValidationCaughtError<Issue>;
