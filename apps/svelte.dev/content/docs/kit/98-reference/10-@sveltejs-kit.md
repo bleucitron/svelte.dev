@@ -533,6 +533,12 @@ emulate?: () => MaybePromise<Emulator>;
 
 <div class="ts-block-property-details">
 
+<div class="ts-block-property-bullets">
+
+- <span class="tag deprecated">déprécié</span> Sera supprimé dans la prochaine version majeure
+
+</div>
+
 Crée un `Emulator`, permettant à l'adaptateur d'influencer l'environnement pendant le développement,
 la compilation et le pré-rendu.
 
@@ -1404,6 +1410,11 @@ disponible sur le chemin courant et ses enfants.
 </div></div>
 
 ## Emulator
+
+<blockquote class="tag deprecated note">
+Sera supprimé dans la prochaine version majeure
+
+</blockquote>
 
 Une collection de fonctions qui influencent l'environnement lors du développement, de la
 compilation, et du pré-rendu.

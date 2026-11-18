@@ -65,11 +65,11 @@ const nav_links: NavigationLink[] = [
 
 const banner: BannerData = {
 	id: 'french-non-official',
-	start: new Date('16 Jul, 2025 00:00:00 UTC'),
-	end: new Date('31 Dec, 2027 00:00:00 UTC'),
+	start: new Date('16 Jul, 2026 00:00:00 UTC'),
+	end: new Date('31 Dec, 2028 00:00:00 UTC'),
 	arrow: false,
 	content: {
-		lg: "⚠️ Cette traduction n'est pas officielle, veuillez vous référrer au site officiel en cas de doute. ⚠️",
+		lg: "⚠️ Cette traduction n'est pas officielle, veuillez vous référer au site officiel en cas de doute. ⚠️",
 		sm: '⚠️ Traduction non officielle ⚠️'
 	},
 	href: 'https://github.com/bleucitron/svelte.dev'

@@ -777,7 +777,7 @@ valider les données à chaque touche du clavier) ou dans un callback `onchange`
 
 Par défaut, les problèmes sont ignorés s'ils concernent des contrôles de formulaires avec lesquels
 il n'y a pas encore eu d'interaction. Pour valider _tous_ les inputs, appelez `validate({
-includeUntouched: true })`.
+all: true })`.
 
 Pour les validations côté client, vous pouvez préciser un schéma _preflight_ qui va remplir les
 `issues()` et empêcher que les données soient envoyées au serveur si celles-ci ne sont pas validées
@@ -1700,7 +1700,7 @@ utilisatrice est connectée, peu importe la page sur laquelle il est utilisé.
 ```svelte
 <!--- file: src/lib/ProjectList.svelte --->
 <script>
-	import { getMyProjects } from '$lib/projects.remote';
+	import { getMyProjects } from '#lib/projects.remote.js';
 </script>
 
 <ul>

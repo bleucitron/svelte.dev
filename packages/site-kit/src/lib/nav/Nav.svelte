@@ -237,7 +237,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 		font: var(--sk-font-ui-medium);
 	}
 
-	@media (max-width: 831px) {
+	@media (max-width: 51.9375em) {
 		nav {
 			transition: transform 0.2s;
 		}
@@ -269,7 +269,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 
 			&[aria-current='page'] {
 				color: var(--sk-fg-accent);
-				box-shadow: inset 0 -1px 0 0 currentColor;
+				box-shadow: inset 0 -2px 0 0 currentColor;
 			}
 
 			&:not(.secondary) {
@@ -279,6 +279,11 @@ Top navigation bar for the application. It provides a slot for the left side, th
 			&.secondary {
 				box-shadow: none;
 				line-height: 1;
+
+				&[aria-current='page'] {
+					text-decoration: underline;
+					text-underline-offset: 0.15em;
+				}
 			}
 		}
 	}
@@ -296,12 +301,14 @@ Top navigation bar for the application. It provides a slot for the left side, th
 
 			a {
 				outline-offset: -2px;
+				text-decoration: none;
 			}
 		}
 	}
 
 	.home-link {
 		--padding-right: 1rem;
+		text-decoration: none;
 		width: 3.4rem;
 		height: 100%;
 		background: url(../branding/svelte-logo.svg) no-repeat 0 50% / calc(100% - var(--padding-right))
@@ -325,7 +332,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 		display: block;
 	}
 
-	@media (max-width: 831px) {
+	@media (max-width: 51.9375em) {
 		nav {
 			top: unset;
 			bottom: 0;
@@ -350,7 +357,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 		}
 	}
 
-	@media (min-width: 480px) {
+	@media (min-width: 30em) {
 		.home-link {
 			width: 11.2rem;
 			background: url(../branding/svelte.svg) no-repeat 0 50% / calc(100% - var(--padding-right))
@@ -369,7 +376,7 @@ Top navigation bar for the application. It provides a slot for the left side, th
 		}
 	}
 
-	@media (min-width: 832px) {
+	@media (min-width: 52em) {
 		.home-link {
 			--padding-right: 2rem;
 			width: 13.2rem;

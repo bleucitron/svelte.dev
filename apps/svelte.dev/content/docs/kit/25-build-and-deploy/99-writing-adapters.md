@@ -27,14 +27,6 @@ export default function (options) {
 		async adapt(builder) {
 			// implémentation de l'adaptateur
 		},
-		async emulate() {
-			return {
-				async platform({ config, prerender }) {
-					// l'objet renvoyé devient `event.platform` lors du développement, de
-					// la compilation et de la prévisualisation. Sa forme est celle de `App.Platform`
-				}
-			}
-		},
 		supports: {
 			read: ({ config, route }) => {
 				// Renvoyez `true` si la route avec la `config` donnée peut utiliser `read`
@@ -68,8 +60,7 @@ export default function (options) {
 }
 ```
 
-De ces options, uniquement `name` et `adapt` sont requises. `emulate`, `vite` et `supports` sont
-optionnelles.
+De ces options, uniquement `name` et `adapt` sont requises. `vite` et `supports` sont optionnelles.
 
 L'adaptateur est censé faire un certain nombre de choses au sein de la méthode `adapt` :
 

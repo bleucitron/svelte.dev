@@ -10,7 +10,7 @@ prennent une application compilée en entrée et génèrent un code prêt à êt
 Des adaptateurs officiels existent pour toute une variété de plateformes — ils sont documentés dans
 les pages suivantes :
 
-- [`@sveltejs/adapter-cloudflare`](adapter-cloudflare) pour Cloudflare Workers et Cloudflare Pages
+- [`@sveltejs/adapter-cloudflare`](adapter-cloudflare) pour Cloudflare Workers
 - [`@sveltejs/adapter-netlify`](adapter-netlify) pour Netlify
 - [`@sveltejs/adapter-node`](adapter-node) pour les serveurs Node
 - [`@sveltejs/adapter-bun`](adapter-bun) pour les serveurs Bun
