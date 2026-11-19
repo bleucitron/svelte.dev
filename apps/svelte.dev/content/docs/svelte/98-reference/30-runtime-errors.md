@@ -10,12 +10,12 @@ title: Erreurs d'exécution
 ### async_derived_orphan
 
 ```
-Cannot create a `$derived(...)` with an `await` expression outside of an effect tree
+Can only create a `$derived(...)` with an `await` expression during component initialization or in a declaration tag
 ```
 
 Il y a deux types de réactions dans Svelte — les [`$derived`](/docs/svelte/$derived) et les
-[`$effect`](/docs/svelte/$effect). Les dérivés peuvent être créés n'importe où, car ils sont
-exécutés en _différé_ et peuvent être [nettoyés par le
+[`$effect`](/docs/svelte/$effect). Les dérivés peuvent être créés normalement n'importe où, car ils
+sont exécutés en _différé_ et peuvent être [nettoyés par le
 ramasse-miettes](https://developer.mozilla.org/fr/docs/Glossary/Garbage_collection) si plus rien ne
 leur fait référence. Les effets, en revanche, continuent d'être exécutés immédiatement dès qu'une de
 leurs dépendances change, tant qu'ils n'ont pas été détruits.
@@ -25,10 +25,11 @@ racine](/docs/svelte/$effect#$effect.root), tels que celui qui est créé lorsqu
 composant pour la première fois), afin que Svelte sache quand les détruire.
 
 Un tour de passe-passe se produit lorsqu'un dérivé contient une expression `await` : puisqu'attendre
-jusqu'à ce qu'on lise `{await getPromise()}` pour appeler `getPromise` ferait arriver trop tard,
-nous utilisons un effet pour plutôt l'appeler proactivement, prévenant Svelte lorsque la valeur est
-rendue disponible. Mais puisque nous utilisons un effet, nous pouvons uniquement créer des dérivés
-asynchrones au sein d'un autre effet.
+jusqu'à ce qu'on lise `{$derived(await getPromise())}` pour appeler `getPromise` ferait arriver trop
+tard, nous utilisons un effet pour plutôt l'appeler proactivement, prévenant Svelte lorsque la
+valeur est rendue disponible. Mais puisque nous utilisons un effet, ceci ne peut se produire que
+lors de l'initialisation d'un composant ou dans une balise de
+[déclaration](/docs/svelte/declaration-tags).
 
 ### bind_invalid_checkbox_value
 
@@ -197,6 +198,14 @@ Cannot commit a fork that was already discarded
 ```
 Cannot create a fork inside an effect or when state changes are pending
 ```
+
+### get_abort_signal_after_await
+
+```
+`getAbortSignal()` cannot be called after an `await`
+```
+
+Abort signals must be associated with their deriveds/effects as soon as they run — if it happens after an `await`, it's too late. Create the abort signal first, before awaiting anything.
 
 ### get_abort_signal_outside_reaction
 

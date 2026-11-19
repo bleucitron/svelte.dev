@@ -45,7 +45,7 @@ export default defineConfig({
 					environment: undefined,
 					persist: undefined
 				},
-				fallback: 'plaintext'
+				worker: true
 			})
 		})
 	]
@@ -68,38 +68,12 @@ qui traite de
 `getPlatformProxy`](https://developers.cloudflare.com/workers/wrangler/api/#parameters-1) pour plus
 de détails.
 
-### fallback
+### worker
 
-Si oui ou non afficher une page 404.html en texte pur, ou une page de secours rendue en SPA pour les
-requêtes ne correspondant à aucun asset.
-
-Pour les Cloudflare Workers, le comportement par défaut est de renvoyer une réponse 404 avec un body
-vide pour les requêtes ne correspondant à aucun asset. Cependant, si l'option de configuration de
-Wrangler
-[`assets.not_found_handling`](https://developers.cloudflare.com/workers/static-assets/routing/#2-not_found_handling)
-vaut `"404-page"`, cette page sera servie si une requête échoue à correspondre un asset. Si
-`asset.not_found_handling` est défini comme `"single-page-application"`, l'adaptateur va rendre une
-page de secours `index.html` en SPA indépendamment de l'option `fallback` précisée.
-
-## Configuration de base [!VO]Basic configuration
-
-L'adaptateur s'attend à trouver un [fichier de configuration
-Wrangler](https://developers.cloudflare.com/workers/wrangler/configuration/) à la racine du projet.
-Il devrait ressembler à quelque chose comme ça :
-
-```jsonc
-/// file: wrangler.jsonc
-{
-	"name": "<any-name-you-want>",
-	"main": ".svelte-kit/cloudflare/_worker.js",
-	"compatibility_flags": ["nodejs_als"],
-	"compatibility_date": "<YYYY-MM-DD>",
-	"assets": {
-		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare",
-	}
-}
-```
+Si oui ou compiler un Worker. Vaut par défaut `true`. Utilisez `false` si vous souhaitez uniquement
+déployer des assets statiques. Dans ce cas
+[`assets.not_found_handling`](https://developers.cloudflare.com/workers/static-assets/#routing-behavior)
+vaudra `"404-page"`, si non déjà défini.
 
 ## Déploiement [!VO]Deployment
 
@@ -171,23 +145,9 @@ serveur](routing#server) ou grâce au hook [`handle`](hooks#handle).
 
 ## Résolution de problèmes [!VO]Troubleshooting
 
-### Compatibilité avec Node.js [!VO]Node.js compatibility
-
-Si vous souhaitez activer la [compatibilité avec
-Node.js](https://developers.cloudflare.com/workers/runtime-apis/nodejs/), vous pouvez ajouter
-l'option de compatibilité `nodejs_compat` à votre fichier de configuration :
-
-```jsonc
-/// file: wrangler.jsonc
-{
-	"compatibility_flags": ["nodejs_compat"]
-}
-```
-
 ### Limites de taille des workers [!VO]Worker size limits
 
-Lorsque vous déployez votre application, le serveur généré par SvelteKit est compilé en un seul
-fichier. Wrangler va échouer à publier votre worker s'il excède les [limites de
+Le déploiement de votre application échoura si vos fichiers de Workers dépassent les [limites de
 taille](https://developers.cloudflare.com/workers/platform/limits/#worker-size) après minification.
 Il est normalement peu probable que vous dépassiez cette limite, mais certaines grosses librairies
 peuvent vous les faire dépasser. Dans ce cas, vous pouvez essayer de réduire la taille de votre
@@ -212,8 +172,7 @@ Sites](https://developers.cloudflare.com/workers/configuration/sites/configurati
 plutôt d'utiliser les [Workers Static
 Assets](https://developers.cloudflare.com/workers/static-assets/). Pour migrer, remplacez
 `@sveltejs/adapter-cloudflare-workers` par `@sveltejs/adapter-cloudflare` et supprimez tous les
-paramètres de configuration `site` de votre fichier de configuration Wrangler, puis ajoutez-y les
-paramètres de configuration `assets.directory` et `assets.bindings` :
+paramètres de configuration `main` et `site` de votre fichier de configuration Wrangler.
 
 ```js
 // @errors: 2307
@@ -236,8 +195,6 @@ export default defineConfig({
 ```toml
 /// file: wrangler.toml
 ---site.bucket = ".cloudflare/public"---
-+++assets.directory = ".cloudflare/public"
-assets.binding = "ASSETS" # Excluez ceci si vous n'avez pas de clé `main` configurée.+++
 ```
 
 ### wrangler.jsonc
@@ -247,20 +204,22 @@ assets.binding = "ASSETS" # Excluez ceci si vous n'avez pas de clé `main` confi
 {
 ---	"site": {
 		"bucket": ".cloudflare/public"
-	},---
-+++	"assets": {
-		"directory": ".cloudflare/public",
-		"binding": "ASSETS" // Excluez ceci si vous n'avez pas de clé `main` configurée.
-	}+++
+	}---
 }
 ```
 
-## Migrating from Cloudflare Pages
+## Migrer depuis les Cloudflare Pages [!VO]Migrating from Cloudflare Pages
 
+Pour migrer vers les Cloudflare Workers :
 To migrate to Cloudflare Workers:
 
-1. Remove `pages_build_output_dir` from your Wrangler configuration and [add the `main` and `assets` settings](#Basic-configuration).
-2. Remove the adapter's `routes` option and any `_routes.json` files.
-3. Replace `wrangler pages dev` and `wrangler pages deploy` with `wrangler dev` and `wrangler deploy`. For automatic deployments, use [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) instead of the Pages Git integration.
+1. Supprimez `pages_build_output_dir` de votre configuration Wrangler.
+2. Supprimez l'option `routes` de votre adaptateur et tout fichier `_routes.json`.
+3. Remplacez `wrangler pages dev` et `wrangler pages deploy` par `wrangler dev` et `wrangler
+   deploy`. Pour les déploiements automatisés, utilisez [Workers
+Builds](https://developers.cloudflare.com/workers/ci-cd/builds/) plutôt que l'intégration Git de
+Pages.
 
-See Cloudflare's [Workers and Pages compatibility matrix](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/#compatibility-matrix) for a comparison of supported features.
+Voir la [matric de compatibilité entre les Cloudflare Workers et les Cloudflare
+Pages](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/#compatibility-matrix)
+pour avoir une comparaison des fonctionnalités supportées.

@@ -39,6 +39,9 @@ export default function (options) {
 			}
 		},
 		vite: {
+			// mettez ceci à `true` pour désactiver le serveur Node qui est lancé par défaut lors de
+			// `vite preview`
+			customPreview: false,
 			getRequest(options) {
 				const request = getRequest(options);
 				// modifiez l'objet Request ici si besoin

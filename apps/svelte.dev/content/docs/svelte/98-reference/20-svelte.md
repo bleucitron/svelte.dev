@@ -373,7 +373,8 @@ Renvoie un [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/Abor
 s'annule lorsque le [`$derived`](/docs/svelte/$derived) ou [`$effect`](/docs/svelte/$effect) courant
 est ré-exécuté ou détruit.
 
-Doit être appelée lorsqu'un `$derived` ou `$effect` est en cours d'exécution.
+Doit être appelée lorsqu'un `$derived` ou `$effect` est en cours d'exécution, avant quoi que ce soit
+ne soit attendu avec `await`.
 
 ```svelte
 <script>
