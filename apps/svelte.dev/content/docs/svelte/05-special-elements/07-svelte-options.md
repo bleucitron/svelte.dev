@@ -22,6 +22,9 @@ elle est utilisée comme option `tag`
 - `css="injected"` — le composant injectera ses styles inlinés : lors du rendu côté serveur, les
 styles seront injectés dans une balise `<style>` du `<head>`, lors du rendu côté client, les styles
 seront chargées via JavaScript
+- `customRenderer="..."` — le module qui fournit le [custom renderer](custom-renderers) avec lequel
+son composant est rendu. Utilisez `customRenderer={null}` pour utiliser le DOM au lieu du renderer
+par défaut. Nécessite l'option de compilateur `experimental.customRenderer`
 
 > [!LEGACY] Options dépréciées
 > Svelte 4 a également les options suivantes. Elles sont dépréciées en Svelte 5 et

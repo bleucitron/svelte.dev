@@ -483,7 +483,8 @@ composant (si compilé avec `accessors: true`).
 ```dts
 function hydrate<
 	Props extends Record<string, any>,
-	Exports extends Record<string, any>
+	Exports extends Record<string, any>,
+	Renderer = undefined
 >(
 	component:
 		| ComponentType<SvelteComponent<Props>>
@@ -525,12 +526,13 @@ initial à moins que l'option `intro` soit définie à `false`.
 ```dts
 function mount<
 	Props extends Record<string, any>,
-	Exports extends Record<string, any>
+	Exports extends Record<string, any>,
+	Renderer = undefined
 >(
 	component:
 		| ComponentType<SvelteComponent<Props>>
 		| Component<Props, Exports, any>,
-	options: MountOptions<Props>
+	options: MountOptions<Props, Renderer>
 ): Exports;
 ```
 
@@ -573,9 +575,7 @@ serveur](/docs/svelte/svelte-server#render).
 ```dts
 function onMount<T>(
 	fn: () =>
-		| NotFunction<T>
-		| Promise<NotFunction<T>>
-		| (() => any)
+		NotFunction<T> | Promise<NotFunction<T>> | (() => any)
 ): void;
 ```
 
@@ -1084,58 +1084,74 @@ Supprime le fork
 
 ## MountOptions
 
-Définit les options acceptées par la fonction `mount()`.
-
 <div class="ts-block">
 
 ```dts
 type MountOptions<
-	Props extends Record<string, any> = Record<string, any>
-> = {
-	/**
-	 * L'élément cible où le composant doit être monté.
-	 */
-	target: Document | Element | ShadowRoot;
-	/**
-	 * Un noeud optionnel dans `target`. Lorsque fourni, il est utilisé pour rendre le composant juste
-	 * immédiatement avant lui.
-	 */
-	anchor?: Node;
-	/**
-	 * Permet la spécification des évènements.
-	 * @deprecated Utilisez plutôt les props de callback.
-	 */
-	events?: Record<string, (e: any) => any>;
-	/**
-	 * Peut être obtenu via `getContext()` au niveau du composant.
-	 */
-	context?: Map<any, any>;
-	/**
-	 * Si oui ou non il faut jouer les transitions lors du rendu initial.
-	 * @default true
-	 */
-	intro?: boolean;
-	/**
-	 * Une fonction qui transforme les erreurs attrapées par les frontières d'erreur avant qu'elles ne
-	 * soient passées au snippet `failed`.
-	 * Vaut par défaut la fonction identité.
-	 */
-	transformError?: (
-		error: unknown
-	) => unknown | Promise<unknown>;
-} & ({} extends Props
+	Props extends Record<string, any> = Record<string, any>,
+	Renderer = undefined
+> = (Renderer extends MountRenderer
 	? {
+			/** Un custom renderer à utiliser à la place du DOM */
+			renderer: Renderer;
 			/**
-			 * Component properties.
+	 		 * L'élément cible où le composant doit être monté.
 			 */
-			props?: Props;
-		}
+			target: Document | Element | ShadowRoot;
+			/**
+			 * Un noeud optionnel dans `target`. Lorsque fourni, il est utilisé pour rendre le composant juste
+			 * immédiatement avant lui.
+			 */
+			anchor?: Node;
+	}
 	: {
 			/**
-			 * Component properties.
+			 * L'élément cible où le composant doit être monté.
 			 */
-			props: Props;
-		});
+			target: Document | Element | ShadowRoot;
+			/**
+			 * Un noeud optionnel dans `target`. Lorsque fourni, il est utilisé pour rendre le composant juste
+			 * immédiatement avant lui.
+			 */
+			anchor?: Node;
+			/** Un custom renderer à utiliser à la place du DOM */
+			renderer?: undefined;
+	}) & {
+			/**
+			 * Permet la spécification des évènements.
+			 * @deprecated Utilisez plutôt les props de callback.
+			 */
+			events?: Record<string, (e: any) => any>;
+			/**
+			 * Peut être obtenu via `getContext()` au niveau du composant.
+			 */
+			context?: Map<any, any>;
+			/**
+			 * Si oui ou non il faut jouer les transitions lors du rendu initial.
+			 * @default true
+			 */
+			intro?: boolean;
+			/**
+			 * Une fonction qui transforme les erreurs attrapées par les frontières d'erreur avant qu'elles ne
+			 * soient passées au snippet `failed`.
+			 * Vaut par défaut la fonction identité.
+			 */
+			transformError?: (
+				error: unknown
+			) => unknown | Promise<unknown>;
+} & ({} extends Props
+		? {
+				/**
+				 * Propriétés du composant.
+				 */
+				props?: Props;
+			}
+		: {
+				/**
+				 * Propriétés du composant.
+				 */
+				props: Props;
+			});
 ```
 
 </div>

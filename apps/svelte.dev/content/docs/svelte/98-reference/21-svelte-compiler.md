@@ -271,13 +271,11 @@ namespace AST {
 		preserveWhitespace?: boolean;
 		namespace?: Namespace;
 		css?: 'injected';
+		customRenderer?: string | null;
 		customElement?: {
 			tag?: string;
 			shadow?:
-				| 'open'
-				| 'none'
-				| ObjectExpression
-				| undefined;
+				'open' | 'none' | ObjectExpression | undefined;
 			props?: Record<
 				string,
 				{
@@ -389,9 +387,7 @@ namespace AST {
 		name: string;
 		/** Le 'y' in `bind:x={y}` */
 		expression:
-			| Identifier
-			| MemberExpression
-			| SequenceExpression;
+			Identifier | MemberExpression | SequenceExpression;
 	}
 
 	/** Une directive `class:` */
@@ -442,9 +438,7 @@ namespace AST {
 		name: string;
 		/** Le 'y' de `style:x={y}` */
 		value:
-			| true
-			| ExpressionTag
-			| Array<ExpressionTag | Text>;
+			true | ExpressionTag | Array<ExpressionTag | Text>;
 		modifiers: Array<'important'>;
 	}
 
@@ -612,9 +606,7 @@ namespace AST {
 	   * Les valeurs entre guillemets sont représentées par un tableau, même si elles ne contiennent pas d'expression comme `"{x}"`
 		 */
 		value:
-			| true
-			| ExpressionTag
-			| Array<Text | ExpressionTag>;
+			true | ExpressionTag | Array<Text | ExpressionTag>;
 	}
 
 	export interface SpreadAttribute extends BaseNode {
@@ -641,9 +633,7 @@ namespace AST {
 	}
 
 	export type AttributeLike =
-		| Attribute
-		| SpreadAttribute
-		| Directive;
+		Attribute | SpreadAttribute | Directive;
 
 	export type Directive =
 		| AST.AnimateDirective
@@ -701,11 +691,7 @@ namespace AST {
 		| Block;
 
 	export type SvelteNode =
-		| Node
-		| TemplateNode
-		| AST.Fragment
-		| _CSS.Node
-		| Script;
+		Node | TemplateNode | AST.Fragment | _CSS.Node | Script;
 
 	export type { _CSS as CSS };
 }
@@ -986,7 +972,7 @@ discloseVersion?: boolean;
 </div>
 
 Si `true`, expose la version majeure de Svelte dans le navigateur en l'ajoutant à un `Set` stocké
-dans l'objet global `window.__svelte.v`.
+dans l'objet global `globalThis.__svelte.v`.
 
 </div>
 </div>
@@ -1436,6 +1422,26 @@ async?: boolean;
 
 Autorise le mot-clé `await` dans les expressions dérivées, les expressions de template, et à la
 racine des composants
+
+</div>
+</div>
+<div class="ts-block-property">
+
+```dts
+customRenderer?: true | string | ((options: { filename: string }) => string | null);
+```
+
+<div class="ts-block-property-details">
+
+Perment aux custom renderers d'être utilisés avec `<svelte:options
+customRenderer="path/to/renderer/module" />`. Peut valoir :
+
+- `true`, permettant aux composants d'individuellement participer
+- une chaîne de caractères qui pointe vers un custom renderer par défaut
+- une fonction qui reçoit un objet `{ filename }` et renvoie un chemin de module de custom renderer
+(résolu relativement à ce composant, si relatif), ou `null` si le composant devrait utiliser le DOM
+
+L'export par défaut d'un module de custom renderer doit être un objet créé avec `createRenderer`.
 
 </div>
 </div></div>

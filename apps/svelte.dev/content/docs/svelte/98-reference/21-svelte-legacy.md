@@ -49,8 +49,7 @@ function asClassComponent<
 	Slots extends Record<string, any>
 >(
 	component:
-		| SvelteComponent<Props, Events, Slots>
-		| Component<Props>
+		SvelteComponent<Props, Events, Slots> | Component<Props>
 ): ComponentType<
 	SvelteComponent<Props, Events, Slots> & Exports
 >;
