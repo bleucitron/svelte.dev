@@ -17,15 +17,21 @@ Cette fonctionnalité est actuellement expérimentale, et il vous faut l'activer
 dans les fichiers `svelte.config.js` ou `vite.config.js` :
 
 ```js
-// @noErrors
-/// file: svelte.config.js
-export default {
-	compilerOptions: {
-		experimental: {
-			customRenderer: true
-		}
-	}
-};
+/// file: vite.config.js
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+	plugins: [
+		svelte({
+			compilerOptions: {
+				experimental: {
+					+++customRenderer: true+++
+				}
+			}
+		})
+	]
+});
 ```
 
 L'API peut évoluer avant que cette fonctionnalité ne soit plus expérimentale.
@@ -67,15 +73,21 @@ Si la plupart de vos composants utilisent le même renderer, vous pouvez en fair
 défaut en passant le chemin du module plutôt que `true` :
 
 ```js
-// @noErrors
-/// file: svelte.config.js
-export default {
-	compilerOptions: {
-		experimental: {
-			customRenderer: 'three-renderer'
-		}
-	}
-};
+/// file: vite.config.js
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+	plugins: [
+		svelte({
+			compilerOptions: {
+				experimental: {
+					+++customRenderer: 'three-renderer'+++
+				}
+			}
+		})
+	]
+});
 ```
 
 Les composants individuels peuvent toujours choisir un renderer différent, ou aucun avec
@@ -92,17 +104,23 @@ Pour avoir plus de contrôle, passez une fonction. Celle-ci recevra le nom de fi
 composant, et renvoit le module de renderer pour ce composant, ou `null` pour cibler le DOM :
 
 ```js
-// @noErrors
-/// file: svelte.config.js
-export default {
-	compilerOptions: {
-		experimental: {
-			customRenderer: ({ filename }) => {
-				return filename.includes('/src/scene/') ? 'three-renderer' : null;
+/// file: vite.config.js
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+	plugins: [
+		svelte({
+			compilerOptions: {
+				experimental: {
++++					customRenderer: ({ filename }) => {
+						return filename.includes('/src/scene/') ? 'three-renderer' : null;
+					}+++
+				}
 			}
-		}
-	}
-};
+		})
+	]
+});
 ```
 
 Puisque la fonction sait pour quel fichier elle doit décider, elle peut également renvoyer un chemin
@@ -151,7 +169,27 @@ par ce renderer :
 
 ```js
 /// file: main.js
-// @noErrors
+// @filename: ambient.d.ts
+declare module 'terminal-renderer' {
+	interface TerminalRendererFragment {}
+	interface TerminalRendererElement {}
+	interface TerminalRendererText {}
+	interface TerminalRendererComment {}
+
+	type TerminalNodes = {
+		fragment: TerminalRendererFragment;
+		element: TerminalRendererElement;
+		text: TerminalRendererText;
+		comment: TerminalRendererComment;
+	}
+
+	const renderer: import('svelte/renderer').Renderer<TerminalNodes>;
+	export default renderer;
+
+	export function draw(fragment: TerminalRendererFragment): void;
+}
+// @filename: index.js
+// ---cut---
 import { mount } from 'svelte';
 import renderer, { draw } from 'terminal-renderer';
 import Clock from './Clock.svelte';
@@ -205,7 +243,28 @@ renderer à la fonction [`mount`](svelte#mount) ainsi qu'une cible créée par c
 l'[exemple du terminal](#Running-outside-the-browser) un peu plus haut :
 
 ```js
-// @noErrors
+/// file: main.js
+// @filename: ambient.d.ts
+declare module 'three-renderer' {
+	interface ThreeRendererFragment {}
+	interface ThreeRendererElement {}
+	interface ThreeRendererText {}
+	interface ThreeRendererComment {}
+
+	type ThreeNodes = {
+		fragment: ThreeRendererFragment;
+		element: ThreeRendererElement;
+		text: ThreeRendererText;
+		comment: ThreeRendererComment;
+	}
+
+	const renderer: import('svelte/renderer').Renderer<ThreeNodes>;
+	export default renderer;
+
+	export function draw(fragment: ThreeRendererFragment): void;
+}
+// @filename: index.js
+// ---cut---
 import { mount } from 'svelte';
 import renderer from 'three-renderer';
 import Scene from './Scene.svelte';
@@ -436,7 +495,7 @@ que les paramètres de chaque méthode soient typés :
 // @noErrors
 import { createRenderer } from 'svelte/renderer';
 
-const renderer = createRenderer<{
+export default createRenderer<{
 	fragment: SceneFragment;
 	element: SceneObject;
 	text: SceneText;
@@ -504,23 +563,27 @@ créer son propre canvas :
 
 ```js
 // @noErrors
-embed({ host, parent }) {
-	if (host !== null) {
-		throw new Error('Le renderer de canvas peut uniquement être utilisé au sein du DOM');
+export default createRenderer({
+	// ...
+
+	embed({ host, parent }) {
+		if (host !== null) {
+			throw new Error('Le renderer de canvas peut uniquement être utilisé au sein du DOM');
+		}
+
+		const canvas = parent instanceof HTMLCanvasElement ? parent : document.createElement('canvas');
+		const scene = create_scene(canvas);
+
+		return {
+			// n'insérer un canvas que si nous venons de le créer
+			node: canvas === parent ? undefined : canvas,
+			// le noeud racine de la scène, dans lequel le contenu est rendu
+			container: scene.root,
+			// exécuté une fois que le contenu a été supprimé
+			destroy: () => scene.dispose()
+		};
 	}
-
-	const canvas = parent instanceof HTMLCanvasElement ? parent : document.createElement('canvas');
-	const scene = create_scene(canvas);
-
-	return {
-		// n'insérer un canvas que si nous venons de le créer
-		node: canvas === parent ? undefined : canvas,
-		// le noeud racine de la scène, dans lequel le contenu est rendu
-		container: scene.root,
-		// exécuté une fois que le contenu a été supprimé
-		destroy: () => scene.dispose()
-	};
-}
+});
 ```
 
 Comme dans cet exemple, jeter une erreur est la meilleure manière de rejeter une position que votre
@@ -535,20 +598,24 @@ appartenant au `guest` :
 
 ```js
 // @noErrors
-host({ guest }) {
-	if (guest !== null) {
-		throw new Error('Seul du contenu DOM peut être rendu dans une scène');
+export default createRenderer({
+	// ...
+
+	host({ guest }) {
+		if (guest !== null) {
+			throw new Error('Seul du contenu DOM peut être rendu dans une scène');
+		}
+
+		// un objet de scène qui affiche un élément DOM comme surcouche
+		const overlay = create_overlay();
+
+		return {
+			node: overlay,
+			container: overlay.element,
+			destroy: () => overlay.dispose()
+		};
 	}
-
-	// un objet de scène qui affiche un élément DOM comme surcouche
-	const overlay = create_overlay();
-
-	return {
-		node: overlay,
-		container: overlay.element,
-		destroy: () => overlay.dispose()
-	};
-}
+});
 ```
 
 ### Règles des crossings [!VO]Rules for crossings

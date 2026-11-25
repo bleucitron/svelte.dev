@@ -16,4 +16,16 @@ npx sv add playwright
 - des scripts ajoutés dans votre fichier `package.json`
 - un fichier de configuration Playwright
 - votre fichier `.gitignore` mis à jour
-- un test de démo
+- un exemple de test e2e
+- une page de démo optionnelle que le test e2e va tester
+
+## Options
+
+### demo
+
+Si oui ou non générer une page de démo sur la route `/demo/playwright` (listée dans le post-it
+`DemoLinks`) pour le test e2e d'exemple. Sans cette page, le test va cibler `/`.
+
+```sh
+npx sv add playwright="demo:yes"
+```

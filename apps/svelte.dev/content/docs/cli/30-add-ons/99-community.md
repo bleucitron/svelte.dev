@@ -37,9 +37,10 @@ export default defineAddon({
 		})
 		.build(),
 
-	setup: ({ dependsOn, isKit, unsupported, addOption }) => {
+	setup: ({ dependsOn, runsAfter, isKit, unsupported, addOption }) => {
 		if (!isKit) unsupported('Nécessite SvelteKit');
-		dependsOn('vitest');
+		dependsOn('vitest'); // add-on requis
+		runsAfter('prettier'); // uniquement pour l'order
 
 		// ajoute dynamiquement des options (par ex. basé sur l'état du workspace ou des données récupérées)
 		// addOption('key', { question: '...', type: 'boolean', default: true });
@@ -67,8 +68,39 @@ dépendances, et l'I/O de fichier. Le moteur orchestre l'exécution de l'add-on.
 language, et des transformations typées. Tout ici est pur — pas de système de fichiers, pas de
 conscience du workspace.
 
-Cette séparation implique que les transformations sont testables sans aucun workspace, et
-composables entre add-ons.
+[Pourquoi il y a deux paquets.](faq#Why-are-there-two-packages-sv-and-sveltejs-sv-utils)
+
+### Dépendances [!VO]Dependencies
+
+`setup` reçoit `draftOptions`, les options choisies jusque là, pour que les dépendances puissent en
+profiter. `run` reçoit les `options` finales. `dependsOn` prend également les options privilégiées
+pour un add-on officiel : elles répondent aux questions lorsque le CLI les appliquent, et sont
+ignorées lorsque l'utilisateur ou l'utilisatrice les sélectionne elle-même.
+
+```js
+import { defineAddon, defineAddonOptions } from 'sv';
+
+export default defineAddon({
+	id: 'my-auth',
+
+	options: defineAddonOptions()
+		.add('database', {
+			question: 'Stocker les users dans une base de données ?',
+			type: 'boolean',
+			default: true
+		})
+		.build(),
+
+	setup: ({ draftOptions, dependsOn, dependencyVersion }) => {
+		// ne pas reconfigurer une base de données que le projet a déjà
+		if (draftOptions.database && !dependencyVersion('drizzle-orm')) {
+			dependsOn('drizzle', { database: 'postgresql' });
+		}
+	},
+
+	run: ({ options }) => {}
+});
+```
 
 ## Développement [!VO]Development
 
@@ -86,7 +118,7 @@ pas l'intention de publier — par exemple, pour standardiser la mise en place d
 votre équipe ou de votre organisation.
 
 > [!NOTE]
-> Le scipt `demo-add` compile automatiquement votre add-on avant de l'exécuter.
+> Le script `demo-add` compile automatiquement votre add-on avant de l'exécuter.
 
 ## Tests [!VO]Testing
 
@@ -96,9 +128,9 @@ SvelteKit à partir de templates, exécute votre add-on, et vous donne accès au
 générés.
 
 ```js
-import { expect } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { expect } from '@playwright/test';
 import { createSetupTest } from 'sv/testing';
 import * as vitest from 'vitest';
 import addon from './index.js';
@@ -145,7 +177,7 @@ Le script `tests/setup/global.js` étant le suivant :
 ```js
 import path from 'node:path';
 import { setupGlobal } from 'sv/testing';
-// test projects are scaffolded into `<project-root>/.test-output`
+// les projets de test sont préparés dans `<project-root>/.test-output`
 const TEST_DIR = path.resolve(import.meta.dirname, '..', '..', '.test-output');
 
 export default setupGlobal({ TEST_DIR });
@@ -158,7 +190,22 @@ export default setupGlobal({ TEST_DIR });
 Les add-on communautaires sont compilés avec [tsdown](https://tsdown.dev/) en un seul fichier. Tout
 est compilé, à l'exception de sv (qui est une dépendance-paire, fournie lors de l'exécution.)
 
-`sv` ships its own copy of [`@sveltejs/sv-utils`](sv-utils), so an add-on that leaves it unbundled will still load. Nothing verifies the version: your add-on runs against whatever `sv` provides, and following its breaking changes is up to you. Bundle it to stay on a version you control.
+[`@sveltejs/sv-utils`](sv-utils) est également empaqueté pour marquer sa version. Pour garder votre
+add-on léger, vous pouvez le laisser non empaqueté le déplaçant dans `peerDependencies` (`tsdown` ne
+compile jamais ses pairs) :
+
+```jsonc
+"peerDependencies": {
+	"sv": "^1.4.0",
+	// résolu depuis la copie que `sv` embarque, `sv` vous prévient s'il y a une incompatibilité
+	// majeure
+	"@sveltejs/sv-utils": "^1.1.0"
+}
+```
+
+Garde `sv` à la version avec laquelle vous avez testé : lorsqu'une incompatibilité est détectée, les
+utilisateurs et utilisatrices sont invité·e·s à exécuter `npx sv@1.4.0 add <your-addon>`.
+Renseignez-vous sur [le compromis](faq#Should-my-add-on-bundle-sveltejs-sv-utils).
 
 ### `package.json`
 

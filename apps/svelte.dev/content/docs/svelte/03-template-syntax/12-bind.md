@@ -183,7 +183,7 @@ Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group` :
 	let fillings = $state([]);
 </script>
 
-<h1>Customize your burrito</h1>
+<h1>Personnaliser votre burrito</h1>
 
 <!-- les inputs radio groupés sont mutuellement exclusifs -->
 <label><input type="radio" bind:group={tortilla} value="Nature" />Nature</label>
@@ -207,7 +207,11 @@ Les inputs qui fonctionnent en groupe peuvent utiliser `bind:group` :
 ```
 <!-- codeblock:end -->
 
-> [!NOTE] `bind:group` ne fonctionne que si les inputs sont dans le même composant Svelte.
+> [!NOTE] Le tableau d'un groupe de checkbox est construit à partir des checkbox cochées dans une
+> unique instance de composant. Si chaque checkbox est dans son propre composant, en cocher une
+> remplace le tableau plutôt qu'ajouter des éléments au tableau. Les groupes de radio fonctionnent à
+> travers les composants, tant que la valeur est liée au travers d'une prop
+> [`$bindable`]($bindable).
 
 ## `<input bind:files>`
 

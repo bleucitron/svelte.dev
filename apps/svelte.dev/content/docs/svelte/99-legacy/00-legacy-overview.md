@@ -18,5 +18,28 @@ legacy_ et le _mode runes_. Si un composant est en mode runes (que vous simpleme
 utilisant les runes, ou en définissant explicitement l'option de compilateur `runes: true`), les
 fonctionnalités du mode legacy n'y sont plus disponibles.
 
+Les composants qui utilisent explicitement le mode legacy, à cause de la présence de
+`<svelte:options runes={false} />`, de l'option de compilateur `runes: false`, de `export let`, de
+`$$props` ou `$$restProps`, ré-exécutent une expression de template lorsqu'une variable qu'il
+référence change de valeur, comme dans Svelte 3/4. Les `$state` que l'expression lit au travers
+d'un champ de classe ou dans un appel de fonction ne sont pas suivis, ce qui veut dire que
+`{counter.value}` n'est pas ré-exécuté par `counter.increment()` si `value` est un champ `$state`
+d'une instance de classe venant d'un [module `.svelte.js`](svelte-js-files). Pour utiliser de tels
+états dans un composant en mode legacy, convertissez-le en un store avec
+[`toStore`](svelte-store#toStore) :
+
+```svelte
+<svelte:options runes={false} />
+
+<script>
+	import { toStore } from 'svelte/store';
+	import { counter } from './counter.svelte.js';
+
+	const count = toStore(() => counter.value);
+</script>
+
+<button on:click={() => counter.increment()}>{$count}</button>
+```
+
 Si vous êtes uniquement intéressé•e par la syntaxe de Svelte 3/4, vous pouvez retrouver sa
 documentation sur [v4.svelte.dev](https://v4.svelte.dev) (en anglais).

@@ -10,8 +10,12 @@ code dans les add-ons.
 npm install -D @sveltejs/sv-utils
 ```
 
-## `transforms`
+> [!NOTE]
+> Empaquetez `@sveltejs/sv-utils` dans votre add-on pour marquer sa version, ou déclarez-le dans ses
+> `peerDependencies` pour utiliser la copie que `sv` embarque. Voir [le
+> compromis](faq#Should-my-add-on-bundle-sveltejs-sv-utils).
 
+## `transforms`
 
 `transforms` est une collection de fonction conscientes des parsers vous permettant de modifier les
 fichiers via un AST. Elle accepte un callback. La valeur de retour est conçue pour être passée
@@ -244,7 +248,8 @@ configuration Vite, utilitaires SvelteKit
 - **`svelte.*`** - ensureScript, addSlot, addFragment
 - **`json.*`** - arrayUpsert, packageScriptsUpsert
 - **`html.*`** - manipulation d'attributs
-- **`text.*`** - insertion de lignes dans les fichiers bruts (.env, .gitignore)
+- **`text.*`** - `add` (ajoute si manquant) ou `set` des lignes dans des fichiers plats (`.env`,
+`.gitignore`)
 
 ## Configuration de Svelte [!VO]Svelte config
 
@@ -288,6 +293,9 @@ sur place (tableaux, objets imbriqués).
 - **`override(props, { dropLeadingComments })`** — définit ou remplace des options
 `dropLeadingComments` supprime un commentaire considéré comme devenu inutile (par ex. la note sur
 adapter-auto lorsque vous changez d'adaptateur).
+- **`config`** — l'objet de configuration brut résolu pour les modifications qui ont besoin
+d'opérations bas-niveau sur l'AST. Dans une configuration Vite, il s'agit de l'objet passé à
+`sveltekit()`.
 
 Cette méthode écrit dans `sv.file`, de sorte que la modification est suivi comme n'importe quelle
 autre. Si le projet n'a aucun fichier de configuration, un `svelte.config.js` est créé.
@@ -314,9 +322,10 @@ builds". À utiliser avec `sv.files` lorsque le projet utilise pnpm.
 de la forme, de sorte que le pin de l’invocateur de `packageManager` ne soit pas utilisé.
 L'utilitaire détecte la version de pnpm actuellement installée via `pnpm --version` :
 
-- pnpm `>= 11`: écrit dans la map unifiée `allowBuilds` (`{ pkg: true }`), en migrant toute liste
+- pnpm `>= 10.26` : écrit dans la map unifiée `allowBuilds` (`{ pkg: true }`), en migrant toute liste
 `onlyBuiltDependencies` vers la map.
-- pnpm `< 11`: écrit dans la liste `onlyBuiltDependencies` legacy.
+- pnpm de `10.5` à `10.25` : écrit dans la liste `onlyBuiltDependencies` legacy.
+- pnpm `< 10.5` : n'écrit rien
 
 ```js
 // @noErrors
@@ -329,6 +338,36 @@ if (packageManager === 'pnpm') {
 	);
 }
 ```
+
+## Demo pages
+
+### `defineDemoPage`
+
+Met en place un add-on de démo dans votre projet SvelteKit. Chaque démo est listée dans un post-it
+flottant `DemoLinks` rendu dans le layout racine, peu importe le template. Il renvoie les morceaux
+que vous avez étalés dans `sv.file()` :
+
+```js
+// @noErrors
+import { defineDemoPage } from '@sveltejs/sv-utils';
+
+const demo = defineDemoPage('my-addon', language, directory.kitRoutes);
+
+sv.file(...demo.links); // ajoute `/demo/my-addon` à `<routes>/demo/DemoLinks.svelte`
+sv.file(...demo.layout); // rend `<DemoLinks />` dans `<routes>/+layout.svelte`
+sv.file(`${demo.addonPath}/+page.svelte` /* votre route de démo */);
+```
+
+- **`addonPath`** — `<routes>/demo/<name>`, à laquelle appartient votre démo.
+- **`links`** — une paire `[path, transform]` pour `<routes>/demo/DemoLinks.svelte` (créée si
+manquante).
+- **`layout`** — une paire `[path, transform]` pour `<routes>/+layout.svelte` (créée si manquante).
+
+Les deux transformations sont idem-potentes, ce qui implique que la ré-exécution d'un add-on ne va
+dupliquer les entrées. Ne les exécutez uniquement lorsque l'utilisateur ou l'utilisatrice a demandé
+une démo (par ex. une option `demo`), afin que les projets sans démo n'aient pas le post-it.
+Pour désactiver le post-it, supprimez le fichier `DemoLinks.svelte` ainsi que son usage dans le
+layout racine.
 
 ## Usage dans le navigateur [!VO]Browser usage
 

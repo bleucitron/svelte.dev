@@ -1026,12 +1026,7 @@ l'onglet ou via une navigation vers un document différent
 
 ```dts
 type NavigationType =
-	| 'enter'
-	| 'form'
-	| 'leave'
-	| 'link'
-	| 'goto'
-	| 'popstate';
+	'enter' | 'form' | 'leave' | 'link' | 'goto' | 'popstate';
 ```
 
 </div>

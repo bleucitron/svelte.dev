@@ -45,14 +45,28 @@ Installe les dépendances avec le gestionnaire de paquets spécifié :
 - `bun`
 - `deno`
 
+### `--package-manager <package-manager>`
+
+Utilise le gestionnaire de paquets précisé sans le demander. A les mêmes options que `--install`.
+Combinez avec `--no-install` pour mettre en place le projet avec le gestionnaire précisé sans
+procéder à l'installation.
+
 ### `--no-install`
 
 Ne demande pas d'installer des dépendances.
 
 ## Add-ons officiels [!VO]Official add-ons
 
+Les add-ons officiels sont développés et maintenus dans le [repository du CLI de
+Svelte](https://github.com/sveltejs/cli) par l'équipe de Svelte, et ont été approuvés à la fois sur
+leur qualité et leur sécurité. L'ensemble est intentionnellement petit — il couvre des intégrations
+largement utilisées et haute facture, tandis que les autres intégrations sont publiées en tant
+qu'[add-ons communautaires](#Community-add-ons). La page de chaque add-on décrit ce qu'il met en
+place et les options que chacun a disponibles.
+
 - [`ai-tools`](ai-tools)
 - [`better-auth`](better-auth)
+- [`devtools`](devtools)
 - [`drizzle`](drizzle)
 - [`enhanced-img`](enhanced-img)
 - [`eslint`](eslint)
@@ -68,11 +82,11 @@ Ne demande pas d'installer des dépendances.
 ## Add-ons communautaires [!VO]Community add-ons
 
 > [!NOTE]
-> Les mainteneurs de Svvelte ne vérifient pas le code des add-ons communautaires.
+> Les mainteneurs de Svelte ne vérifient pas le code des add-ons communautaires.
 
 Les add-ons communautaires sont des paquets npm publiés par la communauté. Chercher des add-ons pour
-vos librairies préférées. _(bientôt)_ Beaucoup de développeurs sont en train de construire des
-add-ons `sv` pour rendre leurs intégrations plus immédiates. Vous pouvez les trouver sur
+vos librairies préférées. Beaucoup de développeurs sont en train de construire des add-ons `sv` pour
+rendre leurs intégrations plus immédiates. Vous pouvez les trouver sur
 [`npmx`](https://www.npmx.dev/search?q=keyword:sv-add) en cherchant le mot-clé : `sv-add`.
 
 ```sh

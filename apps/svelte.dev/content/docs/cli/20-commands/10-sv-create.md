@@ -87,6 +87,12 @@ Installe les dépendances avec le gestionnaire de paquet spécifié :
 - `bun`
 - `deno`
 
+### `--package-manager <package-manager>`
+
+Utilise le gestionnaire de paquets précisé sans le demander. A les mêmes options que `--install`.
+Combinez avec `--no-install` pour mettre en place le projet avec le gestionnaire précisé sans
+procéder à l'installation.
+
 ### `--no-install`
 
 Empêche l'installation des dépendances.

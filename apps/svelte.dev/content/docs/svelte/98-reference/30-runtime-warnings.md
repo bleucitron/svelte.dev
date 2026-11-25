@@ -472,11 +472,11 @@ The following properties cannot be cloned with `$state.snapshot` — the return 
 
 `$state.snapshot` essaye de clone la valeur fournie afin de renvoyer une référence qui ne changera
 plus. Certains objets peuvent ne pas être clonables, auquel cas la valeur originale est renvoyée.
-Dans l'exemple suivant, `property` est cloné, mais `window` ne l'est pas, car les éléments du DOM ne
-peuvent pas être clonés :
+Dans l'exemple suivant, `property` est cloné, mais `callback` ne l'est pas, car les fonctions ne
+peuvent pas être clonées :
 
 ```js
-const object = $state({ property: 'ceci est clonable', window })
+const object = $state({ property: 'ceci est clonable', callback: () => {} })
 const snapshot = $state.snapshot(object);
 ```
 

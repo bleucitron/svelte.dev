@@ -601,6 +601,10 @@ en nombre et booléen respectivement.
 > false)` plutôt que juste `v.boolean()`, tandis qu'avec Zod, cela signifie l'utilisation de
 > `z.boolean.default(false)` au lieu de simplement `z.boolean()`.
 
+Pour une checbox devant être cochée, pour accepter des conditions d'utilisation par exemple,
+utilisez `z.literal(true)` avec Zod ou `v.pipe(v.optional(v.boolean(), false), v.literal(true))`
+avec Valibot. Une checkbox non cochée fera alors échouer la validation.
+
 Dans le cas d'inputs `radio` et `checkbox` qui appartiennent tous au même champ, la `value` doit
 être précisée en tant que second argument de `.as(...)` :
 

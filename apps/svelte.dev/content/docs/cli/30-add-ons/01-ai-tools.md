@@ -19,7 +19,7 @@ individuel.
 
 - Le plugin Svelte contient l'ensemble des outils IA de Svelte (serveur MCP,
 [skills](/docs/ai/skills), et sous-agents) et se maintient à jour tout seul. Il est disponible pour
-Claude Code et OpenCode. Pour Claude Code, il s'active via l'ajout d'un fichier
+Claude Code, OpenCode et Pi. Pour Claude Code, il s'active via l'ajout d'un fichier
 `.claude/settings.json` — la première fois que vous ouvrez le projet, on vous demandera d'accepter
 de faire confiance au workspace, puis le plugin sera automatiquement installé (aucun `/plugin
 install` n'est nécessaire)
@@ -37,7 +37,7 @@ exactement ce que vous installez) :
 ### ide
 
 Le ou les clients que vous souhaitez utiliser, comme `'claude-code'`, `'cursor'`, `'gemini'`,
-`'opencode'`, `'vscode'`, `'other'`.
+`'opencode'`, `'pi'`, `'vscode'`, `'other'`.
 
 ```sh
 npx sv add ai-tools="ide:cursor,vscode"
@@ -69,4 +69,33 @@ Uniquement pertinent lorsque vous ajoutez le serveur MCP en tant qu'outil indivi
 
 ```sh
 npx sv add ai-tools="mcpSetup:local"
+```
+
+### agentsMd
+
+Si oui ou non ajouter un [fichier README pour les agents](https://agents.md/) (`AGENTS.md`, ou
+`GEMINI.md` pour Gemini, plus un fichier `.claude/CLAUDE.md` pointant vers `AGENTS.md` pour Claude
+Code). Vaut par défaut `true`. La question n'est pas posée lorsqu'aucun client sélectionné n'en
+aurait besoin : le plugin Svelte (Claude Code avec `delivery:plugin`, OpenCode et Pi) le fournit
+déjà.
+
+```sh
+npx sv add ai-tools="ide:cursor+agentsMd:no"
+```
+
+### optInSkills
+
+Quels [skills](https://svelte.dev/docs/ai/skills) optionnels ajouter, comme `'svelte-mcp-feedback`
+(reporte les erreurs Svelte que vous corrigez au repository
+[ai-tools](https://github.com/sveltejs/ai-tools) pour que l'autofixer puisse les attraper). Aucun
+skill n'est ajouté par défaut. Les skills optionnels ne sont pas compilés avec le plugin Svelte, ce
+qui implique que cette question est posée pour chaque client qui supporte les skills, même lorsque
+vous choisissez le plugin. La question n'est pas posée lorsque tous les clients sélectionnés peuvent
+déjà charger les skills optionnels depuis l'un de ses dossiers de skills (par exemple Cursor charge
+déjà `.claude/skills`, et Pi charge également `.agents/skills`). Les skills ne sont ajoutés que pour
+les clients qui ne peuvent pas encore les charger, afin d'éviter que `sv` ne charge une deuxième
+copie pour un client qui en voit déjà un.
+
+```sh
+npx sv add ai-tools="ide:claude-code+delivery:plugin+optInSkills:svelte-mcp-feedback"
 ```

@@ -825,6 +825,12 @@ css?: 'injected' | 'external' | ((options: { filename: string }) => 'injected' |
 
 <div class="ts-block-property-details">
 
+<div class="ts-block-property-bullets">
+
+- <span class="tag">par défaut</span> `'external'`
+
+</div>
+
 - `'injected'` : les styles seront inclus dans le `head` lors de `render(...)`, et injectés dans le
 document (si non déjà présents) lorsque le composant sera monté. Pour les composants compilés en
 tant qu'éléments personnalisés, les styles sont injectés dans le shadow root.

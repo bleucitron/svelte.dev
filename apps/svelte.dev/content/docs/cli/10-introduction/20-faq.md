@@ -25,4 +25,34 @@ Voici une liste de problèmes déjà identifiés par le passé avec leur solutio
 
 - [`npx sv` ne crée rien](https://github.com/sveltejs/cli/issues/472)
 - [la commande `sv` entre en conflit avec `runit`](https://github.com/sveltejs/cli/issues/259)
-- [`sv` dans windows powershell entre en conflit avec `Set-Variable`](https://github.com/sveltejs/cli/issues/317)
+- [`sv` dans windows powershell entre en conflit avec
+`Set-Variable`](https://github.com/sveltejs/cli/issues/317)
+
+## Pourquoi y a t'il deux paquets, `sv` et `@sveltejs/sv-utils` ? [!VO]Why are there two packages, `sv` and `@sveltejs/sv-utils`?
+
+Il y a une différence claire :
+
+- [`sv`](sv) décide **où et quand** : les chemins, la détection de workspace, les dépendances, et
+les entrées/sorties de fichier.
+- [`@sveltejs/sv-utils`](sv-utils) décide **quoi** faire du contenu : parsers et transformeurs purs,
+sans aucune conscience du système de fichiers ou du workspace.
+
+Ceci permet de maintenir les transformations testables sans workspace, ainsi que leur composabilité
+entre add-ons.
+
+## Est-ce que mon add-on devrait inclure `@sveltejs/sv-utils` ? [!VO]Should my add-on bundle `@sveltejs/sv-utils`?
+
+La plupart des changements bloquants se produisent dans `@sveltejs/sv-utils`, et non dans `sv`.
+Chaque évolution de `sv` inclut exactement une version de `@sveltejs/sv-utils`, vous avez donc deux
+options :
+
+- **Empaqueté** (le défaut du template) : marque la version que vous avez testé. Solution la plus
+sûre, coûte ~1 MB.
+- **Non empaqueté** : déclarez la dépendance dans `peerDependencies`. Votre add-on reste léger et
+est exécuté avec la copie que `sv` embarque. Lorsque des versions majeures diffèrent, `sv` vous
+avertit et affiche la commande à ré-exécuter avec la version de `sv` pour laquelle vous avez compilé
+: `npx sv@<peerDependencies.sv> add <votre-addon>`.
+
+Si un add-on n'incluant pas cette dépendance pose problème à vos usagers, ils et elles peuvent
+exécuter cette commande, et vous pouvez publier un correctif pour la dernière version de `sv`. Voir
+la section [bundling](community#Publishing-Bundling).

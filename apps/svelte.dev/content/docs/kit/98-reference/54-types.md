@@ -31,7 +31,6 @@ pages :
 
 ```ts
 /// file: .svelte-kit/types/src/routes/[foo]/[bar]/[baz]/$types.d.ts
-/// link: true
 import type * as Kit from '@sveltejs/kit';
 
 type RouteParams = {

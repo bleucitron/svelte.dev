@@ -123,7 +123,7 @@ dédiée](https://github.com/sveltejs/kit/discussions/5774) pour plus de détail
 
 Ces options s'applique à la fois aux migrations basées sur les tâches et aux migrations legacy.
 
-### `--cwd <path>`
+### `-C`, `--cwd <path>`
 
 Lancez la migration dans un environnment de travail différent. Le chemin est par défaut le dossier
 courant et doit contenir un fichier `package.json`.

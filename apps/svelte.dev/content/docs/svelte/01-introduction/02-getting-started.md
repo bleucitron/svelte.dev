@@ -33,6 +33,11 @@ certainement besoin de choisir une [librairie de routing](/packages#routing).
 Il existe également des plugins pour [d'autres bundlers](/packages#bundler-plugins), mais nous
 recommandons l'utilisation de Vite.
 
+Pour ajouter Svelte à des pages servies par un backend qui n'est pas écrit en JavaScript, comme
+Rails ou Laravel, suivez le [guide d'intégration des
+backends](https://vite.dev/guide/backend-integration) de Vite et rendez les composants dans la page
+avec [`mount`](imperative-component-api#mount).
+
 ## Outillage des éditeurs [!VO]Editor tooling
 
 L'équipe de Svelte maintient une [extension VS

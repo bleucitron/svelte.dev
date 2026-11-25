@@ -8,17 +8,41 @@ Svelte.
 
 ## Usage
 
-La façon la plus simple d'exécuter `sv` est via [`npx`](https://docs.npmjs.com/cli/v8/commands/npx)
-(ou la commande équivalente si vous utilisez un autre gestionnaire de paquets — par exemple, `pnpm
-dlx` si vous utilisez [pnpm](https://pnpm.io/)) :
-
 ```sh
 npx sv <command> <args>
 ```
 
-Si vous êtes au sein d'un projet où `sv` est déjà installé, ceci utilisera l'installation locale.
-Sinon, la version la plus récente de `sv` sera téléchargée et exécutée sans qu'elle soit
-formellement installée, ce qui est particulièrement utile pour [`sv create`](sv-create).
+## Commandes [!VO]Commands
+
+- [`sv create`](sv-create) — prépare un nouveau projet SvelteKit, avec la possibilité de mettre en
+place des add-ons directement
+- [`sv add`](sv-add) — applique des add-ons à un projet existant
+- [`sv migrate`](sv-migrate) — migre votre base de code Svelte(Kit) entre différentes versions
+- [`sv check`](sv-check) — analyse votre code avec
+[svelte-check](https://github.com/sveltejs/language-tools)
+
+Lancez `sv <command> --help` pour voir toutes les options d'une commande.
+
+## Add-ons
+
+Un add-on est une intégration pré-empaquetée qui s'applique elle-même à votre projet : elle installe
+ses dépendances, écrit dans les fichiers de configuration, et peut poser des questions
+additionnelles (comme par exemple quelle base de données utiliser).
+
+Il en exists deux types :
+
+- **les add-ons officiels** sont développés et maintenus dans le [repository du CLI de
+Svelte](https://github.com/sveltejs/cli) par l'équipe de Svelte, et ont été approuvés à la fois sur
+leur qualité et leur sécurité. C'est un ensemble délibéremment petit d'intégrations largement
+utilisées et de haute facture. Voir la [liste complète des add-ons
+officiels](sv-add#Official-add-ons).
+- **les add-ons communautaires** sont des paquets npm publiés par la communauté, permettant à
+n'importe quelle librairie ou outillage d'être installé en une ligne grâce à `npx sv add my-addon`.
+Les mainteneurs de Svelte n'ont pas vérifié la présence de code malveillant dans ces paquets — voir
+la [documentation des add-ons communautaires](sv-add#Community-add-ons) pour apprendre comment les
+installer.
+
+Vous souhaitez créer votre propre add-on ? Suivez le [guide de création](community).
 
 ## Remerciements
 
